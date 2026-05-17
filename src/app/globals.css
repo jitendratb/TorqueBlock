@@ -1,26 +1,218 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary: #f97316;
+  --color-primary-dark: #2563EB;
+  --color-primary-light: #60A5FA;
+  --color-secondary: #8B5CF6;
+  --color-secondary-light: #A78BFA;
+  --color-bg-main: #0B0F19;
+  --color-bg-section: #111827;
+  --color-bg-card: #1F2937;
+  --color-text-main: #FFFFFF;
+  --color-text-secondary: #D1D5DB;
+  --color-text-muted: #9CA3AF;
+  --color-success: #22C55E;
+  --color-warning: #F59E0B;
+  --color-error: #EF4444;
+  --color-border: rgba(255, 255, 255, 0.1);
+  --gradient-primary: linear-gradient(135deg, #3B82F6, #8B5CF6);
+  --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+* {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+*::-webkit-scrollbar {
+  display: none;
+}
+
+.custom-scroll {
+  overflow: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+
+.custom-scroll:hover {
+  scrollbar-width: thin;
+  scrollbar-color: #f97316 transparent;
+}
+
+.custom-scroll:hover::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scroll:hover::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll:hover::-webkit-scrollbar-thumb {
+  background: #f97316;
+  border-radius: 999px;
+}
+
+.custom-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: #ea580c;
+}
+
+.custom-scroll {
+  scroll-behavior: smooth;
+}
+
+
+.header-root {
+  top: 0;
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(209, 213, 219, 0.6);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition:
+    top var(--transition-smooth),
+    background var(--transition-smooth),
+    backdrop-filter var(--transition-smooth),
+    border-color var(--transition-smooth),
+    box-shadow var(--transition-smooth);
+}
+
+.header-root[data-scrolled="true"] {
+  top: 1rem;
+  background: rgba(255, 255, 255, 0.001);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+
+.Hover-Modal[data-scrolled="true"] {
+  top: 100px;
+}
+
+.header-nav {
+  padding: 1rem;
+  border-radius: 1rem;
+  transition:
+    padding var(--transition-smooth),
+    border-color var(--transition-smooth),
+    border-radius var(--transition-smooth);
+}
+
+.nav-link {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 4px;
+  transition: color var(--transition-smooth);
+  font-family: var(--font-inter), sans-serif;
+}
+
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--color-primary);
+  font-family: var(--font-inter), sans-serif;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition-smooth);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.hdr-btn-login .arrow-icon {
+  font-size: 0.7rem;
+  transition: transform .25s cubic-bezier(.4, 0, .2, 1);
+}
+
+.hdr-btn-login:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+@keyframes slide-down-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.animate-slide-down-fade {
+  animation: slide-down-fade 0.5s ease-out forwards;
+}
+
+
+.outline-text {
+  -webkit-text-stroke: 2px #f97316;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+.animate-bounce-slow {
+  animation: bounce 3s ease-in-out infinite;
+}
+
+@keyframes bounce {
+
+  0%,
+  100% {
+    transform: translateY(-5%);
+  }
+
+  50% {
+    transform: translateY(0);
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.outline-text {
+  -webkit-text-stroke: 2px #3f3f46;
 }
