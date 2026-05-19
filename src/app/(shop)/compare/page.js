@@ -4,14 +4,14 @@ import compareServiceInstance from '@/services/compareService';
 import CompareClient from './components/CompareClient';
 
 export const metadata = {
-  title: 'Tyre Battles - Torque Black',
-  description: 'Compare premium motorcycle tyres and find the ultimate performance weapon.',
+    title: 'Tyre Battles - Torque Block',
+    description: 'Compare premium motorcycle tyres and find the ultimate performance weapon.',
 };
 
 export default async function ComparePage({ searchParams }) {
     const page = parseInt(searchParams?.page || '1', 10);
     const limit = parseInt(searchParams?.limit || '12', 10);
-    
+
     let initialResponse = null;
     try {
         initialResponse = await compareServiceInstance.getAllCompare({ page, limit });
@@ -21,7 +21,7 @@ export default async function ComparePage({ searchParams }) {
 
     const initialComparisons = initialResponse?.data || [];
     const pagination = initialResponse?.pagination || {};
-    
+
     const initialPage = pagination?.currentPage || page;
     const initialTotalPages = pagination?.totalPages || 1;
     const initialTotalCount = pagination?.totalItems || 0;
@@ -36,7 +36,7 @@ export default async function ComparePage({ searchParams }) {
     return (
         <div className="space-y-4 mb-4">
             <Breadcrumb items={breadcrumbItems} />
-            <CompareClient 
+            <CompareClient
                 initialComparisons={initialComparisons}
                 initialPage={initialPage}
                 initialTotalPages={initialTotalPages}

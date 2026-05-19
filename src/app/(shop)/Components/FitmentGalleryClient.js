@@ -24,7 +24,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
 
     return (
       <div key={name}>
-        <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${color === 'orange' ? 'text-orange-400' : 'text-blue-400'}`}>
+        <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${color === 'orange' ? 'text-orange-400' : 'text-white'}`}>
           {name}
         </p>
         
@@ -58,7 +58,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
                 style={dynamicStyle}
                 className={`relative h-[280px] md:h-[360px] overflow-hidden bg-zinc-900 transition-[width] duration-500 ease-in-out cursor-pointer
                   ${isMobileOrTablet ? '' : 'w-[220px] hover:!w-[440px]'}
-                  ${color === 'orange' ? 'border-r border-orange-500/20' : 'border-r border-blue-500/20'} last:border-r-0`}
+                  ${color === 'orange' ? 'border-r border-orange-500/20' : 'border-r border-white/20'} last:border-r-0`}
               >
                 <Image
                   src={img}
@@ -68,7 +68,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
                 <span className={`absolute bottom-2 left-2 text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full whitespace-nowrap
-                  ${color === 'orange' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}`}>
+                  ${color === 'orange' ? 'bg-orange-500/20 text-orange-300 border border-orange-500/30' : 'bg-white/20 text-white border border-white/30'}`}>
                   Shot {i + 1}
                 </span>
               </div>
@@ -89,7 +89,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {renderGallery(tyre1Gallery, tyre1Name, 'orange', active1, setActive1)}
-        {renderGallery(tyre2Gallery, tyre2Name, 'blue', active2, setActive2)}
+        {renderGallery(tyre2Gallery, tyre2Name, 'white', active2, setActive2)}
       </div>
     </div>
   );

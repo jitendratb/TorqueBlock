@@ -55,7 +55,7 @@ function page() {
           <div className='space-y-10 pb-10 mt-10'>
             <BrandsSection />
             <Category />
-            <TyreSection />
+            {/* <TyreSection /> */}
             <ReviewsSection />
             <B2BEnterpriseSection />
           </div>

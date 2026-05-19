@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   const t1 = parts[0]?.replace(/-/g, ' ') || 'Tyre 1';
   const t2 = parts[1]?.replace(/-/g, ' ') || 'Tyre 2';
   return {
-    title: `${t1} vs ${t2} — Torque Black`,
+    title: `${t1} vs ${t2} — Torque Block`,
     description: `Full head-to-head comparison: ${t1} vs ${t2}. Specs, ratings, and expert verdict.`,
   };
 }
@@ -75,7 +75,7 @@ export default async function CompareDetails({ params }) {
       <div className="relative rounded-xl md:rounded-[2rem] overflow-hidden border border-white/10 bg-zinc-900/60 backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.5)]">
         <div className="absolute inset-0 flex pointer-events-none">
           <div className="w-1/2 h-full bg-gradient-to-br from-orange-500/20 via-orange-500/5 to-transparent" />
-          <div className="w-1/2 h-full bg-gradient-to-bl from-blue-500/20 via-blue-500/5 to-transparent" />
+          <div className="w-1/2 h-full bg-gradient-to-bl from-white/20 via-white/5 to-transparent" />
         </div>
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-full bg-white/10 pointer-events-none z-10" />
 
@@ -86,10 +86,10 @@ export default async function CompareDetails({ params }) {
               {category || 'Head-to-Head Battle'}
             </span>
           </div>
-          <h1 className="md:text-center flex text-xl md:text-3xl lg:text-5xl font-black uppercase tracking-tighter leading-none text-white mt-1">
-            <span className="text-orange-500">{tyre1Name}</span>
-            <span className="text-zinc-600 mx-3 md:px-4 italic text-xl md:text-4xl">vs</span>
-            <span className="text-blue-400">{tyre2Name}</span>
+          <h1 className="w-full flex items-center justify-center text-xl md:text-3xl lg:text-4xl font-black uppercase tracking-tighter leading-none mt-1">
+            <span className="flex-1 text-right text-orange-500">{tyre1Name}</span>
+            <span className="text-zinc-600 mx-4 md:mx-6 italic text-xl md:text-4xl shrink-0">vs</span>
+            <span className="flex-1 text-left text-white">{tyre2Name}</span>
           </h1>
           {seo?.description && (
             <p className="text-zinc-500 text-[10px] md:text-xs text-center max-w-2xl leading-relaxed mt-1 px-4">
@@ -115,7 +115,7 @@ export default async function CompareDetails({ params }) {
 
           <div className="flex flex-col items-center shrink-0 mb-12">
             <div className="w-8 h-8 md:w-16 md:h-16 rounded-full bg-zinc-950 border border-white/20 flex items-center justify-center shadow-2xl relative">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/40 to-blue-500/40 blur-md" />
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500/40 to-white/40 blur-md" />
               <span className="text-white text-xs md:text-base font-black italic relative z-10">VS</span>
             </div>
           </div>
@@ -130,17 +130,17 @@ export default async function CompareDetails({ params }) {
                 </div>
               )}
             </div>
-            <span className="text-[10px] font-bold text-blue-400 bg-blue-400/10 px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-400/20 mb-3">Beta</span>
+            <span className="text-[10px] font-bold text-white bg-white/10 px-4 py-1.5 rounded-full uppercase tracking-widest border border-white/20 mb-3">Beta</span>
           </div>
         </div>
       </div>
 
       {(tyre1?.description || tyre2?.description) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'blue' }].map(({ tyre, name, color }) => (
+          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'white' }].map(({ tyre, name, color }) => (
             tyre?.description ? (
-              <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-blue-500/20'}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${color === 'orange' ? 'text-orange-400' : 'text-blue-400'}`}>{name}</p>
+              <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-white/20'}`}>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-2 ${color === 'orange' ? 'text-orange-400' : 'text-white'}`}>{name}</p>
                 <p className="text-zinc-300 text-sm leading-relaxed">{tyre.description}</p>
               </div>
             ) : null
@@ -153,7 +153,7 @@ export default async function CompareDetails({ params }) {
           <div className="grid grid-cols-[1fr_auto_auto] md:grid-cols-[2fr_1fr_1fr] bg-zinc-950/80 border-b border-white/10 px-4 md:px-6 py-3 gap-4">
             <div className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Performance Metric</div>
             <div className="text-[10px] font-black text-orange-400 uppercase tracking-widest text-center w-12 md:w-auto">{tyre1Name}</div>
-            <div className="text-[10px] font-black text-blue-400 uppercase tracking-widest text-center w-12 md:w-auto">{tyre2Name}</div>
+            <div className="text-[10px] font-black text-white uppercase tracking-widest text-center w-12 md:w-auto">{tyre2Name}</div>
           </div>
 
           {Object.keys(RATING_LABELS).map((key, i) => {
@@ -183,7 +183,7 @@ export default async function CompareDetails({ params }) {
                       <div className="w-px h-3 bg-white/20 shrink-0" />
                       <div className="flex-1 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                         <div
-                          className={`h-full rounded-full ${v2Wins ? 'bg-blue-500' : 'bg-blue-500/40'}`}
+                          className={`h-full rounded-full ${v2Wins ? 'bg-white' : 'bg-white/40'}`}
                           style={{ width: `${pct2}%` }}
                         />
                       </div>
@@ -193,7 +193,7 @@ export default async function CompareDetails({ params }) {
                     {v1 !== null ? v1 : '—'}
                     {v1Wins && <span className="text-[8px] ml-1">▲</span>}
                   </div>
-                  <div className={`text-xs md:text-sm font-black text-center w-12 md:w-auto ${v2Wins ? 'text-blue-400' : 'text-zinc-400'}`}>
+                  <div className={`text-xs md:text-sm font-black text-center w-12 md:w-auto ${v2Wins ? 'text-white' : 'text-zinc-400'}`}>
                     {v2 !== null ? v2 : '—'}
                     {v2Wins && <span className="text-[8px] ml-1">▲</span>}
                   </div>
@@ -206,17 +206,17 @@ export default async function CompareDetails({ params }) {
 
       {((tyre1?.frontSizes?.length > 0 || tyre1?.rearSizes?.length > 0) || (tyre2?.frontSizes?.length > 0 || tyre2?.rearSizes?.length > 0)) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'blue' }].map(({ tyre, name, color }) => (
+          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'white' }].map(({ tyre, name, color }) => (
 
-            <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-blue-500/20'} flex flex-col justify-between`}>
+            <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-white/20'} flex flex-col justify-between`}>
               <div>
-                <p className={`text-[10px] font-black uppercase tracking-widest mb-4 ${color === 'orange' ? 'text-orange-400' : 'text-blue-400'}`}>{name} — Available Sizes</p>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-4 ${color === 'orange' ? 'text-orange-400' : 'text-white'}`}>{name} — Available Sizes</p>
                 {tyre?.frontSizes?.length > 0 && (
                   <div className="mb-3">
                     <p className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Front</p>
                     <div className="flex flex-wrap gap-1.5">
                       {tyre.frontSizes.map(s => (
-                        <span key={s} className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${color === 'orange' ? 'text-orange-300 bg-orange-500/10 border-orange-500/20' : 'text-blue-300 bg-blue-500/10 border-blue-500/20'}`}>{s}</span>
+                        <span key={s} className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${color === 'orange' ? 'text-orange-300 bg-orange-500/10 border-orange-500/20' : 'text-white bg-white/10 border-white/20'}`}>{s}</span>
                       ))}
                     </div>
                   </div>
@@ -226,7 +226,7 @@ export default async function CompareDetails({ params }) {
                     <p className="text-[9px] font-bold text-zinc-500 uppercase tracking-widest mb-2">Rear</p>
                     <div className="flex flex-wrap gap-1.5">
                       {tyre.rearSizes.map(s => (
-                        <span key={s} className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${color === 'orange' ? 'text-orange-300 bg-orange-500/10 border-orange-500/20' : 'text-blue-300 bg-blue-500/10 border-blue-500/20'}`}>{s}</span>
+                        <span key={s} className={`text-[10px] font-bold px-2.5 py-1 rounded-lg border ${color === 'orange' ? 'text-orange-300 bg-orange-500/10 border-orange-500/20' : 'text-white bg-white/10 border-white/20'}`}>{s}</span>
                       ))}
                     </div>
                   </div>
@@ -235,7 +235,7 @@ export default async function CompareDetails({ params }) {
 
               <div className='pt-4'>
                 <WhatsAppButton
-                  text="Check Availability & Price"
+                  text="Secure My Fitment Size"
                   value={`I was checking the ${name} tyre sizes and I'm interested in buying it for my bike. Can you help me with availability, pricing, and fitment for my motorcycle?`}
                 />
               </div>
@@ -251,8 +251,8 @@ export default async function CompareDetails({ params }) {
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 inline-block" />
               Choose {tyre1Name.split(' ').slice(-2).join(' ')} If
             </div>
-            <div className="py-3 px-5 text-[10px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+            <div className="py-3 px-5 text-[10px] font-black text-white uppercase tracking-widest flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-white inline-block" />
               Choose {tyre2Name.split(' ').slice(-2).join(' ')} If
             </div>
           </div>
@@ -268,7 +268,7 @@ export default async function CompareDetails({ params }) {
             <div className="p-5 space-y-2.5">
               {(tyre2?.choose_if || []).map((item, i) => (
                 <div key={i} className="flex items-start gap-2.5">
-                  <FiCheck className="text-blue-400 shrink-0 mt-0.5" size={13} />
+                  <FiCheck className="text-white shrink-0 mt-0.5" size={13} />
                   <p className="text-zinc-300 text-xs leading-snug">{item}</p>
                 </div>
               ))}
@@ -279,13 +279,13 @@ export default async function CompareDetails({ params }) {
 
       {(tyre1?.best_use_case?.length > 0 || tyre2?.best_use_case?.length > 0) && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'blue' }].map(({ tyre, name, color }) => (
+          {[{ tyre: tyre1, name: tyre1Name, color: 'orange' }, { tyre: tyre2, name: tyre2Name, color: 'white' }].map(({ tyre, name, color }) => (
             tyre?.best_use_case?.length > 0 ? (
-              <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-blue-500/20'}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${color === 'orange' ? 'text-orange-400' : 'text-blue-400'}`}>{name} — Best For</p>
+              <div key={name} className={`rounded-xl md:rounded-2xl border bg-zinc-900/60 backdrop-blur-xl p-5 ${color === 'orange' ? 'border-orange-500/20' : 'border-white/20'}`}>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-3 ${color === 'orange' ? 'text-orange-400' : 'text-white-400'}`}>{name} — Best For</p>
                 <div className="flex flex-wrap gap-2">
                   {tyre.best_use_case.map(u => (
-                    <span key={u} className={`text-[10px] font-bold px-3 py-1.5 rounded-full ${color === 'orange' ? 'bg-orange-500/15 text-orange-300 border border-orange-500/25' : 'bg-blue-500/15 text-blue-300 border border-blue-500/25'}`}>{u}</span>
+                    <span key={u} className={`text-[10px] font-bold px-3 py-1.5 rounded-full ${color === 'orange' ? 'bg-orange-500/15 text-orange-300 border border-orange-500/25' : 'bg-white/15 text-white-300 border border-white/25'}`}>{u}</span>
                   ))}
                 </div>
               </div>
@@ -293,6 +293,18 @@ export default async function CompareDetails({ params }) {
           ))}
         </div>
       )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <WhatsAppButton
+          text={`Get ${tyre1Name} Deal`}
+          value={`Hi Torque Block! I was comparing tyres and I'm interested in getting the best deal on the ${tyre1Name} tyre. Can you assist me with stock, price, and fitment?`}
+        />
+
+        <WhatsAppButton
+          text={`Get ${tyre2Name} Deal`}
+          value={`Hi Torque Block! I was comparing tyres and I'm interested in getting the best deal on the ${tyre2Name} tyre. Can you assist me with stock, price, and fitment?`}
+        />
+      </div>
 
 
 
@@ -340,8 +352,6 @@ export default async function CompareDetails({ params }) {
           </div>
         </div>
       </div>
-
-
 
     </div>
   );

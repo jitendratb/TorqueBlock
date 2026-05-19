@@ -16,6 +16,20 @@ function Header() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [mobileExpanded, setMobileExpanded] = useState(null);
 
+    const WHATSAPP_NUMBER = "916366625625";
+
+    const handleTalkToExpert = (e) => {
+        e.preventDefault();
+        const message = `Hi Torque Block! I'd like to talk to a tyre expert. Can you help me find the right tyre for my bike?`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+    };
+
+    const handleContactUs = (e) => {
+        e.preventDefault();
+        const message = `Hi Torque Block! I found your website and I'd like to get in touch. Can you assist me?`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
+    };
+
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = document.documentElement.scrollTop;
@@ -55,7 +69,7 @@ function Header() {
         { name: "Home", href: "/" },
         { name: "Tyres", href: "/tyres" },
         { name: "Bike Brands", href: "/bikes" },
-        { name: "Tyre Comparison" },
+        { name: "Tyre Comparison", href: "/compare" },
     ];
 
     const mobileSubMenus = {
@@ -80,15 +94,21 @@ function Header() {
             { label: "Ducati Multistrada 1200 S", href: "/bikes/ducati-multistrada-1200-s-tyres" },
         ],
         "Tyre Comparison": [
-            { label: "Wet vs Dry Grip", href: "/compare/grip" },
-            { label: "Mileage vs Performance", href: "/compare/longevity" },
-            { label: "Soft vs Hard Compound", href: "/compare/compound" },
-            { label: "Radial vs Bias Ply", href: "/compare/radial-bias" },
-            { label: "Street vs Track Tyres", href: "/compare/street-vs-track" },
-            { label: "Touring vs Sport Tyres", href: "/compare/touring-vs-sport" },
-            { label: "Slicks vs Treaded", href: "/compare/slicks-vs-treaded" },
-            { label: "Dual Sport vs Adventure", href: "/compare/dual-sport-vs-adventure" },
+            { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
+            { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
+            { label: "Michelin Road 6 vs Metzeler Roadtec 02", href: "/compare/michelin-road-6-vs-metzeler-roadtec-02" },
+            { label: "Pirelli Diablo Rosso IV vs Metzeler Sportec M9 RR", href: "/compare/pirelli-diablo-rosso-iv-vs-metzeler-sportec-m9-rr" },
+            { label: "Pirelli Diablo Rosso IV vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-vs-michelin-power-6" },
+            { label: "Michelin Power 6 vs Metzeler Sportec M9 RR", href: "/compare/michelin-power-6-vs-metzeler-sportec-m9-rr" },
+            { label: "Pirelli Diablo Rosso IV Corsa vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-corsa-vs-michelin-power-6" },
+            { label: "Pirelli Scorpion Trail II vs Michelin Anakee Road", href: "/compare/pirelli-scorpion-trail-ii-vs-michelin-anakee-road" },
         ],
+    };
+
+
+    const handleTalk = (message) => {
+        const mess = `Hi Torque Block! ${message}`;
+        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mess)}`, "_blank");
     };
 
     const MegaMenuContent = () => {
@@ -114,7 +134,7 @@ function Header() {
                                 <li><Link href="/tyres/metzeler-racetec-td-slick" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Metzeler Racetec TD Slick</Link></li>
                             </ul>
                         </div>
-                        <div className="col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100 relative overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
+                        <div onClick={() =>handleTalk("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")} className="col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100 relative overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
                             <div className="relative z-10 flex flex-col h-full justify-center">
                                 <span className="inline-block px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded mb-3 w-max uppercase tracking-widest">Smart Tool</span>
                                 <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">Find the Perfect Tyre</h3>
@@ -130,12 +150,12 @@ function Header() {
 
             case 'Bike Brands':
                 return (
-                    <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div onClick={() => handleTalk("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")} className="grid cursor-pointer grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className="col-span-3">
-                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Select by Motorcycle Model</h3>
-                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100">Select by Motorcycle Model</h3>
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                                 {mobileSubMenus['Bike Brands'].map((bike) => (
-                                    <Link key={bike.label} href={bike.href} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
+                                    <Link key={bike.label} href={bike.href} className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-300 transition-all group">
                                         <div className="w-10 h-10 bg-gray-100 rounded-full flex shrink-0 items-center justify-center group-hover:bg-orange-100 transition-all">
                                             <span className="text-xs font-bold text-gray-500 group-hover:text-orange-500">{bike.label.substring(0, 1)}</span>
                                         </div>
@@ -158,29 +178,31 @@ function Header() {
 
             case 'Tyre Comparison':
                 return (
-                    <div className="grid grid-cols-3 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                    <div  className="flex justify-between  gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div>
                             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Key Comparisons</h3>
-                            <ul className="space-y-3 text-sm text-gray-600">
+                            <ul className="space-y-3 text-sm text-gray-600 grid grid-cols-2 gap-2">
                                 {mobileSubMenus['Tyre Comparison'].map(comp => (
                                     <li key={comp.label}><Link href={comp.href} className="hover:text-orange-500 transition-all">{comp.label}</Link></li>
                                 ))}
                             </ul>
                         </div>
-                        <div className="col-span-2 flex gap-6">
-                            <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                                <div className="text-[10px] font-bold text-orange-500 mb-3 uppercase tracking-widest bg-blue-50 w-max px-2 py-1 rounded">Interactive Tool</div>
-                                <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-orange-500 transition-colors">Head-to-Head Comparison</h4>
-                                <p className="text-sm text-gray-500 mb-6 leading-relaxed">Compare tyre specs side-by-side.</p>
-                                <button className="w-full py-2.5 bg-gray-900 text-white text-sm font-medium rounded-xl hover:bg-gray-800 transition-colors">Start Comparing</button>
-                            </div>
-                            <div className="flex-1 bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 group">
-                                <div className="text-[10px] font-bold text-purple-600 mb-3 uppercase tracking-widest bg-purple-50 w-max px-2 py-1 rounded">Expert Guide</div>
-                                <h4 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-purple-700 transition-colors">Complete Buying Guide</h4>
-                                <p className="text-sm text-gray-500 mb-6 leading-relaxed">Read our comprehensive tyre buying guide.</p>
-                                <button className="w-full py-2.5 border-2 border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:border-purple-600 hover:text-purple-700 transition-colors">Read Guide</button>
+                        <div onClick={() => handleTalk("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")} className="flex w-[320px] cursor-pointer">
+                            <div className="relative flex-1 bg-gradient-to-br from-purple-900/90 to-indigo-950/95 rounded-2xl p-6 text-white hover:shadow-[0_20px_50px_rgba(139,92,246,0.15)] transition-all duration-500 hover:-translate-y-1.5 group border border-purple-500/20 overflow-hidden shadow-xl flex flex-col justify-between">
+                                {/* Ambient Glow */}
+                                <div className="absolute -right-8 -bottom-8 opacity-30 w-36 h-36 bg-purple-500 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-700 pointer-events-none" />
+
+                                <div className="relative z-10 flex flex-col h-full">
+                                    <span className="inline-block px-3 py-1 bg-purple-500/20 text-purple-300 text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-purple-500/30">Expert Guide</span>
+                                    <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-purple-300 transition-colors tracking-tight leading-snug">Ultimate Buying Blueprint</h4>
+                                    <p className="text-xs text-purple-200/70 mb-6 leading-relaxed">Master tyre compounds, performance metrics, and track compatibility to build the perfect setup.</p>
+                                    <Link href="/tyre-guide" className="text-sm font-bold text-white hover:text-purple-300 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
+                                        Unlock Tyre Guide <FaArrowRightLong className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+                                    </Link>
+                                </div>
                             </div>
                         </div>
+                      
                     </div>
                 );
 
@@ -189,19 +211,6 @@ function Header() {
         }
     };
 
-    const WHATSAPP_NUMBER = "916366625625";
-
-    const handleTalkToExpert = (e) => {
-        e.preventDefault();
-        const message = `Hi Torque Black! I'd like to talk to a tyre expert. Can you help me find the right tyre for my bike?`;
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-    };
-
-    const handleContactUs = (e) => {
-        e.preventDefault();
-        const message = `Hi Torque Black! I found your website and I'd like to get in touch. Can you assist me?`;
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-    };
 
     return (
         <div>
@@ -217,9 +226,9 @@ function Header() {
                             return (
                                 <li key={item.name} className="relative cursor-pointer" onMouseEnter={() => handleMouseEnter(item.name)} onMouseLeave={handleMouseLeave}>
                                     {item.href ? (
-                                        <Link href={item.href} className={`nav-link text-sm ${isActive ? "active" : ""}`}>{item.name}</Link>
+                                        <Link href={item.href} className={`nav-link text-xs uppercase  font-bold ${isActive ? "active" : ""}`}>{item.name}</Link>
                                     ) : (
-                                        <span className={`nav-link text-sm ${isActive ? "active" : ""}`}>{item.name}</span>
+                                        <span className={`nav-link text-xs uppercase tracking-wider font-bold ${isActive ? "active" : ""}`}>{item.name}</span>
                                     )}
                                 </li>
                             );
@@ -232,7 +241,7 @@ function Header() {
                             Talk to an Expert
                         </button>
                         <button onClick={handleContactUs} className="hdr-btn-login nav-link hidden lg:block">
-                            <span className='text-sm flex gap-2 items-center justify-center min-w-[120px]'>Contact Us <FaArrowRightLong className='arrow-icon' /></span>
+                            <span className='text-xs uppercase font-bold flex gap-2 items-center justify-center min-w-[120px]'>Contact Us <FaArrowRightLong className='arrow-icon' /></span>
                         </button>
 
                         <button
@@ -272,7 +281,7 @@ function Header() {
                 className="fixed top-0 right-0 bottom-0 w-[82vw] max-w-[340px] z-[70] flex flex-col overflow-y-auto shadow-[-8px_0_40px_rgba(0,0,0,0.4)] transition-transform duration-[380ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
             >
                 <div className="flex items-center justify-between px-5 py-[18px] border-b border-white/[0.07]">
-                    <Image src="/newlogo.webp" alt="Torque Black" width={100} height={40} className="h-auto w-[100px]" />
+                    <Image src="/newlogo.webp" alt="Torque Block" width={100} height={40} className="h-auto w-[100px]" />
                     <button
                         onClick={closeSidebar}
                         aria-label="Close menu"

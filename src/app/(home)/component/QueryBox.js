@@ -45,7 +45,7 @@ function QueryBox() {
 
   const HandleFormClick = (e) => {
     e.preventDefault();
-    let message = `Hi Torque Black, I need a tyre recommendation for my bike. My bike is ${selectedTyre?.value} ${selectedModel?.value}`;
+    let message = `Hi Torque Block, I need a tyre recommendation for my bike. My bike is ${selectedTyre?.value} ${selectedModel?.value}`;
     const phoneNumber = "916366625625";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
   }

@@ -4,7 +4,7 @@ import BikesClient from '../Components/TyreComponent/BikesClient';
 import vehicleService from '@/services/vehicleService';
 
 export const metadata = {
-  title: 'Motorcycles - Torque Black',
+  title: 'Motorcycles - Torque Block',
   description: 'Find the best performance tyres for your motorcycle brand and model.',
 };
 

@@ -9,12 +9,7 @@ import Pagination from "@/components/atoms/Pagination";
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 
 function CompareClient({ initialComparisons, initialPage, initialTotalPages, initialTotalCount }) {
-    const {
-        comparisons: storeComparisons,
-        loading,
-        fetchComparisons,
-    } = useCompareStore();
-
+    const { comparisons: storeComparisons, loading, fetchComparisons, } = useCompareStore();
     const [comparisons, setComparisons] = useState(initialComparisons || []);
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
@@ -114,7 +109,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                             >
                                 <div className="absolute inset-0 flex opacity-40 group-hover:opacity-70 transition-opacity duration-700">
                                     <div className="w-1/2 h-full bg-gradient-to-br from-orange-500/40 via-orange-500/10 to-transparent" />
-                                    <div className="w-1/2 h-full bg-gradient-to-bl from-blue-500/40 via-blue-500/10 to-transparent" />
+                                    <div className="w-1/2 h-full bg-gradient-to-bl from-white/40 via-white/10 to-transparent" />
                                 </div>
 
                                 <div className="absolute inset-0 flex items-center justify-between p-4 mt-8 opacity-80 group-hover:opacity-100 transition-all duration-500 z-10">
@@ -144,7 +139,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                                     {/* Top Tags */}
                                     <div className="flex justify-between items-start w-full">
                                         <span className="text-[10px] font-bold text-orange-400 bg-orange-400/10 px-4 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-md border border-orange-400/20 shadow-[0_0_15px_rgba(251,146,60,0.2)]">Alpha</span>
-                                        <span className="text-[10px] font-bold text-blue-400 bg-blue-400/10 px-4 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-md border border-blue-400/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">Beta</span>
+                                        <span className="text-[10px] font-bold text-white bg-white/10 px-4 py-1.5 rounded-full uppercase tracking-widest backdrop-blur-md border border-white/20 shadow-[0_0_15px_rgba(59,130,246,0.2)]">Beta</span>
                                     </div>
 
                                     <div className="absolute top-[45%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-30">
@@ -208,7 +203,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                         </p>
                     </div>
 
-                    <WhatsAppButton text="Deploy Expert" value={'Hi Torque Black! I am comparing tyres in the Battle Arena and need expert advice to choose the perfect weapon for my machine.'} className="max-w-[350px]" />
+                    <WhatsAppButton text="Deploy Expert" value={'Hi Torque Block! I am comparing tyres in the Battle Arena and need expert advice to choose the perfect weapon for my machine.'} className="max-w-[350px]" />
                 </div>
             </div>
 
