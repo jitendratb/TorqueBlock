@@ -52,7 +52,7 @@ function QueryBox() {
 
   return (
     <div className='h-full w-full'>
-      <form onSubmit={HandleFormClick} className='space-y-2 max-w-md p-4 rounded-lg mx-auto border border-gray-400 bg-white/30 backdrop-blur-lg'>
+      <form onSubmit={HandleFormClick} className='space-y-2 max-w-md px-4 py-6 md:px-6 py-8 rounded-lg mx-auto border border-gray-400 bg-white/30 backdrop-blur-lg'>
         <h1 className='text-center text-[22px] md:text-2xl lg:font-bold'>
           <span className='block lg:hidden'>
             Get Expert Tyre Advice

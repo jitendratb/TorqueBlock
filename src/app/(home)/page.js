@@ -44,7 +44,7 @@ function page() {
         <Image src="/Home/HomeBannerMobile.webp" alt="Premium Motorcycle Tyres India" fill priority fetchPriority="high" className='md:hidden' />
         <span className='absolute bg-gradient-to-r from-black/80 to-black/40 inset-0 z-0' />
         <div className='w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 z-10'>
-          <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 px-4 pt-20 pb-6 md:py-0 text-white text-2xl font-bold gap-5'>
+          <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 px-4 pt-20 pb-6 md:py-0 text-white text-2xl font-bold gap-5 items-center'>
             <H1Tags />
             <QueryBox />
           </div>

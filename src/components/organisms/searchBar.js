@@ -78,10 +78,9 @@ function SearchBar({
     const suggestions = getSuggestions();
 
     return (
-        <div className={`relative w-full ${className}`} {...props}>
+        <div className={`relative w-full ${className}`} style={{ maxWidth }} {...props}>
             <div
                 className="relative flex items-center w-full bg-gray-50 border border-gray-200 rounded-full px-2 lg:px-4 py-0.5 md:py-1 lg:py-2 transition-all duration-300 hover:bg-white hover:border-gray-300 hover:shadow-sm focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
-                style={{ maxWidth }}
                 onClick={() => inputRef.current?.focus()}
             >
                 <IoSearchSharp className="text-gray-400 text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />
@@ -123,22 +122,20 @@ function SearchBar({
             </div>
 
             {showSuggestions && storeShowSuggestions && suggestions.length > 0 && (
-                <div className="absolute left-1/2 -translate-x-1/2 mt-2 w-[200px] md:min-w-[380px] rounded border border-slate-200/70 bg-white shadow-xl ring-1 ring-black/5 z-50">
-                    <div className="p-1 max-h-60 overflow-y-auto ">
+                <div className="absolute left-0 right-0 mt-2 w-full rounded-2xl border border-slate-200/70 bg-white shadow-xl ring-1 ring-black/5 z-50 overflow-hidden">
+                    <div className="p-1.5 max-h-60 overflow-y-auto">
                         {!loading && !error && suggestions.map((item, index) => (
                             <button
                                 key={`${item.type}-${index}`}
                                 type="button"
                                 onMouseDown={(e) => e.preventDefault()}
                                 onClick={() => handleSearchSubmit(item.query)}
-                                className="w-full text-left transition hover:border px-1 py-1 border border-transparent hover:bg-blue-50 rounded hover:border-blue-50"
+                                className="w-full text-left transition px-3 py-2 hover:bg-blue-50/70 rounded-xl flex items-center justify-between gap-2 cursor-pointer"
                             >
-                                <div className="flex text-[10px] md:text-xs items-center justify-between gap-2">
-                                    <span className="font-semibold text-slate-800 truncate">{item.label}</span>
-                                    <span className="rounded-full bg-slate-200 px-2 py-0.5 text-[8px] font-semibold uppercase  text-slate-600">
-                                        {item.type}
-                                    </span>
-                                </div>
+                                <span className="font-semibold text-slate-800 truncate text-xs">{item.label}</span>
+                                <span className="rounded-full bg-slate-100 text-slate-600 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider">
+                                    {item.type}
+                                </span>
                             </button>
                         ))}
                     </div>

@@ -24,7 +24,7 @@ function BrandCard({ brand }) {
             Explore Brand
           </div>
           <div className='flex justify-between items-end  w-full'>
-            <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-700 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
+            <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-white bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-700 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
               {brand?.name || brand?.brandName}
             </h3>
             <div>

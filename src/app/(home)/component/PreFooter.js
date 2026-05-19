@@ -6,61 +6,49 @@ const footerSections = [
   {
     title: "POPULAR BIKES",
     links: [
-      "KTM Duke Tyres",
-      "BMW GS Tyres",
-      "Hayabusa Tyres",
-      "Ducati Panigale Tyres",
-      "Interceptor 650 Tyres",
+      { label: "Harley-Davidson 1200 Custom", href: "/bikes/harley-davidson-1200-custom-tyres" },
+      { label: "Harley-Davidson Heritage Classic", href: "/bikes/harley-davidson-heritage-classic-tyres" },
+      { label: "Harley-Davidson Road King", href: "/bikes/harley-davidson-road-king-tyres" },
+      { label: "Honda XL750 Transalp", href: "/bikes/honda-xl750-transalp-tyres" },
+      { label: "Triumph Speed 400", href: "/bikes/triumph-speed-400-tyres" },
+      { label: "Triumph Tiger 900 GT", href: "/bikes/triumph-tiger-900-gt-tyres" },
+      { label: "Kawasaki Versys 1000", href: "/bikes/kawasaki-versys-1000-tyres" },
+      { label: "Ducati Multistrada 1200 S", href: "/bikes/ducati-multistrada-1200-s-tyres" },
+      { label: "Triumph Tiger 900 Rally Pro", href: "/bikes/triumph-tiger-900-rally-pro-tyres" },
     ],
   },
   {
     title: "POPULAR TYRE TYPES",
     links: [
-      "Sports Touring Tyres",
-      "Adventure Tyres",
-      "Dual Sport Tyres",
-      "Track Racing Tyres",
-      "Cruiser Bike Tyres",
+      { label: "Sports Touring Tyres", href: "/tyres" },
+      { label: "Adventure Tyres", href: "/tyres" },
+      { label: "Dual Sport Tyres", href: "/tyres" },
+      { label: "Track Racing Tyres", href: "/tyres" },
+      { label: "Cruiser Bike Tyres", href: "/tyres" },
     ],
   },
   {
     title: "PREMIUM TYRE BRANDS",
     links: [
-      "Pirelli Tyres",
-      "Michelin Tyres",
-      "Metzeler Tyres",
+      { label: "Pirelli Tyres", href: "/tyres" },
+      { label: "Michelin Tyres", href: "/tyres" },
+      { label: "Metzeler Tyres", href: "/tyres" },
     ],
   },
   {
     title: "TYRE COMPARISONS",
     links: [
-      "Road 6 vs Angel GT II",
-      "Power 6 vs Diablo Rosso IV",
-      "Karoo 4 vs Anakee Wild",
-      "Sportec M9 RR vs Power GP 2",
-      "Roadtec 02 vs Road 6",
+      { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
+      { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
+      { label: "Michelin Road 6 vs Metzeler Roadtec 02", href: "/compare/michelin-road-6-vs-metzeler-roadtec-02" },
+      { label: "Pirelli Diablo Rosso IV vs Metzeler Sportec M9 RR", href: "/compare/pirelli-diablo-rosso-iv-vs-metzeler-sportec-m9-rr" },
+      { label: "Pirelli Diablo Rosso IV vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-vs-michelin-power-6" },
+      { label: "Michelin Power 6 vs Metzeler Sportec M9 RR", href: "/compare/michelin-power-6-vs-metzeler-sportec-m9-rr" },
+      { label: "Pirelli Diablo Rosso IV Corsa vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-corsa-vs-michelin-power-6" },
+      { label: "Pirelli Scorpion Trail II vs Michelin Anakee Road", href: "/compare/pirelli-scorpion-trail-ii-vs-michelin-anakee-road" },
+      { label: "Pirelli Scorpion Trail II vs Metzeler Tourance Next 2", href: "/compare/pirelli-scorpion-trail-ii-vs-metzeler-tourance-next-2" },
     ],
   },
-//   {
-//     title: "ADVENTURE TYRES",
-//     links: [
-//       "Scorpion Rally STR",
-//       "Karoo 4",
-//       "Anakee Adventure",
-//       "Trail Attack 3",
-//       "Tourance Next 2",
-//     ],
-//   },
-//   {
-//     title: "SPORTS BIKE TYRES",
-//     links: [
-//       "Diablo Rosso IV",
-//       "Power GP 2",
-//       "Sportec M9 RR",
-//       "S22 Battlax",
-//       "Rosso Corsa IV",
-//     ],
-//   },
 ];
 
 export default function EnterprisePreFooter() {
@@ -74,7 +62,7 @@ export default function EnterprisePreFooter() {
 
           <div className="w-28 h-1 bg-orange-500 rounded-full mx-auto mt-2" />
 
-          <p className="text-gray-400 text-sm lg:text-lg mt-6 max-w-4xl mx-auto leading-relaxed">
+          <p className="text-gray-400 text-sm lg:text-sm mt-6 max-w-4xl mx-auto leading-relaxed">
             Discover motorcycle tyre recommendations, bike specific fitments,
             touring setups, track focused tyres, and expert tyre comparisons
             built for Indian roads and performance riders.
@@ -82,22 +70,19 @@ export default function EnterprisePreFooter() {
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {footerSections.map((section, index) => (
             <div key={index}>
-              
               <h3 className="text-sm font-bold tracking-[0.2em] text-orange-400 uppercase mb-4">
                 {section.title}
               </h3>
-
-
               <ul className="space-y-1">
                 {section.links.map((link, i) => (
                   <li key={i}>
-                    <Link href="/" className="group flex items-center text-gray-300 hover:text-orange-400 transition-all duration-300">
+                    <Link href={link.href} className="group flex items-center text-gray-300 hover:text-orange-400 transition-all duration-300">
                       <span className="w-1.5 h-1.5 rounded-full bg-orange-500/70 mr-3 flex-shrink-0 group-hover:bg-orange-400" />
                       <span className="text-sm">
-                        {link}
+                        {link.label}
                       </span>
                     </Link>
                   </li>
