@@ -12,7 +12,7 @@ export default function WhatsAppButton({
    const HandleFormClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    let message = `Hi Torque Black, ${value}`;
+    let message = `Hi Torque Block, ${value}`;
     const phoneNumber = "916366625625";
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
   }

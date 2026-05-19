@@ -97,21 +97,21 @@ function Header() {
                 return (
                     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div>
-                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">By Vehicle Type</h3>
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Pirelli Collection</h3>
                             <ul className="space-y-3 text-sm text-gray-600">
-                                <li><Link href="/tyres/car" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Car Tyres</Link></li>
-                                <li><Link href="/tyres/bike" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Bike Tyres</Link></li>
-                                <li><Link href="/tyres/scooter" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Scooter Tyres</Link></li>
-                                <li><Link href="/tyres/commercial" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Commercial Tyres</Link></li>
+                                <li><Link href="/tyres/pirelli-angel-st" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Angel ST</Link></li>
+                                <li><Link href="/tyres/pirelli-sport-demon" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Sport Demon</Link></li>
+                                <li><Link href="/tyres/pirelli-mt60-rs" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli MT60 RS</Link></li>
+                                <li><Link href="/tyres/pirelli-scorpion-trail-iii" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Scorpion Trail III</Link></li>
                             </ul>
                         </div>
                         <div>
-                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Popular Brands</h3>
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Track & Performance</h3>
                             <ul className="space-y-3 text-sm text-gray-600">
-                                <li><Link href="/brands/mrf" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">MRF Tyres</Link></li>
-                                <li><Link href="/brands/ceat" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">CEAT Tyres</Link></li>
-                                <li><Link href="/brands/apollo" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Apollo Tyres</Link></li>
-                                <li><Link href="/brands/michelin" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Michelin Tyres</Link></li>
+                                <li><Link href="/tyres/pirelli-diablo-rosso-iv-corsa" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Diablo Rosso IV Corsa</Link></li>
+                                <li><Link href="/tyres/pirelli-diablo-powercruiser" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Diablo Powercruiser</Link></li>
+                                <li><Link href="/tyres/pirelli-night-dragon" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Pirelli Night Dragon</Link></li>
+                                <li><Link href="/tyres/metzeler-racetec-td-slick" className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">Metzeler Racetec TD Slick</Link></li>
                             </ul>
                         </div>
                         <div className="col-span-2 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100 relative overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500">
@@ -132,14 +132,14 @@ function Header() {
                 return (
                     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
                         <div className="col-span-3">
-                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Select by Motorcycle Brand</h3>
-                            <div className="grid grid-cols-3 gap-4">
-                                {['Royal Enfield', 'KTM', 'Bajaj', 'Yamaha', 'TVS', 'Honda', 'Hero', 'Suzuki', 'Kawasaki'].map((brand) => (
-                                    <Link key={brand} href={`/bikes/${brand.toLowerCase().replace(' ', '-')}`} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
-                                        <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-orange-100 transition-all">
-                                            <span className="text-xs font-bold text-gray-500 group-hover:text-orange-500">{brand.substring(0, 1)}</span>
+                            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Select by Motorcycle Model</h3>
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                {mobileSubMenus['Bike Brands'].map((bike) => (
+                                    <Link key={bike.label} href={bike.href} className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all group">
+                                        <div className="w-10 h-10 bg-gray-100 rounded-full flex shrink-0 items-center justify-center group-hover:bg-orange-100 transition-all">
+                                            <span className="text-xs font-bold text-gray-500 group-hover:text-orange-500">{bike.label.substring(0, 1)}</span>
                                         </div>
-                                        <span className="text-sm font-medium text-gray-700 group-hover:text-orange-500">{brand}</span>
+                                        <span className="text-[13px] font-medium text-gray-700 group-hover:text-orange-500 leading-tight">{bike.label}</span>
                                     </Link>
                                 ))}
                             </div>
@@ -162,10 +162,9 @@ function Header() {
                         <div>
                             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Key Comparisons</h3>
                             <ul className="space-y-3 text-sm text-gray-600">
-                                <li><Link href="/compare/grip" className="hover:text-orange-500 transition-all">Wet vs Dry Grip</Link></li>
-                                <li><Link href="/compare/longevity" className="hover:text-orange-500 transition-all">Mileage vs Performance</Link></li>
-                                <li><Link href="/compare/compound" className="hover:text-orange-500 transition-all">Soft vs Hard Compound</Link></li>
-                                <li><Link href="/compare/radial-bias" className="hover:text-orange-500 transition-all">Radial vs Bias Ply</Link></li>
+                                {mobileSubMenus['Tyre Comparison'].map(comp => (
+                                    <li key={comp.label}><Link href={comp.href} className="hover:text-orange-500 transition-all">{comp.label}</Link></li>
+                                ))}
                             </ul>
                         </div>
                         <div className="col-span-2 flex gap-6">
