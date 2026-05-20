@@ -1,10 +1,9 @@
-"use client";
-
-import React from 'react';
+import React, { Suspense } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import TyreSection from '@/app/(home)/component/TyreSection';
 import BrandsSection from '@/app/(home)/component/BrandsSection';
+import { BrandCardSkeletonGroup } from '@/app/(home)/component/BrandCardSkeleton';
 import Breadcrumb from '@/components/atoms/BreadCrumb';
 import { FaChevronRight, FaFilter } from 'react-icons/fa';
 import { FiZap, FiMap, FiShield, FiTarget, FiCompass } from 'react-icons/fi';
@@ -123,7 +122,9 @@ export default function TyresPage() {
                     <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em]">Global Partners</span>
                     <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">THE <span className="outline-text text-transparent">ALLIANCE</span></h3>
                 </div>
-                <BrandsSection />
+                <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
+                    <BrandsSection />
+                </Suspense>
             </div>
         </div>
     );

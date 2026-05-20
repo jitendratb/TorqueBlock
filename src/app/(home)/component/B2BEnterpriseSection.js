@@ -1,4 +1,3 @@
-'use client'
 
 import Link from 'next/link'
 import { FaArrowRight, FaCheckCircle, FaTruck, FaTools, FaWarehouse, } from 'react-icons/fa'

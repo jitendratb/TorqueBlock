@@ -322,7 +322,6 @@ function Header() {
                         })}
                     </ul>
 
-                    {/* Right-Aligned Navigation Actions */}
                     <div className='flex items-center justify-end gap-4 w-full lg:max-w-sm xl:max-w-lg'>
                         <SearchBar />
                         <button 
@@ -349,12 +348,9 @@ function Header() {
                 </nav>
             </header>
 
-            {/* 
-              SEO & SSR optimized Mega-Menu Hover Container. 
-              Instead of unmounting via JS, the modal elements are pre-rendered into HTML (ideal for search engine crawlers), 
-              and visibility/animations are controlled through highly optimized CSS transition classes.
-            */}
+         
             <div 
+                data-scrolled={scrolled}
                 className={`Hover-Modal fixed left-0 top-[88px] w-full z-40 transition-all duration-300 ease-out ${
                     activeHover && activeHover !== "Home"
                         ? "opacity-100 translate-y-0 pointer-events-auto"

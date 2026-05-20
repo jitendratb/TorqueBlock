@@ -38,13 +38,16 @@ function Category() {
           {pairedCategories.map((pair, rowIndex) => (
             <div key={rowIndex} className='flex flex-col md:flex-row gap-4 h-[500px] lg:h-[450px]'>
               {pair.map((cat, idx) => (
-                  <Link href={cat.href} key={idx} className={`group relative rounded-[2rem] overflow-hidden border bg-zinc-950 transition-all duration-700 ease-out shadow-xl hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] h-[250px] md:h-auto flex-1 md:hover:flex-[2] w-full`}>
+                  <Link href={cat.href} key={idx} className={`group relative rounded-[2rem] overflow-hidden border border-zinc-800/30 hover:border-orange-500/40 bg-zinc-950 transition-all duration-700 ease-out shadow-xl hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] h-[250px] md:h-auto flex-1 md:hover:flex-[2] w-full`}>
                       <Image 
                           src={cat.image} 
                           alt={cat.title}
                           fill
+                          priority
+                          sizes="(max-width: 768px) 100vw, 50vw"
+                          quality={85}
                           placeholder="blur"
-                          className="object-cover transition-transform duration-[1.5s] group-hover:scale-105 saturate-50 group-hover:saturate-100"
+                          className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 saturate-50 group-hover:saturate-100"
                       />
                       
                       <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700" />
@@ -53,7 +56,7 @@ function Category() {
                           <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 mb-1 -translate-x-4 group-hover:translate-x-0">
                               {cat.subtitle}
                           </span>
-                          <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:250%_auto] bg-left uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
+                          <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-1000 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
                               {cat.title}
                           </h3>
                       </div>

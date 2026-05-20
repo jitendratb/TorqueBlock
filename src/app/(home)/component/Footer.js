@@ -1,18 +1,24 @@
-'use client'
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaInstagram, FaFacebookF, FaYoutube, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
+import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
 
-const brandLinks = ['Pirelli', 'Michelin', 'Metzeler',]
-const helpLinks = ['Contact Us', 'About Us', 'Shipping Policy', 'Return Policy',]
+const brandLinks = [
+    { label: 'Pirelli', href: '/search?q=Pirelli' },
+    { label: 'Michelin', href: '/search?q=Michelin' },
+    { label: 'Metzeler', href: '/search?q=Metzeler' },
+]
+const helpLinks = [
+    { label: 'Contact Us', href: '/contact' },
+    { label: 'About Us', href: '/about' },
+    { label: 'Shipping Policy', href: '/shipping-policy' },
+    { label: 'Return Policy', href: '/return-policy' },
+]
 const operatingLinks = ['Bengaluru', 'Delhi', 'Pan-India Delivery & Fitment']
 
 function Footer() {
     return (
         <footer className="bg-black border-t border-zinc-800">
-
-
             <div className="max-w-7xl mx-auto px-4 py-16">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
                     <div className="lg:col-span-2">
@@ -48,9 +54,26 @@ function Footer() {
                                 </span>
                             </a>
 
-                            <div className="flex items-start gap-3 text-zinc-300">
-                                <FaMapMarkerAlt className="mt-1 text-sm" />
-                                <span className="text-sm leading-6"> Bangalore, Karnataka, India </span>
+                            <div className="space-y-4 border-t border-zinc-900 pt-4">
+                                <div className="flex items-start gap-3 text-zinc-300">
+                                    <FaMapMarkerAlt className="mt-1 text-sm text-orange-500 shrink-0" />
+                                    <div>
+                                        <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 block mb-1">Bengaluru Hub</span>
+                                        <p className="text-xs leading-5">
+                                            8, Andree Rd, next to Bangalore Cafe, Bheemanna Garden, Shanti Nagar, Bengaluru, Karnataka 560027
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-3 text-zinc-300">
+                                    <FaMapMarkerAlt className="mt-1 text-sm text-orange-500 shrink-0" />
+                                    <div>
+                                        <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 block mb-1">Delhi Hub</span>
+                                        <p className="text-xs leading-5">
+                                            Basement, Community Center, NH - 1, behind Block C, Naraina, New Delhi, Delhi 110028
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 mt-8">
@@ -67,8 +90,12 @@ function Footer() {
                                     icon: <FaYoutube />,
                                     href: 'https://www.youtube.com/@torqueblock',
                                 },
+                                {
+                                    icon: <FaLinkedinIn />,
+                                    href: 'https://www.linkedin.com/company/torque-block',
+                                },
                             ].map((item, index) => (
-                                <Link key={index} href={item.href} target="_blank" rel="noopener noreferrer" className="h-11 w-11 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 hover:bg-white hover:text-black transition-all duration-300" >
+                                <Link key={index} href={item.href} target="_blank" rel="noopener noreferrer" className="h-11 w-11 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300" >
                                     {item.icon}
                                 </Link>
                             ))}
@@ -86,9 +113,9 @@ function Footer() {
                         <ul className="space-y-4">
                             {brandLinks.map((item, index) => (
                                 <li key={index}>
-                                    <Link href="/" className="group flex items-center text-zinc-400 hover:text-white transition text-sm " >
+                                    <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
                                         <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
-                                        {item}
+                                        {item.label}
                                     </Link>
                                 </li>
                             ))}
@@ -104,9 +131,9 @@ function Footer() {
                         <ul className="space-y-4">
                             {helpLinks.map((item, index) => (
                                 <li key={index}>
-                                    <Link href="/" className="group flex items-center text-zinc-400 hover:text-white transition text-sm " >
+                                    <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
                                         <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
-                                        {item}
+                                        {item.label}
                                     </Link>
                                 </li>
                             ))}
