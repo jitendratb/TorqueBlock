@@ -29,9 +29,9 @@ const footerSections = [
   {
     title: "PREMIUM TYRE BRANDS",
     links: [
-      { label: "Pirelli Tyres", href: "/tyres" },
-      { label: "Michelin Tyres", href: "/tyres" },
-      { label: "Metzeler Tyres", href: "/tyres" },
+      { label: "Pirelli Tyres", href: "/search?q=Pirelli" },
+      { label: "Michelin Tyres", href: "/search?q=Michelin" },
+      { label: "Metzeler Tyres", href: "/search?q=Metzeler" },
     ],
   },
   {
