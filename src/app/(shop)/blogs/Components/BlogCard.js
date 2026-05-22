@@ -12,7 +12,6 @@ export default function BlogCard({ blog, size = 'standard', index = 0 }) {
     const categoryName = category?.category ?? 'General';
     const slug = blogid?.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-');
     const isFeatured = size === 'featured';
-
     const delayClass = ['animation-delay-0', '[animation-delay:80ms]', '[animation-delay:160ms]', '[animation-delay:240ms]', '[animation-delay:320ms]', '[animation-delay:400ms]',][Math.min(index, 5)];
 
     return (
