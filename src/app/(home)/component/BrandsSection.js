@@ -15,7 +15,7 @@ async function BrandsCard() {
     <div className='w-full mx-auto flex flex-col gap-6 overflow-hidden'>
       <div className='flex flex-col md:flex-row gap-4 w-full items-center md:justify-center md:py-6'>
         {brands?.length > 0 ? (
-          brands.map((brand) => (
+          brands.slice(0,3).map((brand) => (
               <BrandCard brand={brand} key={brand._id} />
           ))
         ) : (

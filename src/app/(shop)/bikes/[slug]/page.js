@@ -12,7 +12,7 @@ export default async function BrandPage({ params }) {
     ];
 
     return (
-        <div className="space-y-6 pb-8 overflow-hidden">
+        <div className="space-y-4 lg:space-y-6 pb-4 overflow-hidden  xl:overflow-visible">
             <Breadcrumb items={breadcrumbItems} />
             <BrandModelsClient brandSlug={slug} />
         </div>

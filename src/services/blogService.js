@@ -1,12 +1,11 @@
 import TorqueBlockApi from '@/lib/api';
 
 class BlogService {
- 
-    async getAllBlogs({ page = 1, limit = 20 ,category } = {}) {
+    async getAllBlogs({ page = 1, limit = 20, category } = {}) {
         try {
-            const params = { page, limit,category };
+            const params = { page, limit, category };
             const response = await TorqueBlockApi.get('/blog/all', { params });
-   
+
             console.log(response)
             return {
                 blogs: response?.blogs,
@@ -18,6 +17,16 @@ class BlogService {
                 blogs: [],
                 pagination: {}
             };
+        }
+    }
+
+    async getBlogById(slug) {
+        try {
+            const response = await TorqueBlockApi.get(`/blog/${slug}`);
+            return response;
+        } catch (error) {
+            console.error('[BlogService.getBlogById] Failed to retrieve blog:', error?.message ?? error);
+            return null;
         }
     }
 }

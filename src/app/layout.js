@@ -1,6 +1,7 @@
 import { Geist_Mono, Inter } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
+import FloatingWhatsApp from "@/components/atoms/FloatingWhatsApp";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -23,7 +24,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <FloatingWhatsApp />
+      </body>
     </html>
   );
 }

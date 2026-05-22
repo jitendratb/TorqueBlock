@@ -11,6 +11,7 @@ const brandLinks = [
 const helpLinks = [
     { label: 'Contact Us', href: '/contact' },
     { label: 'About Us', href: '/about' },
+    { label: 'Blogs', href: '/blogs' },
     { label: 'Shipping Policy', href: '/shipping-policy' },
     { label: 'Return Policy', href: '/return-policy' },
 ]
@@ -20,7 +21,7 @@ function Footer() {
     return (
         <footer className="bg-black border-t border-zinc-800">
             <div className="max-w-7xl mx-auto px-4 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-12">
                     <div className="lg:col-span-2">
                         <Link href="/" className="inline-block mb-2">
                             <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[85px] lg:w-[130px]" />
@@ -102,15 +103,12 @@ function Footer() {
                         </div>
                     </div>
 
-
-
-
                     <div>
-                        <h3 className="text-white font-semibold text-lg mb-6">
+                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
                             Top Brands
                         </h3>
 
-                        <ul className="space-y-4">
+                        <ul className="space-y-3 lg:space-y-4">
                             {brandLinks.map((item, index) => (
                                 <li key={index}>
                                     <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
@@ -124,11 +122,11 @@ function Footer() {
 
                     {/* SUPPORT */}
                     <div>
-                        <h3 className="text-white font-semibold text-lg mb-6">
+                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
                             Support
                         </h3>
 
-                        <ul className="space-y-4">
+                        <ul className="space-y-3 lg:space-y-4">
                             {helpLinks.map((item, index) => (
                                 <li key={index}>
                                     <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
@@ -142,11 +140,11 @@ function Footer() {
 
 
                     <div>
-                        <h3 className="text-white font-semibold text-lg mb-6">
+                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
                             Operating From:
                         </h3>
 
-                        <ul className="space-y-4">
+                        <ul className="space-y-3 lg:space-y-4">
                             {operatingLinks.map((item, index) => (
                                 <li key={index}>
                                     <span className="text-zinc-400 text-sm">

@@ -61,11 +61,11 @@ function BikeModelsClient({ brandSlug }) {
     const whatsappMessage = encodeURIComponent(`Hi Torque Block! I need a high-performance tyre setup for my ${data.bikeBrand} ${data.bikeModel}. What's the best rubber for maximum grip?`);
 
     return (
-        <div className="relative space-y-8">
+        <div className="relative space-y-4 lg:space-y-8">
             <div className="absolute top-[20%] -left-20 w-96 h-96 bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
             <div className="absolute top-[60%] -right-20 w-96 h-96 bg-orange-500/10 blur-[120px] rounded-full pointer-events-none" />
 
-            <section className="relative h-[80vh] md:h-[80vh] w-full rounded-[1rem] md:rounded-[3rem] overflow-hidden group shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/5">
+            <section className="relative h-[80vh] md:h-[70vh]  2xl:h-[500px] w-full rounded-[1rem] md:rounded-[3rem] overflow-hidden group shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/5">
                 <Image
                     src={data.heroImage}
                     alt={`${data.bikeBrand} ${data.bikeModel}`}
@@ -75,7 +75,6 @@ function BikeModelsClient({ brandSlug }) {
                 />
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10" />
-
 
                 <div className="absolute top-2 right-2 md:right-8 z-30 animate-in fade-in slide-in-from-top-4 duration-1000">
                     <a
@@ -138,10 +137,10 @@ function BikeModelsClient({ brandSlug }) {
                 </div>
             </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-2">
-                <div className="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl relative overflow-hidden group hover:border-zinc-700 transition-all duration-300">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+                <div className="p-4 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl relative overflow-hidden group hover:border-zinc-700 transition-all duration-300">
                     <div className="relative z-10 space-y-2">
-                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Front Fitment</span>
+                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Front Standard Fitment</span>
                         <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight">
                             {data.frontSizes?.[0]}
                         </h3>
@@ -151,9 +150,9 @@ function BikeModelsClient({ brandSlug }) {
                     </div>
                 </div>
 
-                <div className="p-6 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl relative overflow-hidden group hover:border-zinc-700 transition-all duration-300">
+                <div className="p-4 md:p-8 bg-zinc-900 border border-zinc-800 rounded-2xl relative overflow-hidden group hover:border-zinc-700 transition-all duration-300">
                     <div className="relative z-10 space-y-2">
-                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Rear Fitment</span>
+                        <span className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest">Rear Standard Fitment</span>
                         <h3 className="text-3xl md:text-4xl font-black text-white tracking-tight">
                             {data.rearSizes?.[0]}
                         </h3>
@@ -163,12 +162,12 @@ function BikeModelsClient({ brandSlug }) {
                     </div>
                 </div>
 
-                <div className="md:col-span-2 mt-4">
+                <div className="md:col-span-2 ">
                     <PerformanceDNA points={data.whyTyreChoiceMatters} />
                 </div>
             </div>
 
-            <section className="space-y-16">
+            <section className="">
                 <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-8 px-4">
                     <div className="space-y-4 max-w-2xl lg:text-center text-left">
                         <h2 className="text-4xl md:text-2xl font-black text-white uppercase tracking-tighter leading-none">
@@ -187,8 +186,8 @@ function BikeModelsClient({ brandSlug }) {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 lg:gap-8">
                     {data.topProducts?.map((product, index) => (
-                        <div key={index} className="group relative pt-20 pb-4 md:pb-10 px-4 md:px-8 bg-zinc-950 border border-zinc-900 rounded-[2rem] lg:rounded-[4rem] hover:border-orange-500 transition-all duration-700 hover:bg-zinc-900/40">
-                            <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-64 h-64 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 ease-out z-20">
+                        <div onClick={() => router.push(`${product?.link}`)} key={index} className="group relative mt-20 lg:mt-24 pb-4 md:pb-10 px-4 md:px-2 lg:px-8 bg-zinc-950 border border-orange-900 rounded-[2rem] lg:rounded-[4rem] hover:border-orange-500 transition-all duration-700 hover:bg-zinc-900/40 cursor-pointer">
+                            <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-56 h-56 lg:w-62 lg:h-62 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-700 ease-out z-20">
                                 <Image
                                     src={product.image}
                                     alt={product.name}
@@ -197,22 +196,19 @@ function BikeModelsClient({ brandSlug }) {
                                 />
                             </div>
 
-                            <div className="relative z-10 flex flex-col items-center pt-32 text-center space-y-6">
-                                <div className="space-y-4 min-h-20">
+                            <div className="relative z-10 flex flex-col items-center pt-28 lg:pt-34 text-center space-y-2">
+                                <div className="space-y-4 md:min-h-20">
                                     <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em]">Choice 0{index + 1}</span>
                                     <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-700 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
                                         {product.name}
                                     </h3>
                                 </div>
-                                <p className="text-zinc-500 text-sm font-medium leading-relaxed h-[70px] over-flow-hidden line-clamp-3">
+                                <p className="text-zinc-500 text-sm font-medium leading-relaxed md:h-[70px] over-flow-hidden line-clamp-3">
                                     {product.description}
                                 </p>
-                        
-                                    <WhatsAppButton 
-                                        text="Check Price & Availability" 
-                                        value={`I'm interested in the ${product?.name} for my ${data.bikeModel}. Can you check live availability and share the best dealer price?`} 
-                                    />
-                           
+
+                                <WhatsAppButton text="Check Price & Availability" value={`I'm interested in the ${product?.name} for my ${data.bikeModel}. Can you check live availability and share the best dealer price?`} />
+
                             </div>
                         </div>
                     ))}

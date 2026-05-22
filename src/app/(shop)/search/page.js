@@ -11,11 +11,12 @@ import searchServiceInstance from '@/services/searchService';
 
 
 const Card = ({ item }) => {
+    const router = useRouter();
     switch (item.type) {
         case 'Tyre': {
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
             return (
-                <article className="grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden">
+                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden cursor-pointer">
                     <div className="relative h-[160px] md:h-full w-full overflow-hidden bg-zinc-950 ">
                         <Image
                             src={item.hero?.heroImage || '/placeholder-tyre.jpg'}
@@ -41,7 +42,7 @@ const Card = ({ item }) => {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-2 text-[10px]  lg:text-sm text-zinc-400">
-                                <span className="rounded-full bg-zinc-950 px-3 py-2">
+                                <span className="rounded-full bg-zinc-950 px-3 py-2 truncate max-w-[250px]">
                                     {item.commonlyUsedOn || 'Motorcycle'}
                                 </span>
 
@@ -61,8 +62,7 @@ const Card = ({ item }) => {
                             </div>
                             <p className="text-[10px]  md:text-xs lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.hero?.subtitle || 'Premium tyre for optimal performance.'}</p>
                         </div>
-                        <div className="flex items-center justify-between ">
-                            <div className="text-[10px] md:text-sm text-zinc-400">Relevance: {item.relevanceScore || 0}</div>
+                        <div className="flex items-center justify-end ">
                             <WhatsAppButton value={`I'm interested in ${item.productName || item.hero?.title}. Please share availability and compatible options.`} text='Get Details' className="max-w-[150px]" />
                         </div>
                     </div>
@@ -72,8 +72,9 @@ const Card = ({ item }) => {
         case 'Comparison': {
             const view = Math.floor(Math.random() * 10000) + 100;
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
+            console.log(item)
             return (
-                <div className="overflow-hidden grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-900/95 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
+                <div onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-900/95 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
                     <div className="relative grid h-[220px] md:h-full grid-cols-2 overflow-hidden">
                         <div className="relative">
                             <Image
@@ -129,12 +130,8 @@ const Card = ({ item }) => {
                         </div>
 
                         {/* Bottom */}
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                                <span className="text-[10px] md:text-sm text-zinc-500">
-                                    Relevance: {item.relevanceScore || 0}
-                                </span>
-                            </div>
+                        <div className="flex items-center justify-end">
+                           
 
                             <WhatsAppButton
                                 value={`I'm interested in ${item.tyre1?.productName} vs ${item.tyre2?.productName}. Please share pricing, availability and best compatible options.`}
@@ -149,7 +146,7 @@ const Card = ({ item }) => {
         case 'Bike': {
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
             return (
-                <article className="grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden">
+                <article onClick={() => { router.push(`/bikes/${item.identifier}`) }} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden">
                     <div className="relative h-[220px] md:h-full overflow-hidden bg-zinc-950">
                         <Image
                             src={item.image || '/placeholder-bike.jpg'}
@@ -179,8 +176,7 @@ const Card = ({ item }) => {
                             <span className="rounded-full bg-zinc-950 px-3 py-2  text-yellow-400">⭐ {rating}</span>
                         </div>
                         <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
-                        <div className="flex items-center justify-between">
-                            <div className="text-[10px] md:text-sm text-zinc-400">Relevance: {item.relevanceScore || 0}</div>
+                        <div className="flex items-center justify-end">
                             <WhatsAppButton value={`I'm looking for tyres for ${item.bikeBrand} ${item.bikeModel}. Please share compatible options.`} text='Get Details' className="max-w-[150px]" />
                         </div>
                     </div>

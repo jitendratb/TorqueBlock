@@ -7,9 +7,9 @@ const Breadcrumb = ({ items = [], className = "", separator = <IoIosArrowForward
 
   return (
     <nav aria-label="Breadcrumb" className={`w-full  ${className}`}>
-      <ol className="flex items-center flex-wrap gap-2 line-clamp-1 overflow-x-auto text-sm md:text-[15px] text-zinc-500">
+      <ol className="flex items-center  gap-2 line-clamp-1 overflow-x-auto text-sm md:text-[15px] text-zinc-500">
 
-        <Link href="/" className="transition-all duration-200 text-white/70 hover:text-orange-500">Home</Link>
+        <Link href="/" className="transition-all text-xs md:text-sm duration-200 text-white/70 hover:text-orange-500">Home</Link>
         <span className="text-zinc-400"> {separator} </span> {items?.map((item, index) => {
 
           const isLast = index === items.length - 1;

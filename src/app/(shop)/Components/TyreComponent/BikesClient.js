@@ -83,10 +83,7 @@ function BikesClient({ initialBrands }) {
         <div className="space-y-8 md:space-y-12" ref={topRef}>
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 px-2">
                 <div className="space-y-3 md:space-y-4">
-                    <div className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 bg-zinc-900 border border-zinc-800 rounded-full w-fit">
-                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-500 rounded-full animate-pulse" />
-                        <span className="text-[8px] lg:text-[10px] font-black text-white uppercase tracking-[0.3em] ">Vehicle Roster / Ready</span>
-                    </div>
+                   
                     <h2 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
                         SELECT YOUR <br />
                         <span className="text-orange-500 outline-text text-transparent">WEAPON</span>
