@@ -79,7 +79,6 @@ const Card = ({ item }) => {
         case 'Comparison': {
             const view = Math.floor(Math.random() * 10000) + 100;
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
-            console.log(item)
             return (
                 <div onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-900/95 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
                     <div className="relative grid h-[220px] md:h-full grid-cols-2 overflow-hidden">
@@ -263,7 +262,6 @@ function SearchPageContent() {
             try {
                 const results = await searchServiceInstance.search(searchQuery, { limit: 10, page: currentPage, category: filters.type.length > 0 ? filters.type.join(',') : undefined, brand: filters.brand.length > 0 ? filters.brand.join(',') : undefined, sorted: sortBy, rating: filters.rating > 0 ? filters.rating : undefined });
 
-                console.log('Search results:', results);
 
                 if (results && results.results) {
                     const flattenedResults = [];

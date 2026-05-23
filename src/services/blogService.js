@@ -6,7 +6,6 @@ class BlogService {
             const params = { page, limit, category };
             const response = await TorqueBlockApi.get('/blog/all', { params });
 
-            console.log(response)
             return {
                 blogs: response?.blogs,
                 pagination: response?.pagination

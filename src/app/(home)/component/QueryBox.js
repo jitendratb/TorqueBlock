@@ -33,7 +33,6 @@ function QueryBox() {
 
       try {
         const res = await TorqueBlockApi.get(`compatible/brandmodels/${selectedTyre?._id}`)
-        console.log(res?.vehicleModels)
         setModelOptions(res?.vehicleModels || [])
       } catch (error) {
         console.log(error)

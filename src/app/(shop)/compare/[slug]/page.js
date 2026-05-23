@@ -66,8 +66,6 @@ export default async function CompareDetails({ params }) {
 
   const waMessage = `I just compared ${tyre1Name} vs ${tyre2Name} and need expert advice to choose the perfect tyre for my machine.`;
 
-  console.log(data)
-
   return (
     <div className="space-y-4 mb-4">
       <Breadcrumb items={breadcrumbItems} />

@@ -126,7 +126,6 @@ function TyreSection() {
                 });
 
                 setTyreData(updatedData);
-                console.log(updatedData);
 
             } catch (error) {
                 console.log(error);

@@ -26,8 +26,6 @@ export default async function ComparePage({ searchParams }) {
     const initialTotalPages = pagination?.totalPages || 1;
     const initialTotalCount = pagination?.totalItems || 0;
 
-    console.log(initialResponse)
-
     const breadcrumbItems = [
         { label: 'Compare', isLast: true },
     ];
