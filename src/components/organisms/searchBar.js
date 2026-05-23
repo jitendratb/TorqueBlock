@@ -124,20 +124,41 @@ function SearchBar({
             {showSuggestions && storeShowSuggestions && suggestions.length > 0 && (
                 <div className="absolute left-0 right-0 mt-2 w-full rounded-2xl border border-slate-200/70 bg-white shadow-xl ring-1 ring-black/5 z-50 overflow-hidden">
                     <div className="p-1.5 max-h-60 overflow-y-auto">
-                        {!loading && !error && suggestions.map((item, index) => (
-                            <button
-                                key={`${item.type}-${index}`}
-                                type="button"
-                                onMouseDown={(e) => e.preventDefault()}
-                                onClick={() => handleSearchSubmit(item.query)}
-                                className="w-full text-left transition px-3 py-2 hover:bg-blue-50/70 rounded-xl flex items-center justify-between gap-2 cursor-pointer"
-                            >
-                                <span className="font-semibold text-slate-800 truncate text-xs">{item.label}</span>
-                                <span className="rounded-full bg-slate-100 text-slate-600 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider">
-                                    {item.type}
-                                </span>
-                            </button>
-                        ))}
+                  
+                        {!loading && !error && suggestions.map((item, index) => {
+                            const getRoute = (type, identifier) => {
+                                const id = identifier || item.query || item.label;
+                                switch (type) {
+                                    case 'Tyre':
+                                        return `/tyres/${id}`;
+                                    case 'Bike':
+                                        return `/bikes/${id}`;
+                                    case 'Comparison':
+                                        return `/compare/${id}`;
+                                    default:
+                                        return `/search?q=${encodeURIComponent(id)}`;
+                                }
+                            };
+
+                            return (
+                                <button
+                                    key={`${item.type}-${index}`}
+                                    type="button"
+                                    onMouseDown={(e) => e.preventDefault()}
+                                    onClick={() => { 
+                                        router.push(getRoute(item.type, item.identifier)); 
+                                        setShowSuggestions(false); 
+                                        setSearchInput(""); 
+                                    }}
+                                    className="w-full text-left transition px-3 py-2 hover:bg-blue-50/70 rounded-xl flex items-center justify-between gap-2 cursor-pointer"
+                                >
+                                    <span className="font-semibold text-slate-800 truncate text-xs">{item.label}</span>
+                                    <span className="rounded-full bg-slate-100 text-slate-600 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider">
+                                        {item.type}
+                                    </span>
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
             )}

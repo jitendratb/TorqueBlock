@@ -40,7 +40,7 @@ function page() {
 
   return (
     <div className=''>
-      <div className='relative w-full h-screen overflow-hidden' >
+      <div className='relative w-full h-screen ' >
         <Image 
           src={banners[Math.floor(Math.random() * banners.length)].image} 
           alt="Premium Motorcycle Tyres India" 

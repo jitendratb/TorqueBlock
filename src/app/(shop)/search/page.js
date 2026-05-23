@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useCallback, useMemo, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
@@ -37,7 +36,15 @@ const Card = ({ item }) => {
                         <div className='space-y-1 md:space-y-2'>
                             <div className="flex items-start justify-between gap-4">
                                 <div>
-                                    <p className="text-[10px] lg:text-xs uppercase tracking-[0.2em] text-orange-400/80">{item.brand?.name || 'Brand'}</p>
+                                    <button 
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            router.push(`/brands/${item.brand?.identifier}`);
+                                        }} 
+                                        className="text-[10px] lg:text-xs uppercase tracking-[0.2em] text-orange-400/80 border  border-transparent hover:border hover:border-orange-500/20 hover:scale-110 rounded-xl transition-all duration-300 px-2 py-1 hover:text-white cursor-pointer hover:bg-orange-500/10 hover:border-orange-500/50 transition-colors"
+                                    >
+                                        {item.brand?.name || 'Brand'}
+                                    </button>
                                     <h3 className="text-lg  lg:text-2xl font-semibold text-white">{item.productName || item.hero?.title}</h3>
                                 </div>
                             </div>
@@ -497,7 +504,7 @@ function SearchPageContent() {
                         </div>
                     </div>
 
-                    <main className="space-y-4  overflow-y-auto custom-scroll pr-1 flex flex-col flex-1 max-h-[calc(93vh-5rem)]">
+                    <main className="space-y-4  overflow-y-auto custom-scroll  flex flex-col flex-1 max-h-[calc(93vh-5rem)]">
                         {loading ? (
                             <div className="grid gap-4 grid-cols-1">
                                 <SearchResultSkeleton />
@@ -520,7 +527,7 @@ function SearchPageContent() {
                                 </div>
                             </div>
                         ) : searchResults.length > 0 ? (
-                            <div className="grid gap-4 grid-cols-1">
+                            <div className="grid gap-4 grid-cols-1 mr-1">
                                 {searchResults.map((item, index) => (
                                     <div key={item.id || index}>
                                         <Card item={item} />

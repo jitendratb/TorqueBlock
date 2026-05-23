@@ -99,6 +99,7 @@ const useSearchStore = create(
                             type: 'Tyre',
                             label: tyre.productName,
                             query: tyre.productName,
+                            identifier: tyre.identifier,
                         });
                     });
                 }
@@ -110,6 +111,7 @@ const useSearchStore = create(
                             type: 'Comparison',
                             label: cleanComparisonLabel(comparison.identifier),
                             query: cleanComparisonLabel(comparison.identifier),
+                            identifier: comparison.identifier,
                         });
                     });
                 }
@@ -121,6 +123,7 @@ const useSearchStore = create(
                             type: 'Bike',
                             label: formatBikeLabel(bike),
                             query: formatBikeLabel(bike),
+                            identifier: bike.identifier,
                         });
                     });
                 }

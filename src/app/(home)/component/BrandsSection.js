@@ -1,12 +1,11 @@
 import React from 'react'
-import TorqueBlockApi from "@/lib/api"
+import brandService from "@/services/brandService";
 import BrandCard from './BrandCard';
 
 async function BrandsCard() {
   let brands = [];
   try {
-    const res = await TorqueBlockApi.get("/brands", { params: { isActive: true }})
-    brands = res?.data || [];
+    brands = await brandService.getBrands({ isActive: true });
   } catch (error) {
     console.error("Error fetching brands on Server Side:", error);
   }

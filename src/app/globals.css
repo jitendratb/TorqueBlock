@@ -32,43 +32,53 @@
 
 .custom-scroll {
   overflow: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-.custom-scroll::-webkit-scrollbar {
-  width: 0px;
-  height: 0px;
-}
-
-
-.custom-scroll:hover {
   scrollbar-width: thin;
-  scrollbar-color: #f97316 transparent;
-}
-
-.custom-scroll:hover::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.custom-scroll:hover::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scroll:hover::-webkit-scrollbar-thumb {
-  background: #f97316;
-  border-radius: 999px;
-}
-
-.custom-scroll:hover::-webkit-scrollbar-thumb:hover {
-  background: #ea580c;
-}
-
-.custom-scroll {
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
   scroll-behavior: smooth;
 }
 
+/* Permanent thin scrollbar size to prevent layout shifts when hovering */
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 999px;
+  transition: background 0.3s ease;
+}
+
+/* Smooth color fade-in on hover */
+.custom-scroll:hover {
+  scrollbar-color: rgba(249, 115, 22, 0.4) transparent;
+}
+
+.custom-scroll:hover::-webkit-scrollbar-thumb {
+  background: rgba(249, 115, 22, 0.4);
+}
+
+.custom-scroll:hover::-webkit-scrollbar-thumb:hover {
+  background: rgba(234, 88, 12, 0.8);
+}
+
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 1.8s linear infinite;
+}
 
 .header-root {
   top: 0;
@@ -165,10 +175,25 @@
   animation: slide-down-fade 0.5s ease-out forwards;
 }
 
-
 .outline-text {
   -webkit-text-stroke: 2px #f97316;
 }
+
+  @keyframes scanline {
+          0% { transform: translateY(-100px); opacity: 0.1; }
+          50% { opacity: 0.3; }
+          100% { transform: translateY(100px); opacity: 0.1; }
+        }
+        @keyframes telemetry-glow {
+          0%, 100% { opacity: 0.7; text-shadow: 0 0 10px rgba(249,115,22,0.1); }
+          50% { opacity: 0.9; text-shadow: 0 0 30px rgba(249,115,22,0.4); }
+        }
+        .animate-scanline {
+          animation: scanline 4s linear infinite;
+        }
+        .animate-telemetry-glow {
+          animation: telemetry-glow 3s ease-in-out infinite;
+        }
 
 @keyframes marquee {
   0% {
@@ -217,7 +242,6 @@
   -webkit-text-stroke: 2px #3f3f46;
 }
 
-/* ── Blog page keyframes ────────────────────────────────────────────────── */
 
 @keyframes cardEntrance {
   from {

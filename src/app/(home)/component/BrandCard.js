@@ -3,18 +3,17 @@ import Link from 'next/link';
 import React from 'react'
 import { FiArrowRight } from 'react-icons/fi';
 
-function BrandCard({ brand }) {
-  console.log(brand)
+function BrandCard({ brand, className = "w-[280px] md:w-[280px] lg:w-[320px]" }) {
   return (
-    <Link href={`/search?q=${brand?.name}`} className='group block cursor-pointer relative h-[200px] md:h-[180px] lg:h-[240px] w-[280px] md:w-[280px] lg:w-[320px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-zinc-900 shadow-xl w-full'>
-         <Image
+    <Link href={`/brands/${brand?._id}`} className={`group block cursor-pointer relative h-[200px] md:h-[180px] lg:h-[240px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-zinc-900 shadow-xl w-full ${className}`}>
+      <Image
         src={brand?.brandBanner}
         alt={brand?.brandName || brand?.name || "Brand"}
         fill
         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         className='object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105'
       />
-     
+
       <div className='absolute inset-0 bg-black/10 group-hover:bg-black/40 transition-colors duration-500 pointer-events-none' />
       <div className='absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent pointer-events-none' />
       <div className='absolute bottom-0 left-0 w-full p-6 md:p-8 flex items-center justify-between z-10'>
