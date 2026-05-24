@@ -99,6 +99,9 @@ export const metadata = {
         title: "Torque Block",
     },
 
+};
+
+export const viewport = {
     themeColor: "#000000",
 };
 
