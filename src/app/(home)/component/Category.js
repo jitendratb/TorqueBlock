@@ -45,7 +45,7 @@ function Category() {
                           fill
                           priority
                           sizes="(max-width: 768px) 100vw, 50vw"
-                          quality={85}
+                          quality={75}
                           placeholder="blur"
                           className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 saturate-50 group-hover:saturate-100"
                       />

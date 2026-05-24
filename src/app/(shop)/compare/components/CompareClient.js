@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/molecules/CustomImage";
 import Link from "next/link";
 import { FiSearch, FiZap, FiMessageCircle } from "react-icons/fi";
 import useCompareStore from "@/stores/compareStore";
@@ -115,14 +115,14 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                                 <div className="absolute inset-0 flex items-center justify-between p-4 mt-8 opacity-80 group-hover:opacity-100 transition-all duration-500 z-10">
                                     <div className="relative w-[45%] h-[65%] group-hover:scale-110 group-hover:-translate-x-3 group-hover:-rotate-3 transition-transform duration-700">
                                         {tyre1Image ? (
-                                            <Image src={tyre1Image} alt={tyre1Name} fill className="object-contain object-center drop-shadow-2xl" />
+                                            <Image src={tyre1Image} alt={tyre1Name} fill imageClassName="object-contain object-center drop-shadow-2xl" />
                                         ) : (
                                             <div className="w-full h-full bg-zinc-800/50 rounded-xl" />
                                         )}
                                     </div>
                                     <div className="relative w-[45%] h-[65%] group-hover:scale-110 group-hover:translate-x-3 group-hover:rotate-3 transition-transform duration-700">
                                         {tyre2Image ? (
-                                            <Image src={tyre2Image} alt={tyre2Name} fill className="object-contain object-center drop-shadow-2xl" />
+                                            <Image src={tyre2Image} alt={tyre2Name} fill imageClassName="object-contain object-center drop-shadow-2xl" />
                                         ) : (
                                             <div className="w-full h-full bg-zinc-800/50 rounded-xl" />
                                         )}

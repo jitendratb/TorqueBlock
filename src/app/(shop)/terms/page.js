@@ -1,46 +1,38 @@
-import React from 'react'
+import React from 'react';
+import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export const metadata = {
-  title:
-    'Terms & Conditions | Torque Block Premium Motorcycle Tyres',
-
-  description:
-    'Review Torque Block terms and conditions covering website usage, tyre fitment responsibility, pricing accuracy, order acceptance, warranty limitations, liability boundaries, and governing jurisdiction.',
-
+  title: 'Terms & Conditions | Torque Block Premium Motorcycle Tyres',
+  description: 'Review Torque Block terms and conditions covering website usage, tyre fitment responsibility, pricing accuracy, order acceptance, warranty limitations, liability boundaries, and governing jurisdiction.',
   keywords: [
     'motorcycle tyre terms and conditions',
     'superbike tyre warranty India',
     'tyre ecommerce legal policy',
     'premium tyre store terms',
     'Torque Block terms'
-  ]
-}
+  ],
+  alternates: { canonical: 'https://torqueblock.com/terms' },
+  openGraph: {
+    title: 'Terms & Conditions | Torque Block',
+    description: 'Review Torque Block terms and conditions covering website usage and product purchases.',
+    url: 'https://torqueblock.com/terms',
+    siteName: 'Torque Block',
+    type: 'website',
+    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+  },
+};
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen text-white py-6">
-
-      {/* JSON-LD SCHEMA */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebPage',
-            name: 'Terms & Conditions',
-            description:
-              'Torque Block terms and conditions for website usage, product purchases, warranties, and customer responsibilities.',
-            publisher: {
-              '@type': 'Organization',
-              name: 'Torque Block'
-            }
-          })
-        }}
+    <>
+      <WebPageSchema 
+        type="WebPage"
+        title="Terms & Conditions | Torque Block"
+        description="Torque Block terms and conditions for website usage, product purchases, warranties, and customer responsibilities."
+        url="/terms"
       />
-
-      <div className="">
-
-        {/* HEADER */}
+      <div className="min-h-screen text-white py-6">
+        <div className="">
         <div className="mb-10 flex flex-col items-center text-center">
 
           <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em] block mb-2">
@@ -430,9 +422,8 @@ export default function TermsPage() {
           </section>
 
         </div>
-
       </div>
-
     </div>
+    </>
   )
 }

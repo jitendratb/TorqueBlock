@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
+import Image from "@/components/molecules/CustomImage";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import vehicleService from "@/services/vehicleService";
@@ -14,49 +14,8 @@ import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import PerformanceDNA from "@/components/molecules/PerformanceDNA";
 import SupportTerminal from "@/components/molecules/SupportTerminal";
 
-function BikeModelsClient({ brandSlug }) {
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
+function BikeModelsClient({  data }) {
     const router = useRouter();
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                setLoading(true);
-                const response = await vehicleService.getBrandModels(brandSlug);
-                setData(response);
-            } catch (error) {
-                console.error("Failed to fetch bike detail data", error);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, [brandSlug]);
-
-    if (loading) {
-        return (
-            <div className="space-y-12 animate-pulse px-4">
-                <div className="h-[70vh] bg-zinc-900/50 rounded-[3rem]" />
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div className="h-96 bg-zinc-900/50 rounded-[2.5rem]" />
-                    <div className="h-96 bg-zinc-900/50 rounded-[2.5rem]" />
-                    <div className="h-96 bg-zinc-900/50 rounded-[2.5rem]" />
-                </div>
-            </div>
-        );
-    }
-
-    if (!data) {
-        return (
-            <div className="py-24 text-center border-2 border-dashed border-zinc-800 rounded-[3rem] mx-4 bg-zinc-900/20">
-                <p className="text-zinc-500 text-xl font-black uppercase tracking-[0.5em]">System Failure: Model Missing</p>
-                <Link href="/bikes" className="mt-8 inline-flex items-center gap-4 px-8 py-4 bg-orange-500 text-black font-black rounded-full hover:scale-110 transition-all">
-                    REBOOT TO BRANDS
-                </Link>
-            </div>
-        );
-    }
 
     const whatsappMessage = encodeURIComponent(`Hi Torque Block! I need a high-performance tyre setup for my ${data.bikeBrand} ${data.bikeModel}. What's the best rubber for maximum grip?`);
 
@@ -70,7 +29,7 @@ function BikeModelsClient({ brandSlug }) {
                     src={data.heroImage}
                     alt={`${data.bikeBrand} ${data.bikeModel}`}
                     fill
-                    className="object-cover transition-transform duration-[3s] group-hover:scale-110 brightness-75"
+                    imageClassName="object-cover transition-transform duration-[3s] group-hover:scale-110 brightness-75"
                     priority
                 />
 
@@ -192,7 +151,7 @@ function BikeModelsClient({ brandSlug }) {
                                     src={product.image}
                                     alt={product.name}
                                     fill
-                                    className="object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.8)]"
+                                    imageClassName="object-contain drop-shadow-[0_40px_60px_rgba(0,0,0,0.8)]"
                                 />
                             </div>
 

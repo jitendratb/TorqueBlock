@@ -1,10 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/molecules/CustomImage";
 import { useState } from "react";
 
 function FitmentSection({ tyre }) {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState();
 
     return (
         <section className=" border-t border-white/10 overflow-hidden">
@@ -36,7 +36,7 @@ function FitmentSection({ tyre }) {
                         src={image}
                         alt={`${tyre?.productName} fitment ${index + 1}`}
                         fill
-                        className="object-cover transition-transform duration-700 ease-out"
+                        imageClassName="object-cover transition-transform duration-700 ease-out"
                     />
 
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-70 group-hover:opacity-20 transition-all duration-500" />

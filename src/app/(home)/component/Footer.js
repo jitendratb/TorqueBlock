@@ -24,7 +24,7 @@ function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 lg:gap-12">
                     <div className="lg:col-span-2">
                         <Link href="/" className="inline-block mb-2">
-                            <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[85px] lg:w-[130px]" />
+                            <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[85px] lg:w-[130px]" style={{ height: 'auto' }} />
                         </Link>
 
                         <p className="text-zinc-400  text-sm max-w-md">

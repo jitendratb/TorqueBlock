@@ -262,7 +262,7 @@ function Header() {
             <header className="header-root fixed left-0 right-0 w-full z-50" data-scrolled={scrolled}>
                 <nav className={`header-nav flex text-white justify-between items-center gap-4 max-w-7xl mx-auto ${scrolled ? "bg-white/10 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
                     <Link href="/" className="text-2xl font-bold" aria-label="Torque Block Home">
-                        <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[130px]" />
+                        <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[130px]" style={{ height: 'auto' }} />
                     </Link>
 
                     {/* Desktop Navigation Link Bar */}
@@ -395,7 +395,7 @@ function Header() {
             >
                 {/* Header of Drawer */}
                 <div className="flex items-center justify-between px-5 py-[18px] border-b border-white/[0.07]">
-                    <Image src="/newlogo.webp" alt="Torque Block Logo" width={100} height={40} className="h-auto w-[100px]" />
+                    <Image src="/newlogo.webp" alt="Torque Block Logo" width={100} height={40} className="h-auto w-[100px]" style={{ height: 'auto' }} />
                     <button
                         onClick={closeSidebar}
                         aria-label="Close navigation menu"

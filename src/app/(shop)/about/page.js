@@ -1,22 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-import {
-  FaShieldAlt,
-  FaTruck,
-  FaMapPin,
-  FaUserCheck,
-  FaCheckCircle,
-  FaChevronDown
-} from 'react-icons/fa'
+import { FaShieldAlt, FaTruck, FaMapPin, FaUserCheck, FaCheckCircle, FaChevronDown } from 'react-icons/fa'
 import WhatsAppButton from '@/components/atoms/WhatsAppButton'
+import WebPageSchema from '@/components/seo/WebPageSchema'
 
 export const metadata = {
-  title:
-    'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
-
-  description:
-    'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone. Genuine inventory, pan-India delivery, expert superbike tyre consultation, and rider-first support.',
-
+  title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
+  description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone. Genuine inventory, pan-India delivery, expert superbike tyre consultation, and rider-first support.',
   keywords: [
     'premium motorcycle tyres India',
     'superbike tyres India',
@@ -26,7 +16,16 @@ export const metadata = {
     'performance motorcycle tyres',
     'bike tyre experts India',
     'Torque Block'
-  ]
+  ],
+  alternates: { canonical: 'https://torqueblock.com/about' },
+  openGraph: {
+    title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
+    description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone.',
+    url: 'https://torqueblock.com/about',
+    siteName: 'Torque Block',
+    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+    type: 'website',
+  },
 }
 
 export default function AboutPage() {
@@ -36,19 +35,16 @@ export default function AboutPage() {
       title: '100% Genuine Inventory',
       desc: 'Every tyre is sourced through verified distribution channels with strict authenticity checks and freshness standards.'
     },
-
     {
       icon: <FaTruck size={24} />,
       title: 'Pan-India Delivery',
       desc: 'Secure multi-layer packaging and trusted logistics partnerships ensure safe delivery across India.'
     },
-
     {
       icon: <FaMapPin size={24} />,
       title: 'Verified Fitment Partners',
       desc: 'We work with trusted superbike garages and fitment partners in major cities for professional installation support.'
     },
-
     {
       icon: <FaUserCheck size={24} />,
       title: 'Expert Rider Consultation',
@@ -61,22 +57,18 @@ export default function AboutPage() {
       q: 'Are all tyres sold by Torque Block genuine?',
       a: 'Yes. All tyres are sourced from verified brand-authorized distribution channels with strict authenticity checks.'
     },
-
     {
       q: 'Do you deliver across India?',
       a: 'Yes. Torque Block ships premium motorcycle tyres across India with secure packaging and logistics support.'
     },
-
     {
       q: 'Can you help me choose the right tyres?',
       a: 'Absolutely. Our team helps riders select tyres based on motorcycle category, riding style, terrain, and usage.'
     },
-
     {
       q: 'Do you support superbikes and premium motorcycles?',
       a: 'Yes. Torque Block specializes in performance motorcycles, superbikes, hypersport, touring, and adventure motorcycles.'
     },
-
     {
       q: 'Do you provide fitment support?',
       a: 'Yes. We work with garage partners and fitment specialists in multiple cities across India.'
@@ -84,25 +76,14 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen py-8">
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Organization',
-            name: 'Torque Block',
-            url: 'https://torqueblock.com',
-            logo: 'https://torqueblock.com/logo.png',
-            description:
-              'India’s premium motorcycle tyre platform for superbikes and performance motorcycles.',
-            sameAs: [
-              'https://instagram.com/torqueblock'
-            ]
-          })
-        }}
+    <>
+      <WebPageSchema 
+        type="AboutPage"
+        title="About Torque Block"
+        description="India’s premium motorcycle tyre platform for superbikes and performance motorcycles."
+        url="/about"
       />
+      <div className="min-h-screen py-8">
 
       <div className="space-y-8">
         <div className="text-center">
@@ -335,5 +316,6 @@ export default function AboutPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

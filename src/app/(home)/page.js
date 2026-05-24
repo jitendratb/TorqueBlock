@@ -10,28 +10,25 @@ import ReviewsSection from './component/ReviewSection'
 import B2BEnterpriseSection from './component/B2BEnterpriseSection'
 import Category from './component/Category'
 import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
+import WebPageSchema from '@/components/seo/WebPageSchema'
 
 function page() {
   const banners = [
-    {
-      id: 2,
-      image: "/bg1.webp",
-      mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
-    },
     {
       id: 4,
       image: "/bg3.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
-    }, {
-      id: 5,
-      image: "/bg4.webp",
-      mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
-    }, {
-      id: 6,
-      image: "/bg5.webp",
+    },
+    // {
+    //   id: 4,
+    //   image: "/Home/HomeBanner.webp",
+    //   mobileImage: "/Home/HomeBannerMobile.webp",
+    //   alt: "Premium Motorcycle Tyres India",
+    // },
+     {
+      id: 4,
+      image: "/Category/DualSport.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     }
@@ -40,14 +37,20 @@ function page() {
 
   return (
     <div className=''>
+      <WebPageSchema 
+        type="WebSite"
+        title="Torque Block | Premium Motorcycle Tyres India"
+        description="India's premium performance motorcycle tyre platform for superbikes, track riding, sport touring, and ADV motorcycles."
+        url="/"
+      />
       <div className='relative w-full h-screen ' >
         <Image 
           src={banners[Math.floor(Math.random() * banners.length)].image} 
           alt="Premium Motorcycle Tyres India" 
           fill 
           priority 
-          sizes="100vw"
-          quality={85}
+          sizes="(max-width: 768px) 0vw, 100vw"
+          quality={75}
           className='hidden md:block object-cover' 
         />
         <Image 
@@ -55,8 +58,8 @@ function page() {
           alt="Premium Motorcycle Tyres India" 
           fill 
           priority 
-          sizes="100vw"
-          quality={85}
+          sizes="(max-width: 768px) 100vw, 0vw"
+          quality={75}
           className='md:hidden object-cover' 
         />
         <span className='absolute bg-gradient-to-r from-black/80 to-black/40 inset-0 z-0' />

@@ -7,14 +7,14 @@ import WhatsAppButton from '@/components/atoms/WhatsAppButton';
 
 export default function NotFound() {
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-[#05070a] relative px-6 py-16 overflow-hidden">
+    <div className="h-full w-full flex flex-col items-center justify-center  relative px-6 py-8  overflow-hidden">
       
-        <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/20 to-transparent pointer-events-none animate-scanline" />
+        {/* <div className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-orange-500/20 to-transparent pointer-events-none animate-scanline" /> */}
 
-      <div className="absolute h-[500px] w-[500px] rounded-full bg-orange-500/5 blur-[120px] pointer-events-none select-none z-0" />
-      <div className="absolute h-80 w-80 rounded-full bg-amber-500/[0.02] blur-[80px] pointer-events-none select-none z-0" />
+      {/* <div className="absolute h-[500px] w-[500px] rounded-full bg-orange-500/5 blur-[120px] pointer-events-none select-none z-0" /> */}
+      {/* <div className="absolute h-80 w-80 rounded-full bg-amber-500/[0.02] blur-[80px] pointer-events-none select-none z-0" /> */}
 
-      <div className="relative z-10 flex flex-col items-center max-w-lg w-full text-center space-y-6">
+      <div className="relative z-10 flex flex-col items-center max-w-lg w-full text-center space-y-4">
         
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-[9px] sm:text-[10px] font-black uppercase tracking-[0.25em] text-orange-500 select-none animate-pulse">
           <FiAlertTriangle className="animate-bounce" /> Warning: Connection Lost

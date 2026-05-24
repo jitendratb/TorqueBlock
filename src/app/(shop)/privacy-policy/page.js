@@ -1,65 +1,53 @@
 import React from 'react'
+import WebPageSchema from '@/components/seo/WebPageSchema'
 
 export const metadata = {
-  title:
-    'Privacy Policy | Torque Block Premium Motorcycle Tyres',
-
-  description:
-    'Learn how Torque Block collects, stores, protects, and uses customer information, payment details, browser data, and analytics information for premium motorcycle tyre purchases.',
-
+  title: 'Privacy Policy | Torque Block Premium Motorcycle Tyres',
+  description: 'Learn how Torque Block collects, stores, protects, and uses customer information, payment details, browser data, and analytics information for premium motorcycle tyre purchases.',
   keywords: [
     'privacy policy India ecommerce',
     'motorcycle tyre privacy policy',
     'superbike ecommerce privacy',
     'secure tyre purchase India',
     'Torque Block privacy policy'
-  ]
+  ],
+  alternates: { canonical: 'https://torqueblock.com/privacy-policy' },
+  openGraph: {
+    title: 'Privacy Policy | Torque Block',
+    description: 'Learn how Torque Block collects, stores, protects, and uses customer information.',
+    url: 'https://torqueblock.com/privacy-policy',
+    siteName: 'Torque Block',
+    type: 'website',
+    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+  },
 }
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen text-white py-6">
-
-      {/* JSON-LD SCHEMA */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'WebPage',
-            name: 'Privacy Policy',
-            description:
-              'Torque Block privacy policy for customer data, payments, analytics, and communications.',
-            publisher: {
-              '@type': 'Organization',
-              name: 'Torque Block'
-            }
-          })
-        }}
+    <>
+      <WebPageSchema 
+        type="WebPage"
+        title="Privacy Policy | Torque Block"
+        description="Torque Block privacy policy for customer data, payments, analytics, and communications."
+        url="/privacy-policy"
       />
+      <div className="min-h-screen text-white py-6">
+        <div className="">
+          {/* HEADER */}
+          <div className="mb-10 text-center">
+            <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em] block mb-2">
+              Legal & Security
+            </span>
+            <h1 className="text-3xl lg:text-5xl font-black uppercase tracking-tighter text-white">
+              Privacy <span className="text-orange-500">Policy</span>
+            </h1>
+            <div className="w-20 h-1 bg-orange-500 rounded-full mt-4 mx-auto" />
+          </div>
 
-      <div className="">
-
-        {/* HEADER */}
-        <div className="mb-10 text-center">
-
-          <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em] block mb-2">
-            Legal & Security
-          </span>
-
-          <h1 className="text-3xl lg:text-5xl font-black uppercase tracking-tighter text-white">
-            Privacy <span className="text-orange-500">Policy</span>
-          </h1>
-
-          <div className="w-20 h-1 bg-orange-500 rounded-full mt-4 mx-auto" />
-
-        </div>
-
-        {/* MAIN CONTENT */}
-        <div className="bg-zinc-900/40 border border-zinc-800/80 p-8 lg:p-10 rounded-3xl backdrop-blur-md space-y-10 text-zinc-300 text-sm lg:text-base leading-relaxed">
-
-          {/* INTRO */}
-          <section className="space-y-5">
+          {/* MAIN CONTENT */}
+          <div className="bg-zinc-900/40 border border-zinc-800/80 p-8 lg:p-10 rounded-3xl backdrop-blur-md space-y-10 text-zinc-300 text-sm lg:text-base leading-relaxed">
+            {/* INTRO */}
+            <section className="space-y-5">
 
             <p>
               Torque Block values customer privacy and is committed to protecting
@@ -354,5 +342,6 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
     </div>
+    </>
   )
 }

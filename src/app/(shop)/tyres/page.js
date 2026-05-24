@@ -8,6 +8,21 @@ import Breadcrumb from '@/components/atoms/BreadCrumb';
 import { FaChevronRight, FaFilter } from 'react-icons/fa';
 import { FiZap, FiMap, FiShield, FiTarget, FiCompass } from 'react-icons/fi';
 import WhatsAppButton from '@/components/atoms/WhatsAppButton';
+import WebPageSchema from '@/components/seo/WebPageSchema';
+
+export const metadata = {
+  title: 'Premium Motorcycle Tyres | Torque Block',
+  description: 'Shop the best premium motorcycle tyres online in India. Official partners for Pirelli, Michelin, Metzeler, Bridgestone, and more. Expert fitment support.',
+  alternates: { canonical: 'https://torqueblock.com/tyres' },
+  openGraph: {
+    title: 'Premium Motorcycle Tyres | Torque Block',
+    description: 'Shop the best premium motorcycle tyres online in India. Official partners for top brands.',
+    url: 'https://torqueblock.com/tyres',
+    siteName: 'Torque Block',
+    type: 'website',
+    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+  },
+};
 
 export default function TyresPage() {
     const breadcrumbItems = [
@@ -22,7 +37,20 @@ export default function TyresPage() {
         { name: "Adventure", slug: "adventure", icon: <FiCompass /> },
     ];
 
+    const schemaItems = categories.map((cat) => ({
+        name: cat.name,
+        url: `/tyres?category=${cat.slug}`
+    }));
+
     return (
+        <>
+        <WebPageSchema 
+            type="CollectionPage"
+            title="Premium Motorcycle Tyres Collection"
+            description="Shop the best premium motorcycle tyres online in India. Official partners for top brands."
+            url="/tyres"
+            items={schemaItems}
+        />
         <div className="space-y-16 pb-4">
             <div >
                 <Breadcrumb items={breadcrumbItems} />
@@ -127,5 +155,6 @@ export default function TyresPage() {
                 </Suspense>
             </div>
         </div>
+        </>
     );
 }

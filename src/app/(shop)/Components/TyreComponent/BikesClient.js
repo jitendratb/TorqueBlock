@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
-import Image from "next/image";
+import Image from "@/components/molecules/CustomImage";
 import Link from "next/link";
 import { BikeBrandSkeletonGroup } from "./BikeBrandSkeleton";
 import { FiSearch, FiArrowRight } from "react-icons/fi";

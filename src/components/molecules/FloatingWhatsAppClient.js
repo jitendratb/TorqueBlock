@@ -7,10 +7,7 @@ import { FaWhatsapp, FaPaperPlane, FaTimes } from 'react-icons/fa';
 const formatAdminName = (email) => {
     if (!email) return "Torque Block Expert";
     const username = email.split('@')[0];
-    return username
-        .split('.')
-        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ');
+    return username.split('.').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join(' ');
 };
 
 const getHumanoidMessage = (msg) => {
@@ -72,7 +69,7 @@ function FloatingWhatsAppClient({ data }) {
         const t1 = setTimeout(() => {
             setIsTyping(false);
             setStatusText('Online');
-            setMessages([{ id: 1, text: "Hallo Sir", time: getFormattedTime() }]);
+            setMessages([{ id: 1, text: "Hello Sir", time: getFormattedTime() }]);
 
             const t2 = setTimeout(() => {
                 setIsTyping(true);
@@ -158,7 +155,7 @@ function FloatingWhatsAppClient({ data }) {
         e.preventDefault();
 
         const baseMessage = `Hi Torque Block! ${inputValue.trim() ? inputValue.trim() : "I'm looking for tyre recommendations"}`;
-        const phoneNumber = data?.phone || "916366625625";
+        const phoneNumber = "916366625625";
         window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(baseMessage)}`, "_blank");
     };
 
@@ -186,7 +183,7 @@ function FloatingWhatsAppClient({ data }) {
 
                     <div className="relative z-10 w-11 h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center overflow-hidden">
                         {data?.avatar ? (
-                            <Image src={data.avatar} alt="Real Avatar" className="w-full h-full object-cover" fill priority />
+                            <Image src={data.avatar} alt="Real Avatar" className="w-full h-full object-cover" fill sizes="44px" priority />
                         ) : (
                             <span className="text-lg font-black text-white select-none">
                                 {(data?.name || formatAdminName(data?.adminemail))?.charAt(0).toUpperCase()}

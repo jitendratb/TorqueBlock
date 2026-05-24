@@ -2,7 +2,7 @@
 
 
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
-import Image from "next/image";
+import Image from "@/components/molecules/CustomImage"
 import { useMemo, useState } from "react";
 import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
@@ -59,7 +59,7 @@ export default function ProductDetails({ tyre }) {
 
     return (
         <section className="w-full relative">
-            <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
+            <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
                 <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
                     <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1">
                         {gallery?.map((item, idx) => {
@@ -67,7 +67,7 @@ export default function ProductDetails({ tyre }) {
 
                             return (
                                 <button key={idx} type="button" onClick={() => setActiveImage(item)} onMouseEnter={() => setActiveImage(item)} className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${isActive ? "border-orange-500" : "border-zinc-800 hover:border-zinc-600"}`}>
-                                    <Image src={item} alt={`${tyre?.name || "Tyre"} image ${idx + 1}`} fill sizes="40px" className="object-cover transition-transform duration-300 hover:scale-105" />
+                                    <Image src={item} alt={`${tyre?.name || "Tyre"} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
                                 </button>
                             );
                         })}
@@ -81,7 +81,7 @@ export default function ProductDetails({ tyre }) {
                                 fill
                                 priority
                                 sizes="(max-width: 768px) 100vw, 50vw"
-                                className="object-contain transition-transform w-full duration-300 hover:scale-105"
+                                imageClassName="object-contain transition-transform w-full duration-300 hover:scale-105"
                             />
                         )}
                     </div>
