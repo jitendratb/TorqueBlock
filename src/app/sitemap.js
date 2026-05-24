@@ -2,7 +2,7 @@ import vehicleService from '@/services/vehicleService';
 import TorqueBlockApi from '@/lib/api';
 
 export default async function sitemap() {
-  const baseUrl = 'https://torqueblock.com';
+  const baseUrl = 'https://shop.torqueblock.com';
   
   const staticRoutes = [
     '',
