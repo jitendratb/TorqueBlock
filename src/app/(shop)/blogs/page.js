@@ -3,19 +3,9 @@ import BlogsClient from './Components/BlogsClient';
 import blogService from '@/services/blogService';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-    title: 'Blogs | Torque Block — Motorcycle Tyre Insights',
-    description: 'Expert motorcycle tyre reviews, riding tips, and product guides from the Torque Block team.',
-    alternates: { canonical: 'https://torqueblock.com/blogs' },
-    openGraph: {
-        title: 'Torque Block Blog',
-        description: 'Expert motorcycle tyre reviews, riding tips, and product guides.',
-        url: 'https://torqueblock.com/blogs',
-        siteName: 'Torque Block',
-        type: 'website',
-        images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-    },
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default async function BlogsPage({ searchParams }) {
     const resolvedParams = await searchParams;

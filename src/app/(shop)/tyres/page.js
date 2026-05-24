@@ -10,19 +10,21 @@ import { FiZap, FiMap, FiShield, FiTarget, FiCompass } from 'react-icons/fi';
 import WhatsAppButton from '@/components/atoms/WhatsAppButton';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-  title: 'Premium Motorcycle Tyres | Torque Block',
-  description: 'Shop the best premium motorcycle tyres online in India. Official partners for Pirelli, Michelin, Metzeler, Bridgestone, and more. Expert fitment support.',
-  alternates: { canonical: 'https://torqueblock.com/tyres' },
-  openGraph: {
+export async function generateMetadata() {
+  return {
     title: 'Premium Motorcycle Tyres | Torque Block',
-    description: 'Shop the best premium motorcycle tyres online in India. Official partners for top brands.',
-    url: 'https://torqueblock.com/tyres',
-    siteName: 'Torque Block',
-    type: 'website',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-  },
-};
+    description: 'Shop the best premium motorcycle tyres online in India. Official partners for Pirelli, Michelin, Metzeler, Bridgestone, and more. Expert fitment support.',
+    alternates: { canonical: 'https://torqueblock.com/tyres' },
+    openGraph: {
+      title: 'Premium Motorcycle Tyres | Torque Block',
+      description: 'Shop the best premium motorcycle tyres online in India. Official partners for top brands.',
+      url: 'https://torqueblock.com/tyres',
+      siteName: 'Torque Block',
+      type: 'website',
+      images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+    },
+  };
+}
 
 export default function TyresPage() {
     const breadcrumbItems = [

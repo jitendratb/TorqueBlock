@@ -4,21 +4,23 @@ import BikesClient from '../Components/TyreComponent/BikesClient';
 import vehicleService from '@/services/vehicleService';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-  title: 'Motorcycles | Torque Block',
-  description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
-  alternates: {
-    canonical: 'https://torqueblock.com/bikes',
-  },
-  openGraph: {
+export async function generateMetadata() {
+  return {
     title: 'Motorcycles | Torque Block',
     description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
-    url: 'https://torqueblock.com/bikes',
-    siteName: 'Torque Block',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-    type: 'website',
-  },
-};
+    alternates: {
+      canonical: 'https://torqueblock.com/bikes',
+    },
+    openGraph: {
+      title: 'Motorcycles | Torque Block',
+      description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
+      url: 'https://torqueblock.com/bikes',
+      siteName: 'Torque Block',
+      images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+      type: 'website',
+    },
+  };
+}
 
 export default async function BikesPage() {
   let initialBrands = [];

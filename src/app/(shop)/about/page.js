@@ -4,28 +4,30 @@ import { FaShieldAlt, FaTruck, FaMapPin, FaUserCheck, FaCheckCircle, FaChevronDo
 import WhatsAppButton from '@/components/atoms/WhatsAppButton'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 
-export const metadata = {
-  title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
-  description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone. Genuine inventory, pan-India delivery, expert superbike tyre consultation, and rider-first support.',
-  keywords: [
-    'premium motorcycle tyres India',
-    'superbike tyres India',
-    'Pirelli tyres India',
-    'Metzeler tyres India',
-    'Michelin motorcycle tyres',
-    'performance motorcycle tyres',
-    'bike tyre experts India',
-    'Torque Block'
-  ],
-  alternates: { canonical: 'https://torqueblock.com/about' },
-  openGraph: {
+export async function generateMetadata() {
+  return {
     title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
-    description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone.',
-    url: 'https://torqueblock.com/about',
-    siteName: 'Torque Block',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-    type: 'website',
-  },
+    description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone. Genuine inventory, pan-India delivery, expert superbike tyre consultation, and rider-first support.',
+    keywords: [
+      'premium motorcycle tyres India',
+      'superbike tyres India',
+      'Pirelli tyres India',
+      'Metzeler tyres India',
+      'Michelin motorcycle tyres',
+      'performance motorcycle tyres',
+      'bike tyre experts India',
+      'Torque Block'
+    ],
+    alternates: { canonical: 'https://torqueblock.com/about' },
+    openGraph: {
+      title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
+      description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone.',
+      url: 'https://torqueblock.com/about',
+      siteName: 'Torque Block',
+      images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+      type: 'website',
+    },
+  };
 }
 
 export default function AboutPage() {

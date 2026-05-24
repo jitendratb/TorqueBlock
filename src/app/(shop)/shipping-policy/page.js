@@ -1,28 +1,9 @@
 import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-  title: 'Shipping & Delivery Policy | Torque Block Premium Motorcycle Tyres',
-  description: 'Learn about Torque Block shipping timelines, secure tyre packaging standards, pan-India delivery coverage, courier partners, dispatch timelines, and shipment support policies.',
-  keywords: [
-    'motorcycle tyre shipping India',
-    'superbike tyre delivery',
-    'premium motorcycle tyres India',
-    'tyre courier service India',
-    'Pirelli tyre delivery',
-    'Metzeler tyre shipping',
-    'Torque Block shipping policy'
-  ],
-  alternates: { canonical: 'https://torqueblock.com/shipping-policy' },
-  openGraph: {
-    title: 'Shipping & Delivery Policy | Torque Block',
-    description: 'Learn about Torque Block shipping timelines, secure tyre packaging standards, and pan-India delivery coverage.',
-    url: 'https://torqueblock.com/shipping-policy',
-    siteName: 'Torque Block',
-    type: 'website',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-  },
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default function ShippingPolicyPage() {
   return (

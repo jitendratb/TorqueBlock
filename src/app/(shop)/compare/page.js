@@ -4,19 +4,9 @@ import compareServiceInstance from '@/services/compareService';
 import CompareClient from './components/CompareClient';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-    title: 'Tyre Battles - Torque Block',
-    description: 'Compare premium motorcycle tyres and find the ultimate performance weapon. Side-by-side spec comparison of the best tyre brands.',
-    alternates: { canonical: 'https://torqueblock.com/compare' },
-    openGraph: {
-        title: 'Tyre Battles - Torque Block',
-        description: 'Compare premium motorcycle tyres and find the ultimate performance weapon.',
-        url: 'https://torqueblock.com/compare',
-        siteName: 'Torque Block',
-        type: 'website',
-        images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-    },
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default async function ComparePage({ searchParams }) {
     const resolvedParams = await searchParams;

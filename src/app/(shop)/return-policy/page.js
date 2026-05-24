@@ -1,28 +1,9 @@
 import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-  title: 'Returns & Refund Policy | Torque Block Premium Motorcycle Tyres',
-  description: 'Read Torque Block’s returns, cancellations, replacement, and refund policy for premium motorcycle tyres including eligibility conditions, refund timelines, warranty guidelines, and reverse logistics terms.',
-  keywords: [
-    'motorcycle tyre return policy India',
-    'superbike tyre refund policy',
-    'premium tyre replacement',
-    'motorcycle tyre cancellation',
-    'Pirelli tyre returns',
-    'Metzeler warranty India',
-    'Torque Block refund policy'
-  ],
-  alternates: { canonical: 'https://torqueblock.com/return-policy' },
-  openGraph: {
-    title: 'Returns & Refund Policy | Torque Block',
-    description: 'Read Torque Block’s returns, cancellations, replacement, and refund policy for premium motorcycle tyres.',
-    url: 'https://torqueblock.com/return-policy',
-    siteName: 'Torque Block',
-    type: 'website',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-  },
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default function ReturnPolicyPage() {
   return (

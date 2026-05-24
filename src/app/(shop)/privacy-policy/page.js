@@ -1,25 +1,8 @@
 import React from 'react'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 
-export const metadata = {
-  title: 'Privacy Policy | Torque Block Premium Motorcycle Tyres',
-  description: 'Learn how Torque Block collects, stores, protects, and uses customer information, payment details, browser data, and analytics information for premium motorcycle tyre purchases.',
-  keywords: [
-    'privacy policy India ecommerce',
-    'motorcycle tyre privacy policy',
-    'superbike ecommerce privacy',
-    'secure tyre purchase India',
-    'Torque Block privacy policy'
-  ],
-  alternates: { canonical: 'https://torqueblock.com/privacy-policy' },
-  openGraph: {
-    title: 'Privacy Policy | Torque Block',
-    description: 'Learn how Torque Block collects, stores, protects, and uses customer information.',
-    url: 'https://torqueblock.com/privacy-policy',
-    siteName: 'Torque Block',
-    type: 'website',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-  },
+export async function generateMetadata() {
+  return ;
 }
 
 export default function PrivacyPolicyPage() {

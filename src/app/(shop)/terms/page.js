@@ -1,26 +1,9 @@
 import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
-export const metadata = {
-  title: 'Terms & Conditions | Torque Block Premium Motorcycle Tyres',
-  description: 'Review Torque Block terms and conditions covering website usage, tyre fitment responsibility, pricing accuracy, order acceptance, warranty limitations, liability boundaries, and governing jurisdiction.',
-  keywords: [
-    'motorcycle tyre terms and conditions',
-    'superbike tyre warranty India',
-    'tyre ecommerce legal policy',
-    'premium tyre store terms',
-    'Torque Block terms'
-  ],
-  alternates: { canonical: 'https://torqueblock.com/terms' },
-  openGraph: {
-    title: 'Terms & Conditions | Torque Block',
-    description: 'Review Torque Block terms and conditions covering website usage and product purchases.',
-    url: 'https://torqueblock.com/terms',
-    siteName: 'Torque Block',
-    type: 'website',
-    images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
-  },
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default function TermsPage() {
   return (

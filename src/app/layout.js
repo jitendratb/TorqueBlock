@@ -13,10 +13,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: siteConfig.name,
-  description: siteConfig.description,
-};
+export async function generateMetadata() {
+  return ;
+}
 
 export default function RootLayout({ children }) {
   return (
