@@ -32,9 +32,10 @@ export default async function BikesPage() {
     { label: 'Bikes', isLast: true },
   ];
 
-  const schemaItems = (initialBrands || []).map((brand) => ({
-    name: brand.name || "Bike Brand",
-    url: `/bikes/${brand.slug || brand.name?.toLowerCase().replace(/ /g, '-') || ''}`
+  const brandsArray = Array.isArray(initialBrands) ? initialBrands : initialBrands?.vehicleBrandsData || [];
+  const schemaItems = brandsArray.map((brand) => ({
+    name: brand.bikeModel ? `${brand.bikeBrand} ${brand.bikeModel}` : brand.name || "Bike Brand",
+    url: `/bikes/${brand.identifier || brand.slug || brand.name?.toLowerCase().replace(/ /g, '-') || ''}`
   }));
 
   return (
