@@ -46,7 +46,11 @@ function QueryBox() {
     e.preventDefault();
     let message = `Hi Torque Block, I need a tyre recommendation for my bike. My bike is ${selectedTyre?.value} ${selectedModel?.value}`;
     const phoneNumber = "916366625625";
-    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank");
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
+    const url = isMobile 
+        ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+        : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
   }
 
   return (
