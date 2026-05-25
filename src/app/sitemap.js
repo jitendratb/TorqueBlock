@@ -1,8 +1,11 @@
 import vehicleService from '@/services/vehicleService';
 import TorqueBlockApi from '@/lib/api';
+import brandServiceInstance from '@/services/brandService';
+import blogService from '@/services/blogService';
+import compareServiceInstance from '@/services/compareService';
 
 export default async function sitemap() {
-  const baseUrl = 'https://shop.torqueblock.com';
+  const baseUrl = 'https://www.torqueblock.com';
   
   const staticRoutes = [
     '',
@@ -23,10 +26,10 @@ export default async function sitemap() {
   let bikeRoutes = [];
   try {
     const brandsRes = await vehicleService.getVehicleBrands({ limit: 1000 });
-    const bikes = brandsRes?.data || brandsRes || [];
+    const bikes = brandsRes?.vehicleBrandsData || brandsRes?.data || brandsRes || [];
     if (Array.isArray(bikes)) {
       bikeRoutes = bikes.map((bike) => {
-        const slug = bike?.slug || bike?.brandName?.toLowerCase().replace(/\s+/g, '-') || bike?.name?.toLowerCase().replace(/\s+/g, '') || '';
+        const slug = bike?.identifier || bike?.slug || bike?.brandName?.toLowerCase().replace(/\s+/g, '-') || bike?.name?.toLowerCase().replace(/\s+/g, '') || '';
         return {
             url: `${baseUrl}/bikes/${slug}`,
             lastModified: new Date().toISOString(),
@@ -58,5 +61,63 @@ export default async function sitemap() {
     console.error("Error fetching tyres for sitemap", err);
   }
 
-  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes];
+  let brandRoutes = [];
+  try {
+    const brandsRes = await brandServiceInstance.getBrands({ isActive: true });
+    const brands = brandsRes || [];
+    if (Array.isArray(brands)) {
+      brandRoutes = brands.map((brand) => {
+        const slug = brand?.slug || brand?.name?.toLowerCase().replace(/\s+/g, '-') || '';
+        return {
+            url: `${baseUrl}/brands/${slug}`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        };
+      }).filter(r => r.url !== `${baseUrl}/brands/`);
+    }
+  } catch (err) {
+    console.error("Error fetching brands for sitemap", err);
+  }
+
+  let blogRoutes = [];
+  try {
+    const blogsRes = await blogService.getAllBlogs({ limit: 1000 });
+    const blogs = blogsRes?.blogs || blogsRes?.data?.blogs || blogsRes || [];
+    if (Array.isArray(blogs)) {
+      blogRoutes = blogs.map((blog) => {
+        let rawSlug = blog?.blogid || blog?.slug || blog?.title || '';
+        const slug = rawSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        return {
+            url: `${baseUrl}/blogs/${slug}`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.6,
+        };
+      }).filter(r => r.url !== `${baseUrl}/blogs/`);
+    }
+  } catch (err) {
+    console.error("Error fetching blogs for sitemap", err);
+  }
+
+  let compareRoutes = [];
+  try {
+    const compareRes = await compareServiceInstance.getAllCompare({ limit: 1000 });
+    const compares = compareRes?.data || compareRes || [];
+    if (Array.isArray(compares)) {
+      compareRoutes = compares.map((comp) => {
+        const slug = comp?.identifier || comp?.slug || '';
+        return {
+            url: `${baseUrl}/compare/${slug}`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        };
+      }).filter(r => r.url !== `${baseUrl}/compare/`);
+    }
+  } catch (err) {
+    console.error("Error fetching compares for sitemap", err);
+  }
+
+  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes, ...brandRoutes, ...blogRoutes, ...compareRoutes];
 }

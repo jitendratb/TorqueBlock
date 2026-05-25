@@ -1,5 +1,5 @@
-const SITE_URL = "https://shop.torqueblock.com";
-const isProduction = process.env.NODE_ENV === "production";
+const SITE_URL = "https://www.torqueblock.com";
+const isProduction = true;
 
 export default function robots() {
 
