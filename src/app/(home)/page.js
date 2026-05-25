@@ -11,6 +11,7 @@ import B2BEnterpriseSection from './component/B2BEnterpriseSection'
 import Category from './component/Category'
 import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
 import WebPageSchema from '@/components/seo/WebPageSchema'
+import ValuePerformanceBrands from './component/ValuePerformanceBrands'
 
 function page() {
   const banners = [
@@ -77,7 +78,7 @@ function page() {
               <BrandsSection />
             </Suspense>
             <Category />
-            {/* <TyreSection /> */}
+            <ValuePerformanceBrands />
             <ReviewsSection />
             <B2BEnterpriseSection />
           </div>

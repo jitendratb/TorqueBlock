@@ -11,6 +11,16 @@ class BrandService {
         }
     }
 
+    async getPerformanceBrands() {
+        try {
+            const res = await TorqueBlockApi.get("/brands/performance");
+            return res?.data || [];
+        } catch (error) {
+            console.error("Failed to fetch brands:", error);
+            throw error;
+        }
+    }
+
     async getBrandBySlug(slug) {
         if (!slug) return null;
         try {

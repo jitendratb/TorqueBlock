@@ -5,7 +5,7 @@ import BrandCard from './BrandCard';
 async function BrandsCard() {
   let brands = [];
   try {
-    brands = await brandService.getBrands({ isActive: true });
+    brands = await brandService.getPerformanceBrands();
   } catch (error) {
     console.error("Error fetching brands on Server Side:", error);
   }

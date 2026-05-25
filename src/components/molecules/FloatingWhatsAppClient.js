@@ -167,7 +167,7 @@ function FloatingWhatsAppClient({ data }) {
     const HandleFormClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let message = `I’m enquiring about motorcycle tyres from the website.`;
+        let message = `Hi, I’m enquiring about motorcycle tyres from the website.`;
         const phoneNumber = "916366625625";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
         const url = isMobile
