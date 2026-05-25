@@ -154,10 +154,11 @@ function FloatingWhatsAppClient({ data }) {
     const handleSendMessage = (e) => {
         e.preventDefault();
 
-        const baseMessage = `Hi Torque Block! ${inputValue.trim() ? inputValue.trim() : "I'm looking for tyre recommendations"}`;
+        const baseMessage = `Hi Team Torque Block!,
+        ${inputValue.trim() ? inputValue.trim() : "I’m enquiring about motorcycle tyres from the website."}`;
         const phoneNumber = "916366625625";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
-        const url = isMobile 
+        const url = isMobile
             ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(baseMessage)}`
             : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(baseMessage)}`;
         window.open(url, "_blank");
@@ -166,10 +167,10 @@ function FloatingWhatsAppClient({ data }) {
     const HandleFormClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        let message = `Hi Torque Block, I'm looking for tyre recommendations`;
+        let message = `I’m enquiring about motorcycle tyres from the website.`;
         const phoneNumber = "916366625625";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
-        const url = isMobile 
+        const url = isMobile
             ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
             : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
