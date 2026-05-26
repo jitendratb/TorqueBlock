@@ -14,15 +14,39 @@ import ValuePerformanceBrands from './component/ValuePerformanceBrands'
 
 function page() {
   const banners = [
-    {
-      id: 4,
-      image: "/bg3.webp",
+     {
+      id:2,
+      image: "https://cdn.torqueblock.com/GT-650-tyre-18ebf1ae-fdd0-47d0-ac66-c6d13131e4d8.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
-     {
-      id: 4,
-      image: "/Category/DualSport.webp",
+      {
+      id:3,
+      image: "https://cdn.torqueblock.com/brand-tyre-7b173d58-a7a2-4ba4-a0a0-96531ffc6f63.webp",
+      mobileImage: "/Home/HomeBannerMobile.webp",
+      alt: "Premium Motorcycle Tyres India",
+    },
+       {
+      id:4,
+      image: "https://cdn.torqueblock.com/brand-tyre-bcbac7bf-3391-4730-864e-2ee0fa43c82d.webp",
+      mobileImage: "/Home/HomeBannerMobile.webp",
+      alt: "Premium Motorcycle Tyres India",
+    },
+       {
+      id:5,
+      image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
+      mobileImage: "/Home/HomeBannerMobile.webp",
+      alt: "Premium Motorcycle Tyres India",
+    },
+       {
+      id:6,
+      image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
+      mobileImage: "/Home/HomeBannerMobile.webp",
+      alt: "Premium Motorcycle Tyres India",
+    },
+    {
+      id:7,
+      image: "https://cdn.torqueblock.com/brand-tyre-53adac61-7de9-4113-8b10-90526ae6cba7.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     }
@@ -42,7 +66,8 @@ function page() {
           src={banners[Math.floor(Math.random() * banners.length)].image} 
           alt="Premium Motorcycle Tyres India" 
           fill 
-          priority 
+          priority
+          fetchPriority="high" 
           sizes="(max-width: 768px) 0vw, 100vw"
           quality={75}
           className='hidden md:block object-cover' 
@@ -51,7 +76,8 @@ function page() {
           src="/Home/HomeBannerMobile.webp" 
           alt="Premium Motorcycle Tyres India" 
           fill 
-          priority 
+          priority
+          fetchPriority="high" 
           sizes="(max-width: 768px) 100vw, 0vw"
           quality={75}
           className='md:hidden object-cover' 
