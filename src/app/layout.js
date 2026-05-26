@@ -22,6 +22,8 @@ export async function generateMetadata() {
 
 import Script from 'next/script';
 
+import ScrollToTop from "@/components/atoms/ScrollToTop";
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -29,6 +31,7 @@ export default function RootLayout({ children }) {
       className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <ScrollToTop />
         <noscript>
           <iframe 
             src={`https://www.googletagmanager.com/ns.html?id=${siteConfig.analytics.googleTagManagerId}`}

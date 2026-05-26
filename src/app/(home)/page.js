@@ -5,7 +5,6 @@ import QueryBox from './component/QueryBox'
 import BrandsSection from './component/BrandsSection'
 import { BrandCardSkeletonGroup } from './component/BrandCardSkeleton'
 import { PageShell } from '@/components/layout/page-shell'
-import TyreSection from './component/TyreSection'
 import ReviewsSection from './component/ReviewSection'
 import B2BEnterpriseSection from './component/B2BEnterpriseSection'
 import Category from './component/Category'
@@ -84,7 +83,6 @@ function page() {
           </div>
         </PageShell>
       </ScrollBackgroundWrapper>
-
     </div>
   )
 }
