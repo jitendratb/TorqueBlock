@@ -36,8 +36,8 @@ async function ValuePerformanceBrands() {
                             <article className="grid grid-cols-2 min-w-[280px] md:min-w-[340px] overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300">
                                 <div className="relative h-[120px] md:h-[140px] rounded-3xl overflow-hidden">
                                     <CustomImage
-                                        src={brand.brandBanner || brand.brandLogo}
-                                        alt={brand.name}
+                                        src={brand?.brandLogo}
+                                        alt={brand?.name}
                                         fill
                                         priority={index < 4}
                                         className="object-contain p-4 group-hover:scale-110 transition-transform duration-700 ease-out"

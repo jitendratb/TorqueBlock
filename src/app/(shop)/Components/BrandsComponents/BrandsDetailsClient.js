@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FiArrowLeft, FiAward, FiShield, FiZap, FiActivity, FiCheckCircle } from 'react-icons/fi';
 import WhatsAppButton from '@/components/atoms/WhatsAppButton';
+import CustomImage from '@/components/molecules/CustomImage';
 
 function BrandsDetailsClient({ brand }) {
   if (!brand) {
@@ -78,7 +79,7 @@ function BrandsDetailsClient({ brand }) {
 
       <section className="relative h-[250px] sm:h-[340px] md:h-[420px] w-full overflow-hidden rounded-[1rem] border border-white/5 shadow-2xl">
         {brand?.brandBanner ? (
-          <Image
+          <CustomImage
             src={brand.brandBanner}
             alt={`${brandName} Banner`}
             fill
@@ -102,13 +103,12 @@ function BrandsDetailsClient({ brand }) {
 
             {/* Glass Logo Container */}
             {brand?.brandLogo ? (
-              <div className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-xl flex items-center justify-center p-3">
-                <Image
-                  src={brand.brandLogo}
+              <div className="relative overflow-hidden w-[120px] h-[120px] md:w-[140px] md:h-[140px] shrink-0 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-xl flex items-center justify-center">
+                <CustomImage
+                  src={brand?.brandLogo}
                   alt={`${brandName} Logo`}
-                  width={96}
-                  height={96}
-                  className="object-contain max-h-full max-w-full"
+                  fill
+                  imageClassName="object-center"
                 />
               </div>
             ) : (
@@ -186,7 +186,7 @@ function BrandsDetailsClient({ brand }) {
                 <h3 className="text-lg font-bold text-white uppercase tracking-wider leading-tight">
                   Request Fitment & Sizing Quotes
                 </h3>
-               
+
               </div>
             </div>
             <p className="text-zinc-500 text-xs leading-relaxed">
