@@ -15,8 +15,51 @@ const geistMono = Geist_Mono({
 
 export async function generateMetadata() {
   return {
-    title: siteConfig.name,
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: siteConfig.seo.defaultTitle,
+      template: siteConfig.seo.titleTemplate,
+    },
     description: siteConfig.description,
+    keywords: siteConfig.keywords,
+    authors: [
+      {
+        name: siteConfig.name,
+        url: siteConfig.url,
+      },
+    ],
+    creator: siteConfig.name,
+    openGraph: {
+      type: siteConfig.openGraph.type,
+      locale: siteConfig.openGraph.locale,
+      url: siteConfig.url,
+      title: siteConfig.title,
+      description: siteConfig.description,
+      siteName: siteConfig.openGraph.siteName,
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 630,
+          alt: siteConfig.name,
+        },
+      ],
+    },
+    twitter: {
+      card: siteConfig.twitter.card,
+      title: siteConfig.title,
+      description: siteConfig.description,
+      images: [siteConfig.ogImage],
+      creator: siteConfig.twitter.creator,
+    },
+    icons: {
+      icon: siteConfig.logo,
+      shortcut: siteConfig.logo,
+      apple: siteConfig.logo,
+    },
+    alternates: {
+      canonical: siteConfig.seo.canonical,
+    },
   };
 }
 

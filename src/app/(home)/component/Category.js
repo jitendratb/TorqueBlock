@@ -9,6 +9,8 @@ import RacingSlicks from "../../../../public/Category/RacingSlicks.webp"
 import SportTouring from "../../../../public/Category/SportTouring.webp"
 import SuperSport from "../../../../public/Category/SuperSport.webp"
 
+import CategorySchema from '../../../components/seo/CategorySchema';
+
 function Category() {
   const categories = [
     { title: "Super Sport", subtitle: "Track & Street", image: SuperSport, href: "/search?q=supersport", className: "md:col-span-2 md:row-span-2" },
@@ -19,7 +21,6 @@ function Category() {
     { title: "Dual Sport", subtitle: "Any Terrain", image: DualSport, href: "/search?q=sports", className: "md:col-span-2 md:row-span-1" },
   ];
 
-
   const pairedCategories = [];
   for (let i = 0; i < categories.length; i += 2) {
     pairedCategories.push(categories.slice(i, i + 2));
@@ -27,6 +28,7 @@ function Category() {
 
   return (
     <div className='' id="category-section">
+      <CategorySchema categories={categories} />
       <div className="mb-10 text-center">
           <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em]">Riding Styles</span>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000">

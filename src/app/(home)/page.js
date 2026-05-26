@@ -20,12 +20,6 @@ function page() {
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
-    // {
-    //   id: 4,
-    //   image: "/Home/HomeBanner.webp",
-    //   mobileImage: "/Home/HomeBannerMobile.webp",
-    //   alt: "Premium Motorcycle Tyres India",
-    // },
      {
       id: 4,
       image: "/Category/DualSport.webp",
