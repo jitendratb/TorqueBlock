@@ -32,6 +32,13 @@ const footerSections = [
       { label: "Pirelli Tyres", href: "/search?q=Pirelli" },
       { label: "Michelin Tyres", href: "/search?q=Michelin" },
       { label: "Metzeler Tyres", href: "/search?q=Metzeler" },
+      { label: 'MRF Tyres', href: '/search?q=MRF' },
+      { label: 'TVS Tyres', href: '/search?q=TVS' },
+      { label: 'CEAT Tyres', href: '/search?q=CEAT' },
+      { label: 'Reise Tyres', href: '/search?q=Reise' },
+      { label: 'Maxxis Tyres', href: '/search?q=Maxxis' },
+      { label: 'Vredestein Tyres', href: '/search?q=Vredestein' },
+      { label: 'Eurogrip Tyres', href: '/search?q=Eurogrip' },
     ],
   },
   {

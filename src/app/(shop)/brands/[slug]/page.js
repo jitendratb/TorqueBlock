@@ -73,8 +73,6 @@ async function BrandDetailPage({ params }) {
     <div className='pb-4 space-y-4'>
       <Breadcrumb items={breadcrumbItems} />
       <BrandsDetailsClient brand={brand} />
-
-      {/* Structured JSON-LD Schema */}
       <BrandSchema brand={brand} slug={slug} />
       <BreadcrumbSchema items={breadcrumbItems} />
     </div>

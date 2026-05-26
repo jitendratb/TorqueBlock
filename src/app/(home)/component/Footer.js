@@ -7,6 +7,14 @@ const brandLinks = [
     { label: 'Pirelli', href: '/search?q=Pirelli' },
     { label: 'Michelin', href: '/search?q=Michelin' },
     { label: 'Metzeler', href: '/search?q=Metzeler' },
+    { label: 'MRF', href: '/search?q=MRF' },
+    { label: 'TVS', href: '/search?q=TVS' },
+    { label: 'CEAT', href: '/search?q=CEAT' },
+    { label: 'Reise', href: '/search?q=Reise' },
+    { label: 'Maxxis', href: '/search?q=Maxxis' },
+    { label: 'Vredestein', href: '/search?q=Vredestein' },
+    { label: 'Eurogrip', href: '/search?q=Eurogrip' },
+    
 ]
 const helpLinks = [
     { label: 'Contact Us', href: '/contact' },
