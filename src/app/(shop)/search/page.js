@@ -14,7 +14,7 @@ const Card = ({ item }) => {
         case 'Tyre': {
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
             return (
-                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden cursor-pointer">
+                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden cursor-pointer">
                     <div className="relative h-[160px] md:h-full w-full overflow-hidden bg-zinc-950 ">
                         <Image
                             src={item.hero?.heroImage || '/placeholder-tyre.jpg'}
@@ -45,17 +45,17 @@ const Card = ({ item }) => {
                                 </div>
                             </div>
                             <div className="flex flex-wrap gap-2 text-[10px]  lg:text-sm text-zinc-400">
-                                <span className="rounded-full bg-zinc-950 px-3 py-2 truncate max-w-[250px]">
+                                <span className="rounded-full bg-orange-500/20 text-orange-500 px-3 py-2 truncate max-w-[250px]">
                                     {item.commonlyUsedOn || 'Motorcycle'}
                                 </span>
 
 
                                 {item.rearSizes?.length > 0 && (
-                                    <span className="rounded-full bg-zinc-950 px-3 py-2">
+                                    <span className="rounded-full bg-orange-500/20 text-orange-500 px-3 py-2">
                                         Rear:{' '}
                                         {item.rearSizes.slice(0, 1).join(', ')}
                                         {item.rearSizes.length > 1 && (
-                                            <span className="ml-1 text-zinc-500">
+                                            <span className="ml-1 text-xs">
                                                 +{item.rearSizes.length - 1} more
                                             </span>
                                         )}
@@ -76,7 +76,7 @@ const Card = ({ item }) => {
             const view = Math.floor(Math.random() * 10000) + 100;
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
             return (
-                <div onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-900/95 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
+                <div onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
                     <div className="relative grid h-[220px] md:h-full grid-cols-2 overflow-hidden">
                         <div className="relative">
                             <Image
@@ -148,7 +148,7 @@ const Card = ({ item }) => {
         case 'Bike': {
             const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
             return (
-                <article onClick={() => { router.push(`/bikes/${item.identifier}`) }} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 overflow-hidden">
+                <article onClick={() => { router.push(`/bikes/${item.identifier}`) }} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden">
                     <div className="relative h-[220px] md:h-full overflow-hidden bg-zinc-950">
                         <Image
                             src={item.image || '/placeholder-bike.jpg'}
@@ -352,7 +352,7 @@ function SearchPageContent() {
                     <div className="space-y-4 overflow-y-auto h-full flex-1 ">
                         <div>
                             <h3 className="text-sm font-semibold text-white">Brands</h3>
-                            <div className="mt-3 grid gap-2 border border-zinc-800 rounded-xl p-2 bg-zinc-900/95">
+                            <div className="mt-3 grid gap-2 border border-zinc-800 rounded-xl p-2 bg-zinc-600/30">
                                 {brands.map((brand) => (
                                     <label key={brand} className="inline-flex items-center gap-3 rounded-lg  border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 transition hover:border-orange-500 hover:text-white">
                                         <Checkbox
@@ -367,7 +367,7 @@ function SearchPageContent() {
 
                         <div>
                             <h3 className="text-sm font-semibold text-white">Type</h3>
-                            <div className="mt-3 grid gap-2 border border-zinc-800 rounded-xl p-2 bg-zinc-900/95">
+                            <div className="mt-3 grid gap-2 border border-zinc-800 rounded-xl p-2 bg-zinc-600/30">
                                 {types.map((type) => (
                                     <label key={type} className="inline-flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-950 px-4 py-3 text-sm text-zinc-300 transition hover:border-orange-500 hover:text-white">
                                         <Checkbox
