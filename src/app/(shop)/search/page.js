@@ -8,7 +8,6 @@ import Checkbox from '@/components/atoms/Checkbox';
 import CustomDropdown from '@/components/atoms/CustomDropdown';
 import searchServiceInstance from '@/services/searchService';
 
-
 const Card = ({ item }) => {
     const router = useRouter();
     switch (item.type) {
