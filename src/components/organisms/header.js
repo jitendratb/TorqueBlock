@@ -20,7 +20,7 @@ const NAVIGATION_CONFIG = {
     navItems: [
         { name: "Home", href: "/" },
         { name: "Tyres", href: "/tyres" },
-        { name: "Bike Brands", href: "/bikes" },
+        { name: "Motorcycle", href: "/bikes" },
         { name: "Tyre Comparison", href: "/compare" },
     ],
     mobileSubMenus: {
@@ -34,7 +34,7 @@ const NAVIGATION_CONFIG = {
             { label: "Pirelli Night Dragon", href: "/tyres/pirelli-night-dragon" },
             { label: "Metzeler Racetec TD Slick", href: "/tyres/metzeler-racetec-td-slick" },
         ],
-        "Bike Brands": [
+        "Motorcycle": [
             { label: "Harley-Davidson 1200 Custom", href: "/bikes/harley-davidson-1200-custom-tyres" },
             { label: "Harley-Davidson Heritage Classic", href: "/bikes/harley-davidson-heritage-classic-tyres" },
             { label: "Harley-Davidson Road King", href: "/bikes/harley-davidson-road-king-tyres" },
@@ -111,7 +111,7 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
         <div className="col-span-3">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Select by Motorcycle Model</h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                {NAVIGATION_CONFIG.mobileSubMenus["Bike Brands"].map((bike) => (
+                {NAVIGATION_CONFIG.mobileSubMenus["Motorcycle"].map((bike) => (
                     <Link
                         key={bike.label}
                         href={bike.href}
@@ -364,8 +364,8 @@ function Header() {
                         <div className={activeHover === "Tyres" ? "block" : "hidden"}>
                             <TyresMegaMenu tabIndex={activeHover === "Tyres" ? 0 : -1} onAction={handleTalk} />
                         </div>
-                        <div className={activeHover === "Bike Brands" ? "block" : "hidden"}>
-                            <BikeBrandsMegaMenu tabIndex={activeHover === "Bike Brands" ? 0 : -1} onAction={handleTalk} />
+                        <div className={activeHover === "Motorcycle" ? "block" : "hidden"}>
+                            <BikeBrandsMegaMenu tabIndex={activeHover === "Motorcycle" ? 0 : -1} onAction={handleTalk} />
                         </div>
                         <div className={activeHover === "Tyre Comparison" ? "block" : "hidden"}>
                             <TyreComparisonMegaMenu tabIndex={activeHover === "Tyre Comparison" ? 0 : -1} onAction={handleTalk} />
