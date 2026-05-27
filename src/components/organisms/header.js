@@ -8,7 +8,6 @@ import { usePathname } from "next/navigation";
 import SearchBar from './searchBar';
 import { IoMdMenu } from "react-icons/io";
 
-// Enterprise Constants & Config Decoupling
 const WHATSAPP_NUMBER = "916366625625";
 
 const NAVIGATION_CONFIG = {
@@ -374,7 +373,6 @@ function Header() {
                 </div>
             </div>
 
-            {/* Accessibility Friendly Backdrop Button Overlay */}
             <button
                 type="button"
                 onClick={closeSidebar}

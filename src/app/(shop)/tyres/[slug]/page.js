@@ -1,6 +1,7 @@
 import Breadcrumb from "@/components/atoms/BreadCrumb";
 import tyresService from "@/services/tyresService";
-import TyresClient from "../../Components/TyresClient";
+import dynamic from 'next/dynamic';
+const TyresClient = dynamic(() => import('../../Components/TyresClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";

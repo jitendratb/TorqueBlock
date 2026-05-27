@@ -1,5 +1,6 @@
 import Breadcrumb from '@/components/atoms/BreadCrumb';
-import BlogsClient from './Components/BlogsClient';
+import dynamic from 'next/dynamic';
+const BlogsClient = dynamic(() => import('./Components/BlogsClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import blogService from '@/services/blogService';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 

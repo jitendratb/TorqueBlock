@@ -6,12 +6,17 @@ import QueryBox from './component/QueryBox'
 import BrandsSection from './component/BrandsSection'
 import { BrandCardSkeletonGroup } from './component/BrandCardSkeleton'
 import { PageShell } from '@/components/layout/page-shell'
-import ReviewsSection from './component/ReviewSection'
-import B2BEnterpriseSection from './component/B2BEnterpriseSection'
-import Category from './component/Category'
 import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
 import WebPageSchema from '@/components/seo/WebPageSchema'
-import ValuePerformanceBrands from './component/ValuePerformanceBrands'
+import dynamic from 'next/dynamic'
+
+const Category = dynamic(() => import('./component/Category'), { ssr: true });
+const ValuePerformanceBrands = dynamic(() => import('./component/ValuePerformanceBrands'), { ssr: true });
+const ReviewsSection = dynamic(() => import('./component/ReviewSection'), { 
+  ssr: true,
+  loading: () => <div className="h-64 w-full animate-pulse bg-zinc-100 dark:bg-zinc-900 rounded-xl my-10" /> 
+});
+const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'), { ssr: true });
 
 export const revalidate = 60;
 
@@ -55,14 +60,10 @@ function page() {
     }
   ];
 
-  // Pick a random banner on every server request
   const selectedBanner = banners[Math.floor(Math.random() * banners.length)];
   const commonProps = { alt: selectedBanner.alt, fill: true, priority: true, sizes: '100vw', quality: 75 };
   const { props: { srcSet: desktop } } = getImageProps({ ...commonProps, src: selectedBanner.image });
   const { props: { srcSet: mobile, ...rest } } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
-
-  // Manually preload the correct image based on device size since we are using custom <picture> tags.
-  // This tells the browser to start downloading the LCP image before it even parses the HTML body.
   preload(desktop, { as: 'image', fetchPriority: 'high', media: "(min-width: 768px)" });
   preload(mobile, { as: 'image', fetchPriority: 'high', media: "(max-width: 767px)" });
 

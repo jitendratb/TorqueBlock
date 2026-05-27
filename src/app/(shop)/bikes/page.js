@@ -1,6 +1,7 @@
 import React from 'react';
 import Breadcrumb from '@/components/atoms/BreadCrumb';
-import BikesClient from '../Components/TyreComponent/BikesClient';
+import dynamic from 'next/dynamic';
+const BikesClient = dynamic(() => import('../Components/TyreComponent/BikesClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import vehicleService from '@/services/vehicleService';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 

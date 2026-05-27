@@ -1,7 +1,8 @@
 import React from 'react';
 import Breadcrumb from '@/components/atoms/BreadCrumb';
 import compareServiceInstance from '@/services/compareService';
-import CompareClient from './components/CompareClient';
+import dynamic from 'next/dynamic';
+const CompareClient = dynamic(() => import('./components/CompareClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {

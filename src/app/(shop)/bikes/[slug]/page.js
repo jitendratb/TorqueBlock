@@ -1,6 +1,7 @@
 import React from 'react'
 import Breadcrumb from '@/components/atoms/BreadCrumb';
-import BrandModelsClient from '../../Components/BikeModelsClient';
+import dynamic from 'next/dynamic';
+const BrandModelsClient = dynamic(() => import('../../Components/BikeModelsClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import { cache } from 'react';
 import vehicleService from '@/services/vehicleService';
 import { notFound } from 'next/navigation';
