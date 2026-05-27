@@ -28,9 +28,6 @@ const Card = ({ item }) => {
                         <div className="absolute bottom-4  left-4   rounded-full border border-orange-500/30 bg-orange-500/30 px-3 py-1 text-xs uppercase  text-orange-500 backdrop-blur-md font-semibold">
                             Tyre
                         </div>
-                        <div className="absolute right-4 top-4 rounded-full bg-zinc-900/80 px-3 py-1 text-xs font-semibold text-white">
-                            In stock
-                        </div>
                     </div>
                     <div className="p-2 md:p-4 flex flex-col justify-between">
                         <div className='space-y-1 md:space-y-2'>
