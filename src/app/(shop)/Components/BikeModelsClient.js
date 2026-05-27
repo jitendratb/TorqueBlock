@@ -166,7 +166,7 @@ function BikeModelsClient({  data }) {
                                     {product.description}
                                 </p>
 
-                                <WhatsAppButton text="Check Price & Availability" value={`I'm interested in the ${product?.name} for my ${data.bikeModel}. Can you check live availability and share the best dealer price?`} />
+                                <WhatsAppButton text="Check Price & Availability" value={`I'm interested in the ${product?.name} for my ${data.bikeModel}. Can you check live availability`} />
 
                             </div>
                         </div>
