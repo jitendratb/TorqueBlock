@@ -7,15 +7,18 @@ const brandLinks = [
     { label: 'Pirelli', href: '/search?q=Pirelli' },
     { label: 'Michelin', href: '/search?q=Michelin' },
     { label: 'Metzeler', href: '/search?q=Metzeler' },
+]
+
+const valuePerformance = [
     { label: 'MRF', href: '/search?q=MRF' },
-    { label: 'TVS', href: '/search?q=TVS' },
+    { label: 'Apollo', href: '/search?q=Apollo' },
     { label: 'CEAT', href: '/search?q=CEAT' },
     { label: 'Reise', href: '/search?q=Reise' },
     { label: 'Maxxis', href: '/search?q=Maxxis' },
     { label: 'Vredestein', href: '/search?q=Vredestein' },
     { label: 'Eurogrip', href: '/search?q=Eurogrip' },
-    
 ]
+
 const helpLinks = [
     { label: 'Contact Us', href: '/contact' },
     { label: 'About Us', href: '/about' },
@@ -111,26 +114,48 @@ function Footer() {
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
-                            Top Brands
-                        </h3>
 
-                        <ul className="space-y-3 lg:space-y-4">
-                            {brandLinks.map((item, index) => (
-                                <li key={index}>
-                                    <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
-                                        <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
-                                        {item.label}
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
+                    <div className='flex flex-col gap-4'>
+                        <div>
+                            <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
+                                Ultimate Performance
+                            </h3>
+
+                            <ul className="space-y-3 lg:space-y-4">
+                                {brandLinks.map((item, index) => (
+                                    <li key={index}>
+                                        <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
+                                            <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+
+                        <div>
+                            <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
+                                Value Performance
+                            </h3>
+
+                            <ul className="space-y-3 lg:space-y-4">
+                                {valuePerformance.map((item, index) => (
+                                    <li key={index}>
+                                        <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
+                                            <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
+                                            {item.label}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
                     </div>
 
                     {/* SUPPORT */}
                     <div>
-                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
+                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
                             Support
                         </h3>
 
@@ -148,7 +173,7 @@ function Footer() {
 
 
                     <div>
-                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-6">
+                        <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
                             Operating From:
                         </h3>
 

@@ -1,5 +1,6 @@
-import Image from 'next/image'
+import Image, { getImageProps } from 'next/image'
 import React, { Suspense } from 'react'
+import { preload } from 'react-dom'
 import H1Tags from './component/H1Tags'
 import QueryBox from './component/QueryBox'
 import BrandsSection from './component/BrandsSection'
@@ -11,6 +12,8 @@ import Category from './component/Category'
 import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 import ValuePerformanceBrands from './component/ValuePerformanceBrands'
+
+export const revalidate = 60;
 
 function page() {
   const banners = [
@@ -52,6 +55,16 @@ function page() {
     }
   ];
 
+  // Pick a random banner on every server request
+  const selectedBanner = banners[Math.floor(Math.random() * banners.length)];
+  const commonProps = { alt: selectedBanner.alt, fill: true, priority: true, sizes: '100vw', quality: 75 };
+  const { props: { srcSet: desktop } } = getImageProps({ ...commonProps, src: selectedBanner.image });
+  const { props: { srcSet: mobile, ...rest } } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
+
+  // Manually preload the correct image based on device size since we are using custom <picture> tags.
+  // This tells the browser to start downloading the LCP image before it even parses the HTML body.
+  preload(desktop, { as: 'image', fetchPriority: 'high', media: "(min-width: 768px)" });
+  preload(mobile, { as: 'image', fetchPriority: 'high', media: "(max-width: 767px)" });
 
   return (
     <div className=''>
@@ -62,26 +75,10 @@ function page() {
         url="/"
       />
       <div className='relative w-full h-screen ' >
-        <Image 
-          src={banners[Math.floor(Math.random() * banners.length)].image} 
-          alt="Premium Motorcycle Tyres India" 
-          fill 
-          priority
-          fetchPriority="high" 
-          sizes="(max-width: 768px) 0vw, 100vw"
-          quality={75}
-          className='hidden md:block object-cover' 
-        />
-        <Image 
-          src="/Home/HomeBannerMobile.webp" 
-          alt="Premium Motorcycle Tyres India" 
-          fill 
-          priority
-          fetchPriority="high" 
-          sizes="(max-width: 768px) 100vw, 0vw"
-          quality={75}
-          className='md:hidden object-cover' 
-        />
+        <picture>
+          <source media="(min-width: 768px)" srcSet={desktop} />
+          <img {...rest} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-cover" />
+        </picture>
         <span className='absolute bg-gradient-to-r from-black/80 to-black/40 inset-0 z-0' />
         <div className='w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 z-10'>
           <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 px-4 pt-20 pb-6 md:py-0 text-white text-2xl font-bold gap-5 items-center'>

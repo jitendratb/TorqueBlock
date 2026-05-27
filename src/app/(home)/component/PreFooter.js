@@ -16,30 +16,37 @@ const footerSections = [
       { label: "Triumph Tiger 900 Rally Pro", href: "/bikes/triumph-tiger-900-rally-pro-tyres" },
     ],
   },
+  // {
+  //   title: "POPULAR TYRE TYPES",
+  //   links: [
+  //     { label: "Sports Touring Tyres", href: "/tyres" },
+  //     { label: "Adventure Tyres", href: "/tyres" },
+  //     { label: "Dual Sport Tyres", href: "/tyres" },
+  //     { label: "Track Racing Tyres", href: "/tyres" },
+  //     { label: "Cruiser Bike Tyres", href: "/tyres" },
+  //   ],
+  // },
   {
-    title: "POPULAR TYRE TYPES",
-    links: [
-      { label: "Sports Touring Tyres", href: "/tyres" },
-      { label: "Adventure Tyres", href: "/tyres" },
-      { label: "Dual Sport Tyres", href: "/tyres" },
-      { label: "Track Racing Tyres", href: "/tyres" },
-      { label: "Cruiser Bike Tyres", href: "/tyres" },
-    ],
-  },
-  {
-    title: "PREMIUM TYRE BRANDS",
+    title: "ULTIMATE PERFORMANCE",
     links: [
       { label: "Pirelli Tyres", href: "/search?q=Pirelli" },
       { label: "Michelin Tyres", href: "/search?q=Michelin" },
       { label: "Metzeler Tyres", href: "/search?q=Metzeler" },
+
+    ],
+  },
+  {
+    title: "VALUE PERFORMANCE",
+    links: [
       { label: 'MRF Tyres', href: '/search?q=MRF' },
-      { label: 'TVS Tyres', href: '/search?q=TVS' },
-      { label: 'CEAT Tyres', href: '/search?q=CEAT' },
+      { label: 'Apollo Tyres', href: '/search?q=Apollo' },
       { label: 'Reise Tyres', href: '/search?q=Reise' },
       { label: 'Maxxis Tyres', href: '/search?q=Maxxis' },
+      { label: 'Ceat Tyres', href: '/search?q=Ceat'},
       { label: 'Vredestein Tyres', href: '/search?q=Vredestein' },
       { label: 'Eurogrip Tyres', href: '/search?q=Eurogrip' },
-    ],
+    ]
+
   },
   {
     title: "TYRE COMPARISONS",
