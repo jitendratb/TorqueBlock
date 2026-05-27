@@ -63,7 +63,7 @@ const Card = ({ item }) => {
                                 )}
 
                             </div>
-                            <p className="text-[10px]  md:text-xs lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.hero?.subtitle || 'Premium tyre for optimal performance.'}</p>
+                            <p className="text-[10px]  md:text-xs lg:text-sm leading-6 text-zinc-400 line-clamp-1">{item.hero?.subtitle || 'Premium tyre for optimal performance.'}</p>
                         </div>
                         <div className="flex items-center justify-end ">
                             <WhatsAppButton value={`I'm interested in ${item.productName || item.hero?.title}. Please share availability and compatible options.`} text='Get Details' className="max-w-[150px]" />
@@ -124,7 +124,7 @@ const Card = ({ item }) => {
                                 <span className="rounded-full bg-zinc-950 px-3 py-2  text-yellow-400">⭐ {rating}</span>
                             </div>
 
-                            <p className="line-clamp-2 text-[10px] lg:text-sm text-zinc-400">
+                            <p className="line-clamp-1 text-[10px] lg:text-sm text-zinc-400">
                                 {item?.seo?.description ||
                                     'Compare performance, grip, mileage and riding comfort.'}
                             </p>
@@ -177,7 +177,7 @@ const Card = ({ item }) => {
                             <span className="rounded-full bg-zinc-950 px-3 py-2">Compatible Tyres</span>
                             <span className="rounded-full bg-zinc-950 px-3 py-2  text-yellow-400">⭐ {rating}</span>
                         </div>
-                        <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
+                        <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-1">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
                         <div className="flex items-center justify-end">
                             <WhatsAppButton value={`I'm looking for tyres for ${item.bikeBrand} ${item.bikeModel}. Please share compatible options.`} text='Get Details' className="max-w-[150px]" />
                         </div>
