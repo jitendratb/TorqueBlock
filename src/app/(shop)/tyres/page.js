@@ -54,7 +54,7 @@ export default function TyresPage() {
             url="/tyres"
             items={schemaItems}
         />
-        <div className="space-y-16 pb-4">
+        <div className="space-y-4 pb-4">
             <div >
                 <Breadcrumb items={breadcrumbItems} />
             </div>
@@ -81,7 +81,7 @@ export default function TyresPage() {
                     </div>
 
                     <h1 className="text-5xl md:text-9xl font-black text-white mb-6 tracking-tighter leading-none">
-                        THE <span className="text-orange-500 outline-text text-transparent">RUBBER</span> <br />
+                        THE <span className="text-transparent [-webkit-text-stroke:2px_#f97316]">RUBBER</span> <br />
                         ROSTER
                     </h1>
 
@@ -151,7 +151,7 @@ export default function TyresPage() {
             <div className="pt-8 border-t border-zinc-900">
                 <div className="text-center mb-4 space-y-4">
                     <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em]">Global Partners</span>
-                    <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">THE <span className="outline-text text-transparent">ALLIANCE</span></h3>
+                    <h3 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter">THE <span className="text-transparent [-webkit-text-stroke:2px_#f97316]">ALLIANCE</span></h3>
                 </div>
                 <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
                     <BrandsSection />

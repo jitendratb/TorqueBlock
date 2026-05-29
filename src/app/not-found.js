@@ -49,7 +49,7 @@ export default function NotFound() {
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full max-w-md mx-auto">
             <WhatsAppButton 
               text="Chat with Specialist" 
-              value="Hi Torque Block! I got lost on your website 404 page. I'm looking for the perfect tyres for my vehicle. Can you help me find the right fitment and warehouse stock?" 
+              value="I got lost on your website 404 page. I'm looking for the perfect tyres for my vehicle. Can you help me find the right fitment and warehouse stock?" 
               className="w-full sm:w-1/2 h-12 shadow-lg" 
             />
 
