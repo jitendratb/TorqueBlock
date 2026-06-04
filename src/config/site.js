@@ -52,8 +52,8 @@ export const siteConfig = {
   ],
 
   url: "https://www.torqueblock.com",
-  logo: "/fevicon.ico",
-  ogImage: "/fevicon.ico",
+  logo: "/favicon.ico",
+  ogImage: "/favicon.ico",
   email: "ops@torqueblock.com",
   phone: "+91-6366625625",
   socials: {

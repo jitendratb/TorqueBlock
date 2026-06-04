@@ -9,12 +9,14 @@ import { PageShell } from '@/components/layout/page-shell'
 import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 import dynamic from 'next/dynamic'
+import TrendingSection from './component/TrendingSection'
+import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 
 const Category = dynamic(() => import('./component/Category'), { ssr: true });
 const ValuePerformanceBrands = dynamic(() => import('./component/ValuePerformanceBrands'), { ssr: true });
-const ReviewsSection = dynamic(() => import('./component/ReviewSection'), { 
+const ReviewsSection = dynamic(() => import('./component/ReviewSection'), {
   ssr: true,
-  loading: () => <div className="h-64 w-full animate-pulse bg-zinc-100 dark:bg-zinc-900 rounded-xl my-10" /> 
+  loading: () => <div className="h-64 w-full animate-pulse bg-zinc-100 dark:bg-zinc-900 rounded-xl my-10" />
 });
 const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'), { ssr: true });
 
@@ -22,38 +24,38 @@ export const revalidate = 60;
 
 function page() {
   const banners = [
-     {
-      id:2,
+    {
+      id: 2,
       image: "https://cdn.torqueblock.com/GT-650-tyre-18ebf1ae-fdd0-47d0-ac66-c6d13131e4d8.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
-      {
-      id:3,
+    {
+      id: 3,
       image: "https://cdn.torqueblock.com/brand-tyre-7b173d58-a7a2-4ba4-a0a0-96531ffc6f63.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
-       {
-      id:4,
+    {
+      id: 4,
       image: "https://cdn.torqueblock.com/brand-tyre-bcbac7bf-3391-4730-864e-2ee0fa43c82d.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
-       {
-      id:5,
-      image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
-      mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
-    },
-       {
-      id:6,
+    {
+      id: 5,
       image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
     },
     {
-      id:7,
+      id: 6,
+      image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
+      mobileImage: "/Home/HomeBannerMobile.webp",
+      alt: "Premium Motorcycle Tyres India",
+    },
+    {
+      id: 7,
       image: "https://cdn.torqueblock.com/brand-tyre-53adac61-7de9-4113-8b10-90526ae6cba7.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
       alt: "Premium Motorcycle Tyres India",
@@ -69,7 +71,7 @@ function page() {
 
   return (
     <div className=''>
-      <WebPageSchema 
+      <WebPageSchema
         type="WebSite"
         title="Torque Block | Premium Motorcycle Tyres India"
         description="India's premium performance motorcycle tyre platform for superbikes, track riding, sport touring, and ADV motorcycles."
@@ -93,6 +95,9 @@ function page() {
           <div className='space-y-10 pb-10 mt-10'>
             <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
               <BrandsSection />
+            </Suspense>
+            <Suspense fallback={<TrendCardSkelton count={4} />} >
+              <TrendingSection />
             </Suspense>
             <Category />
             <ValuePerformanceBrands />

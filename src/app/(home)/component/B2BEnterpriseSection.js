@@ -34,7 +34,7 @@ function B2BEnterpriseSection() {
                                 'Priority Tyre Allocation',
                                 'Exclusive Partner Pricing',
                                 'Pan-India Logistics Network',
-                                'Fast Moving Superbikes Inventory',
+                                'Fast-Moving Superbike Inventory',
                             ].map((item, index) => (
                                 <div
                                     key={index}

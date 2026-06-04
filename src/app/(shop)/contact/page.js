@@ -100,7 +100,7 @@ export default function ContactPage() {
 
                     <div>
                       <p className="text-zinc-500 text-xs uppercase tracking-widest">
-                        Email Inquiry
+                        Email Enquiry
                       </p>
 
                       <h3 className="text-lg font-bold mt-1 group-hover:text-orange-500 transition-all">
@@ -247,7 +247,7 @@ export default function ContactPage() {
                       name="message"
                       value={form.message}
                       onChange={handleChange}
-                      placeholder="Tell us your tyre requirement, bike usage, preferred riding style, track or touring setup..."
+                      placeholder="Tell us your tyre requirements, bike usage, preferred riding style, track or touring setup..."
                       required
                       className="w-full bg-black border border-zinc-800 rounded-xl px-4 py-3 outline-none focus:border-orange-500 transition-all resize-none"
                     />
@@ -259,7 +259,7 @@ export default function ContactPage() {
                     disabled={loading}
                     className="w-full bg-orange-500 hover:bg-orange-600 disabled:opacity-50 text-white  uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-3 transition-all cursor-pointer"
                   >
-                    {loading ? "Submitting..." : "Submit Inquiry"}
+                    {loading ? "Submitting..." : "Submit Enquiry"}
 
                     <FaPaperPlane />
                   </button>

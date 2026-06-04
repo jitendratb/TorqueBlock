@@ -87,7 +87,6 @@ function QueryBox() {
             searchable={true}
             disabled={!selectedTyre?._id}
           />
-
         </div>
 
         <button type="submit" disabled={!selectedModel?._id && !selectedModel?.value} className={`
@@ -98,7 +97,7 @@ function QueryBox() {
             : "bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:bg-green-400 hover:shadow-[0_0_25px_rgba(34,197,94,0.6)] hover:-translate-y-1 active:translate-y-0"
           }
       `}>  <FaWhatsapp className={`text-xl transition-transform duration-300 ${!selectedModel?._id && !selectedModel?.value ? "group-hover:scale-110 animate-pulse" : ""}`} />
-          <span className='ml-3 text-sm tracking-wide'>Ask Tyre Expert on WhatsApp</span></button>
+          <span className='ml-3 text-sm tracking-wide'>Ask a Tyre Expert on WhatsApp</span></button>
       </form>
     </div>
   )

@@ -15,7 +15,7 @@ function Category() {
   const categories = [
     { title: "Super Sport", subtitle: "Track & Street", image: SuperSport, href: "/search?q=supersport", className: "md:col-span-2 md:row-span-2" },
     { title: "Cruiser", subtitle: "Highway Dominance", image: Cruiser, href: "/search?q=cruiser", className: "md:col-span-1 md:row-span-1" },
-    { title: "Off-Roading", subtitle: "Dirt & Trail", image: OffRoading, href: "/search?q=offroad", className: "md:col-span-1 md:row-span-1" },
+    { title: "Off-Roading", subtitle: "Dirt & Trail", image: OffRoading, href: "/search?q=off-road", className: "md:col-span-1 md:row-span-1" },
     { title: "Sport Touring", subtitle: "Endurance & Speed", image: SportTouring, href: "/search?q=touring", className: "md:col-span-2 md:row-span-1" },
     { title: "Racing Slicks", subtitle: "Pure Track Performance", image: RacingSlicks, href: "/search?q=racing", className: "md:col-span-2 md:row-span-1" },
     { title: "Dual Sport", subtitle: "Any Terrain", image: DualSport, href: "/search?q=sports", className: "md:col-span-2 md:row-span-1" },
@@ -32,7 +32,7 @@ function Category() {
       <div className="mb-10 text-center">
           <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.5em]">Riding Styles</span>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000">
-              Select Your <span className="text-orange-500">Discipline</span>
+              Select Your <span className="text-orange-500">Playground</span>
           </h2>
       </div>
 

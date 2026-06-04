@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Description({ tyre }) {
+function Description({ tyre , desClassName="space-y-2" }) {
     return (
         <div className="space-y-4">
-            <div className='space-y-2'>
+            <div className={desClassName}>
                 <p className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
                     Description
                 </p>

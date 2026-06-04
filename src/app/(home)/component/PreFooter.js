@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const footerSections = [
   {
-    title: "POPULAR BIKES",
+    title: "POPULAR MOTORCYCLES",
     links: [
       { label: "Harley-Davidson 1200 Custom", href: "/bikes/harley-davidson-1200-custom-tyres" },
       { label: "Harley-Davidson Heritage Classic", href: "/bikes/harley-davidson-heritage-classic-tyres" },
@@ -76,8 +76,8 @@ export default function EnterprisePreFooter() {
           <div className="w-28 h-1 bg-orange-500 rounded-full mx-auto mt-2" />
 
           <p className="text-gray-400 text-sm lg:text-sm mt-6 max-w-4xl mx-auto leading-relaxed">
-            Discover motorcycle tyre recommendations, bike specific fitments,
-            touring setups, track focused tyres, and expert tyre comparisons
+            Discover motorcycle tyre recommendations, bike-specific fitments,
+            touring setups, track-focused tyres, and expert tyre comparisons
             built for Indian roads and performance riders.
           </p>
         </div>

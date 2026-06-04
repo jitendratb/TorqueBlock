@@ -14,7 +14,7 @@ export default function TrustSection({tyre}) {
     const features = [
         {
             icon: <FaTruck />,
-            title: "Pan India Delivery",
+            title: "Pan-India Delivery",
             description: "Fast & reliable delivery across India",
         },
         {
@@ -65,7 +65,7 @@ export default function TrustSection({tyre}) {
 
                             <div className="space-y-6">
                                 <div className="w-full md:max-w-[450px] md:mx-auto">
-                                    <WhatsAppButton text="Check Availability Before Stock Ends" value={` I'm interested in ${tyre?.productName} Please help me with • Tyre availabilit • Compatible tyre size • Bike fitment confirmatio • Price detail • Delivery timelin My Bike Model:`} />
+                                    <WhatsAppButton text="Check Availability Before Stock Ends" value={`I'm interested in ${tyre?.productName || 'this tyre'}. Please help me with:\n• Tyre availability\n• Compatible tyre size\n• Bike fitment confirmation\n• Price details\n• Delivery timeline\n\nMy Bike Model:`} />
                                 </div>
 
 
