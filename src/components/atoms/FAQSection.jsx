@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import FAQSchema from "../seo/FAQSchema";
 import { FiPlus, FiMinus, FiHelpCircle } from "react-icons/fi";
 
 export default function FAQSection({ faqs = [] }) {
@@ -51,8 +50,6 @@ export default function FAQSection({ faqs = [] }) {
           );
         })}
       </div>
-
-      <FAQSchema faqs={faqs} />
     </div>
   );
 }
