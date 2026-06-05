@@ -11,7 +11,7 @@ export default function FAQSection({ faqs = [] }) {
   };
 
   return (
-    <div className="w-full  space-y-4">
+    <div className="w-full  space-y-4 pt-4 pb-8">
       <div className="flex items-center gap-3">
         <FiHelpCircle className="text-orange-500" size={22} />
         <h2 className="text-sm lg:text-2xl font-black text-white uppercase tracking-wider">
