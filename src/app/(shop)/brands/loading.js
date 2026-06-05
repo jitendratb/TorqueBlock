@@ -10,10 +10,10 @@ export default function BrandsLoading() {
 
       {/* Header telemetry blocks */}
       <div className="flex flex-col items-start justify-start space-y-3 animate-pulse">
-        <div className="h-6 w-40 bg-zinc-900 border border-zinc-800 rounded-full" />
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-none">
+        <div className="h-6 w-40 bg-zinc-900 border border-gray-100 rounded-full" />
+        <div className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-white uppercase tracking-none">
           Premium <span className="text-zinc-800">Brands</span>
-        </h1>
+        </div>
         <div className="h-16 w-full max-w-xl bg-zinc-900/50 rounded-xl" />
       </div>
 

@@ -7,10 +7,8 @@ function TrendCard({ item, className = "w-full md:w-[320px] lg:w-[360px]" }) {
     const currentScore = typeof item?.trendScore === 'object' ? item.trendScore?.totalScore || 0 : item?.trendScore || 0;
     const isTrendingUp = currentScore >= (item?.previousScore || 0);
 
-
-    console.log(item);
     return (
-        <Link href={`/trending/${item?.slug}`} className={`group relative h-[300px] rounded-[2.5rem] block shrink-0 overflow-hidden cursor-pointer ${className}`}>
+        <Link href={`/trending/${item?.slug}`} className={`group relative h-[280px] rounded-[2.5rem] block shrink-0 overflow-hidden cursor-pointer ${className}`}>
             <CustomImage
                 src={item?.bannerImage || item?.image || '/placeholder.jpg'}
                 alt={item?.name || 'Trending Tyre'}

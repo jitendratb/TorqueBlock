@@ -1,7 +1,7 @@
 import React from "react";
 import JsonLd from "./JsonLd";
 
-const SITE_URL = "https://torqueblock.com";
+const SITE_URL = "https://www.torqueblock.com";
 
 export default function BreadcrumbSchema({ items = [] }) {
   if (!items || items.length === 0) return null;
@@ -12,7 +12,7 @@ export default function BreadcrumbSchema({ items = [] }) {
     itemListElement: items.map((item, index) => {
       const name = item.label || item.name || `Step ${index + 1}`;
       const relativePath = item.href || item.url || "/";
-      
+
       // Ensure all breadcrumb item links are absolute URLs (required by Google Search Console)
       const absoluteUrl = relativePath.startsWith("http")
         ? relativePath

@@ -1,7 +1,7 @@
 import React from "react";
 import JsonLd from "./JsonLd";
 
-const SITE_URL = "https://torqueblock.com";
+const SITE_URL = "https://www.torqueblock.com";
 
 export default function BrandSchema({ brand, slug }) {
   if (!brand) return null;

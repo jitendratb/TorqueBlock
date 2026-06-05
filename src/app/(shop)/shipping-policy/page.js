@@ -2,7 +2,17 @@ import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Shipping & Delivery Policy | Torque Block',
+    description: 'Torque Block shipping and delivery timelines, courier partners, packaging standards, and support for premium motorcycle tyres.',
+    keywords: [
+      'motorcycle tyre shipping India',
+      'Torque Block delivery times',
+      'courier partners Blue Dart',
+      'safe tyre packaging'
+    ],
+    alternates: { canonical: 'https://www.torqueblock.com/shipping-policy' },
+  };
 }
 
 export default function ShippingPolicyPage() {

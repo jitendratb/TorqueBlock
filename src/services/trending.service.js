@@ -33,6 +33,26 @@ const trendingService = {
             console.error("Error fetching trending item by id:", error);
             throw error;
         }
+    },
+
+    fetchSeoTrending: async () => {
+        try {
+            const response = await TorqueBlockApi.get('/trending/seo-data');
+            return response;
+        } catch (error) {
+            console.error("Error fetching trending SEO data:", error);
+            throw error;
+        }
+    },
+
+    interact: async (slug, type) => {
+        try {
+            const response = await TorqueBlockApi.patch(`/trending/${slug}/interact`, { type });
+            return response;
+        } catch (error) {
+            console.error("Error patching trending interaction:", error);
+            throw error;
+        }
     }
 };
 

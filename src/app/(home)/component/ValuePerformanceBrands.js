@@ -48,9 +48,9 @@ async function ValuePerformanceBrands() {
                                     <span className=" py-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white-500 bg-white-100 rounded-full">
                                         Performance
                                     </span>
-                                    <h1 className="text-2xl sm:text-3xl font-extrabold text-white-900 tracking-tight">
+                                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white-900 tracking-tight">
                                         {brand?.name}
-                                    </h1>
+                                    </h3>
 
                                     <button className=" flex items-center gap-2 text-xs md:text-sm font-semibold text-white-900 group-hover:text-white-600 transition-colors">
                                         Explore Brand

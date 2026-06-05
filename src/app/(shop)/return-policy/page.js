@@ -2,7 +2,17 @@ import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Returns & Refund Policy | Torque Block',
+    description: 'Torque Block returns, replacements, cancellations, and refund policy for premium motorcycle tyres.',
+    keywords: [
+      'motorcycle tyre returns',
+      'Torque Block refund policy',
+      'cancellation policy',
+      'warranty claims'
+    ],
+    alternates: { canonical: 'https://www.torqueblock.com/return-policy' },
+  };
 }
 
 export default function ReturnPolicyPage() {

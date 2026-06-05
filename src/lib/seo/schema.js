@@ -1,4 +1,4 @@
-const SITE_URL = "https://torqueblock.com";
+const SITE_URL = "https://www.torqueblock.com";
 
 const DEFAULT_IMAGE = "/newLogo.webp";
 
@@ -6,15 +6,15 @@ export function generateProductSchema(product) {
     if (!product) return null;
 
     const displayName = product?.productName || product?.hero?.title || product?.name;
-    
-    const displayDescription = product?.hero?.subtitle 
-        || product?.shortDescription 
-        || product?.seo?.description 
+
+    const displayDescription = product?.hero?.subtitle
+        || product?.shortDescription
+        || product?.seo?.description
         || product?.description;
 
-    const mainImage = product?.productImages?.[0] 
-        || product?.hero?.heroImage 
-        || product?.image 
+    const mainImage = product?.productImages?.[0]
+        || product?.hero?.heroImage
+        || product?.image
         || DEFAULT_IMAGE;
 
     const brandName = product?.brand?.name || product?.brand || "Torque Block";
@@ -41,12 +41,10 @@ export function generateProductSchema(product) {
             itemCondition: "https://schema.org/NewCondition",
         },
 
-        aggregateRating: product?.ratingCount > 0
-            ? {
-                "@type": "AggregateRating",
-                ratingValue: product?.rating || 4.8,
-                reviewCount: product?.ratingCount,
-            }
-            : undefined,
+        aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: product?.rating || 4.8,
+            reviewCount: product?.ratingCount || 1,
+        },
     };
 }

@@ -56,7 +56,7 @@ function QueryBox() {
   return (
     <div className='h-full w-full'>
       <form onSubmit={HandleFormClick} className='space-y-2 max-w-md px-4 py-4 md:px-6 md:py-8 rounded-lg mx-auto border border-gray-400 bg-white/20 backdrop-blur-xs'>
-        <h1 className='text-center text-[22px] md:text-2xl lg:font-bold'>
+        <h2 className='text-center text-[22px] md:text-2xl lg:font-bold'>
           <span className='block lg:hidden'>
             Get Expert Tyre Advice
           </span>
@@ -64,7 +64,7 @@ function QueryBox() {
           <span className='hidden lg:block'>
             Get Expert Tyre Recommendations
           </span>
-        </h1>
+        </h2>
         <p className='text-center text-orange-500 text-xs md:text-sm'>Bike-specific tyre advice on WhatsApp in under 2 minutes.</p>
         <div>
           <p className='text-white text-sm pb-2'>Select Bike</p>

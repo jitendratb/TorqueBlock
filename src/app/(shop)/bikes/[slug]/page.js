@@ -30,15 +30,24 @@ export async function generateMetadata({ params }) {
         || (bikeBrand?.bikeBrand ? `Explore ${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} sizes, compatibility, grip performance, and reviews.` : "Explore bike brand sizes, compatibility, grip performance, and reviews.");
 
     const ogTitle = bikeBrand?.seo?.title || (bikeBrand?.bikeBrand ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} Details` : "Bike Details");
+    const bikeName = bikeBrand?.bikeBrand ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel}` : "";
+    const keywords = bikeName ? [
+        `${bikeName} tyres`,
+        `${bikeName} tyre size`,
+        `best tyres for ${bikeName}`,
+        `${bikeName} tyre specs`,
+        `${bikeName} tyre upgrade`
+    ] : [];
 
     return {
         title: bikeBrand?.seo?.title || displayTitle,
         description: bikeBrand?.seo?.description || displayDescription,
-        alternates: { canonical: `https://torqueblock.com/bikes/${slug}`, },
+        keywords,
+        alternates: { canonical: `https://www.torqueblock.com/bikes/${slug}`, },
         robots: { index: true, follow: true, },
         openGraph: {
             type: "website",
-            url: `https://torqueblock.com/bikes/${slug}`,
+            url: `https://www.torqueblock.com/bikes/${slug}`,
             title: ogTitle,
             description: bikeBrand?.seo?.description || displayDescription,
             images: [

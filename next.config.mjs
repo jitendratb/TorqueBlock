@@ -6,7 +6,23 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: 'cdn.torqueblock.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'torqueblock.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.torqueblock.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.postimg.cc',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.postimg.cc',
       },
     ],
   },

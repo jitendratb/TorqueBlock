@@ -18,11 +18,11 @@ export async function generateMetadata() {
       'bike tyre experts India',
       'Torque Block'
     ],
-    alternates: { canonical: 'https://torqueblock.com/about' },
+    alternates: { canonical: 'https://www.torqueblock.com/about' },
     openGraph: {
       title: 'About Torque Block | India’s Premium Motorcycle Tyre Specialists',
       description: 'Torque Block is India’s trusted destination for premium motorcycle tyres including Pirelli, Michelin, Metzeler, and Bridgestone.',
-      url: 'https://torqueblock.com/about',
+      url: 'https://www.torqueblock.com/about',
       siteName: 'Torque Block',
       images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
       type: 'website',

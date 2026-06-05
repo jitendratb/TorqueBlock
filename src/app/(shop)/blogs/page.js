@@ -5,7 +5,28 @@ import blogService from '@/services/blogService';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Motorcycle Tyre Guides, Reviews & Industry News | Torque Block Blog',
+    description: 'Read the latest motorcycle tyre reviews, selection guides, maintenance tips, and expert recommendations for superbike and track riding from Torque Block.',
+    keywords: [
+      'motorcycle tyre guides',
+      'superbike tyre reviews',
+      'motorcycle tyre maintenance',
+      'riding tips India',
+      'performance tyres advice'
+    ],
+    alternates: {
+      canonical: 'https://www.torqueblock.com/blogs',
+    },
+    openGraph: {
+      title: 'Motorcycle Tyre Guides, Reviews & Industry News | Torque Block Blog',
+      description: 'Read the latest motorcycle tyre reviews, selection guides, maintenance tips, and expert recommendations from Torque Block.',
+      url: 'https://www.torqueblock.com/blogs',
+      siteName: 'Torque Block',
+      images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+      type: 'website',
+    },
+  };
 }
 
 export default async function BlogsPage({ searchParams }) {
@@ -45,6 +66,7 @@ export default async function BlogsPage({ searchParams }) {
                 items={schemaItems}
             />
             <main className="min-h-screen">
+                <h1 className="sr-only">Torque Block Motorcycle Blogs & Guides</h1>
                 <Breadcrumb items={breadcrumbItems} />
                 <div className="py-4">
                     <BlogsClient blogs={blogs} pagination={pagination} />

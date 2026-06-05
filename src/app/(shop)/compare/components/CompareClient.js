@@ -61,10 +61,10 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                         <div className="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-500 rounded-full animate-pulse" />
                         <span className="text-[8px] lg:text-[10px] font-black text-white uppercase tracking-[0.3em]">Battle Arena / Active</span>
                     </div>
-                    <h2 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
+                    <h1 className="text-4xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
                         FACE THE <br />
                         <span className="text-orange-500 outline-text text-transparent">COMPETITION</span>
-                    </h2>
+                    </h1>
                 </div>
 
                 <div className="relative w-full md:max-w-md group">

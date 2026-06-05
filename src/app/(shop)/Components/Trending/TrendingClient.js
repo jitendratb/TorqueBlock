@@ -6,8 +6,9 @@ import TrendingFirstCardSkeleton from './TrendingFirstCardSkeleton';
 import TrendCard from '@/components/atoms/TrendCard';
 import Pagination from '@/components/atoms/Pagination';
 import { FiAlertCircle } from 'react-icons/fi';
+import TrendCardSkelton from '@/components/atoms/TrendCardSkelton';
 
-function TrendingClient({ trendAll, trendingFirst, error }) {
+function TrendingClient({ trendAll, trendingFirst, loading, error }) {
 
   return (
     <div className='flex flex-col gap-4 w-full'>
@@ -26,17 +27,10 @@ function TrendingClient({ trendAll, trendingFirst, error }) {
           <h2 className='text-2xl md:text-3xl font-bold text-white tracking-tight'>More Trending Tyres</h2>
         </div>
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4  w-full '>
-          {trendAll?.map((item) => {
-            return (
-              <>
-                <TrendCard item={item} key={item._id} className="w-full md:w-full lg:w-full" />
-              </>)
-          })}
-        </div>
-
-        <div className='mt-4 flex justify-center'>
-          <Pagination />
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4  w-full mb-4'>
+          {trendAll?.length > 0 ? ( trendAll?.map((item) => (
+            <TrendCard item={item} key={item._id} className="w-full md:w-full lg:w-full" />
+          ))) : <TrendCardSkelton count={8} />}
         </div>
       </section>
     </div>

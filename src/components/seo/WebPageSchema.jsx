@@ -1,7 +1,7 @@
 import React from 'react';
 import JsonLd from './JsonLd';
 
-const SITE_URL = "https://torqueblock.com";
+const SITE_URL = "https://www.torqueblock.com";
 const SITE_NAME = "Torque Block";
 
 export default function WebPageSchema({
@@ -41,10 +41,10 @@ export default function WebPageSchema({
     schema.mainEntity = {
       "@type": "ItemList",
       "itemListElement": items.map((item, index) => {
-        const itemUrl = item.url 
-          ? (item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url.startsWith('/') ? item.url : `/${item.url}`}`) 
+        const itemUrl = item.url
+          ? (item.url.startsWith('http') ? item.url : `${SITE_URL}${item.url.startsWith('/') ? item.url : `/${item.url}`}`)
           : absoluteUrl;
-          
+
         return {
           "@type": "ListItem",
           "position": index + 1,

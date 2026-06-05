@@ -5,16 +5,14 @@ import Footer from "../(home)/component/Footer";
 
 
 export const metadata = {
-    metadataBase: new URL("https://torqueblock.com"),
+    metadataBase: new URL("https://www.torqueblock.com"),
 
     title: {
         default: "Torque Block",
         template: "%s | Torque Block",
     },
 
-    description:
-        "India's premium performance motorcycle tyre platform for superbikes, track riding, sport touring, and ADV motorcycles.",
-
+    description:"India's premium performance motorcycle tyre platform for superbikes, track riding, sport touring, and ADV motorcycles.",
     applicationName: "Torque Block",
 
     creator: "Torque Block",
@@ -23,11 +21,14 @@ export const metadata = {
     category: "Automotive",
 
     keywords: [
+        "high performance motorcycle tyres",
         "performance motorcycle tyres",
         "superbike tyres India",
-        "Pirelli tyres",
-        "Metzeler tyres",
-        "Michelin motorcycle tyres",
+        "superbike tyres Bangalore",
+        "superbike tyres near me",
+        "Pirelli tyres Bangalore",
+        "Metzeler tyres Bangalore",
+        "Michelin motorcycle tyres Bangalore",
     ],
 
     formatDetection: {
@@ -43,7 +44,7 @@ export const metadata = {
     openGraph: {
         type: "website",
         locale: "en_IN",
-        url: "https://torqueblock.com",
+        url: "https://www.torqueblock.com",
         siteName: "Torque Block",
 
         title: "Torque Block",

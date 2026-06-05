@@ -4,13 +4,15 @@ import CustomImage from '@/components/molecules/CustomImage'
 import { FiEye, FiHeart, FiAward } from 'react-icons/fi'
 import { FaMotorcycle } from 'react-icons/fa6'
 import { GiCarWheel } from 'react-icons/gi'
+import { useRouter } from 'next/navigation';
 
-function TrendingFirstCard({trendingFirst}) { 
-    const bikeModel = trendingFirst?.bike?.bikeModel 
+function TrendingFirstCard({ trendingFirst }) {
+    const router = useRouter();
+    const bikeModel = trendingFirst?.bike?.bikeModel
     const bikeBrnad = trendingFirst?.bike?.bikeId?.brandId?.brandName
 
     return (
-        <div className='relative w-full lg:max-w-5xl h-[400px] lg:h-[450px] rounded-[1rem] overflow-hidden  group cursor-pointer ring-1 ring-white/10 ring-inset bg-zinc-950'>
+        <div onClick={() => router.push(`/trending/${trendingFirst?.slug}`)} className='relative w-full lg:max-w-5xl h-[400px] lg:h-[450px] rounded-[1rem] overflow-hidden  group cursor-pointer ring-1 ring-white/10 ring-inset bg-zinc-950'>
             {trendingFirst?.bannerImage ? (
                 <CustomImage
                     src={trendingFirst.bannerImage}
@@ -27,9 +29,11 @@ function TrendingFirstCard({trendingFirst}) {
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/60 to-transparent w-2/3" />
 
-            <div className='absolute top-4 lg:top-6 left-4 lg:left-6 flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/20 text-white px-2 md:px-4 py-1 md:py-2 rounded-full shadow-lg transform transition-transform duration-500 group-hover:translate-y-1'>
-                <FiAward className="text-amber-400 text-xs lg:text-lg" />
-                <span className='text-xs lg:text-sm font-bold tracking-widest uppercase'>#1 Trending</span>
+            <div className="absolute lg:top-6 lg:left-6 top-2 left-2 flex items-center gap-2 bg-orange-500/20 backdrop-blur-md border border-orange-500/40 rounded-full lg:px-4 lg:py-2 px-2 py-1">
+                <FiAward className="text-orange-400  " />
+                <span className="text-xs font-black uppercase tracking-widest text-orange-300">
+                    #{trendingFirst?.sortOrder} Trending · {trendingFirst?.trendType}
+                </span>
             </div>
 
             <div className='absolute bottom-0 md:bottom-6 lg:bottom-4  inset-x-0 p-4 lg:p-10 flex flex-col sm:flex-row justify-end sm:justify-between items-start sm:items-end gap-4 sm:gap-6 h-full z-10'>

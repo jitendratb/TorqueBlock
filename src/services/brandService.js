@@ -25,7 +25,6 @@ class BrandService {
         if (!slug) return null;
         try {
             const res = await TorqueBlockApi.get(`/brands/${slug}`);
-            console.log(res)
             return res || null;
         } catch (error) {
             console.error(`Failed to fetch brand by slug ${slug}:`, error);

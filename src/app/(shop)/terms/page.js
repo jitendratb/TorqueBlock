@@ -2,7 +2,17 @@ import React from 'react';
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Terms & Conditions | Torque Block',
+    description: 'Torque Block terms and conditions governing website usage, product purchases, fitment responsibilities, and warranties.',
+    keywords: [
+      'Torque Block terms and conditions',
+      'fitment responsibility',
+      'tyre warranty',
+      'legal jurisdiction Bengaluru'
+    ],
+    alternates: { canonical: 'https://www.torqueblock.com/terms' },
+  };
 }
 
 export default function TermsPage() {

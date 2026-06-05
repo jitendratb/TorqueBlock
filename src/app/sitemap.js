@@ -3,6 +3,7 @@ import TorqueBlockApi from '@/lib/api';
 import brandServiceInstance from '@/services/brandService';
 import blogService from '@/services/blogService';
 import compareServiceInstance from '@/services/compareService';
+import trendingService from '@/services/trending.service';
 
 export default async function sitemap() {
   const baseUrl = 'https://www.torqueblock.com';
@@ -16,12 +17,20 @@ export default async function sitemap() {
     '/brands',
     '/about',
     '/contact',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
-    changeFrequency: route === '/blogs' ? 'weekly' : 'monthly',
-    priority: route === '' ? 1.0 : 0.8,
-  }));
+    '/trending',
+    '/privacy-policy',
+    '/return-policy',
+    '/shipping-policy',
+    '/terms',
+  ].map((route) => {
+    const isPolicy = ['/privacy-policy', '/return-policy', '/shipping-policy', '/terms'].includes(route);
+    return {
+      url: `${baseUrl}${route}`,
+      lastModified: new Date().toISOString(),
+      changeFrequency: route === '/blogs' || route === '/trending' ? 'weekly' : 'monthly',
+      priority: route === '' ? 1.0 : isPolicy ? 0.5 : 0.8,
+    };
+  });
 
   let bikeRoutes = [];
   try {
@@ -119,5 +128,24 @@ export default async function sitemap() {
     console.error("Error fetching compares for sitemap", err);
   }
 
-  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes, ...brandRoutes, ...blogRoutes, ...compareRoutes];
+  let trendingRoutes = [];
+  try {
+    const trendingRes = await trendingService.fetchAllTrending({ limit: 1000 });
+    const trendings = trendingRes?.data || trendingRes || [];
+    if (Array.isArray(trendings)) {
+      trendingRoutes = trendings.map((trend) => {
+        const slug = trend?.slug || '';
+        return {
+            url: `${baseUrl}/trending/${slug}`,
+            lastModified: new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+        };
+      }).filter(r => r.url !== `${baseUrl}/trending/`);
+    }
+  } catch (err) {
+    console.error("Error fetching trending items for sitemap", err);
+  }
+
+  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes, ...brandRoutes, ...blogRoutes, ...compareRoutes, ...trendingRoutes];
 }

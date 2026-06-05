@@ -21,6 +21,7 @@ export async function generateMetadata({ params }) {
     if (!tyre) return {};
 
     const displayName = tyre?.productName || tyre?.hero?.title;
+    const brandName = tyre?.brand?.name || tyre?.brand || "Torque Block";
     const displayDescription = tyre?.hero?.subtitle
         || (displayName ? `Explore ${displayName} tyre sizes, compatibility, grip performance, and reviews.` : "Explore tyre sizes, compatibility, grip performance, and reviews.");
 
@@ -30,14 +31,24 @@ export async function generateMetadata({ params }) {
 
     const mainImage = tyre?.productImages?.[0] || tyre?.hero?.heroImage || "/newLogo.webp";
 
+    const keywords = displayName ? [
+        `${displayName} India`,
+        `${displayName} review`,
+        `${displayName} price`,
+        `${brandName} tyres`,
+        `${displayName} fitment`,
+        `buy ${displayName} online`
+    ] : [];
+
     return {
         title: tyre?.seo?.title || displayTitle,
         description: tyre?.seo?.description || displayDescription,
-        alternates: { canonical: `https://torqueblock.com/tyres/${slug}`, },
+        keywords,
+        alternates: { canonical: `https://www.torqueblock.com/tyres/${slug}`, },
         robots: { index: true, follow: true, },
         openGraph: {
             type: "website",
-            url: `https://torqueblock.com/tyres/${slug}`,
+            url: `https://www.torqueblock.com/tyres/${slug}`,
             title: tyre?.seo?.title || displayName || "Tyre Details",
             description: tyre?.seo?.description || displayDescription,
             images: [

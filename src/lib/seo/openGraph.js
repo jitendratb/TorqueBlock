@@ -6,7 +6,7 @@ export function generateOpenGraph({ title, description, image, canonical, }) {
     const safeDescription = description || "India's premium performance motorcycle tyre platform.";
 
     const safeImage = image || DEFAULT_OG_IMAGE;
-    const safeCanonical = canonical || "https://torqueblock.com";
+    const safeCanonical = canonical || "https://www.torqueblock.com";
 
     return {
         title: safeTitle,

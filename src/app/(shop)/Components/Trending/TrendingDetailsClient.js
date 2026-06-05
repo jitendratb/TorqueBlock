@@ -1,20 +1,32 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CustomImage from '@/components/molecules/CustomImage';
 import Link from 'next/link';
-import { FiTrendingUp, FiEye, FiMousePointer, FiAward, FiCheck, FiX, FiChevronDown, FiChevronUp, FiCalendar, FiZap, FiTarget, FiStar, FiHeart, FiShield, FiTag, FiHeadphones } from 'react-icons/fi';
+import { FiTrendingUp, FiEye, FiMousePointer, FiAward, FiCheck, FiX, FiChevronDown, FiChevronUp, FiCalendar, FiZap, FiTarget, FiStar, FiHeart, FiShield, FiTag, FiHeadphones, FiInfo, FiAlertCircle } from 'react-icons/fi';
 import { FaMotorcycle } from 'react-icons/fa6';
 import { GiCarWheel, GiTyre } from 'react-icons/gi';
 import WhatsAppButton from '@/components/atoms/WhatsAppButton';
 import FAQSection from '@/components/atoms/FAQSection';
 import Description from '../TyreComponent/Description';
 import FitmentSection from '../TyreComponent/FitmentSection';
+import trendingService from '@/services/trending.service';
+import { useToast } from '@/context/ToastContext';
 
 
-function StatPill({ icon: Icon, label, value, accent = false }) {
+function StatPill({ icon: Icon, label, value, accent = false, onClick, disabled }) {
     return (
-        <div className={`flex items-center gap-3 px-4 py-3 rounded-2xl border ${accent ? 'bg-orange-500/10 border-orange-500/30' : 'bg-white/[0.03] border-white/10'}`}>
-            <div className={`p-2 rounded-xl ${accent ? 'bg-orange-500/20' : 'bg-white/5'}`}>
+        <div
+            onClick={!disabled ? onClick : undefined}
+            className={`flex items-center gap-3 px-4 py-3 rounded-2xl border transition-all duration-300 ${accent
+                    ? 'bg-orange-500/10 border-orange-500/30'
+                    : 'bg-white/[0.03] border-white/10'
+                } ${onClick && !disabled
+                    ? 'cursor-pointer hover:bg-white/10 active:scale-95 hover:border-white/20'
+                    : ''
+                } ${disabled ? 'opacity-70 cursor-not-allowed' : ''
+                }`}
+        >
+            <div className={`p-2 rounded-xl ${accent ? 'bg-orange-500/20' : 'bg-white/5'} transition-all duration-300`}>
                 <Icon className={`text-base ${accent ? 'text-orange-400' : 'text-zinc-300'}`} />
             </div>
             <div>
@@ -179,7 +191,47 @@ export default function TrendingDetailsClient({ item }) {
     const score = item?.trendScore;
     const faqs = item?.faqs || [];
     const bikeBrand = bike?.bikeId?.brandId?.brandName || bike?.bikeId?.brandId;
-    console.log(item)
+
+
+    const toast = useToast();
+
+    const [views, setViews] = useState(item?.totalViews || 0);
+    const [likes, setLikes] = useState(item?.totalClicks || 0);
+    const [hasLiked, setHasLiked] = useState(false);
+
+    useEffect(() => {
+        if (item?.slug) {
+            trendingService.interact(item.slug, 'view')
+                .then(res => {
+                    if (res?.data?.totalViews !== undefined) {
+                        setViews(res.data.totalViews);
+                    } else {
+                        setViews(prev => prev + 1);
+                    }
+                })
+                .catch(err => {
+                    console.error("Error logging view:", err);
+                    setViews(prev => prev + 1);
+                });
+        }
+    }, [item?.slug]);
+
+    const handleLike = async () => {
+        if (!item?.slug) return;
+        try {
+            const res = await trendingService.interact(item.slug, 'like');
+            if (res?.data?.totalClicks !== undefined) {
+                setLikes(res.data.totalClicks);
+                setHasLiked(true);
+            } else {
+                setLikes(prev => prev + 1);
+                setHasLiked(true);
+            }
+            toast.success("Like recorded successfully!");
+        } catch (error) {
+            toast.info("You already liked this!");
+        }
+    };
 
     return (
         <div className="flex flex-col gap-4">
@@ -228,8 +280,14 @@ export default function TrendingDetailsClient({ item }) {
                 </div>
 
                 <div className="absolute bottom-0 right-0 p-6 md:p-10 hidden lg:flex flex-col gap-3 max-w-[250px]">
-                    <StatPill icon={FiEye} label="Views" value={(item?.totalViews || 0).toLocaleString()} />
-                    <StatPill icon={FiHeart} label="Likes" value={(item?.totalClicks || 0).toLocaleString()} />
+                    <StatPill icon={FiEye} label="Views" value={views.toLocaleString()} />
+                    <StatPill
+                        icon={FiHeart}
+                        label="Likes"
+                        value={likes.toLocaleString()}
+                        accent={hasLiked}
+                        onClick={handleLike}
+                    />
                 </div>
             </div>
 
@@ -255,7 +313,7 @@ export default function TrendingDetailsClient({ item }) {
                         </div>
                     )}
 
-                    <Description tyre={product} desClassName="hidden" />
+                    <Description tyre={product} desClassName="hidden" sizesClassName="hidden" />
                     <FitmentSection tyre={product} h1tag="Tyre Sizing & Fitment Gallery" />
 
                     {item?.content?.bottomContent && (

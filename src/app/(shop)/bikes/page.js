@@ -9,13 +9,21 @@ export async function generateMetadata() {
   return {
     title: 'Motorcycles | Torque Block',
     description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
+    keywords: [
+      'superbike tyres by model',
+      'motorcycle tyre fitment chart',
+      'Kawasaki tyres',
+      'Honda tyres',
+      'BMW motorcycle tyres',
+      'KTM tyres'
+    ],
     alternates: {
-      canonical: 'https://torqueblock.com/bikes',
+      canonical: 'https://www.torqueblock.com/bikes',
     },
     openGraph: {
       title: 'Motorcycles | Torque Block',
       description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
-      url: 'https://torqueblock.com/bikes',
+      url: 'https://www.torqueblock.com/bikes',
       siteName: 'Torque Block',
       images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
       type: 'website',

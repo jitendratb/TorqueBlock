@@ -6,7 +6,7 @@ export default function ArticleSchema({ article }) {
 
   const headline = article?.header || article?.title || "Blog Post";
   const description = article?.subHeader || article?.description || "";
-  const imageUrl = article?.image || "https://torqueblock.com/newlogo.webp";
+  const imageUrl = article?.image || "https://www.torqueblock.com/newlogo.webp";
   const authorName = article?.editor || article?.author || "Torque Block";
   const datePublished = article?.timeofCreation || article?.createdAt || new Date().toISOString();
   const slug = article?.blogid || article?.slug || "";
@@ -26,14 +26,14 @@ export default function ArticleSchema({ article }) {
       name: "Torque Block",
       logo: {
         "@type": "ImageObject",
-        url: "https://torqueblock.com/newlogo.webp",
+        url: "https://www.torqueblock.com/newlogo.webp",
       },
     },
     datePublished: datePublished,
     dateModified: datePublished,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `https://torqueblock.com/blogs/${slug}`,
+      "@id": `https://www.torqueblock.com/blogs/${slug}`,
     },
   };
 

@@ -18,11 +18,21 @@ const getBrand = cache(async () => {
 export async function generateMetadata() {
   const title = "Premium Motorcycle Tyre Brands | Torque Block";
   const description = "Explore premium motorcycle tyre brands including Pirelli, Michelin, Metzeler, and more. Authorized partners for superior performance and safety.";
-  const url = "https://torqueblock.com/brands";
+  const url = "https://www.torqueblock.com/brands";
 
   return {
     title,
     description,
+    keywords: [
+      'motorcycle tyre brands',
+      'Pirelli India',
+      'Metzeler India',
+      'Michelin India',
+      'Pirelli tyres Bangalore',
+      'Metzeler tyres Bangalore',
+      'Michelin tyres near me',
+      'Bridgestone bike tyres'
+    ],
     alternates: {
       canonical: url,
     },
@@ -78,7 +88,6 @@ async function Brands() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <Breadcrumb items={[{ label: 'Brands', isLast: true }]} />
           <div className="mt-4 md:mt-6">
-            <h1 className="sr-only">Premium Motorcycle Tyre Brands</h1>
             <BrandsClient brands={brands || []} />
           </div>
         </div>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Description({ tyre , desClassName="space-y-2" }) {
+function Description({ tyre , desClassName="space-y-2", sizesClassName }) {
     return (
         <div className="space-y-4">
             <div className={desClassName}>
@@ -11,7 +11,7 @@ function Description({ tyre , desClassName="space-y-2" }) {
                     {tyre?.hero?.subtitle}
                 </p>
             </div>
-            <section className="border-t border-white/10  mt-4">
+            <section className={`border-t border-white/10  mt-4 ${sizesClassName}`}>
                 <div className="">
                     <div className="space-y-2 py-4">
                         <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500 ">

@@ -20,9 +20,10 @@ const valuePerformance = [
 ]
 
 const helpLinks = [
+    { label: 'Trending', href: '/trending' },
+    { label: 'Blogs', href: '/blogs' },
     { label: 'Contact Us', href: '/contact' },
     { label: 'About Us', href: '/about' },
-    { label: 'Blogs', href: '/blogs' },
     { label: 'Shipping Policy', href: '/shipping-policy' },
     { label: 'Return Policy', href: '/return-policy' },
 ]

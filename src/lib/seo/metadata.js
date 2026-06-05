@@ -2,13 +2,13 @@ const SITE_NAME = "Torque Block";
 
 const DEFAULT_IMAGE = "/newLogo.webp";
 
-export function generateMetadata ({ title, description, image, canonical, }) {
+export function generateMetadata({ title, description, image, canonical, }) {
     const safeTitle = title || SITE_NAME;
     const safeDescription = description || "India's premium performance motorcycle tyre platform.";
 
     const safeImage = image || DEFAULT_IMAGE;
 
-    const safeCanonical = canonical || "https://torqueblock.com";
+    const safeCanonical = canonical || "https://www.torqueblock.com";
 
     return {
         title: safeTitle,

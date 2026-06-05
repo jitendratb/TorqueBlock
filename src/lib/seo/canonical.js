@@ -1,5 +1,5 @@
 
-const SITE_URL = "https://torqueblock.com";
+const SITE_URL = "https://www.torqueblock.com";
 
 function normalizePath(path = "") {
     if (!path) return "/";
@@ -28,5 +28,5 @@ export function removeHash(url = "") {
 
 
 export function sanitizeCanonical(url = "") {
-    return removeHash( removeQueryParams(url) );
+    return removeHash(removeQueryParams(url));
 }

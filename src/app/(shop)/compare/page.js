@@ -6,7 +6,28 @@ const CompareClient = dynamic(() => import('./components/CompareClient'), { ssr:
 import WebPageSchema from '@/components/seo/WebPageSchema';
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Compare Performance Motorcycle Tyres | Torque Block',
+    description: 'Compare premium motorcycle tyres side-by-side. Analyze specifications, grip, longevity, and ratings for Pirelli, Metzeler, Michelin, and more to find the best tyre for your superbike.',
+    keywords: [
+      'compare motorcycle tyres',
+      'tyre comparison India',
+      'Pirelli vs Metzeler',
+      'Michelin vs Pirelli',
+      'best superbike tyre comparison'
+    ],
+    alternates: {
+      canonical: 'https://www.torqueblock.com/compare',
+    },
+    openGraph: {
+      title: 'Compare Performance Motorcycle Tyres | Torque Block',
+      description: 'Compare premium motorcycle tyres side-by-side. Analyze specifications, grip, longevity, and ratings for Pirelli, Metzeler, and Michelin.',
+      url: 'https://www.torqueblock.com/compare',
+      siteName: 'Torque Block',
+      images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
+      type: 'website',
+    },
+  };
 }
 
 export default async function ComparePage({ searchParams }) {

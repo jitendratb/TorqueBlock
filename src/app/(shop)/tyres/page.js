@@ -15,11 +15,21 @@ export async function generateMetadata() {
   return {
     title: 'Premium Motorcycle Tyres | Torque Block',
     description: 'Shop the best premium motorcycle tyres online in India. Official partners for Pirelli, Michelin, Metzeler, Bridgestone, and more. Expert fitment support.',
-    alternates: { canonical: 'https://torqueblock.com/tyres' },
+    keywords: [
+      'motorcycle tyres India',
+      'superbike tyres India',
+      'superbike tyres Bangalore',
+      'buy motorcycle tyres online',
+      'motorcycle tyres near me',
+      'Pirelli tyres India',
+      'Michelin tyres India',
+      'Metzeler tyres India'
+    ],
+    alternates: { canonical: 'https://www.torqueblock.com/tyres' },
     openGraph: {
       title: 'Premium Motorcycle Tyres | Torque Block',
       description: 'Shop the best premium motorcycle tyres online in India. Official partners for top brands.',
-      url: 'https://torqueblock.com/tyres',
+      url: 'https://www.torqueblock.com/tyres',
       siteName: 'Torque Block',
       type: 'website',
       images: [{ url: '/favicon.ico', width: 1200, height: 630 }],

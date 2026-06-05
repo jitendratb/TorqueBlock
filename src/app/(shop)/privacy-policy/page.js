@@ -2,7 +2,17 @@ import React from 'react'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 
 export async function generateMetadata() {
-  return ;
+  return {
+    title: 'Privacy Policy | Torque Block',
+    description: 'Torque Block privacy policy. Learn how we collect, store, and protect your personal information, transaction data, and cookie preferences.',
+    keywords: [
+      'Torque Block privacy policy',
+      'customer privacy',
+      'data protection policy',
+      'payment security policy'
+    ],
+    alternates: { canonical: 'https://www.torqueblock.com/privacy-policy' },
+  };
 }
 
 export default function PrivacyPolicyPage() {

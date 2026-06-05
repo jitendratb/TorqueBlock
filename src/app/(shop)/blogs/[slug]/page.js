@@ -26,15 +26,23 @@ export async function generateMetadata({ params }) {
     const displayTitle = blog?.metaTitle || blog?.header || "Blog Post";
     const displayDescription = blog?.metaDescription || blog?.subHeader || "Read this high-performance motorcycle tyre and bike review on Torque Block.";
     const mainImage = blog?.image || "/newLogo.webp";
+    const keywords = [
+      displayTitle,
+      'motorcycle tyre blog',
+      'riding guide',
+      'superbike review',
+      'tyre review article'
+    ];
 
     return {
         title: displayTitle,
         description: displayDescription,
-        alternates: { canonical: `https://torqueblock.com/blogs/${slug}`, },
+        keywords,
+        alternates: { canonical: `https://www.torqueblock.com/blogs/${slug}`, },
         robots: { index: true, follow: true, },
         openGraph: {
             type: "article",
-            url: `https://torqueblock.com/blogs/${slug}`,
+            url: `https://www.torqueblock.com/blogs/${slug}`,
             title: displayTitle,
             description: displayDescription,
             images: [

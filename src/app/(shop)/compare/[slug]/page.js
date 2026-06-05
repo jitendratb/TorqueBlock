@@ -29,15 +29,23 @@ export async function generateMetadata({ params }) {
   const displayTitle = `${tyre1Name} vs ${tyre2Name} - Tyre Comparison | Torque Block`;
   const displayDescription = `Full head-to-head comparison: ${tyre1Name} vs ${tyre2Name}. Compare dry grip, wet grip, mileage, sport handling and comfort.`;
   const mainImage = tyre1?.productImages?.[0] || "/newLogo.webp";
+  const keywords = [
+    `${tyre1Name} vs ${tyre2Name}`,
+    `compare ${tyre1Name} and ${tyre2Name}`,
+    `difference between ${tyre1Name} and ${tyre2Name}`,
+    'motorcycle tyre battle',
+    'tyre battle'
+  ];
 
   return {
     title: compare?.seo?.title || displayTitle,
     description: compare?.seo?.description || displayDescription,
-    alternates: { canonical: `https://torqueblock.com/compare/${slug}`, },
+    keywords,
+    alternates: { canonical: `https://www.torqueblock.com/compare/${slug}`, },
     robots: { index: true, follow: true, },
     openGraph: {
       type: "website",
-      url: `https://torqueblock.com/compare/${slug}`,
+      url: `https://www.torqueblock.com/compare/${slug}`,
       title: compare?.seo?.title || displayTitle,
       description: compare?.seo?.description || displayDescription,
       images: [

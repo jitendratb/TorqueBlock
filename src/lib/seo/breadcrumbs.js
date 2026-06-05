@@ -4,7 +4,7 @@
  * for generating JSON-LD breadcrumb trails.
  */
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://torqueblock.com";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://www.torqueblock.com";
 
 /**
  * @typedef {Object} BreadcrumbItem
