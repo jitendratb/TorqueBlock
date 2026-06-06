@@ -30,7 +30,7 @@ function BrandsClient({ brands = [] }) {
 
     return (
         <div className="space-y-4 py-4">
-            <div className="flex flex-col items-start justify-start space-y-3">
+            <div className="flex flex-col items-start justify-start">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-[10px] md:text-xs font-semibold uppercase tracking-wider text-orange-400">
                     Official Partnerships
                 </div>

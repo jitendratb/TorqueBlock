@@ -1,25 +1,17 @@
-import Image from 'next/image'
 import React from 'react'
 import Link from 'next/link'
-
-import Cruiser from "../../../../public/Category/Cruiser.webp"
-import DualSport from "../../../../public/Category/DualSport.webp"
-import OffRoading from "../../../../public/Category/OffRoading.webp"
-import RacingSlicks from "../../../../public/Category/RacingSlicks.webp"
-import SportTouring from "../../../../public/Category/SportTouring.webp"
-import SuperSport from "../../../../public/Category/SuperSport.webp"
-
 import CategorySchema from '../../../components/seo/CategorySchema';
+import CustomImage from '@/components/molecules/CustomImage'
+import categoryServiceInstance from '@/services/categoryService'
 
-function Category() {
-  const categories = [
-    { title: "Super Sport", subtitle: "Track & Street", image: SuperSport, href: "/search?q=supersport", className: "md:col-span-2 md:row-span-2" },
-    { title: "Cruiser", subtitle: "Highway Dominance", image: Cruiser, href: "/search?q=cruiser", className: "md:col-span-1 md:row-span-1" },
-    { title: "Off-Roading", subtitle: "Dirt & Trail", image: OffRoading, href: "/search?q=off-road", className: "md:col-span-1 md:row-span-1" },
-    { title: "Sport Touring", subtitle: "Endurance & Speed", image: SportTouring, href: "/search?q=touring", className: "md:col-span-2 md:row-span-1" },
-    { title: "Racing Slicks", subtitle: "Pure Track Performance", image: RacingSlicks, href: "/search?q=racing", className: "md:col-span-2 md:row-span-1" },
-    { title: "Dual Sport", subtitle: "Any Terrain", image: DualSport, href: "/search?q=sports", className: "md:col-span-2 md:row-span-1" },
-  ];
+async function Category() {
+
+  let categories = [];
+  try {
+    categories = await categoryServiceInstance.getCategory();
+  } catch (error) {
+    console.error("Failed to fetch categories:", error);
+  }
 
   const pairedCategories = [];
   for (let i = 0; i < categories.length; i += 2) {
@@ -40,26 +32,25 @@ function Category() {
           {pairedCategories.map((pair, rowIndex) => (
             <div key={rowIndex} className='flex flex-col md:flex-row gap-4 h-[500px] lg:h-[450px]'>
               {pair.map((cat, idx) => (
-                  <Link href={cat.href} key={idx} className={`group relative rounded-[2rem] overflow-hidden border border-zinc-800/30 hover:border-orange-500/40 bg-zinc-950 transition-all duration-700 ease-out shadow-xl hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] h-[250px] md:h-auto flex-1 md:hover:flex-[2] w-full`}>
-                      <Image 
-                          src={cat.image} 
-                          alt={cat.title}
+                  <Link href={`/category/${cat.slug}`} key={idx} className={`group relative rounded-[2rem] overflow-hidden border border-zinc-800/30 hover:border-orange-500/40 bg-zinc-950 transition-all duration-700 ease-out shadow-xl hover:shadow-[0_0_40px_rgba(249,115,22,0.15)] h-[250px] md:h-auto flex-1 md:hover:flex-[2] w-full`}>
+                      <CustomImage
+                          src={cat.image || cat.bannerImage} 
+                          alt={cat.name}
                           fill
                           priority
                           sizes="(max-width: 768px) 100vw, 50vw"
                           quality={75}
-                          placeholder="blur"
-                          className="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 saturate-50 group-hover:saturate-100"
+                          imageClassName="object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105 saturate-50 group-hover:saturate-100"
                       />
                       
                       <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/20 to-transparent opacity-90 group-hover:opacity-70 transition-opacity duration-700" />
                       
                       <div className="absolute bottom-0 left-0 w-full p-6 md:p-8 flex flex-col justify-end z-10">
-                          <span className="text-white/60 text-[10px] font-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 mb-1 -translate-x-4 group-hover:translate-x-0">
-                              {cat.subtitle}
+                          <span className="text-orange-500 text-[10px] font-black uppercase tracking-[0.3em] opacity-0 group-hover:opacity-100 transition-all duration-500 delay-100 mb-1 -translate-x-4 group-hover:translate-x-0 line-clamp-1">
+                             Explore Collection →
                           </span>
                           <h3 className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-1000 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2">
-                              {cat.title}
+                              {cat.name}
                           </h3>
                       </div>
 

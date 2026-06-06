@@ -26,8 +26,7 @@ export async function generateMetadata({ params }) {
         ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} Review, Sizes & Compatible Bikes`
         : "Bike Brand Review, Sizes & Compatible Bikes";
 
-    const displayDescription = bikeBrand?.subTitle
-        || (bikeBrand?.bikeBrand ? `Explore ${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} sizes, compatibility, grip performance, and reviews.` : "Explore bike brand sizes, compatibility, grip performance, and reviews.");
+    const displayDescription = bikeBrand?.subTitle || (bikeBrand?.bikeBrand ? `Explore ${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} sizes, compatibility, grip performance, and reviews.` : "Explore bike brand sizes, compatibility, grip performance, and reviews.");
 
     const ogTitle = bikeBrand?.seo?.title || (bikeBrand?.bikeBrand ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} Details` : "Bike Details");
     const bikeName = bikeBrand?.bikeBrand ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel}` : "";
@@ -85,8 +84,6 @@ export default async function BrandPage({ params }) {
         <div className="space-y-4 lg:space-y-6 pb-4 overflow-hidden  xl:overflow-visible">
             <Breadcrumb items={breadcrumbItems} />
             <BrandModelsClient data={bikeBrand} />
-
-            {/* Structured JSON-LD Schema */}
             <BikeSchema bike={bikeBrand} />
             <FAQSchema faqs={faqs} />
             <BreadcrumbSchema items={breadcrumbItems} />

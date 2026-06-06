@@ -11,12 +11,11 @@ const useCompareStore = create((set, get) => ({
 
     fetchComparisons: async ({ page = 1, limit = 20 } = {}) => {
         set({ loading: true, error: null });
-
         try {
             const response = await compareService.getAllCompare({ page, limit });
-            const newComparisons = response?.data || [];
-            const pagination = response?.pagination || {};
-            
+            const newComparisons = response?.categories;
+            const pagination = response?.meta;
+
             set((state) => ({
                 comparisons: page === 1 ? newComparisons : [...(state.comparisons || []), ...newComparisons],
                 currentPage: page,
@@ -25,10 +24,7 @@ const useCompareStore = create((set, get) => ({
                 error: null
             }));
         } catch (error) {
-            set({
-                error: 'Failed to fetch comparisons',
-                loading: false
-            });
+            set({ error: 'Failed to fetch comparisons', loading: false });
         }
     },
 

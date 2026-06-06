@@ -17,7 +17,7 @@ export async function generateMetadata() {
   return {
     metadataBase: new URL(siteConfig.url),
     title: {
-      default: siteConfig.seo.defaultTitle,
+      default: siteConfig.title || siteConfig.seo.defaultTitle,
       template: siteConfig.seo.titleTemplate,
     },
     description: siteConfig.description,
@@ -59,6 +59,11 @@ export async function generateMetadata() {
     },
     alternates: {
       canonical: siteConfig.seo.canonical,
+      languages: {
+        'en-IN': siteConfig.seo.canonical || siteConfig.url,
+        'en-US': `${siteConfig.url}/en-us`,
+        'x-default': siteConfig.seo.canonical || siteConfig.url,
+      },
     },
   };
 }
