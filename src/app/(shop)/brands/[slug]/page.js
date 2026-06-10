@@ -23,7 +23,7 @@ export async function generateMetadata({ params }) {
     : "";
 
   const displayTitle = brand?.metaTitle
-    || (displayName ? `Premium ${displayName} Tyres & Performance Compounds | Torque Block` : "Premium Tyre Brands | Torque Block");
+    || (displayName ? `Premium ${displayName} Tyres & Performance Compounds` : "Premium Tyre Brands");
 
   const displayDescription = brand?.metaDescription
     || (displayName ? `Shop high-performance ${displayName} tyres and compounds. Sourced directly from authorized pipelines with expert fitment assistance.` : "Shop premium motorcycle tyre brands.");

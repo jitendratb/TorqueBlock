@@ -22,6 +22,9 @@ export default function BikeSchema({ bike }) {
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "INR",
+      lowPrice: 10000,
+      highPrice: 5000000,
+      offerCount: bike.topProducts?.length || 3,
       description: `Premium tyre fitment and compatible rubbers for ${name}. Standard Front size: ${bike.frontSizes?.[0] || "N/A"}, Standard Rear size: ${bike.rearSizes?.[0] || "N/A"}.`,
     },
   };

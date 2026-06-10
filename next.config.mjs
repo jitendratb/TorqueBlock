@@ -30,6 +30,11 @@ const nextConfig = {
   async redirects() {
     return [
       {
+        source: '/en-us',
+        destination: '/',
+        permanent: true,
+      },
+      {
         source: '/:path*',
         has: [
           {

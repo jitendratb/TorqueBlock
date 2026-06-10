@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: "Torque Block",
   shortName: "TorqueBlock",
-  title: "Torque Block - India's Performance Motorcycle Tyre Specialists | Pirelli, Metzeler & Michelin",
+  title: "Torque Block - India's Performance Motorcycle Tyre Specialists",
   description: "Torque Block is India's specialist performance motorcycle tyre platform. Compare, choose and buy tyres for superbikes, sport touring and adventure motorcycles from leading global brands.",
 
   keywords: [
@@ -105,7 +105,7 @@ export const siteConfig = {
 
   seo: {
     titleTemplate: "%s | Torque Block",
-    defaultTitle:"India's Performance Motorcycle Tyre Specialists | Pirelli, Metzeler & Michelin | Torque Block",
+    defaultTitle: "India's Performance Motorcycle Tyre Specialists | Torque Block",
     canonical: "https://www.torqueblock.com",
   },
 
@@ -119,7 +119,7 @@ export const siteConfig = {
     card: "summary_large_image",
     creator: "@torqueblock",
   },
-  
+
 
 
   leadCapture: {

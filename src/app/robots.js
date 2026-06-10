@@ -25,45 +25,31 @@ export default function robots() {
           "/account/",
           "/profile/",
           "/checkout/",
-          "/cart/",
-          "/search",
-          "/thank-you/",
+          "/search/",
         ],
-        crawlDelay: 1,
       },
       {
-        userAgent: "GPTBot",
+        userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User"],
         allow: "/",
       },
       {
-        userAgent: "ChatGPT-User",
+        userAgent: ["Googlebot", "Google-Extended"],
         allow: "/",
       },
       {
-        userAgent: "Google-Extended",
+        userAgent: ["ClaudeBot", "Claude-User", "anthropic-ai"],
         allow: "/",
       },
       {
-        userAgent: "ClaudeBot",
+        userAgent: ["PerplexityBot", "Perplexity-User"],
         allow: "/",
       },
       {
-        userAgent: "PerplexityBot",
-        allow: "/",
-      },
-      {
-        userAgent: "anthropic-ai",
-        allow: "/",
-      },
-      {
-        userAgent: "CCBot",
-        allow: "/",
-      },
-      {
-        userAgent: "Omgilibot",
+        userAgent: ["CCBot", "Omgilibot"],
         allow: "/",
       },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
+    Host: SITE_URL,
   };
 }

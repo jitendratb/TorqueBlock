@@ -61,7 +61,6 @@ export async function generateMetadata() {
       canonical: siteConfig.seo.canonical,
       languages: {
         'en-IN': siteConfig.seo.canonical || siteConfig.url,
-        'en-US': `${siteConfig.url}/en-us`,
         'x-default': siteConfig.seo.canonical || siteConfig.url,
       },
     },
