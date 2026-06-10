@@ -58,7 +58,7 @@ async function CategoryDetails({ params }) {
     }
 
     const breadcrumbItems = [
-        { label: 'Category', link: '/category' },
+        { label: 'Category', href: '/category' },
         { label: category.name, isLast: true }
     ];
 

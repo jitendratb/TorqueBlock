@@ -1,6 +1,7 @@
 import React from 'react';
 import TrendCard from '@/components/atoms/TrendCard';
 import trendingService from '@/services/trending.service';
+import TrendingCarouselClient from './TrendingCarouselClient';
 
 async function TrendingSection() {
     let trendingProducts = [];
@@ -26,15 +27,7 @@ async function TrendingSection() {
                 </h2>
             </div>
 
-            <div className='flex overflow-x-auto gap-2 md:gap-4 w-full flex-1'>
-                {
-                    trendingProducts?.map((item, index) => {
-                        return (
-                            <TrendCard key={index} item={item} />
-                        )
-                    })
-                }
-            </div>
+            <TrendingCarouselClient trendingProducts={trendingProducts} />
         </section>
     )
 }

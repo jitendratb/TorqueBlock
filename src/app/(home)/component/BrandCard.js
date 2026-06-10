@@ -5,7 +5,7 @@ import { FiArrowRight } from 'react-icons/fi';
 
 function BrandCard({ brand, className = "w-[280px]  lg:w-[320px]" }) {
   return (
-    <Link href={`/brands/${brand?._id}`} className={`group block cursor-pointer relative h-[200px] md:h-[180px] lg:h-[240px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-zinc-900 shadow-xl w-full ${className}`}>
+    <Link href={`/brands/${brand?._id}`} className={`group block cursor-pointer relative h-[240px] md:h-[180px] lg:h-[240px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-zinc-900 shadow-xl w-full ${className}`}>
       <Image
         src={brand?.brandBanner}
         alt={brand?.brandName || brand?.name || "Brand"}

@@ -29,7 +29,7 @@ export const metadata = {
 };
 
 async function Category() {
-    const breadcrumbItems = [{ label: 'Category', link: '/category', isLast: true }];
+    const breadcrumbItems = [{ label: 'Category', isLast: true }];
 
     let categories = [];
     try {

@@ -7,15 +7,16 @@ import TopProductCard from '../TopProductCard';
 import { useRouter } from "next/navigation";
 import FAQSection from '@/components/atoms/FAQSection';
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
+import Carousel from '@/components/organisms/Carousel';
 
 export default function CategoryDetailsClient({ category }) {
     const router = useRouter();
+
 
     const nameParts = category.name.split(' ');
     const firstPart = nameParts[0];
     const secondPart = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ' Tyres';
 
-    console.log(category)
     return (
         <div className="space-y-4 pb-4">
             <div className="relative w-full h-[500px] rounded-3xl overflow-hidden group">
@@ -97,14 +98,19 @@ export default function CategoryDetailsClient({ category }) {
                 <div className="flex flex-col md:flex-row gap-4">
                     <div className="lg:space-y-4 lg:max-w-2xl text-left">
                         <h2 className="text-2xl md:text-2xl font-black text-white uppercase tracking-tighter leading-none">
-                            EXPLORE <span className="text-orange-500 text-2xl md:text-8xl outline-text text-transparent"> INVENTORY</span>
+                            EXPLORE <span className="text-orange-500 text-5xl md:text-8xl outline-text text-transparent"> INVENTORY</span>
                         </h2>
                         <p className="text-zinc-500 text-xs lg:text-xl font-bold italic">Browse the finest selection of {category.name} tyres.</p>
                     </div>
                 </div>
 
-                <div className="flex overflow-y-auto gap-6">
-                    {category?.tyreIntents?.map((intent, index) => {
+                <Carousel
+                    items={category?.tyreIntents || []}
+                    itemWidth={340}
+                    gap={24}
+                    showArrows={true}
+                    showDots={false}
+                    renderItem={(intent, index) => {
                         const mappedProduct = {
                             name: intent?.productName,
                             description: intent?.hero?.subtitle || "Premium high-performance tyre",
@@ -117,11 +123,11 @@ export default function CategoryDetailsClient({ category }) {
                                 index={index} 
                                 product={mappedProduct} 
                                 bikeModel={category.name} 
-                                className='w-full shrink-0 lg:w-[360px]'
+                                className='w-full shrink-0'
                             />
                         );
-                    })}
-                </div>
+                    }}
+                />
 
                 <div className="relative overflow-hidden rounded-3xl bg-zinc-950/60 border border-white/5 backdrop-blur-xl transition-all duration-500 hover:border-orange-500/20 ">
                     <div className="absolute -top-32 -left-32 w-80 h-80 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
