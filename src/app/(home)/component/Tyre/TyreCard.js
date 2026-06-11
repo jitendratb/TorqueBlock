@@ -41,7 +41,7 @@ function TyreCard({ tyre }) {
         </div>
       </div>
 
-      <div className='p-4 md:p-8 flex flex-col flex-grow justify-between gap-6 z-20 -mt-12'>
+      <div className='p-4  flex flex-col flex-grow justify-between gap-6 z-20 -mt-12'>
 
         <div className="space-y-3 relative">
           <div className="flex items-center gap-3 mb-1">
@@ -61,6 +61,7 @@ function TyreCard({ tyre }) {
             <WhatsAppButton
               text="Get Expert Recommendation"
               value={`I'm interested in the *${tyre?.hero?.title}* tyre. ${tyre?.hero?.subtitle ? `(${tyre?.hero?.subtitle}) ` : ''}Can you help me check compatibility with my bike?`}
+              className='py-3'
             />
           </div>
         </div>

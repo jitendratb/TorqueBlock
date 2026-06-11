@@ -6,8 +6,6 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
-import FAQSchema from "@/components/seo/FAQSchema";
-import { getTyreFAQs } from "@/lib/seo/faqs";
 
 
 const getTyre = cache(async (slug) => {
@@ -22,35 +20,31 @@ export async function generateMetadata({ params }) {
 
     const displayName = tyre?.productName || tyre?.hero?.title;
     const brandName = tyre?.brand?.name || tyre?.brand || "Torque Block";
-    const displayDescription = tyre?.hero?.subtitle
-        || (displayName ? `Explore ${displayName} tyre sizes, compatibility, grip performance, and reviews.` : "Explore tyre sizes, compatibility, grip performance, and reviews.");
+    const displayDescription = tyre?.hero?.subtitle || (displayName ? `Buy ${displayName} performance motorcycle tyres online in India. Check sizes, compatibility, verified reviews, price, and professional installation support near you.` : "Explore high performance motorcycle tyre sizes, compatibility, pricing, and local installation support.");
 
-    const displayTitle = displayName
-        ? `${displayName} Review, Sizes & Compatible Bikes`
-        : "Tyre Review, Sizes & Compatible Bikes";
+    const displayTitle = displayName ? `${displayName} Price, Sizes & Compatible Bikes` : "Performance Motorcycle Tyres - Review, Sizes & Price";
 
     const mainImage = tyre?.productImages?.[0] || tyre?.hero?.heroImage || "/newLogo.webp";
-
-    const keywords = displayName ? [
-        `${displayName} India`,
-        `${displayName} review`,
-        `${displayName} price`,
-        `${brandName} tyres`,
-        `${displayName} fitment`,
-        `buy ${displayName} online`
-    ] : [];
+    const metaTitle = tyre?.seo?.metaTitle || tyre?.seo?.title || displayTitle;
+    const metaDescription = tyre?.seo?.metaDescription || tyre?.seo?.description || displayDescription;
+    const canonical = tyre?.seo?.canonicalUrl || `https://www.torqueblock.com/tyres/${slug}`;
+    
+    const robotsString = tyre?.seo?.robots?.toLowerCase() || "index,follow";
+    const robots = {
+        index: !robotsString.includes("noindex"),
+        follow: !robotsString.includes("nofollow"),
+    };
 
     return {
-        title: tyre?.seo?.title || displayTitle,
-        description: tyre?.seo?.description || displayDescription,
-        keywords,
-        alternates: { canonical: `https://www.torqueblock.com/tyres/${slug}`, },
-        robots: { index: true, follow: true, },
+        title: metaTitle,
+        description: metaDescription,
+        alternates: { canonical: canonical },
+        robots: robots,
         openGraph: {
             type: "website",
-            url: `https://www.torqueblock.com/tyres/${slug}`,
-            title: tyre?.seo?.title || displayName || "Tyre Details",
-            description: tyre?.seo?.description || displayDescription,
+            url: canonical,
+            title: metaTitle,
+            description: metaDescription,
             images: [
                 {
                     url: mainImage,
@@ -63,8 +57,8 @@ export async function generateMetadata({ params }) {
 
         twitter: {
             card: "summary_large_image",
-            title: tyre?.seo?.title || displayName || "Tyre Details",
-            description: tyre?.seo?.description || displayDescription,
+            title: metaTitle,
+            description: metaDescription,
             images: [mainImage],
         },
     };
@@ -80,16 +74,13 @@ async function Page({ params }) {
 
     const displayName = tyre?.productName || tyre?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tyres", href: "/tyres", }, { label: displayName, isLast: true, },];
-    const faqs = getTyreFAQs(tyre);
 
     return (
         <div className="">
             <Breadcrumb items={breadcrumbItems} />
             <TyresClient initialData={tyre} />
             
-            {/* Structured JSON-LD Schema */}
             <ProductSchema product={tyre} />
-            <FAQSchema faqs={faqs} />
             <BreadcrumbSchema items={breadcrumbItems} />
         </div>
     );

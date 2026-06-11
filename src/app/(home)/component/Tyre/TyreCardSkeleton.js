@@ -2,7 +2,7 @@ import React from 'react';
 
 function TyreCardSkeleton() {
   return (
-    <div className='min-w-[280px] md:min-w-[320px] w-full flex flex-col bg-zinc-950/80 backdrop-blur-2xl border border-white/5 rounded-[2rem] overflow-hidden shrink-0'>
+    <div className='w-[280px] md:w-[320px]  flex flex-col bg-zinc-950/80 backdrop-blur-2xl border border-white/5 rounded-[2rem] overflow-hidden shrink-0'>
       <div className='relative h-[240px] w-full overflow-hidden shrink-0 bg-zinc-800/50 animate-pulse'>
         <div className="absolute left-6 top-6 z-20 h-6 w-24 bg-zinc-700/50 rounded-full shadow-[0_0_15px_rgba(0,0,0,0.2)]" />
       </div>
@@ -28,11 +28,11 @@ function TyreCardSkeleton() {
 
 export function TyreCardSkeletonGroup({ count = 4 }) {
   return (
-    <>
+    <div className='flex gap-4'>
       {Array.from({ length: count }).map((_, i) => (
         <TyreCardSkeleton key={i} />
       ))}
-    </>
+    </div>
   );
 }
 

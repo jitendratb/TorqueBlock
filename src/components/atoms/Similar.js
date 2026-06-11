@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import TyreCard from "@/app/(home)/component/Tyre/TyreCard";
 import TorqueBlockApi from "@/lib/api";
 import { TyreCardSkeletonGroup } from "@/app/(home)/component/Tyre/TyreCardSkeleton";
+import Carousel from "../organisms/Carousel";
 
 function Similar({ tyre }) {
 
@@ -62,18 +63,26 @@ function Similar({ tyre }) {
                     </h2>
                 </div>
 
-                <div className="flex gap-4 overflow-x-auto scrollbar-hide pb-2">
-                    {loading ? (
+                {loading ? (
+                    <div className="overflow-x-auto scrollbar-hide pb-2">
                         <TyreCardSkeletonGroup count={4} />
-                    ) : (
-                        similarTyres?.map((item) => (
-                            <TyreCard
-                                key={item?._id}
-                                tyre={item}
-                            />
-                        ))
-                    )}
-                </div>
+                    </div>
+                ) : (
+                    <div className="pb-2">
+                        <Carousel
+                            items={similarTyres || []}
+                            renderItem={(item) => (
+                                <TyreCard
+                                    key={item?._id}
+                                    tyre={item}
+                                />
+                            )}
+                            itemWidth="w-[280px] md:w-[320px]"
+                            gap={16}
+                            showDots={false}
+                        />
+                    </div>
+                )}
 
             </div>
 

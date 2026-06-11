@@ -4,7 +4,7 @@
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import Image from "@/components/molecules/CustomImage"
 import { useMemo, useState } from "react";
-import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt } from "react-icons/fa";
+import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { FaTools, FaTruck, FaUserTie } from "react-icons/fa";
 
@@ -128,6 +128,15 @@ export default function ProductDetails({ tyre }) {
                                 </div>
                             )
                         })}
+                        {tyre?.categoryId?.name && (
+                            <div className="flex items-center gap-2 rounded border border-white/10 bg-zinc-900/80 px-2 md:px-4 py-1 shadow-md backdrop-blur-md transition-all duration-300   "  >
+                                <FaTag className="text-blue-400 text-sm" />
+                                <span className="text-xs md:text-sm font-medium text-white">
+                                    {tyre?.categoryId?.name}
+                                </span>
+                            </div>
+                        )}
+
                     </div>
 
                     <div className="grid grid-cols-1 gap-2">
@@ -136,16 +145,16 @@ export default function ProductDetails({ tyre }) {
                                 Best Suited For
                             </h3>
 
-                            <div className="space-y-1">
+                            <ul className="space-y-1">
                                 {tyre?.bestSuitedFor?.map((item, index) => (
-                                    <div key={index} className="flex items-center gap-3" >
+                                    <li key={index} className="flex items-center gap-3" >
                                         <div className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
-                                        <p className="text-xs md:text-sm leading-relaxed text-zinc-200">
+                                        <span className="text-xs md:text-sm leading-relaxed text-zinc-200">
                                             {item}
-                                        </p>
-                                    </div>
+                                        </span>
+                                    </li>
                                 ))}
-                            </div>
+                            </ul>
                         </div>
 
                         <div>
@@ -153,25 +162,25 @@ export default function ProductDetails({ tyre }) {
                                 Not Ideal If
                             </h3>
 
-                            <div className="space-y-1">
+                            <ul className="space-y-1">
                                 {tyre?.notIdealIf?.map((item, index) => (
-                                    <div key={index} className="flex items-center gap-3" >
+                                    <li key={index} className="flex items-center gap-3" >
                                         <div className="h-2 w-2 rounded-full bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.8)]" />
-                                        <p className="text-xs md:text-sm leading-relaxed text-zinc-200">
+                                        <span className="text-xs md:text-sm leading-relaxed text-zinc-200">
                                             {item}
-                                        </p>
-                                    </div>
+                                        </span>
+                                    </li>
                                 ))}
-                            </div>
+                            </ul>
                         </div>
                         <div className="pt-4 space-y-6">
-                            <WhatsAppButton value={`Hi Torque Block, I’m interested in ${tyre?.productName}. Please share: - Price - Available size - Delivery time -Installation support`} text="Get Best Price on WhatsApp" />
+                            <WhatsAppButton className="py-3" value={`Hi Torque Block, I’m interested in ${tyre?.productName}. Please share: - Price - Available size - Delivery time -Installation support`} text="Get Best Price on WhatsApp" />
 
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
 
                                 <div className="flex items-center gap-2  text-center">
                                     <div className="rounded-full bg-green-500/10 p-3 text-green-400">
-                                      <FaTools className="text-xs md:text-sm" />
+                                        <FaTools className="text-xs md:text-sm" />
                                     </div>
                                     <p className="text-xs md:text-sm font-medium text-white">
                                         Installation Support

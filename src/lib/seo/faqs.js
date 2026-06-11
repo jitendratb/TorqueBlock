@@ -1,27 +1,4 @@
-/**
- * FAQS Helpers
- * Dynamically generates context-specific FAQs for tyres, bikes, comparisons, and blogs to maximize on-page SEO.
- */
 
-export function getTyreFAQs(tyre) {
-  const name = tyre?.productName || tyre?.hero?.title || "this tyre";
-  const brandName = tyre?.brand?.name || "premium brands";
-
-  return [
-    {
-      question: `Are ${name} tyres suitable for Indian road conditions?`,
-      answer: `Yes, ${name} tyres are engineered by ${brandName} with advanced compounds and reinforced carcass structures. They offer excellent durability, grip stability, and comfort on varied road surfaces including urban streets and highways.`,
-    },
-    {
-      question: `How do I verify if ${name} fits my motorcycle?`,
-      answer: `You can check if ${name} matches your bike by checking the standard sizes (like Front ${tyre?.frontSizes?.[0] || "120/70"} or Rear ${tyre?.rearSizes?.[0] || "180/55"}) against your motorcycle's owner manual specifications.`,
-    },
-    {
-      question: `Where can I buy authentic ${name} tyres in India?`,
-      answer: `You can purchase authentic ${name} tyres directly from Torque Block. We source directly from authorized distribution pipelines to guarantee genuine products, fresh manufacturing dates, and standard warranties.`,
-    },
-  ];
-}
 
 export function getBikeFAQs(bike) {
   const name = `${bike?.bikeBrand || ""} ${bike?.bikeModel || ""}`.trim() || "your motorcycle";
