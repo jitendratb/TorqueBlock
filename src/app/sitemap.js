@@ -22,8 +22,9 @@ export default async function sitemap() {
     '/return-policy',
     '/shipping-policy',
     '/terms',
+    '/llms.txt',
   ].map((route) => {
-    const isPolicy = ['/privacy-policy', '/return-policy', '/shipping-policy', '/terms'].includes(route);
+    const isPolicy = ['/privacy-policy', '/return-policy', '/shipping-policy', '/terms', '/llms.txt'].includes(route);
     return {
       url: `${baseUrl}${route}`,
       lastModified: new Date().toISOString(),
