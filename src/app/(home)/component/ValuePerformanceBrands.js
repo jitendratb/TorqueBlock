@@ -21,11 +21,11 @@ async function ValuePerformanceBrands() {
     return (
         <section className="py-8 w-full">
             <div className="mb-10 text-center">
-                <span className="text-orange-500 [.light-mode_&]:text-orange-800 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">
+                <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">
                     Trusted Motorcycle Tyre Brands
                 </span>
                 <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000">
-                    Value Performance <span className="text-orange-500 [.light-mode_&]:text-orange-800 transition-colors duration-1000">Brands</span>
+                    Value Performance <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Brands</span>
                 </h2>
             </div>
 

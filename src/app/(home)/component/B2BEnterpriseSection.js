@@ -10,7 +10,7 @@ function B2BEnterpriseSection() {
                     <div>
                         <div className="inline-flex items-center gap-2 border border-orange-500/30 bg-orange-500/10 [.light-mode_&]:border-orange-700/40 [.light-mode_&]:bg-orange-700/5 px-4 py-2 rounded-full mb-8 transition-colors duration-1000">
                             <div className="h-2 w-2 rounded-full bg-orange-500 animate-pulse" />
-                            <span className="text-orange-400 [.light-mode_&]:text-orange-800 text-xs font-medium tracking-wide uppercase transition-colors duration-1000">
+                            <span className="text-orange-400 [.light-mode_&]:text-orange-700 text-xs font-medium tracking-wide uppercase transition-colors duration-1000">
                                 B2B Tyre Distribution
                             </span>
                         </div>
@@ -41,7 +41,7 @@ function B2BEnterpriseSection() {
                                     className="flex items-center gap-4"
                                 >
                                     <div className="h-6 w-6 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center transition-colors duration-1000">
-                                        <FaCheckCircle className="text-orange-500 [.light-mode_&]:text-orange-800 text-sm transition-colors duration-1000" />
+                                        <FaCheckCircle className="text-orange-500 [.light-mode_&]:text-orange-700 text-sm transition-colors duration-1000" />
                                     </div>
 
                                     <span className="text-white [.light-mode_&]:text-zinc-900 text-sm transition-colors duration-1000">

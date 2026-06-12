@@ -36,7 +36,7 @@ export default function ValuePerformanceBrandsCarouselClient({ brands }) {
                                         {brand?.name}
                                     </h3>
 
-                                    <div className=" flex items-center gap-2 text-xs md:text-sm font-semibold text-white [.light-mode_&]:text-zinc-900 group-hover:text-orange-500 transition-colors duration-1000">
+                                    <div className=" flex items-center gap-2 text-xs md:text-sm font-semibold text-white [.light-mode_&]:text-zinc-900 group-hover:text-orange-600 transition-colors duration-1000">
                                         Explore Brand
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
