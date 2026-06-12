@@ -12,13 +12,24 @@ import dynamic from 'next/dynamic'
 import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 
-const Category = dynamic(() => import('./component/Category'), { ssr: true });
-const ValuePerformanceBrands = dynamic(() => import('./component/ValuePerformanceBrands'), { ssr: true });
+import { CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
+
+const Category = dynamic(() => import('./component/Category'), {
+  ssr: true,
+  loading: () => <CategorySkeleton />
+});
+const ValuePerformanceBrands = dynamic(() => import('./component/ValuePerformanceBrands'), {
+  ssr: true,
+  loading: () => <ValuePerformanceBrandsSkeleton />
+});
 const ReviewsSection = dynamic(() => import('./component/ReviewSection'), {
   ssr: true,
-  loading: () => <div className="h-64 w-full animate-pulse bg-zinc-100 dark:bg-zinc-900 rounded-xl my-10" />
+  loading: () => <ReviewsSectionSkeleton />
 });
-const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'), { ssr: true });
+const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'), {
+  ssr: true,
+  loading: () => <B2BEnterpriseSkeleton />
+});
 
 export const revalidate = 60;
 

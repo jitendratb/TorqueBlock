@@ -89,7 +89,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 {loading ? (
                     [...Array(6)].map((_, i) => (
-                        <div key={i} className="h-[24rem] bg-zinc-900/50 backdrop-blur-md border border-white/5 rounded-xl md:rounded-[2rem] animate-pulse shadow-xl" />
+                        <div key={i} className="h-[20rem] md:h-[24rem] bg-zinc-900/50 backdrop-blur-md border border-white/5 rounded-xl md:rounded-[2rem] animate-pulse shadow-xl" />
                     ))
                 ) : comparisons?.length > 0 ? (
                     comparisons.map((comparison, index) => {
