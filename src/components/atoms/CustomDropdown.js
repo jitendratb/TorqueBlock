@@ -108,7 +108,7 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                     className={
                         selectedOption
                             ? "font-medium text-black"
-                            : "text-gray-400"
+                            : "text-zinc-600"
                     }
                 >
                     {selectedOption

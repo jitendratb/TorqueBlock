@@ -94,21 +94,25 @@ function Footer() {
                                 {
                                     icon: <FaInstagram />,
                                     href: 'https://www.instagram.com/torque_block',
+                                    label: 'Instagram',
                                 },
                                 {
                                     icon: <FaFacebookF />,
                                     href: 'https://www.facebook.com/torqueblock',
+                                    label: 'Facebook',
                                 },
                                 {
                                     icon: <FaYoutube />,
                                     href: 'https://www.youtube.com/@torqueblock',
+                                    label: 'YouTube',
                                 },
                                 {
                                     icon: <FaLinkedinIn />,
                                     href: 'https://www.linkedin.com/company/torque-block',
+                                    label: 'LinkedIn',
                                 },
                             ].map((item, index) => (
-                                <Link key={index} href={item.href} target="_blank" rel="noopener noreferrer" className="h-11 w-11 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300" >
+                                <Link key={index} href={item.href} target="_blank" rel="noopener noreferrer" aria-label={`Follow Torque Block on ${item.label}`} className="h-11 w-11 rounded-full border border-zinc-700 flex items-center justify-center text-zinc-300 hover:bg-orange-500 hover:border-orange-500 hover:text-white transition-all duration-300" >
                                     {item.icon}
                                 </Link>
                             ))}
@@ -195,12 +199,12 @@ function Footer() {
             <div className="border-t border-zinc-800">
                 <div className="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
 
-                    <p className="text-zinc-500 text-sm">
+                    <p className="text-zinc-400 text-sm">
                         © {new Date().getFullYear()} Torque Block.
                         All rights reserved.
                     </p>
 
-                    <div className="flex items-center gap-6 text-sm text-zinc-500">
+                    <div className="flex items-center gap-6 text-sm text-zinc-400">
 
                         <Link
                             href="/privacy-policy"

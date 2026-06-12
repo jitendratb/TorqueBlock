@@ -28,15 +28,15 @@ function FitmentSection({ tyre, h1tag = "Real-World Fitment" , scale=true }) {
                             className={`
                                 group relative overflow-hidden cursor-pointer 
                                 transition-all duration-700 ease-in-out
-                                ${activeIndex === index ? "flex-[3.5]" : "flex-1"}
-                                md:hover:flex-[3.5]
+                                ${activeIndex === index ? "flex-[2]" : "flex-1"}
+                                md:hover:flex-[2]
                             `}
                         >
                             <Image
                                 src={image}
                                 alt={`${tyre?.productName} fitment ${index + 1}`}
                                 fill
-                                imageClassName={`object-cover transition-transform duration-700 ease-out  ${scale ? "group-hover:scale-105" : ""}`}
+                                imageClassName={`object-cover transition-transform duration-700 ease-out ${scale ? "group-hover:scale-105" : ""} ${activeIndex === index ? "scale-105" : ""}`}
                             />
 
                             {/* Vignette Gradients */}

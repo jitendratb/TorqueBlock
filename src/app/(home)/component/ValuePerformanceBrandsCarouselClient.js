@@ -29,19 +29,19 @@ export default function ValuePerformanceBrandsCarouselClient({ brands }) {
                                 </div>
 
                                 <div className="flex flex-col items-start gap-2 p-4">
-                                    <span className=" py-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-white-500 bg-white-100 rounded-full">
+                                    <span className="px-3 py-1 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-zinc-400 bg-zinc-800/50 [.light-mode_&]:text-zinc-700 [.light-mode_&]:bg-zinc-200/80 rounded-full transition-colors duration-1000">
                                         Performance
                                     </span>
-                                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white-900 tracking-tight">
+                                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white [.light-mode_&]:text-zinc-900 transition-colors duration-1000 tracking-tight">
                                         {brand?.name}
                                     </h3>
 
-                                    <button className=" flex items-center gap-2 text-xs md:text-sm font-semibold text-white-900 group-hover:text-white-600 transition-colors">
+                                    <div className=" flex items-center gap-2 text-xs md:text-sm font-semibold text-white [.light-mode_&]:text-zinc-900 group-hover:text-orange-500 transition-colors duration-1000">
                                         Explore Brand
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                                         </svg>
-                                    </button>
+                                    </div>
                                 </div>
                             </article>
                         </Link>

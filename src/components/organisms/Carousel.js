@@ -156,6 +156,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                         e.stopPropagation();
                         scrollToIndex(current - 1);
                     }}
+                    aria-label="Previous slide"
                     className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white hover:text-white transition-all duration-300 shadow-xl"
                 >
                     <FiChevronLeft size={20} />
@@ -169,6 +170,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                         e.stopPropagation();
                         scrollToIndex(current + 1);
                     }}
+                    aria-label="Next slide"
                     className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white  transition-all duration-300 shadow-xl"
                 >
                     <FiChevronRight size={20} />
@@ -185,6 +187,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                                 e.stopPropagation();
                                 scrollToIndex(i);
                             }}
+                            aria-label={`Go to slide ${i + 1}`}
                             className={`h-2 rounded-full transition-all ${current === i
                                 ? "bg-orange-500 w-4"
                                 : "bg-zinc-600 w-2"

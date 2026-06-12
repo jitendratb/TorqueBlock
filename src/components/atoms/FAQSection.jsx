@@ -3,9 +3,9 @@ import { FiPlus, FiMinus, FiHelpCircle } from "react-icons/fi";
 import FAQSchema from "@/components/seo/FAQSchema";
 
 export default function FAQSection({ faqs = [] }) {
-  if (!faqs || faqs.length === 0) return null;
-
   const [activeIndex, setActiveIndex] = useState(null);
+
+  if (!faqs || faqs.length === 0) return null;
 
   const toggleAccordion = (index) => {
     setActiveIndex(activeIndex === index ? null : index);
