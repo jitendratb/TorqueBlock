@@ -11,12 +11,14 @@ function H1Tags() {
 ];
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      const randomIndex = Math.floor(Math.random() * title.length);
-      setCurrentIndex(randomIndex);
-    }, 2000);
+    const startTimeout = setTimeout(() => {
+      const interval = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % title.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }, 4000);
 
-    return () => clearInterval(interval);
+    return () => clearTimeout(startTimeout);
   }, []);
 
   return (

@@ -47,6 +47,14 @@ function FloatingWhatsAppClient({ data }) {
     const [inputValue, setInputValue] = useState('');
     const [unreadCount, setUnreadCount] = useState(1);
     const [statusText, setStatusText] = useState('Online');
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setMounted(true);
+        }, 1000);
+        return () => clearTimeout(timer);
+    }, []);
 
     const autoOpenTimer = useRef(null);
     const sequenceTimers = useRef([]);
@@ -175,6 +183,8 @@ function FloatingWhatsAppClient({ data }) {
             : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
     }
+
+    if (!mounted) return null;
 
     return (
         <div className="fixed bottom-3 lg:bottom-9 right-3 lg:right-9 z-[9999] font-[Inter,sans-serif] text-zinc-100 select-none">
