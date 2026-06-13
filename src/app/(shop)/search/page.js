@@ -117,7 +117,7 @@ const Card = ({ item }) => {
 
                         </div>
                         <div className="flex items-center justify-end mt-2 md:mt-0">
-                            <WhatsAppButton value={`I'm interested in ${item.productName || item.hero?.title}. Please share availability and compatible options.`} text='Get Details' className="max-w-[150px]" />
+                            <WhatsAppButton value={`what's your best price for the ${item.productName || item.hero?.title}? I'm looking to buy soon.`} text='Check Price' className="max-w-[150px]" />
                         </div>
                     </div>
                 </article>
@@ -185,9 +185,9 @@ const Card = ({ item }) => {
                         {/* Bottom */}
                         <div className="flex items-center justify-end mt-2 md:mt-0">
                             <WhatsAppButton
-                                value={`I'm interested in ${item.tyre1?.productName} vs ${item.tyre2?.productName}. Please share pricing, availability and best compatible options.`}
-                                text="Get Details"
-                                className="max-w-[150px]"
+                                value={`I'm trying to decide between ${item.tyre1?.productName} and ${item.tyre2?.productName}. Can you share the pricing for both so I can make a decision?`}
+                                text="Compare Prices"
+                                className="max-w-[160px]"
                             />
                         </div>
                     </div>
@@ -229,7 +229,7 @@ const Card = ({ item }) => {
                             <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
                         </div>
                         <div className="flex items-center justify-end mt-2 md:mt-0">
-                            <WhatsAppButton value={`I'm looking for tyres for ${item.bikeBrand} ${item.bikeModel}. Please share compatible options.`} text='Get Details' className="max-w-[150px]" />
+                            <WhatsAppButton value={`I need new tyres for my ${item.bikeBrand} ${item.bikeModel}. What are your top recommendations based on performance and value?`} text='Get Recommendations' className="max-w-[180px]" />
                         </div>
                     </div>
                 </article>
@@ -586,7 +586,7 @@ function SearchPageContent() {
                                     >
                                         Reset filters
                                     </button>
-                                    <WhatsAppButton value={`I'm searching for tyres for bike ${searchQuery}. Please check availability and share compatible options.`} text='Ask about this product' />
+                                    <WhatsAppButton value={`Hi, I couldn't find what I was looking for. Do you have any stock or recommendations for ${searchQuery}?`} text='Ask an Expert' />
                                 </div>
                             </div>
                         ) : (

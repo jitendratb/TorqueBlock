@@ -191,7 +191,7 @@ function BlogDetailsClient({ blog }) {
 
                             <WhatsAppButton
                                 text="Ask a Specialist"
-                                value={`Hi Torque Block! I was reading your blog post "${header}" and wanted to ask some questions regarding tyre recommendations for my machine.`}
+                                value={` I was reading your blog post "${header}" and wanted to ask some questions regarding tyre recommendations for my machine.`}
                                 className="w-full mt-2"
                             />
                         </div>

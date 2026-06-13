@@ -38,7 +38,7 @@ const SupportTerminal = ({ bikeBrand, bikeModel }) => {
                     <div className="hover:scale-105 transition-transform duration-500">
                         <WhatsAppButton 
                             text="TALK TO AN EXPERT" 
-                            value={`Hi Torque Block! I'm looking for a pro-level tyre setup for my ${bikeBrand} ${bikeModel}. Can you help me find the best rubber for my riding style? 🏁`}
+                            value={`I'm looking for a pro-level tyre setup for my ${bikeBrand} ${bikeModel}. Can you help me find the best rubber for my riding style? 🏁`}
                             className="h-20 min-w-[320px] shadow-[0_20px_50px_rgba(249,115,22,0.2)]"
                         />
                     </div>

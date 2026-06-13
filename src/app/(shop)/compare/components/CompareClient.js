@@ -203,7 +203,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                         </p>
                     </div>
 
-                    <WhatsAppButton text="Deploy Expert" value={'Hi Torque Block! I am comparing tyres in the Battle Arena and need expert advice to choose the perfect weapon for my machine.'} className="max-w-[350px]" />
+                    <WhatsAppButton text="Deploy Expert" value={'I am comparing tyres in the Battle Arena and need expert advice to choose the perfect weapon for my machine.'} className="max-w-[350px]" />
                 </div>
             </div>
 

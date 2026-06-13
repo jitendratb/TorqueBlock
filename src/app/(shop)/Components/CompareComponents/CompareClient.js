@@ -82,12 +82,12 @@ export default function CompareClient({ data, slug }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <WhatsAppButton
                     text={`Get ${tyre1Name} Deal`}
-                    value={`Hi Torque Block! I was comparing tyres and I'm interested in getting the best deal on the ${tyre1Name} tyre. Can you assist me with stock, price, and fitment?`}
+                    value={` I was comparing tyres and I'm interested in getting the best deal on the ${tyre1Name} tyre. Can you assist me with stock, price, and fitment?`}
                 />
 
                 <WhatsAppButton
                     text={`Get ${tyre2Name} Deal`}
-                    value={`Hi Torque Block! I was comparing tyres and I'm interested in getting the best deal on the ${tyre2Name} tyre. Can you assist me with stock, price, and fitment?`}
+                    value={` I was comparing tyres and I'm interested in getting the best deal on the ${tyre2Name} tyre. Can you assist me with stock, price, and fitment?`}
                 />
             </div>
 

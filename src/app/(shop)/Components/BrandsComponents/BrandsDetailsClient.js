@@ -212,7 +212,7 @@ function BrandsDetailsClient({ brand }) {
             <div className="pt-2">
               <WhatsAppButton
                 text={`Request ${brandName} Quote`}
-                value={`Hi Torque Block! I'm interested in premium tyres from ${brandName}. Can you check active deals and warehouse stock lists for my vehicle?`}
+                value={` I'm interested in premium tyres from ${brandName}. Can you check active deals and warehouse stock lists for my vehicle?`}
                 className="w-full h-12"
               />
             </div>

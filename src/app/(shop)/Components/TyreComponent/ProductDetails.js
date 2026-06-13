@@ -174,7 +174,7 @@ export default function ProductDetails({ tyre }) {
                             </ul>
                         </div>
                         <div className="pt-4 space-y-6">
-                            <WhatsAppButton className="py-3" value={`Hi Torque Block, I’m interested in ${tyre?.productName}. Please share: - Price - Available size - Delivery time -Installation support`} text="Get Best Price on WhatsApp" />
+                            <WhatsAppButton className="py-3" value={` I’m interested in ${tyre?.productName}. Please share: - Price - Available size - Delivery time -Installation support`} text="Get Best Price on WhatsApp" />
 
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
 

@@ -37,7 +37,7 @@ export default function CategoryCTABanner() {
                 <div className="flex-shrink-0">
                     <WhatsAppButton
                         text="Talk to a Tyre Expert"
-                        value="Hi Torque Block! I need help choosing the right tyre category for my motorcycle."
+                        value="I need help choosing the right tyre category for my motorcycle."
                     />
                 </div>
             </div>
