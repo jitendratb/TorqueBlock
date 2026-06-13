@@ -111,7 +111,9 @@ function page() {
               <TrendingSection />
             </Suspense>
             <Category />
-            <ValuePerformanceBrands />
+            <Suspense fallback={<ValuePerformanceBrandsSkeleton />} >
+              <ValuePerformanceBrands />
+            </Suspense>
             <ReviewsSection />
             <B2BEnterpriseSection />
           </div>

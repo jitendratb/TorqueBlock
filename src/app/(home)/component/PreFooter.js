@@ -5,15 +5,15 @@ const footerSections = [
   {
     title: "POPULAR MOTORCYCLES",
     links: [
-      { label: "Harley-Davidson 1200 Custom", href: "/bikes/harley-davidson-1200-custom-tyres" },
-      { label: "Harley-Davidson Heritage Classic", href: "/bikes/harley-davidson-heritage-classic-tyres" },
-      { label: "Harley-Davidson Road King", href: "/bikes/harley-davidson-road-king-tyres" },
-      { label: "Honda XL750 Transalp", href: "/bikes/honda-xl750-transalp-tyres" },
-      { label: "Triumph Speed 400", href: "/bikes/triumph-speed-400-tyres" },
-      { label: "Triumph Tiger 900 GT", href: "/bikes/triumph-tiger-900-gt-tyres" },
-      { label: "Kawasaki Versys 1000", href: "/bikes/kawasaki-versys-1000-tyres" },
-      { label: "Ducati Multistrada 1200 S", href: "/bikes/ducati-multistrada-1200-s-tyres" },
-      { label: "Triumph Tiger 900 Rally Pro", href: "/bikes/triumph-tiger-900-rally-pro-tyres" },
+      { label: "Triumph Scrambler 400X", href: "/bikes/triumph-scrambler-400-x-tyres" },
+      { label: "BMW R1300 GS", href: "/bikes/bmw-r-1300-gs-tyres" },
+      { label: "Ducati Panigale V4", href: "/bikes/ducati-panigale-v4-tyres" },
+      { label: "Harley-Davidson Fat Boy 114", href: "/bikes/harley-davidson-fat-boy-114-tyres" },
+      { label: "Kawasaki Ninja ZX-10R", href: "/bikes/kawasaki-ninja-zx10r-tyres" },
+      { label: "KTM 390 Adventure", href: "/bikes/ktm-390-adventure-tyres" },
+      { label: "Royal Enfield Interceptor 650", href: "/bikes/royal-enfield-interceptor-650-tyres" },
+      { label: "Suzuki Hayabusa", href: "/bikes/suzuki-hayabusa-tyres" },
+      { label: "KTM Duke 390", href: "/bikes/ktm-duke-390-tyres" },
     ],
   },
   // {
@@ -29,22 +29,22 @@ const footerSections = [
   {
     title: "ULTIMATE PERFORMANCE",
     links: [
-      { label: "Pirelli Tyres", href: "/search?q=Pirelli" },
-      { label: "Michelin Tyres", href: "/search?q=Michelin" },
-      { label: "Metzeler Tyres", href: "/search?q=Metzeler" },
+      { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
+      { label: "Michelin Tyres", href: "/brands/6638c9c65085dcdf58c8a789" },
+      { label: "Metzeler Tyres", href: "brands/6638c9ba5085dcdf58c8a77b" },
 
     ],
   },
   {
     title: "VALUE PERFORMANCE",
     links: [
-      { label: 'MRF Tyres', href: '/search?q=MRF' },
-      { label: 'Apollo Tyres', href: '/search?q=Apollo' },
-      { label: 'Reise Tyres', href: '/search?q=Reise' },
-      { label: 'Maxxis Tyres', href: '/search?q=Maxxis' },
-      { label: 'Ceat Tyres', href: '/search?q=Ceat'},
-      { label: 'Vredestein Tyres', href: '/search?q=Vredestein' },
-      { label: 'Eurogrip Tyres', href: '/search?q=Eurogrip' },
+      { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
+      { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
+      { label: 'Reise Tyres', href: '/brands/6638c9b85085dcdf58c8a775' },
+      { label: 'Maxxis Tyres', href: '/brands/6638c885d83cd3e79e927275' },
+      { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
+      { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
+      { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
     ]
 
   },

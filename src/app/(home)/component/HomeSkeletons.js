@@ -29,7 +29,14 @@ export function ValuePerformanceBrandsSkeleton() {
             </div>
             <div className="flex overflow-x-auto gap-4 w-full scrollbar-hide py-2">
                 {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex shrink-0 w-[360px] h-[120px] md:h-[140px] bg-zinc-900/50 rounded-3xl border border-zinc-800/30 p-4" />
+                    <div key={i} className="grid grid-cols-2 shrink-0 w-[360px] h-[120px] md:h-[140px] bg-white/20 rounded-3xl border border-zinc-800/30 p-4">
+                        <div className="relative h-full bg-zinc-800/40 rounded-2xl animate-pulse" />
+                        <div className="flex flex-col items-start gap-2 pl-4 justify-center">
+                            <div className="h-4 w-20 bg-zinc-800/60 rounded-full animate-pulse" />
+                            <div className="h-6 w-28 bg-zinc-800/60 rounded-lg animate-pulse" />
+                            <div className="h-3.5 w-24 bg-zinc-800/40 rounded-full animate-pulse" />
+                        </div>
+                    </div>
                 ))}
             </div>
         </section>

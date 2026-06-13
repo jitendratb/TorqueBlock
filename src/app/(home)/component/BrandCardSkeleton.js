@@ -2,7 +2,7 @@ import React from 'react';
 
 function BrandCardSkeleton() {
   return (
-    <div className="relative flex justify-center bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] h-[240px] md:h-[180px] lg:h-[240px] w-full w-[280px] lg:w-[320px] overflow-hidden animate-pulse border border-zinc-800/50">
+    <div className="relative flex justify-center bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] h-[250px] md:h-[220px] lg:h-[240px] w-[280px] md:w-[320px] overflow-hidden animate-pulse border border-zinc-800/50">
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-zinc-800/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex items-center justify-between">
         <div className="w-full">

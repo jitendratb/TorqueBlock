@@ -7,14 +7,35 @@ import WhatsAppButton from '@/components/atoms/WhatsAppButton';
 import Checkbox from '@/components/atoms/Checkbox';
 import CustomDropdown from '@/components/atoms/CustomDropdown';
 import searchServiceInstance from '@/services/searchService';
+import { FiTarget, FiCloudRain, FiMap, FiSettings } from 'react-icons/fi';
+
+const getDeterministicRating = (id = '') => {
+    let hash = 0;
+    const str = String(id || 'default');
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const val = 4.5 + (Math.abs(hash) % 6) * 0.1;
+    return val.toFixed(1);
+};
+
+const getDeterministicViews = (id = '') => {
+    let hash = 0;
+    const str = String(id || 'default');
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return (Math.abs(hash) % 9900) + 100;
+};
 
 const Card = ({ item }) => {
     const router = useRouter();
     switch (item.type) {
         case 'Tyre': {
-            const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
+            const rating = getDeterministicRating(item._id || item.identifier);
+            const quickFacts = item.quickFacts || item.aiSearch?.quickFacts || {};
             return (
-                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden cursor-pointer">
+                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[240px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden">
                     <div className="relative h-[160px] md:h-full w-full overflow-hidden bg-zinc-950 ">
                         <Image
                             src={item.hero?.heroImage || '/placeholder-tyre.jpg'}
@@ -28,10 +49,10 @@ const Card = ({ item }) => {
                             Tyre
                         </div>
                     </div>
-                    <div className="p-2 md:p-4 flex flex-col justify-between">
-                        <div className='space-y-1 md:space-y-2'>
+                    <div className="p-4 flex flex-col justify-between h-full">
+                        <div className='space-y-1 min-h-0 flex-1 flex flex-col justify-center'>
                             <div className="flex items-start justify-between gap-4">
-                                <div>
+                                <div className="flex flex-wrap items-center gap-1.5">
                                     <button
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -41,29 +62,61 @@ const Card = ({ item }) => {
                                     >
                                         {item.brand?.name || 'Brand'}
                                     </button>
-                                    <h3 className="text-lg  lg:text-2xl font-semibold text-white">{item.productName || item.hero?.title}</h3>
                                 </div>
+                            </div>
+                            <div>
+                                <h3 className="text-lg lg:text-2xl font-semibold text-white leading-snug line-clamp-1">{item.productName || item.hero?.title}</h3>
                             </div>
                             <div className="flex flex-wrap gap-2 text-xs text-zinc-400">
                                 <span className="rounded-full bg-white/20 text-white-500 px-3 py-1 truncate max-w-[250px]">
-                                    {item.commonlyUsedOn || 'Motorcycle'}
+                                    {item?.categoryName || item?.commonlyUsedOn}
                                 </span>
 
-                                {item.rearSizes?.length > 0 && (
+                                {item?.rearSizes?.length > 0 && (
                                     <span className="rounded-full bg-white/20 text-white-500 px-3 py-1">
                                         Rear:{' '}
-                                        {item.rearSizes.slice(0, 1).join(', ')}
-                                        {item.rearSizes.length > 1 && (
+                                        {item?.rearSizes?.slice(0, 2).join(', ')}
+                                        {item?.rearSizes?.length > 2 && (
                                             <span className="ml-1 text-[10px]">
-                                                +{item.rearSizes.length - 1} more
+                                                +{item.rearSizes.length - 2} more
                                             </span>
                                         )}
                                     </span>
                                 )}
                             </div>
-                            <p className="text-[10px]  md:text-xs lg:text-sm leading-6 text-zinc-400 line-clamp-1">{item.hero?.subtitle || 'Premium tyre for optimal performance.'}</p>
+
+                            <div className="grid grid-cols-2 gap-3 my-2  border-t border-zinc-800/40 text-xs text-zinc-400">
+                                <div className="flex items-center gap-1.5 min-w-0" title={quickFacts.bestUse || item.bestSuitedFor[0]}>
+                                    <FiTarget className={`text-orange-400 shrink-0 text-xs w-3.5 h-3.5 ${!quickFacts?.bestUse && "hidden"}`} />
+                                    <span className="truncate">
+                                        <span className={`text-zinc-500 font-medium ${!quickFacts?.bestUse && "hidden"}`}>Use:</span> {quickFacts?.bestUse || item.bestSuitedFor[0]}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-1.5 min-w-0" title={quickFacts?.wetGrip || item?.bestSuitedFor[1]}>
+                                    <FiCloudRain className={`text-orange-400 shrink-0 text-xs w-3.5 h-3.5 ${!quickFacts?.wetGrip && "hidden"}`} />
+                                    <span className="truncate">
+                                        <span className={`text-zinc-500 font-medium ${!quickFacts?.wetGrip && "hidden"}`}>Wet:</span> {quickFacts?.wetGrip || item.bestSuitedFor[1]}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-1.5 min-w-0" title={quickFacts?.mileage || item.bestSuitedFor[2]}>
+                                    <FiMap className={`text-orange-400 shrink-0 text-xs w-3.5 h-3.5 ${!quickFacts?.mileage && "hidden"}`} />
+                                    <span className="truncate">
+                                        <span className={`text-zinc-500 font-medium ${!quickFacts?.mileage && "hidden"}`}>Mileage:</span> {quickFacts?.mileage || item.bestSuitedFor[2]}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center gap-1.5 min-w-0" title={quickFacts?.tyreType || item.bestSuitedFor[3]}>
+                                    <FiSettings className={`text-orange-400 shrink-0 text-xs w-3.5 h-3.5 ${!quickFacts?.tyreType && "hidden"}`} />
+                                    <span className="truncate">
+                                        <span className={`text-zinc-500 font-medium ${!quickFacts?.tyreType && "hidden"}`}>Type:</span> {quickFacts?.tyreType || item.bestSuitedFor[3]}
+                                    </span>
+                                </div>
+                            </div>
+
                         </div>
-                        <div className="flex items-center justify-end ">
+                        <div className="flex items-center justify-end mt-2 md:mt-0">
                             <WhatsAppButton value={`I'm interested in ${item.productName || item.hero?.title}. Please share availability and compatible options.`} text='Get Details' className="max-w-[150px]" />
                         </div>
                     </div>
@@ -71,11 +124,11 @@ const Card = ({ item }) => {
             );
         }
         case 'Comparison': {
-            const view = Math.floor(Math.random() * 10000) + 100;
-            const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
+            const view = getDeterministicViews(item._id || item.identifier);
+            const rating = getDeterministicRating(item._id || item.identifier);
             return (
-                <div onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
-                    <div className="relative grid h-[220px] md:h-full grid-cols-2 overflow-hidden">
+                <article onClick={() => { router.push(`/compare/${item.identifier}`) }} className="overflow-hidden cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[260px] rounded-xl border border-zinc-800 bg-zinc-600/30 transition-all duration-300 hover:border-zinc-700 hover:bg-zinc-900">
+                    <div className="relative grid h-[160px] md:h-full grid-cols-2 overflow-hidden w-full">
                         <div className="relative">
                             <Image
                                 src={item.tyre1?.image || '/placeholder.png'}
@@ -94,8 +147,8 @@ const Card = ({ item }) => {
                             />
                         </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                        <div className="absolute left-1/2 top-1/2 z-10 flex h-14 w-14 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 backdrop-blur-md">
-                            <span className="text-lg font-bold uppercase tracking-wider text-white">
+                        <div className="absolute left-1/2 top-1/2 z-10 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/70 backdrop-blur-md">
+                            <span className="text-sm font-bold uppercase tracking-wider text-white">
                                 VS
                             </span>
                         </div>
@@ -110,9 +163,9 @@ const Card = ({ item }) => {
                         </div>
                     </div>
 
-                    <div className="flex flex-col justify-between gap-4 p-4">
-                        <div className='space-y-2'>
-                            <h3 className="text-lg lg:text-2xl md:line-clamp-1 font-semibold leading-snug text-white">
+                    <div className="p-4 flex flex-col  justify-between h-full">
+                        <div className='space-y-1.5 pb-2 min-h-0 flex-1 flex flex-col justify-start'>
+                            <h3 className="text-lg lg:text-2xl font-semibold leading-snug text-white line-clamp-1">
                                 {item.tyre1?.productName}{" "}
                                 <span className="text-zinc-500">vs</span>{" "}
                                 {item.tyre2?.productName}
@@ -122,7 +175,7 @@ const Card = ({ item }) => {
                                 <span className="rounded-full bg-white/20 text-white-500 px-3 py-1">⭐ {rating}</span>
                             </div>
 
-                            <p className="line-clamp-1 text-[10px] lg:text-sm text-zinc-400">
+                            <p className=" text-[10px] lg:text-sm text-zinc-400">
                                 {item?.seo?.description ||
                                     'Compare performance, grip, mileage and riding comfort.'}
                             </p>
@@ -130,24 +183,22 @@ const Card = ({ item }) => {
                         </div>
 
                         {/* Bottom */}
-                        <div className="flex items-center justify-end">
-
-
+                        <div className="flex items-center justify-end mt-2 md:mt-0">
                             <WhatsAppButton
                                 value={`I'm interested in ${item.tyre1?.productName} vs ${item.tyre2?.productName}. Please share pricing, availability and best compatible options.`}
                                 text="Get Details"
-                                className="max-w-[160px]"
+                                className="max-w-[150px]"
                             />
                         </div>
                     </div>
-                </div>
+                </article>
             );
         }
         case 'Bike': {
-            const rating = (Math.random() * 0.5 + 4.5).toFixed(1);
+            const rating = getDeterministicRating(item._id || item.identifier);
             return (
-                <article onClick={() => { router.push(`/bikes/${item.identifier}`) }} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden">
-                    <div className="relative h-[220px] md:h-full overflow-hidden bg-zinc-950">
+                <article onClick={() => { router.push(`/bikes/${item.identifier}`) }} className="grid cursor-pointer grid-cols-1 md:grid-cols-[40%_60%] md:h-[240px] rounded-xl border border-zinc-800 bg-zinc-600/30 overflow-hidden">
+                    <div className="relative h-[160px] md:h-full overflow-hidden bg-zinc-950 w-full">
                         <Image
                             src={item.image || '/placeholder-bike.jpg'}
                             alt={item.bikeBrand && item.bikeModel ? `${item.bikeBrand} ${item.bikeModel}` : "Motorcycle"}
@@ -163,20 +214,21 @@ const Card = ({ item }) => {
                             Compatible
                         </div>
                     </div>
-                    <div className="p-4 space-y-1">
-                        <div className="flex items-start justify-between gap-4">
-                            <div>
-                                <p className="text-[10px] lg:text-xs uppercase tracking-[0.2em] text-blue-400/80">{item.bikeBrand}</p>
-                                <h3 className="text-lg lg:text-2xl font-semibold text-white">{item.bikeModel}</h3>
+                    <div className="p-4 flex flex-col justify-between h-full">
+                        <div className='space-y-1.5 pb-2 min-h-0 flex-1 flex flex-col justify-start'>
+                            <div className="flex items-start justify-between gap-4">
+                                <div>
+                                    <p className="text-[10px] lg:text-xs uppercase tracking-[0.2em] text-blue-400/80">{item.bikeBrand}</p>
+                                    <h3 className="text-lg lg:text-2xl font-semibold text-white leading-snug line-clamp-1">{item.bikeModel}</h3>
+                                </div>
                             </div>
+                            <div className="flex flex-wrap gap-2 text-xs text-zinc-400">
+                                <span className="rounded-full bg-zinc-950 px-3 py-1">Motorcycle</span>
+                                <span className="rounded-full bg-zinc-950 px-3 py-1">Compatible Tyres</span>
+                            </div>
+                            <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-2">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
                         </div>
-                        <div className="flex flex-wrap gap-2 text-xs text-zinc-400">
-                            <span className="rounded-full bg-zinc-950 px-3 py-1">Motorcycle</span>
-                            <span className="rounded-full bg-zinc-950 px-3 py-1">Compatible Tyres</span>
-                            {/* <span className="rounded-full bg-zinc-950 px-3 py-1  text-yellow-400">⭐ {rating}</span> */}
-                        </div>
-                        <p className="text-[10px] lg:text-sm leading-6 text-zinc-400 line-clamp-1">{item.subTitle || 'Find the best tyres for this motorcycle.'}</p>
-                        <div className="flex items-center justify-end">
+                        <div className="flex items-center justify-end mt-2 md:mt-0">
                             <WhatsAppButton value={`I'm looking for tyres for ${item.bikeBrand} ${item.bikeModel}. Please share compatible options.`} text='Get Details' className="max-w-[150px]" />
                         </div>
                     </div>
@@ -194,32 +246,29 @@ const Card = ({ item }) => {
 };
 
 const SearchResultSkeleton = () => (
-    <article className="grid animate-pulse grid-cols-1 md:grid-cols-[40%_60%] md:h-[220px] overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950">
-        <div className="relative h-[220px] md:h-full overflow-hidden bg-zinc-900">
+    <article className="grid animate-pulse grid-cols-1 md:grid-cols-[40%_60%] md:h-[260px] overflow-hidden rounded-xl border border-zinc-800 bg-zinc-950">
+        <div className="relative h-[160px] md:h-full overflow-hidden bg-zinc-900 w-full">
             <div className="absolute left-4 top-4 h-7 w-20 rounded-full bg-zinc-800" />
             <div className="absolute right-4 top-4 h-7 w-24 rounded-full bg-zinc-800" />
         </div>
 
-        <div className="space-y-4 p-4">
-            <div className="space-y-3">
+        <div className="p-4 flex flex-col justify-between h-full">
+            <div className="space-y-3 pb-2 min-h-0 flex-1 flex flex-col justify-start">
                 <div className="h-3 w-24 rounded-full bg-zinc-800" />
                 <div className="h-8 w-3/4 rounded-full bg-zinc-800" />
+
+                <div className="flex flex-wrap gap-2 pt-1">
+                    <div className="h-6 w-20 rounded-full bg-zinc-900" />
+                    <div className="h-6 w-28 rounded-full bg-zinc-900" />
+                </div>
+
+                <div className="space-y-2 pt-2">
+                    <div className="h-4 w-full rounded-full bg-zinc-800" />
+                    <div className="h-4 w-11/12 rounded-full bg-zinc-800" />
+                </div>
             </div>
 
-            <div className="flex flex-wrap gap-2">
-                <div className="h-9 w-20 rounded-full bg-zinc-900" />
-                <div className="h-9 w-28 rounded-full bg-zinc-900" />
-                <div className="h-9 w-16 rounded-full bg-zinc-900" />
-            </div>
-
-            <div className="space-y-2">
-                <div className="h-4 w-full rounded-full bg-zinc-800" />
-                <div className="h-4 w-11/12 rounded-full bg-zinc-800" />
-                <div className="h-4 w-8/12 rounded-full bg-zinc-800" />
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="h-4 w-32 rounded-full bg-zinc-800" />
+            <div className="flex items-center justify-end mt-2 md:mt-0">
                 <div className="h-11 w-[150px] rounded-xl bg-zinc-800" />
             </div>
         </div>
@@ -255,8 +304,7 @@ function SearchPageContent() {
 
             try {
                 const results = await searchServiceInstance.search(searchQuery, { limit: 10, page: currentPage, category: filters.type.length > 0 ? filters.type.join(',') : undefined, brand: filters.brand.length > 0 ? filters.brand.join(',') : undefined, sorted: sortBy, rating: filters.rating > 0 ? filters.rating : undefined });
-
-
+                console.log(results)
                 if (results && results.results) {
                     const flattenedResults = [];
                     const counts = { tyreIntent: 0, vehicleIntent: 0, comparison: 0 };

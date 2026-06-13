@@ -4,19 +4,19 @@ import Link from 'next/link'
 import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
 
 const brandLinks = [
-    { label: 'Pirelli', href: '/search?q=Pirelli' },
-    { label: 'Michelin', href: '/search?q=Michelin' },
-    { label: 'Metzeler', href: '/search?q=Metzeler' },
+    { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
+    { label: "Michelin Tyres", href: "/brands/6638c9c65085dcdf58c8a789" },
+    { label: "Metzeler Tyres", href: "brands/6638c9ba5085dcdf58c8a77b" },
 ]
 
 const valuePerformance = [
-    { label: 'MRF', href: '/search?q=MRF' },
-    { label: 'Apollo', href: '/search?q=Apollo' },
-    { label: 'CEAT', href: '/search?q=CEAT' },
-    { label: 'Reise', href: '/search?q=Reise' },
-    { label: 'Maxxis', href: '/search?q=Maxxis' },
-    { label: 'Vredestein', href: '/search?q=Vredestein' },
-    { label: 'Eurogrip', href: '/search?q=Eurogrip' },
+    { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
+    { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
+    { label: 'Reise Tyres', href: '/brands/6638c9b85085dcdf58c8a775' },
+    { label: 'Maxxis Tyres', href: '/brands/6638c885d83cd3e79e927275' },
+    { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
+    { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
+    { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
 ]
 
 const helpLinks = [

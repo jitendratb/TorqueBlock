@@ -24,24 +24,30 @@ const NAVIGATION_CONFIG = {
     ],
     mobileSubMenus: {
         Tyres: [
-            { label: "Pirelli Angel ST", href: "/tyres/pirelli-angel-st" },
-            { label: "Pirelli Sport Demon", href: "/tyres/pirelli-sport-demon" },
-            { label: "Pirelli MT60 RS", href: "/tyres/pirelli-mt60-rs" },
+            { label: "Pirelli Scorpion Rally STR", href: "/tyres/pirelli-scorpion-rally-str" },
             { label: "Pirelli Scorpion Trail III", href: "/tyres/pirelli-scorpion-trail-iii" },
-            { label: "Pirelli Diablo Rosso IV Corsa", href: "/tyres/pirelli-diablo-rosso-iv-corsa" },
-            { label: "Pirelli Diablo Powercruiser", href: "/tyres/pirelli-diablo-powercruiser" },
-            { label: "Pirelli Night Dragon", href: "/tyres/pirelli-night-dragon" },
-            { label: "Metzeler Racetec TD Slick", href: "/tyres/metzeler-racetec-td-slick" },
+            { label: "Michelin Road 6", href: "/tyres/michelin-road-6" },
+            { label: "Michelin Anakee Adventure", href: "/tyres/michelin-anakee-adventure" },
+            { label: "Metzeler Tourance Next 2", href: "/tyres/metzeler-tourance-next-2" },
+
+            { label: "Metzeler Cruisetec", href: "/tyres/metzeler-cruisetec" },
+            { label: "Pirelli Diablo Rosso IV Corsa", href: "/tyres/pirelli-diablo-powercruiser" },
+            { label: "Metzeler Racetec TD Slick", href: "/tyres/pirelli-night-dragon" },
+            { label: "Metzeler Sportec M9 RR", href: "/tyres/pirelli-scorpion-trail-iii" },
+            { label: "Michelin Power 6", href: "/tyres/michelin-power-6" },
         ],
         "Motorcycles": [
-            { label: "Harley-Davidson 1200 Custom", href: "/bikes/harley-davidson-1200-custom-tyres" },
-            { label: "Harley-Davidson Heritage Classic", href: "/bikes/harley-davidson-heritage-classic-tyres" },
-            { label: "Harley-Davidson Road King", href: "/bikes/harley-davidson-road-king-tyres" },
-            { label: "Honda XL750 Transalp", href: "/bikes/honda-xl750-transalp-tyres" },
+            { label: "Royal Enfield Himalayan 450", href: "/bikes/royal-enfield-himalayan-450-tyres" },
+            { label: "KTM 390 Adventure", href: "/bikes/ktm-390-adventure-tyres" },
+            { label: "BMW G 310 GS", href: "/bikes/bmw-g-310-gs-tyres" },
+            { label: "Honda NX500", href: "/bikes/honda-nx500-tyres" },
+            { label: "KTM Duke 390", href: "/bikes/ktm-duke-390-tyres" },
+            // { label: "Yamaha R15 V4", href: "/bikes/yamaha-r15-v4-tyres" },
+            { label: "Kawasaki Ninja 300", href: "/bikes/kawasaki-ninja-300-tyres" },
             { label: "Triumph Speed 400", href: "/bikes/triumph-speed-400-tyres" },
-            { label: "Triumph Tiger 900 GT", href: "/bikes/triumph-tiger-900-gt-tyres" },
-            { label: "Kawasaki Versys 1000", href: "/bikes/kawasaki-versys-1000-tyres" },
-            { label: "Ducati Multistrada 1200 S", href: "/bikes/ducati-multistrada-1200-s-tyres" },
+            {label:"Royal Enfield Interceptor 650" , href:"/bikes/royal-enfield-interceptor-650-tyres"},
+            {label:"Royal Enfield Continental GT 650", href:"/bikes/royal-enfield-continental-gt-650-tyres"}
+
         ],
         "Tyre Comparison": [
             { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
@@ -56,14 +62,13 @@ const NAVIGATION_CONFIG = {
     }
 };
 
-// --- Subcomponents for Clean Architecture & Dynamic Rendering ---
 
 const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Pirelli Collection</h3>
-            <ul className="space-y-3 text-sm text-gray-600">
-                {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(0, 4).map((item) => (
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">High Demanding Tyres</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+                {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(0, 5).map((item) => (
                     <li key={item.label}>
                         <Link href={item.href} tabIndex={tabIndex} className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">
                             {item.label}
@@ -73,9 +78,9 @@ const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
             </ul>
         </div>
         <div>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Track & Performance</h3>
-            <ul className="space-y-3 text-sm text-gray-600">
-                {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(4).map((item) => (
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Track & Performance</h3>
+            <ul className="space-y-2 text-sm text-gray-600">
+                {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(5).map((item) => (
                     <li key={item.label}>
                         <Link href={item.href} tabIndex={tabIndex} className="hover:text-orange-500 hover:translate-x-1 inline-block transition-all duration-200">
                             {item.label}
@@ -108,14 +113,14 @@ TyresMegaMenu.displayName = "TyresMegaMenu";
 const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="col-span-3">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Select by Motorcycle Model</h3>
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Find Perfect Tyres for Your Bike</h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                 {NAVIGATION_CONFIG.mobileSubMenus["Motorcycles"].map((bike) => (
                     <Link
                         key={bike.label}
                         href={bike.href}
                         tabIndex={tabIndex}
-                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-300 transition-all group focus:outline-none focus:bg-gray-50"
+                        className="flex items-center gap-3 p-2 rounded-xl hover:bg-gray-50 border border-gray-200 hover:border-gray-300 transition-all group focus:outline-none focus:bg-gray-50"
                     >
                         <div className="w-10 h-10 bg-gray-100 rounded-full flex shrink-0 items-center justify-center group-hover:bg-orange-100 transition-all">
                             <span className="text-xs font-bold text-gray-500 group-hover:text-orange-500">{bike.label.substring(0, 1)}</span>
@@ -270,16 +275,16 @@ function Header() {
                             const isActive = pathname === item.href;
                             const isDropdown = item.name !== "Home";
                             return (
-                                <li 
-                                    key={item.name} 
+                                <li
+                                    key={item.name}
                                     role="none"
-                                    className="relative cursor-pointer" 
-                                    onMouseEnter={() => handleMouseEnter(item.name)} 
+                                    className="relative cursor-pointer"
+                                    onMouseEnter={() => handleMouseEnter(item.name)}
                                     onMouseLeave={handleMouseLeave}
                                 >
                                     {item.href ? (
-                                        <Link 
-                                            href={item.href} 
+                                        <Link
+                                            href={item.href}
                                             role="menuitem"
                                             aria-haspopup={isDropdown ? "true" : undefined}
                                             aria-expanded={isDropdown ? activeHover === item.name : undefined}
@@ -294,7 +299,7 @@ function Header() {
                                             {item.name}
                                         </Link>
                                     ) : (
-                                        <span 
+                                        <span
                                             role="menuitem"
                                             tabIndex={0}
                                             aria-haspopup="true"
@@ -323,9 +328,9 @@ function Header() {
 
                     <div className='flex items-center justify-end gap-4 w-full lg:max-w-sm xl:max-w-lg'>
                         <SearchBar />
-                        <button 
-                            onClick={handleTalkToExpert} 
-                            style={{ background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)" }} 
+                        <button
+                            onClick={handleTalkToExpert}
+                            style={{ background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)" }}
                             className="text-sm min-w-[130px] text-white px-3 py-2 rounded-full hover:brightness-110 transition-all duration-300 hidden lg:block cursor-pointer"
                         >
                             Talk to an Expert
@@ -347,14 +352,13 @@ function Header() {
                 </nav>
             </header>
 
-         
-            <div 
+
+            <div
                 data-scrolled={scrolled}
-                className={`Hover-Modal fixed left-0 top-[88px] w-full z-40 transition-all duration-300 ease-out ${
-                    activeHover && activeHover !== "Home"
-                        ? "opacity-100 translate-y-0 pointer-events-auto"
-                        : "opacity-0 -translate-y-2 pointer-events-none"
-                }`}
+                className={`Hover-Modal fixed left-0 top-[88px] w-full z-40 transition-all duration-300 ease-out ${activeHover && activeHover !== "Home"
+                    ? "opacity-100 translate-y-0 pointer-events-auto"
+                    : "opacity-0 -translate-y-2 pointer-events-none"
+                    }`}
                 onMouseEnter={() => { if (hoverTimeout) clearTimeout(hoverTimeout); }}
                 onMouseLeave={handleMouseLeave}
             >
@@ -377,9 +381,8 @@ function Header() {
                 type="button"
                 onClick={closeSidebar}
                 aria-label="Close sidebar menu"
-                className={`fixed inset-0 z-60 bg-black/55 backdrop-blur-sm transition-opacity duration-300 ease-in-out cursor-default border-0 outline-none w-full h-full ${
-                    sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-                }`}
+                className={`fixed inset-0 z-60 bg-black/55 backdrop-blur-sm transition-opacity duration-300 ease-in-out cursor-default border-0 outline-none w-full h-full ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+                    }`}
             />
 
             {/* High Performance Mobile Navigation Drawer */}
@@ -408,9 +411,8 @@ function Header() {
                     <Link
                         href="/"
                         onClick={closeSidebar}
-                        className={`flex items-center rounded-lg px-4 py-3 text-[15px] font-semibold border-b border-white/[0.05] transition-colors duration-200 ${
-                            pathname === '/' ? 'text-orange-400 bg-orange-500/10' : 'text-slate-100 hover:text-orange-300'
-                        }`}
+                        className={`flex items-center rounded-lg px-4 py-3 text-[15px] font-semibold border-b border-white/[0.05] transition-colors duration-200 ${pathname === '/' ? 'text-orange-400 bg-orange-500/10' : 'text-slate-100 hover:text-orange-300'
+                            }`}
                     >
                         Home
                     </Link>
@@ -432,12 +434,11 @@ function Header() {
                                         <FaChevronDown className="text-[10px] text-slate-500" />
                                     )}
                                 </button>
-                                
+
                                 {/* Accordion Collapsible Inner List */}
-                                <div 
-                                    className={`space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${
-                                        isExpanded ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0 pointer-events-none"
-                                    }`}
+                                <div
+                                    className={`space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0 pointer-events-none"
+                                        }`}
                                 >
                                     {NAVIGATION_CONFIG.mobileSubMenus[item.name]?.map((sub) => (
                                         <Link
