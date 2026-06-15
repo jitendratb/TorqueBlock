@@ -135,7 +135,7 @@ export function generateProductSchema(product) {
         aggregateRating: {
             "@type": "AggregateRating",
             ratingValue: product?.rating || 4.8,
-            reviewCount: product?.ratingCount || 1,
+            reviewCount: product?.ratingCount || 459,
         },
 
         review: [
