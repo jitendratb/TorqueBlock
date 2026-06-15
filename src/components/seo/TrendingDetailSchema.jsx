@@ -24,8 +24,8 @@ export default function TrendingDetailSchema({ item }) {
     "image": [
       item.bannerImage || item.image || product?.hero?.heroImage || `${SITE_URL}/newLogo.webp`
     ],
-    "sku": product?.sku || `TB-${slug}`,
-    "mpn": product?.mpn || product?.sku || `TB-${slug}`,
+    "sku": (product?.sku || `TB-${slug}`).substring(0, 70),
+    "mpn": (product?.mpn || product?.sku || `TB-${slug}`).substring(0, 70),
     "category": "Motorcycle Tyres",
     "url": canonical,
     "brand": {
