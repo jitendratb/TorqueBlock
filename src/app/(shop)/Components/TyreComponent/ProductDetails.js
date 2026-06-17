@@ -1,6 +1,5 @@
 "use client";
 
-
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import Image from "@/components/molecules/CustomImage"
 import { useMemo, useState } from "react";

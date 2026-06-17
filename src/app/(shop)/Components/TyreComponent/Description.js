@@ -12,22 +12,11 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                     Description
                 </h2>
                 <div>
-                    <p
-                        className="text-xs md:text-base text-zinc-400"
-                        style={!isExpanded ? {
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden',
-                        } : {}}
-                    >
+                    <p className="text-xs md:text-base text-zinc-400" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', } : {}} >
                         {tyre?.description || tyre?.hero?.subtitle}
                     </p>
                     {(tyre?.description || tyre?.hero?.subtitle) && (
-                        <button
-                            onClick={() => setIsExpanded(!isExpanded)}
-                            className="text-orange-500 hover:text-orange-400 text-xs md:text-sm font-semibold mt-1"
-                        >
+                        <button onClick={() => setIsExpanded(!isExpanded)} className="text-orange-500 hover:text-orange-400 text-xs md:text-sm font-semibold mt-1"  >
                             {isExpanded ? 'Hide' : 'more'}
                         </button>
                     )}
