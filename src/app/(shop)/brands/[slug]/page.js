@@ -29,18 +29,9 @@ export async function generateMetadata({ params }) {
     || (displayName ? `Shop high-performance ${displayName} tyres and compounds. Sourced directly from authorized pipelines with expert fitment assistance.` : "Shop premium motorcycle tyre brands.");
 
   const mainImage = brand?.brandBanner || brand?.featuredData?.featureImg || brand?.brandLogo || "/newLogo.webp";
-  const keywords = displayName ? [
-    `${displayName} tyres`,
-    `${displayName} India`,
-    `${displayName} performance tyres`,
-    `buy ${displayName} tyres online`,
-    `${displayName} tyre specs`
-  ] : [];
-
   return {
     title: displayTitle,
     description: displayDescription,
-    keywords,
     alternates: { canonical: `https://www.torqueblock.com/brands/${slug}`, },
     robots: { index: true, follow: true, },
     openGraph: {

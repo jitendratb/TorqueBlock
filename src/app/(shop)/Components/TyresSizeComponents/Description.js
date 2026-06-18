@@ -2,24 +2,14 @@
 
 import React, { useState } from 'react';
 import { FaMotorcycle } from 'react-icons/fa';
-import {
-    TbResize,
-    TbAspectRatio,
-    TbCircleDot,
-    TbWeight,
-    TbGauge,
-    TbLayersLinked,
-    TbLayersDifference,
-    TbArrowLeftRight,
-    TbFlask,
-    TbCircle
-} from 'react-icons/tb';
+import { TbResize, TbAspectRatio, TbCircleDot, TbWeight, TbGauge, TbLayersLinked, TbLayersDifference, TbArrowLeftRight, TbFlask, TbCircle } from 'react-icons/tb';
+import { AiOutlineColumnWidth } from "react-icons/ai";
 
 const SpecItem = ({ label, value, icon: Icon }) => {
     if (value === null || value === undefined || value === '') return null;
     const displayValue = typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value;
     return (
-        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-3 md:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
+        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-2 md:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
             <div className="absolute -inset-px rounded-xl bg-gradient-to-br from-orange-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
             <div className="absolute -bottom-8 -right-8 w-16 h-16 bg-orange-500/5 rounded-full blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
 
@@ -30,7 +20,7 @@ const SpecItem = ({ label, value, icon: Icon }) => {
                     </span>
                     {Icon && <Icon className="text-zinc-500 group-hover:text-orange-500/80 text-xs md:text-sm transition-colors duration-300 shrink-0" />}
                 </div>
-                <span className="text-sm md:text-base font-bold text-zinc-200 group-hover:text-white transition-colors duration-300 capitalize">
+                <span className="text-sm md:text-base font-bold text-zinc-200 group-hover:text-white transition-colors duration-300 ">
                     {displayValue}
                 </span>
             </div>
@@ -45,15 +35,14 @@ function Description({ tyreData }) {
 
     const specs = [
         { label: 'Size', value: tyreData?.sizeCode || tyreData?.size, icon: TbResize },
-        { label: 'Width', value: tyreData?.width ? `${tyreData.width} mm` : null, icon: TbArrowLeftRight },
+        { label: 'Width', value: tyreData?.width ? `${tyreData.width} mm` : null, icon: AiOutlineColumnWidth },
         { label: 'Aspect Ratio', value: tyreData?.aspectRatio, icon: TbAspectRatio },
-        { label: 'Rim Diameter', value: tyreData?.rimDiameter, icon: TbCircleDot },
         { label: 'Rim Size', value: tyreData?.rimSize ? String(tyreData.rimSize).toUpperCase() : null, icon: TbCircle },
         { label: 'Load Index', value: tyreData?.loadIndex, icon: TbWeight },
         { label: 'Speed Rating', value: tyreData?.speedIndex, icon: TbGauge },
-        { label: 'Compound', value: tyreData?.compoundTechnology, icon: TbFlask },
-        { label: 'Dual Compound', value: tyreData?.dualCompound, icon: TbLayersLinked },
-        { label: 'Triple Compound', value: tyreData?.tripleCompound, icon: TbLayersDifference },
+        { label: 'Compound', value: tyreData?.tripleCompound ? "Triple" :tyreData?.dualCompound  ? "Dual" : "Single", icon: TbFlask },
+        // { label: 'Dual Compound', value: tyreData?.dualCompound, icon: TbLayersLinked },
+        // { label: 'Triple Compound', value: tyreData?.tripleCompound, icon: TbLayersDifference },
     ];
 
     const activeSpecs = specs.filter(s => s.value !== null && s.value !== undefined && s.value !== '');
@@ -83,7 +72,7 @@ function Description({ tyreData }) {
 
                         <button
                             onClick={() => setIsExpanded(!isExpanded)}
-                            className="text-orange-500 hover:text-orange-400 text-xs font-bold uppercase tracking-widest transition-colors"
+                            className="text-orange-500 hover:text-orange-400 text-[8px] lg:text-xs font-bold uppercase tracking-widest transition-colors"
                         >
                             {isExpanded ? 'Read Less' : 'Read More'}
                         </button>
@@ -98,7 +87,7 @@ function Description({ tyreData }) {
                         Technical Specifications
                     </h2>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 relative z-10">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-2 md:gap-4 relative z-10">
                         {activeSpecs.map((spec, idx) => (
                             <SpecItem key={idx} label={spec.label} value={spec.value} icon={spec.icon} />
                         ))}
@@ -109,7 +98,7 @@ function Description({ tyreData }) {
             {tyreData?.quickFacts?.popularBikes?.length > 0 && (
                 <div className="space-y-2">
                     <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
-                       Compatible Bikes
+                        Compatible Bikes
                     </h2>
 
                     <div className="flex flex-wrap gap-2.5 md:gap-3">

@@ -161,3 +161,93 @@ export function generateProductSchema(product) {
 
     return schema;
 }
+
+export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
+    if (!sizeData) return null;
+
+    const displayName = sizeData?.hero?.title || `${sizeData?.availableTyres?.brand?.name || ''} ${sizeData?.availableTyres?.productName || ''} ${sizeData?.size || ''}`.trim() || 'Motorcycle Tyre';
+    
+    const displayDescription = sizeData?.seo?.metaDescription || sizeData?.hero?.subtitle || sizeData?.description;
+
+    const mainImage = sizeData?.hero?.heroImage || sizeData?.availableTyres?.hero?.heroImage || DEFAULT_IMAGE;
+
+    const brandName = sizeData?.availableTyres?.brand?.name || "Torque Block";
+    const sku = sizeData?.identifier || `TB-${(tyreSlug || 'SKU')}-${(sizeSlug || 'SIZE')}`;
+
+    const additionalProperty = [];
+
+    if (sizeData?.width) {
+        additionalProperty.push({ "@type": "PropertyValue", name: "Section Width", value: sizeData.width.toString(), unitText: "mm" });
+    }
+    if (sizeData?.aspectRatio) {
+        additionalProperty.push({ "@type": "PropertyValue", name: "Aspect Ratio", value: sizeData.aspectRatio.toString() });
+    }
+    if (sizeData?.rimDiameter) {
+        additionalProperty.push({ "@type": "PropertyValue", name: "Rim Diameter", value: sizeData.rimDiameter.toString(), unitText: "inches" });
+    }
+    if (sizeData?.position) {
+        additionalProperty.push({ "@type": "PropertyValue", name: "Position", value: sizeData.position });
+    }
+    
+    if (sizeData?.aiSearch?.summary) {
+        additionalProperty.push({ "@type": "PropertyValue", name: "AI Summary", value: sizeData.aiSearch.summary });
+    }
+
+    if (sizeData?.compatibleVehicles && Array.isArray(sizeData.compatibleVehicles)) {
+        sizeData.compatibleVehicles.forEach(vehicle => {
+            const bikeName = vehicle?.brand && vehicle?.model ? `${vehicle.brand} ${vehicle.model}` : vehicle?.name || vehicle;
+            if (typeof bikeName === 'string' && bikeName) {
+                additionalProperty.push({ "@type": "PropertyValue", name: "Compatible Vehicle", value: bikeName });
+            }
+        });
+    }
+
+    const seller = {
+        "@type": "Organization",
+        "name": "Torque Block",
+        "url": SITE_URL
+    };
+
+    const priceValidUntil = new Date();
+    priceValidUntil.setFullYear(priceValidUntil.getFullYear() + 1);
+
+    const offers = {
+        "@type": "Offer",
+        url: `${SITE_URL}/tyres/${tyreSlug}/${sizeSlug}`,
+        priceCurrency: sizeData?.currency || "INR",
+        price: sizeData?.price || sizeData?.pricing?.minPrice || 0,
+        availability: sizeData?.isStock !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        itemCondition: "https://schema.org/NewCondition",
+        priceValidUntil: priceValidUntil.toISOString().split('T')[0],
+        seller: seller,
+    };
+
+    const imagesList = sizeData?.availableTyres?.productImages?.length > 0
+        ? sizeData.availableTyres.productImages
+        : [mainImage];
+
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        name: displayName,
+        description: displayDescription,
+        image: imagesList,
+        sku: sku,
+        mpn: sku,
+        category: sizeData?.availableTyres?.categoryId?.name || "Motorcycle Parts",
+        url: `${SITE_URL}/tyres/${tyreSlug}/${sizeSlug}`,
+        brand: { "@type": "Brand", name: brandName },
+        offers: offers,
+        aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: sizeData?.schemaMarkup?.aggregateRating || 4.8,
+            reviewCount: sizeData?.schemaMarkup?.reviewCount || 190,
+        },
+    };
+
+    if (additionalProperty.length > 0) {
+        schema.additionalProperty = additionalProperty;
+    }
+
+    return schema;
+}

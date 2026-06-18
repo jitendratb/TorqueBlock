@@ -71,6 +71,38 @@ export default async function sitemap() {
     console.error("Error fetching tyres for sitemap", err);
   }
 
+  let tyreSizeRoutes = [];
+  try {
+    const sizesRes = await TorqueBlockApi.get("size", { params: { limit: 1000 } });
+    const sizes = sizesRes?.data || sizesRes || [];
+    if (Array.isArray(sizes)) {
+      tyreSizeRoutes = sizes.map((size) => {
+        const fullIdentifier = size?.identifier || '';
+        const tyreIdentifier = size?.availableTyres?.identifier || size?.availableTyres?.slug || '';
+        let sizeSlug = '';
+        if (tyreIdentifier && fullIdentifier.startsWith(tyreIdentifier + '-')) {
+          sizeSlug = fullIdentifier.substring(tyreIdentifier.length + 1);
+        } else {
+          // Fallback if parsing fails
+          const parts = fullIdentifier.split('-');
+          sizeSlug = parts.slice(-3).join('-'); // Usually something like 150-60-r17
+        }
+
+        if (tyreIdentifier && sizeSlug) {
+            return {
+                url: `${baseUrl}/tyres/${tyreIdentifier}/${sizeSlug}`,
+                lastModified: size?.updatedAt ? new Date(size.updatedAt).toISOString() : new Date().toISOString(),
+                changeFrequency: 'weekly',
+                priority: 0.8,
+            };
+        }
+        return null;
+      }).filter(Boolean);
+    }
+  } catch (err) {
+    console.error("Error fetching tyre sizes for sitemap", err);
+  }
+
   let brandRoutes = [];
   try {
     const brandsRes = await brandServiceInstance.getBrands({ isActive: true });
@@ -148,5 +180,5 @@ export default async function sitemap() {
     console.error("Error fetching trending items for sitemap", err);
   }
 
-  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes, ...brandRoutes, ...blogRoutes, ...compareRoutes, ...trendingRoutes];
+  return [...staticRoutes, ...bikeRoutes, ...tyreRoutes, ...tyreSizeRoutes, ...brandRoutes, ...blogRoutes, ...compareRoutes, ...trendingRoutes];
 }

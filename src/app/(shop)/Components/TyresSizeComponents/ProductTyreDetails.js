@@ -68,7 +68,7 @@ function ProductTyreDetails({ tyreData }) {
     const whatsappMessage = `Hi! I'm interested in the *${productName}*${sizeLabel ? `(Size: ${sizeLabel})` : ''}. Could you please share:\n• Best price for my bike model\n• Availability & delivery timeline\n• Installation support details`;
 
     return (
-        <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2 relative">
             <div className=' flex  flex-col gap-4'>
                 <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
                     <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1">
@@ -106,7 +106,7 @@ function ProductTyreDetails({ tyreData }) {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 ">
+                <div className="hidden lg:grid grid-cols-3 gap-2 ">
                     <div className="flex items-center gap-2">
                         <div className="rounded-full bg-green-500/10 p-2.5 text-green-400 shrink-0">
                             <FaTools className="text-xs md:text-sm" />
@@ -196,37 +196,20 @@ function ProductTyreDetails({ tyreData }) {
                         )}
 
                         <div className=" ">
-                            <p className="text-xs text-zinc-400 font-medium uppercase">AVAILABLE FROM</p >
+                            <p className="text-xs text-zinc-400 font-medium uppercase">AVAILABLE ON-ROAD PRICE*</p >
 
                             <div className='flex items-baseline gap-2 flex-wrap'>
-                                {minPrice ? (
+                                {tyreData?.price ? (
                                     <span className="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-orange-500 to-amber-400 tracking-tight">
-                                        {formatPrice(minPrice)}
+                                        {formatPrice(tyreData?.price)}
                                     </span>
                                 ) : (
                                     <span className="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-400 tracking-tight">
                                         Contact for Price
                                     </span>
                                 )}
-                                {minPrice && maxPrice && maxPrice !== minPrice && (
-                                    <span className="text-sm text-zinc-500 font-medium self-end mb-0.5">
-                                        – {formatPrice(maxPrice)}
-                                    </span>
-                                )}
                             </div>
 
-                        </div>
-
-                        {/* Pricing Note */}
-                        <div className="pt-2 flex items-start gap-2.5 rounded-xl bg-white-500/[0.06] ">
-                            <FiInfo className="text-white-400 text-xs mt-0.5 shrink-0" />
-                            <p className="text-[10px] text-white-200/75 leading-relaxed">
-                                <span className="font-semibold text-white-300">Note: </span>
-                                Prices may vary depending on the{' '}
-                                <span className="text-white-300">manufacturing date</span>{' '}
-                                and{' '}
-                                <span className="text-white-300">availability</span>.
-                            </p>
                         </div>
                     </div>
                 </div>
@@ -244,19 +227,18 @@ function ProductTyreDetails({ tyreData }) {
                                     className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-zinc-900/60 px-3 py-2 backdrop-blur-md transition-all duration-300 hover:border-orange-500/30 hover:bg-zinc-800/60"
                                 >
                                     <FaCheckCircle className="text-xs shrink-0 text-orange-500" />
-                                    <span className="text-[11px] md:text-xs font-medium text-zinc-200">{item}</span>
+                                    <span className="text-[10px] md:text-xs font-medium text-zinc-200">{item}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
                 )}
 
-                {/* WhatsApp CTA + Trust Pillars */}
-                <div className="pt-1 space-y-4">
+                <div className="pb-4 lg:pb-4 space-y-4">
                     <WhatsAppButton
-                        className="py-3 w-full"
+                        className="h-12 w-full"
                         value={whatsappMessage}
-                        text="Get Best Price on WhatsApp"
+                        text="Get a Free Tyre Buying Guide"
                     />
 
                     <div className="grid grid-cols-3 gap-2 lg:hidden">
