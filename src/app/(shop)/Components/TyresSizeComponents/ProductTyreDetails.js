@@ -238,7 +238,7 @@ function ProductTyreDetails({ tyreData }) {
                     <WhatsAppButton
                         className="h-12 w-full"
                         value={whatsappMessage}
-                        text="Get a Free Tyre Buying Guide"
+                        text="Check Availability & Offers"
                     />
 
                     <div className="grid grid-cols-3 gap-2 lg:hidden">
