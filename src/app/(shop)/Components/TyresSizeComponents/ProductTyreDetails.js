@@ -221,7 +221,7 @@ function ProductTyreDetails({ tyreData }) {
                             Key Highlights
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                            {tyreData.hero.highlights.map((item, index) => (
+                            {tyreData?.hero?.highlights?.slice(0, 6)?.map((item, index) => (
                                 <div
                                     key={index}
                                     className="flex items-center gap-2 rounded-lg border border-white/[0.06] bg-zinc-900/60 px-3 py-2 backdrop-blur-md transition-all duration-300 hover:border-orange-500/30 hover:bg-zinc-800/60"

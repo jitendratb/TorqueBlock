@@ -38,7 +38,7 @@ function BuyingGuide({ tyreData }) {
                             </div>
 
                             <ul className="space-y-2.5">
-                                {guide.whoShouldBuy.map((item, idx) => (
+                                {guide?.whoShouldBuy?.slice(0,6)?.map((item, idx) => (
                                     <li key={idx} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                                         <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/20 group-hover:text-emerald-300 transition-colors mt-0.5">
                                             <TbCheck size={14} strokeWidth={2.5} />
@@ -69,7 +69,7 @@ function BuyingGuide({ tyreData }) {
                             </div>
 
                             <ul className="space-y-2.5">
-                                {guide.whoShouldAvoid.map((item, idx) => (
+                                {guide?.whoShouldAvoid?.slice(0, 6)?.map((item, idx) => (
                                     <li key={idx} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                                         <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 group-hover:bg-red-500/20 group-hover:text-red-300 transition-colors mt-0.5">
                                             <TbX size={14} strokeWidth={2.5} />
@@ -101,7 +101,7 @@ function BuyingGuide({ tyreData }) {
                             </div>
 
                             <ul className="space-y-2.5">
-                                {guide.bestUseCases.map((item, idx) => (
+                                {guide?.bestUseCases?.slice(0, 6)?.map((item, idx) => (
                                     <li key={idx} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                                         <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 group-hover:bg-orange-500/20 group-hover:text-orange-300 transition-colors mt-0.5">
                                             <TbChevronRight size={14} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
