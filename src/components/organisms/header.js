@@ -240,7 +240,6 @@ function Header() {
         return () => window.removeEventListener("keydown", handleGlobalKeys);
     }, []);
 
-    // Mobile scroll-lock management
     useEffect(() => {
         if (sidebarOpen) {
             document.body.style.overflow = 'hidden';
@@ -326,11 +325,7 @@ function Header() {
                                             {item.name}
                                         </span>
                                     )}
-                                    {isMounted && totalItems > 0 && (
-                                        <span className="absolute -top-1.5 -right-1.5 w-4.5 h-4.5 bg-orange-500 text-white text-[9px] font-black rounded-full flex items-center justify-center border-2 border-[#09090b] shadow-sm transform transition-transform group-hover:scale-110">
-                                            {totalItems}
-                                        </span>
-                                    )}
+
                                 </li>
                             );
                         })}
