@@ -5,7 +5,6 @@ import {formatTitle} from '@/components/atoms/FormatTitle';
 import TyresSizeClient from '../../../Components/TyresSizeComponents/TyreSizeClient';
 import TyreSizeSchema from '@/components/seo/TyreSizeSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
-import { siteConfig } from "@/config/site";
 
 export async function generateMetadata({ params }) {
     const { slug, size } = await params;
@@ -58,6 +57,8 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug, size } = await params;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
+
+    console.log(tyreBySize)
 
     const breadcrumbItems = [
         { label: 'Tyres', href: '/tyres' }, 

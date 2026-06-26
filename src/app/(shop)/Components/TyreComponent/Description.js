@@ -3,40 +3,46 @@ import React, { useState } from 'react';
 import { FaMotorcycle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
+import TyreCard from "@/components/atoms/TyreCard";
+import Carousel from '@/components/organisms/Carousel';
 
 function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
     const [isExpanded, setIsExpanded] = useState(false);
     const router = useRouter();
 
-    const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front') || [];
+    const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front').map(item => ({
+        ...item,
+        productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []),
+        categoryId: tyre?.categoryId || tyre?.category || null,
+    })) || [];
     const Front = sizesIdsFront.length > 0 ? sizesIdsFront : (tyre?.frontSizes || []);
 
-    const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear') || [];
+    const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear').map(item => ({
+        ...item,
+        productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : [])),
+        categoryId: tyre?.categoryId || tyre?.category || null,
+    })) || [];
     const Rear = sizesIdsRear.length > 0 ? sizesIdsRear : (tyre?.rearSizes || []);
 
-    const handleSizeClick = (item) => {
-        if (!item) return;
-        const sizeValue = typeof item === 'object' ? item?.size : item;
-        if (!sizeValue) return;
-        router.push(`/tyres/${tyre?.identifier}/${sizeValue.toLowerCase().replace(/[\s/]/g, '-')}`);
-    };
+    const isFrontObjects = Front.length > 0 && typeof Front[0] === 'object';
+    const isRearObjects = Rear.length > 0 && typeof Rear[0] === 'object';
 
-       const handleWhatsapp = (item) => {
-    let message = `Hi Torque Block, I am interested in buying ${tyre?.productName} in size ${item}`;
-    const phoneNumber = "916366625625";
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
-    const url = isMobile 
-        ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
-        : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
-  }
+    const handleWhatsapp = (item) => {
+        let message = `Hi Torque Block, I am interested in buying ${tyre?.productName} in size ${item}`;
+        const phoneNumber = "916366625625";
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
+        const url = isMobile ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}` : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+    }
 
     return (
         <div className="space-y-4">
             <div className={desClassName}>
-                <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
-                    Description
-                </h2>
+                <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-3">
+                    <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                        Description
+                    </h2>
+                </div>
                 <div>
                     <p className="text-xs md:text-base text-zinc-400" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', } : {}} >
                         {tyre?.description || tyre?.hero?.subtitle}
@@ -51,16 +57,16 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
             <section className={`border-t border-white/10  my-4 ${sizesClassName}`}>
                 <div className="">
                     <div className="space-y-4 py-4">
-                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 justify-between">
-                            <h2 className="text-sm md:text-lg font-bold uppercase tracking-[0.25em] text-orange-500">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between border-l-2 border-orange-500 pl-3 mb-6">
+                            <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
                                 Select Your Size
                             </h2>
                             {tyre?.sizesIds?.length > 0 ? (
-                                <span className="text-[10px] md:text-xs text-orange-500 font-semibold bg-orange-500/5 px-2.5 py-1 rounded-full border border-orange-500/10">
+                                <span className="text-[9px] md:text-[10px] text-orange-400 font-black uppercase tracking-wider bg-orange-500/10 px-2.5 py-1 rounded-full border border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.1)]">
                                     Interactive Size Specs Available
                                 </span>
                             ) : (
-                                <span className="text-[10px] md:text-xs text-zinc-500 font-medium">
+                                <span className="text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
                                     Select your bike size below
                                 </span>
                             )}
@@ -68,69 +74,75 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
                         <div className="space-y-4">
                             {Front.length > 0 && (
-                                <div className="flex flex-wrap items-center gap-4">
-                                    <span className="text-zinc-500 font-extrabold text-[10px] md:text-xs uppercase tracking-[0.15em] w-14 shrink-0">
-                                        Front
-                                    </span>
+                                <div className="flex flex-col gap-4">
+                                    <div className="flex items-center gap-2 border-l border-orange-500/50 pl-3">
+                                        <h3 className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
+                                            Front Fitment
+                                        </h3>
+                                        <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+                                    </div>
 
-                                    <div className="flex flex-wrap gap-2.5">
-                                        {Front.map((item) => {
-                                            const isInteractive = typeof item === 'object';
-                                            const sizeValue = isInteractive ? item?.size : item;
-                                            const sizeId = isInteractive ? item?._id : item;
-                                            return isInteractive ? (
-                                                <button
-                                                    key={sizeId}
-                                                    onClick={() => handleSizeClick(item)}
-                                                    className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer"
-                                                >
-                                                    <span>{sizeValue}</span>
-                                                    <FiArrowUpRight className="text-zinc-500 group-hover:text-orange-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 text-xs md:text-sm" />
-                                                </button>
-                                            ) : (
-                                                <span
-                                                    key={sizeId}
-                                                    onClick={() => handleWhatsapp(item)}
-                                                    className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer"
-                                                >
-                                                    {sizeValue}
-                                                </span>
-                                            );
-                                        })}
+                                    <div className="flex-1 min-w-0">
+                                        <Carousel
+                                            items={Front}
+                                            itemWidth={isFrontObjects ? 280 : "320"}
+                                            showDots={false}
+                                            showArrows={true}
+                                            gap={16}
+                                            renderItem={(item) => {
+                                                const isInteractive = typeof item === 'object';
+                                                const sizeValue = isInteractive ? item?.size : item;
+                                                const sizeId = isInteractive ? item?._id : item;
+                                                return isInteractive ? (
+                                                    <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
+                                                ) : (
+                                                    <span
+                                                        key={sizeId}
+                                                        onClick={() => handleWhatsapp(item)}
+                                                        className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
+                                                    >
+                                                        {sizeValue}
+                                                    </span>
+                                                );
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             )}
 
                             {Rear.length > 0 && (
-                                <div className="flex flex-wrap items-center gap-4">
-                                    <span className="text-zinc-500 font-extrabold text-[10px] md:text-xs uppercase tracking-[0.15em] w-14 shrink-0">
-                                        Rear
-                                    </span>
+                                <div className="flex flex-col  gap-4">
+                                    <div className="flex items-center gap-2 border-l border-orange-500/50 pl-3">
+                                        <h3 className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
+                                            Rear Fitment
+                                        </h3>
+                                        <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
+                                    </div>
 
-                                    <div className="flex flex-wrap gap-2.5">
-                                        {Rear.map((item) => {
-                                            const isInteractive = typeof item === 'object';
-                                            const sizeValue = isInteractive ? item?.size : item;
-                                            const sizeId = isInteractive ? item?._id : item;
-                                            return isInteractive ? (
-                                                <button
-                                                    key={sizeId}
-                                                    onClick={() => handleSizeClick(item)}
-                                                    className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer"
-                                                >
-                                                    <span>{sizeValue}</span>
-                                                    <FiArrowUpRight className="text-zinc-500 group-hover:text-orange-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 text-xs md:text-sm" />
-                                                </button>
-                                            ) : (
-                                                <span
-                                                    key={sizeId}
-                                                    onClick={() => handleWhatsapp(item)}
-                                                    className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer"
-                                                >
-                                                    {sizeValue}
-                                                </span>
-                                            );
-                                        })}
+                                    <div className=" flex flex-1 min-w-0 ">
+                                        <Carousel
+                                            items={Rear}
+                                            itemWidth={isRearObjects ? 280 : "w-auto"}
+                                            showDots={false}
+                                            showArrows={true}
+                                            gap={16}
+                                            renderItem={(item) => {
+                                                const isInteractive = typeof item === 'object';
+                                                const sizeValue = isInteractive ? item?.size : item;
+                                                const sizeId = isInteractive ? item?._id : item;
+                                                return isInteractive ? (
+                                                    <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
+                                                ) : (
+                                                    <span
+                                                        key={sizeId}
+                                                        onClick={() => handleWhatsapp(item)}
+                                                        className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
+                                                    >
+                                                        {sizeValue}
+                                                    </span>
+                                                );
+                                            }}
+                                        />
                                     </div>
                                 </div>
                             )}
@@ -139,9 +151,11 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
                     <div className="border-t border-white/10 "></div>
                     <div className="py-4">
-                        <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
-                            Commonly Used On
-                        </h2>
+                        <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-4">
+                            <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                                Commonly Used On
+                            </h2>
+                        </div>
 
                         <div className="space-y-2">
                             <p className="text-xs md:text-md text-zinc-200 leading-relaxed">
@@ -181,9 +195,11 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                 <section className="relative border-t border-white/10 mt-4 py-4">
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
-                                Performance Analysis
-                            </h2>
+                            <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-2">
+                                <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                                    Performance Analysis
+                                </h2>
+                            </div>
                             <p className="text-zinc-400 text-xs">
                                 Real-world strengths and limitations of this tyre.
                             </p>

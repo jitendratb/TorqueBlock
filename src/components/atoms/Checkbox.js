@@ -8,6 +8,7 @@ const Checkbox = ({
   onChange,
   className = "",
   disabled = false,
+  variant = "glass",
   ...props
 }) => {
   return (
@@ -19,10 +20,8 @@ const Checkbox = ({
       className={clsx(
         `
         peer relative h-4 w-4 cursor-pointer appearance-none rounded
-        border border-zinc-500 bg-black
-        transition-all duration-200
-
-        checked:border-white
+        border transition-all duration-200
+        outline-none focus:outline-none
 
         after:absolute
         after:left-1/2
@@ -41,7 +40,16 @@ const Checkbox = ({
         checked:after:opacity-100
 
         disabled:cursor-not-allowed
-        disabled:opacity-50
+        disabled:opacity-40
+        `,
+        variant === "glass" ? `
+          bg-white/[0.02] border-white/10 hover:bg-white/[0.06] hover:border-white/20
+          checked:bg-orange-500/20 checked:border-orange-500
+          checked:shadow-[0_0_8px_rgba(249,115,22,0.35)]
+          focus:ring-1 focus:ring-orange-500/30
+        ` : `
+          bg-black border-zinc-500
+          checked:border-white
         `,
         className
       )}

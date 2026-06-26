@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from 'react'
-import ProductTyreDetails from './ProductTyreDetails';
 import Description from './Description';
 import BuyingGuide from './BuyingGuide'
 import TrustCard from './TrustCard';
 import FAQSection from '@/components/atoms/FAQSection';
+import SubProductDetails from '../SubProductDetails';
 
 
 function TyreSizeClient({ initialData }) {
@@ -12,7 +12,7 @@ function TyreSizeClient({ initialData }) {
 
     return (
         <div>
-            <ProductTyreDetails tyreData={tyreSize} />
+            <SubProductDetails tyreData={tyreSize} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
             <TrustCard tyre={tyreSize} />

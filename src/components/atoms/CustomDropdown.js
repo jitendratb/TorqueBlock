@@ -1,8 +1,9 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { FiChevronDown, FiCheck, FiSearch, } from "react-icons/fi";
+import { FiChevronDown, FiCheck, FiSearch } from "react-icons/fi";
+import clsx from "clsx";
 
-export default function CustomDropdown({ options = [], value = "", onChange, placeholder = "Select Option", searchable = true, disabled = false, className = "", buttonClassName="h-12" }) {
+export default function CustomDropdown({ options = [], value = "", onChange, placeholder = "Select Option", searchable = true, disabled = false, className = "", buttonClassName = "h-12", variant = "outlined" }) {
     const [isOpen, setIsOpen] = useState(false);
     const [search, setSearch] = useState("");
     const [highlightedIndex, setHighlightedIndex] = useState(0);
@@ -90,7 +91,7 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
     return (
         <div
             ref={dropdownRef}
-            className={`relative w-full ${className}`}
+            className={clsx("relative w-full", className)}
         >
 
             <button
@@ -98,18 +99,28 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                 disabled={disabled}
                 onClick={() => setIsOpen((prev) => !prev)}
                 onKeyDown={handleKeyDown}
-                className={`cursor-pointer
-          flex w-full items-center justify-between
-          rounded-xl border border-gray-300 bg-white
-          px-4 text-sm shadow-sm transition-all ${buttonClassName}
-          ${disabled ? "cursor-not-allowed opacity-50" : "hover:border-gray-400 focus:border-orange-500 focus:outline-none"}`}
+                className={clsx(
+                    "cursor-pointer flex w-full items-center justify-between rounded-xl px-4 text-sm shadow-sm transition-all duration-300 focus:outline-none",
+                    buttonClassName,
+                    {
+                        // Outlined variant
+                        "border border-gray-300 bg-white text-black hover:border-gray-400 focus:border-orange-500": variant === "outlined" && !isOpen,
+                        "border border-orange-500 bg-white text-black": variant === "outlined" && isOpen,
+                        
+                        // Glass variant
+                        "border border-white/10 bg-white/[0.02] text-white hover:border-white/20 focus:border-orange-500/50 focus:ring-1 focus:ring-orange-500/50": variant === "glass" && !isOpen,
+                        "border border-orange-500 bg-white/[0.02] text-white ring-1 ring-orange-500/50": variant === "glass" && isOpen,
+                        
+                        "cursor-not-allowed opacity-50": disabled
+                    }
+                )}
             >
                 <span
-                    className={
-                        selectedOption
-                            ? "font-medium text-black"
-                            : "text-zinc-600"
-                    }
+                    className={clsx(
+                        variant === "glass"
+                            ? selectedOption ? "font-medium text-white" : "text-zinc-400"
+                            : selectedOption ? "font-medium text-black" : "text-zinc-600"
+                    )}
                 >
                     {selectedOption
                         ? selectedOption.label
@@ -117,19 +128,25 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                 </span>
 
                 <FiChevronDown
-                    className={`text-lg text-orange-500 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
-                        }`}
+                    className={clsx(
+                        "text-lg text-orange-500 transition-transform duration-200",
+                        isOpen && "rotate-180"
+                    )}
                 />
             </button>
 
-            {/* Dropdown */}
             {isOpen && (
                 <div
-                    className="absolute z-50 mt-2 w-full overflow-hidden rounded-xl border border-gray-200 bg-white text-black/80 backdrop-blur-lg shadow-2xl">
-                    {/* Search */}
+                    className={clsx(
+                        "absolute z-50 mt-2 w-full overflow-hidden rounded-xl shadow-2xl",
+                        variant === "glass"
+                            ? "border border-white/10 bg-black/80 backdrop-blur-2xl text-white "
+                            : "border border-gray-200 bg-white backdrop-blur-xl text-black/80"
+                    )}
+                >
                     {searchable && (
-                        <div className="border-b border-gray-100 p-3">
-                            <div className="flex items-center rounded-lg border border-gray-200 px-3">
+                        <div className={clsx("p-3 border-b", variant === "glass" ? "border-white/5" : "border-gray-100")}>
+                            <div className={clsx("flex items-center rounded-lg border px-3", variant === "glass" ? "border-white/10" : "border-gray-200")}>
                                 <FiSearch className="text-gray-400" />
 
                                 <input
@@ -141,21 +158,20 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                                         setSearch(e.target.value);
                                         setHighlightedIndex(0);
                                     }}
-                                    className="h-10 w-full bg-transparent px-2 text-sm outline-none"
+                                    className={clsx(
+                                        "h-10 w-full bg-transparent px-2 text-sm outline-none",
+                                        variant === "glass" ? "text-white placeholder-gray-500" : "text-black placeholder-gray-400"
+                                    )}
                                 />
                             </div>
                         </div>
                     )}
 
-                    {/* Options */}
-                    <ul className="max-h-64 overflow-y-auto custom-scroll py-2">
+                    <ul className="max-h-64 overflow-y-auto  custom-scroll">
                         {filteredOptions.length > 0 ? (
                             filteredOptions.map((item, index) => {
                                 const active =
                                     value === item.value;
-
-                                const highlighted =
-                                    highlightedIndex === index;
 
                                 return (
                                     <li key={item.value}>
@@ -166,13 +182,16 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                                                 setIsOpen(false);
                                                 setSearch("");
                                             }}
-                                            className={`
-                        flex w-full items-center cursor-pointer
-                        justify-between px-4 py-3
-                        text-left text-sm transition-all
-                    
-                        ${active ? "bg-orange-100 font-semibold" : "hover:bg-gray-50 hover:text-gray-500"}
-                      `}
+                                            className={clsx(
+                                                "flex w-full items-center cursor-pointer justify-between px-4 py-3 text-left text-sm transition-all",
+                                                variant === "glass"
+                                                    ? active
+                                                        ? "bg-orange-500/40 text-white font-semibold"
+                                                        : "text-gray-300 hover:bg-white/5 hover:text-white"
+                                                    : active
+                                                        ? "bg-orange-100 font-semibold"
+                                                        : "hover:bg-gray-50 hover:text-gray-500"
+                                            )}
                                         >
                                             <span>{item.label}</span>
 
@@ -184,7 +203,7 @@ export default function CustomDropdown({ options = [], value = "", onChange, pla
                                 );
                             })
                         ) : (
-                            <div className="px-4 py-6 text-center text-sm text-gray-500">
+                            <div className={clsx("px-4 py-6 text-center text-sm", variant === "glass" ? "text-zinc-500" : "text-gray-500")}>
                                 No results found
                             </div>
                         )}

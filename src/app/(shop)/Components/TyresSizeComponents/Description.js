@@ -5,28 +5,28 @@ import { FaMotorcycle } from 'react-icons/fa';
 import { TbResize, TbAspectRatio, TbCircleDot, TbWeight, TbGauge, TbLayersLinked, TbLayersDifference, TbArrowLeftRight, TbFlask, TbCircle } from 'react-icons/tb';
 import { AiOutlineColumnWidth } from "react-icons/ai";
 
-const SpecItem = ({ label, value, icon: Icon }) => {
-    if (value === null || value === undefined || value === '') return null;
-    const displayValue = typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value;
-    return (
-        <div className="group relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-2 md:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
-            <div className="absolute -inset-px rounded-xl bg-gradient-to-br from-orange-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
-            <div className="absolute -bottom-8 -right-8 w-16 h-16 bg-orange-500/5 rounded-full blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
+// const SpecItem = ({ label, value, icon: Icon }) => {
+//     if (value === null || value === undefined || value === '') return null;
+//     const displayValue = typeof value === 'boolean' ? (value ? 'Yes' : 'No') : value;
+//     return (
+//         <div className="group relative overflow-hidden rounded-xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-2 md:p-4 flex flex-col justify-between transition-all duration-300 hover:-translate-y-0.5 hover:border-orange-500/40 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
+//             <div className="absolute -inset-px rounded-xl bg-gradient-to-br from-orange-500/10 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
+//             <div className="absolute -bottom-8 -right-8 w-16 h-16 bg-orange-500/5 rounded-full blur-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col gap-2">
-                <div className="flex items-center justify-between gap-2">
-                    <span className="text-[9px] md:text-[10px] uppercase tracking-[0.18em] text-zinc-500 font-bold group-hover:text-orange-500/80 transition-colors duration-300">
-                        {label}
-                    </span>
-                    {Icon && <Icon className="text-zinc-500 group-hover:text-orange-500/80 text-xs md:text-sm transition-colors duration-300 shrink-0" />}
-                </div>
-                <span className="text-sm md:text-base font-bold text-zinc-200 group-hover:text-white transition-colors duration-300 ">
-                    {displayValue}
-                </span>
-            </div>
-        </div>
-    );
-};
+//             <div className="relative z-10 flex flex-col gap-2">
+//                 <div className="flex items-center justify-between gap-2">
+//                     <span className="text-[9px] md:text-[10px] uppercase tracking-[0.18em] text-zinc-500 font-bold group-hover:text-orange-500/80 transition-colors duration-300">
+//                         {label}
+//                     </span>
+//                     {Icon && <Icon className="text-zinc-500 group-hover:text-orange-500/80 text-xs md:text-sm transition-colors duration-300 shrink-0" />}
+//                 </div>
+//                 <span className="text-sm md:text-base font-bold text-zinc-200 group-hover:text-white transition-colors duration-300 ">
+//                     {displayValue}
+//                 </span>
+//             </div>
+//         </div>
+//     );
+// };
 
 function Description({ tyreData }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -41,9 +41,7 @@ function Description({ tyreData }) {
         { label: 'Load Index', value: tyreData?.loadIndex, icon: TbWeight },
         { label: 'Speed Rating', value: tyreData?.speedIndex, icon: TbGauge },
         { label: 'Compound', value: tyreData?.tripleCompound ? "Triple" :tyreData?.dualCompound  ? "Dual" : "Single", icon: TbFlask },
-        // { label: 'Dual Compound', value: tyreData?.dualCompound, icon: TbLayersLinked },
-        // { label: 'Triple Compound', value: tyreData?.tripleCompound, icon: TbLayersDifference },
-    ];
+   ];
 
     const activeSpecs = specs.filter(s => s.value !== null && s.value !== undefined && s.value !== '');
 
@@ -81,7 +79,7 @@ function Description({ tyreData }) {
             )}
 
 
-            {activeSpecs.length > 0 && (
+            {/* {activeSpecs.length > 0 && (
                 <div className="space-y-2">
                     <h2 className="text-sm md:text-lg font-semibold uppercase tracking-[0.25em] text-orange-500">
                         Technical Specifications
@@ -93,7 +91,7 @@ function Description({ tyreData }) {
                         ))}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {tyreData?.quickFacts?.popularBikes?.length > 0 && (
                 <div className="space-y-2">

@@ -48,6 +48,10 @@ function FloatingWhatsAppClient({ data }) {
     const [unreadCount, setUnreadCount] = useState(1);
     const [statusText, setStatusText] = useState('Online');
     const [mounted, setMounted] = useState(false);
+    
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+    const isDraggingRef = useRef(false);
+    const dragStartPos = useRef({ x: 0, y: 0 });
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -175,6 +179,7 @@ function FloatingWhatsAppClient({ data }) {
     const HandleFormClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (isDraggingRef.current) return;
         let message = `Hi, I’m enquiring about motorcycle tyres from the website.`;
         const phoneNumber = "916366625625";
         const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
@@ -184,10 +189,59 @@ function FloatingWhatsAppClient({ data }) {
         window.open(url, "_blank");
     }
 
+    const handleDragStart = (e) => {
+        if (e.type === 'mousedown') e.preventDefault();
+        isDraggingRef.current = false;
+        
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        dragStartPos.current = {
+            startX: clientX - position.x,
+            startY: clientY - position.y,
+            clickX: clientX,
+            clickY: clientY,
+        };
+
+        const handleDragMove = (moveEvent) => {
+            const currentX = moveEvent.touches ? moveEvent.touches[0].clientX : moveEvent.clientX;
+            const currentY = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY;
+            
+            if (Math.abs(currentX - dragStartPos.current.clickX) > 5 || 
+                Math.abs(currentY - dragStartPos.current.clickY) > 5) {
+                isDraggingRef.current = true;
+            }
+
+            setPosition({
+                x: currentX - dragStartPos.current.startX,
+                y: currentY - dragStartPos.current.startY,
+            });
+        };
+
+        const handleDragEnd = () => {
+            document.removeEventListener('mousemove', handleDragMove);
+            document.removeEventListener('mouseup', handleDragEnd);
+            document.removeEventListener('touchmove', handleDragMove);
+            document.removeEventListener('touchend', handleDragEnd);
+            
+            setTimeout(() => {
+                isDraggingRef.current = false;
+            }, 100);
+        };
+
+        document.addEventListener('mousemove', handleDragMove);
+        document.addEventListener('mouseup', handleDragEnd);
+        document.addEventListener('touchmove', handleDragMove, { passive: false });
+        document.addEventListener('touchend', handleDragEnd);
+    };
+
     if (!mounted) return null;
 
     return (
-        <div className="fixed bottom-3 lg:bottom-9 right-3 lg:right-9 z-[9999] font-[Inter,sans-serif] text-zinc-100 select-none">
+        <div 
+            className="fixed bottom-3 lg:bottom-9 right-3 lg:right-9 z-[9999] font-[Inter,sans-serif] text-zinc-100 select-none"
+            style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+        >
             <div className={`
                 absolute bottom-20 right-0 w-[350px] max-w-[calc(100vw-32px)] 
                 rounded-3xl  bg-zinc-950 shadow-[0_20px_50px_rgba(0,0,0,0.85)] 
@@ -282,6 +336,8 @@ function FloatingWhatsAppClient({ data }) {
             </div>
 
             <button
+                onMouseDown={handleDragStart}
+                onTouchStart={handleDragStart}
                 onClick={HandleFormClick}
                 className="relative cursor-pointer group w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white shadow-[0_8px_30px_rgba(16,185,129,0.35)] flex items-center justify-center transition-all duration-300 active:scale-90"
                 style={{ animation: 'float-gentle 4s ease-in-out infinite' }}

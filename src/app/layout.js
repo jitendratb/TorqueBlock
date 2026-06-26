@@ -72,6 +72,7 @@ import Script from 'next/script';
 import ScrollToTop from "@/components/atoms/ScrollToTop";
 import { ToastProvider } from "@/context/ToastContext";
 import LocalBusinessSchema from "@/components/seo/LocalBusinessSchema";
+import CartSlider from "@/components/organisms/CartSlider";
 
 export default function RootLayout({ children }) {
   return (
@@ -85,6 +86,7 @@ export default function RootLayout({ children }) {
         
         <ToastProvider>
           {children}
+          <CartSlider />
         </ToastProvider>
         <FloatingWhatsApp />
         <LocalBusinessSchema />

@@ -38,7 +38,6 @@
   scroll-behavior: smooth;
 }
 
-/* Permanent thin scrollbar size to prevent layout shifts when hovering */
 .custom-scroll::-webkit-scrollbar {
   width: 6px;
   height: 6px;

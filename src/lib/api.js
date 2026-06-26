@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const TorqueBlockApi = axios.create({
     baseURL: 'https://api.torqueblock.com/api/v1',
-  //  baseURL:'http://localhost:4000/api/v1',
+//    baseURL:'http://localhost:4000/api/v1',
     timeout: 30000, 
     headers: {
         'Content-Type': 'application/json',
@@ -12,6 +12,12 @@ const TorqueBlockApi = axios.create({
 
 TorqueBlockApi.interceptors.request.use(
     (config) => {
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('authToken');
+            if (token) {
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        }
         return config;
     },
     (error) => {
@@ -28,7 +34,13 @@ TorqueBlockApi.interceptors.response.use(
         if (error.response) {
             console.error('API Error Response:', error.response.status, error.response.data);
             if (error.response.status === 401) {
-                console.warn('Unauthorized - Redirecting to login or refreshing token...');
+                console.warn('Unauthorized - Logging out user...');
+                if (typeof window !== 'undefined') {
+                    import('@/stores/authStore').then((module) => {
+                        const authStore = module.default.getState();
+                        authStore.logout();
+                    });
+                }
             }
             if (error.response.status === 500) {
                 console.warn('Server Error - Please try again later.');

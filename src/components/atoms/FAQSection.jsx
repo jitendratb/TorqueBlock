@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { FiPlus, FiMinus, FiHelpCircle } from "react-icons/fi";
 import FAQSchema from "@/components/seo/FAQSchema";
