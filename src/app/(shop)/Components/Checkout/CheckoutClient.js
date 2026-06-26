@@ -50,8 +50,8 @@ export default function CheckoutClient() {
 
     const subtotal = getCartTotal();
     const gstAmount = Math.round(subtotal * 0.18);
-    const deliveryCharge = subtotal > 0 ? 0 : 0;
-    const finalTotal = 1;
+    const deliveryCharge = subtotal > 0 ? 250 : 0;
+    const finalTotal = subtotal + gstAmount + deliveryCharge;
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
@@ -63,6 +63,9 @@ export default function CheckoutClient() {
         try {
             const items = cart.map((item, index) => {
                 const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric;
+                const itemSubtotal = item.price * item.quantity;
+                const itemTax = Math.round(itemSubtotal * 0.18);
+                
                 return {
                     productId: sizeObj._id,
                     quantity: item.quantity,
@@ -70,8 +73,8 @@ export default function CheckoutClient() {
                     installation: false,
                     addressId: selectedAddressId,
                     size: sizeObj.size,
-                    shippingCharge: index === 0 ? 0 : 0,
-                    taxAmount: 1,
+                    shippingCharge: index === 0 ? 250 : 0,
+                    taxAmount: itemTax,
                     discount: 0
                 };
             });
