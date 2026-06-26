@@ -50,7 +50,7 @@ export default function CheckoutClient() {
 
     const subtotal = getCartTotal();
     const gstAmount = Math.round(subtotal * 0.18);
-    const deliveryCharge = subtotal > 0 ? 250 : 0;
+    const deliveryCharge = subtotal > 0 ? 0 : 0;
     const finalTotal = subtotal + gstAmount + deliveryCharge;
 
     const handlePlaceOrder = useCallback(async () => {
@@ -73,7 +73,7 @@ export default function CheckoutClient() {
                     installation: false,
                     addressId: selectedAddressId,
                     size: sizeObj.size,
-                    shippingCharge: index === 0 ? 250 : 0,
+                    shippingCharge: index === 0 ? 0 : 0,
                     taxAmount: itemTax,
                     discount: 0
                 };
