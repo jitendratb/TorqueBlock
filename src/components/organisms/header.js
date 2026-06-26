@@ -7,6 +7,11 @@ import { FaArrowRightLong, FaChevronDown, FaChevronUp } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import SearchBar from './searchBar';
 import { IoMdMenu } from "react-icons/io";
+import { IoCartOutline } from "react-icons/io5";
+import ManuSlider from './ManuSlider';
+import CartSlider from './CartSlider';
+import Login from './login';
+import useCartStore from '@/stores/cartStore';
 
 const WHATSAPP_NUMBER = "916366625625";
 
@@ -195,6 +200,12 @@ function Header() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [mobileExpanded, setMobileExpanded] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
+    const [isLoginOpen, setIsLoginOpen] = useState(false);
+
+    const cart = useCartStore((state) => state.cart || []);
+    const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
+    const totalItems = isMounted ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
+
 
     useEffect(() => {
         setIsMounted(true);
@@ -240,6 +251,7 @@ function Header() {
         return () => window.removeEventListener("keydown", handleGlobalKeys);
     }, []);
 
+    // Mobile scroll-lock management
     useEffect(() => {
         if (sidebarOpen) {
             document.body.style.overflow = 'hidden';
@@ -273,7 +285,6 @@ function Header() {
                         <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[130px]" style={{ height: 'auto' }} />
                     </Link>
 
-                    {/* Desktop Navigation Link Bar */}
                     <ul className='flex items-center gap-6 hidden lg:flex' role="menubar">
                         {NAVIGATION_CONFIG.navItems.map((item) => {
                             const isActive = pathname === item.href;
@@ -325,7 +336,7 @@ function Header() {
                                             {item.name}
                                         </span>
                                     )}
-
+                              
                                 </li>
                             );
                         })}
@@ -334,22 +345,24 @@ function Header() {
                     <div className='flex items-center justify-end gap-4 w-full lg:max-w-sm xl:max-w-lg'>
                         <SearchBar />
                         <button
-                            onClick={handleTalkToExpert}
-                            style={{ background: "linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)" }}
-                            className="text-sm min-w-[130px] text-white px-3 py-2 rounded-full hover:brightness-110 transition-all duration-300 hidden lg:block cursor-pointer"
+                            onClick={() => setCartSliderOpen(true)}
+                            className="relative flex items-center justify-center h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 cursor-pointer text-white gap-2"
+                            aria-label="Open cart"
                         >
-                            Talk to an Expert
-                        </button>
-                        <button onClick={handleContactUs} className="hdr-btn-login nav-link hidden xl:block cursor-pointer">
-                            <span className='text-xs uppercase font-bold flex gap-2 items-center justify-center min-w-[120px]'>Contact Us <FaArrowRightLong className='arrow-icon' /></span>
+                            <IoCartOutline className='text-xl' /> 
+                            <span className="text-sm font-bold uppercase  hidden sm:block">Cart</span>
+                            {totalItems > 0 && (
+                                <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
+                                    {totalItems}
+                                </span>
+                            )}
                         </button>
 
-                        {/* Accessibility Optimized Hamburger Button */}
                         <button
                             aria-label="Open navigation menu"
                             aria-expanded={sidebarOpen}
                             onClick={() => setSidebarOpen(true)}
-                            className="lg:hidden flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] hover:bg-white/10 transition-all duration-200 cursor-pointer text-white"
+                            className="flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] bg-white/10 hover:bg-white/20 transition-all duration-200 cursor-pointer text-white"
                         >
                             <IoMdMenu className='text-2xl' />
                         </button>
@@ -357,127 +370,15 @@ function Header() {
                 </nav>
             </header>
 
-
-            <div
-                data-scrolled={scrolled}
-                className={`Hover-Modal fixed left-0 top-[88px] w-full z-40 transition-all duration-300 ease-out ${activeHover && activeHover !== "Home"
-                    ? "opacity-100 translate-y-0 pointer-events-auto"
-                    : "opacity-0 -translate-y-2 pointer-events-none"
-                    }`}
-                onMouseEnter={() => { if (hoverTimeout) clearTimeout(hoverTimeout); }}
-                onMouseLeave={handleMouseLeave}
-            >
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="bg-white/95 backdrop-blur-xl border border-white/20 shadow-[0_20px_80px_rgba(0,0,0,0.08)] rounded-lg p-8 mt-4">
-                        <div className={activeHover === "Tyres" ? "block" : "hidden"}>
-                            <TyresMegaMenu tabIndex={activeHover === "Tyres" ? 0 : -1} onAction={handleTalk} />
-                        </div>
-                        <div className={activeHover === "Motorcycles" ? "block" : "hidden"}>
-                            <BikeBrandsMegaMenu tabIndex={activeHover === "Motorcycles" ? 0 : -1} onAction={handleTalk} />
-                        </div>
-                        <div className={activeHover === "Tyre Comparison" ? "block" : "hidden"}>
-                            <TyreComparisonMegaMenu tabIndex={activeHover === "Tyre Comparison" ? 0 : -1} onAction={handleTalk} />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <button
-                type="button"
-                onClick={closeSidebar}
-                aria-label="Close sidebar menu"
-                className={`fixed inset-0 z-60 bg-black/55 backdrop-blur-sm transition-opacity duration-300 ease-in-out cursor-default border-0 outline-none w-full h-full ${sidebarOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
-                    }`}
+            <ManuSlider 
+                isOpen={sidebarOpen} 
+                onClose={() => setSidebarOpen(false)} 
+                setIsLoginOpen={setIsLoginOpen}
+                whatsappNumber={WHATSAPP_NUMBER}
+                whatsappMessage={NAVIGATION_CONFIG.whatsapp.contactMessage}
             />
-
-            {/* High Performance Mobile Navigation Drawer */}
-            <aside
-                aria-label="Mobile navigation drawer"
-                style={{
-                    background: 'linear-gradient(160deg, #0f172a 0%, #1e293b 60%, #0f172a 100%)',
-                    transform: sidebarOpen ? 'translateX(0)' : 'translateX(100%)',
-                }}
-                className="fixed top-0 right-0 bottom-0 w-[82vw] max-w-[340px] z-[70] flex flex-col overflow-y-auto shadow-[-8px_0_40px_rgba(0,0,0,0.4)] transition-transform duration-[380ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
-            >
-                {/* Header of Drawer */}
-                <div className="flex items-center justify-between px-5 py-[18px] border-b border-white/[0.07]">
-                    <Image src="/newlogo.webp" alt="Torque Block Logo" width={100} height={40} className="h-auto w-[100px]" style={{ height: 'auto' }} />
-                    <button
-                        onClick={closeSidebar}
-                        aria-label="Close navigation menu"
-                        className="w-9 h-9 rounded-[10px] bg-white/[0.08] border border-white/[0.12] flex items-center justify-center text-white text-lg cursor-pointer transition-colors duration-200 hover:bg-white/[0.15]"
-                    >
-                        Γ£ò
-                    </button>
-                </div>
-
-                {/* Collapsible Mobile Navigation Lists */}
-                <nav className="flex-1 overflow-y-auto px-4 w-full mx-auto py-2">
-                    <Link
-                        href="/"
-                        onClick={closeSidebar}
-                        className={`flex items-center rounded-lg px-4 py-3 text-[15px] font-semibold border-b border-white/[0.05] transition-colors duration-200 ${pathname === '/' ? 'text-orange-400 bg-orange-500/10' : 'text-slate-100 hover:text-orange-300'
-                            }`}
-                    >
-                        Home
-                    </Link>
-
-                    {NAVIGATION_CONFIG.navItems.filter(item => item.name !== 'Home').map((item) => {
-                        const isExpanded = mobileExpanded === item.name;
-                        return (
-                            <div key={item.name} className="border-b border-white/[0.05]">
-                                {/* Accordion Header Toggler */}
-                                <button
-                                    onClick={() => toggleMobileExpanded(item.name)}
-                                    aria-expanded={isExpanded}
-                                    className="w-full flex items-center justify-between py-4 text-[11px] font-bold uppercase tracking-widest text-slate-400 hover:text-white transition-colors duration-200"
-                                >
-                                    <span>{item.name}</span>
-                                    {isExpanded ? (
-                                        <FaChevronUp className="text-[10px] text-slate-500" />
-                                    ) : (
-                                        <FaChevronDown className="text-[10px] text-slate-500" />
-                                    )}
-                                </button>
-
-                                {/* Accordion Collapsible Inner List */}
-                                <div
-                                    className={`space-y-2 overflow-hidden transition-all duration-300 ease-in-out ${isExpanded ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0 pointer-events-none"
-                                        }`}
-                                >
-                                    {NAVIGATION_CONFIG.mobileSubMenus[item.name]?.map((sub) => (
-                                        <Link
-                                            key={sub.label}
-                                            href={sub.href}
-                                            onClick={closeSidebar}
-                                            className="flex rounded-lg items-center gap-2.5 pl-4 pr-5 py-2.5 border border-white/[0.08] bg-white/[0.03] text-slate-300 text-sm font-medium transition-all duration-200 hover:text-orange-400 hover:bg-white/[0.06] hover:pl-6"
-                                        >
-                                            {sub.label}
-                                        </Link>
-                                    ))}
-                                </div>
-                            </div>
-                        );
-                    })}
-                </nav>
-
-                {/* Footer and Lead Action CTAs inside Drawer */}
-                <div className="py-4 px-4 border-t border-white/[0.07] flex flex-col gap-2.5">
-                    <button
-                        onClick={(e) => { closeSidebar(); handleTalkToExpert(e); }}
-                        className="w-full py-3 rounded-xl text-white text-sm font-semibold cursor-pointer transition-all duration-200 hover:brightness-110 flex items-center justify-center gap-2"
-                        style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
-                    >
-                        Talk to an Expert
-                    </button>
-                    <button
-                        onClick={(e) => { closeSidebar(); handleContactUs(e); }}
-                        className="w-full py-3 rounded-xl bg-transparent text-slate-100 text-sm font-semibold border border-white/[0.15] flex items-center justify-center gap-2 cursor-pointer transition-all duration-200 hover:border-orange-400 hover:text-orange-400"
-                    >
-                        Contact Us <FaArrowRightLong />
-                    </button>
-                </div>
-            </aside>
+            <CartSlider />
+            <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
         </div>
     )
 }
