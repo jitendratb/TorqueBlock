@@ -2,7 +2,7 @@ import React from 'react';
 import OrdersClient from '../Components/Orders/OrdersClient';
 
 export const metadata = {
-    title: 'My Orders | TorqueBlock',
+    title: 'My Orders',
     description: 'Track your high-performance motorcycle tyre orders, view delivery history, and manage cancellation details on TorqueBlock.',
 };
 
