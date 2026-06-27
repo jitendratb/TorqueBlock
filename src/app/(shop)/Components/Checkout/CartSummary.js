@@ -17,10 +17,10 @@ export default function CartSummary({ subtotal, gstAmount, deliveryCharge, final
     }, []);
 
     return (
-        <section className="bg-white/10 border border-white/5 rounded-3xl p-6 backdrop-blur-xl space-y-6">
+        <section className="bg-white/10 border border-white/5 rounded-3xl p-4 backdrop-blur-xl space-y-4">
             <div className="flex items-center gap-2 border-b border-white/5 pb-4">
                 <IoReceiptOutline className="text-orange-500 text-lg" />
-                <h2 className="text-sm font-black uppercase tracking-widest text-white">
+                <h2 className="text-xs md:text-sm font-black md:uppercase md:tracking-widest text-white">
                     Order Summary
                 </h2>
             </div>
@@ -84,7 +84,6 @@ export default function CartSummary({ subtotal, gstAmount, deliveryCharge, final
                 <div className="flex justify-between items-center">
                     <div className="flex items-center gap-1.5">
                         <span>GST (18%)</span>
-                        <span className="text-[9px] bg-white/5 border border-white/10 px-1.5 py-0.5 rounded text-gray-400 font-bold uppercase tracking-wider">CGST+SGST</span>
                     </div>
                     <span className="text-zinc-200">{formatPrice(gstAmount)}</span>
                 </div>

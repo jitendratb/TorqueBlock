@@ -50,8 +50,8 @@ const NAVIGATION_CONFIG = {
             // { label: "Yamaha R15 V4", href: "/bikes/yamaha-r15-v4-tyres" },
             { label: "Kawasaki Ninja 300", href: "/bikes/kawasaki-ninja-300-tyres" },
             { label: "Triumph Speed 400", href: "/bikes/triumph-speed-400-tyres" },
-            {label:"Royal Enfield Interceptor 650" , href:"/bikes/royal-enfield-interceptor-650-tyres"},
-            {label:"Royal Enfield Continental GT 650", href:"/bikes/royal-enfield-continental-gt-650-tyres"}
+            { label: "Royal Enfield Interceptor 650", href: "/bikes/royal-enfield-interceptor-650-tyres" },
+            { label: "Royal Enfield Continental GT 650", href: "/bikes/royal-enfield-continental-gt-650-tyres" }
 
         ],
         "Tyre Comparison": [
@@ -66,7 +66,6 @@ const NAVIGATION_CONFIG = {
         ],
     }
 };
-
 
 const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
@@ -190,7 +189,6 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex, onAction }) => (
 ));
 TyreComparisonMegaMenu.displayName = "TyreComparisonMegaMenu";
 
-// --- Main Header Component ---
 
 function Header() {
     const pathname = usePathname();
@@ -211,25 +209,6 @@ function Header() {
         setIsMounted(true);
     }, []);
 
-    // Dynamic Whatsapp lead generation triggers
-    const handleTalkToExpert = useCallback((e) => {
-        e.preventDefault();
-        const message = NAVIGATION_CONFIG.whatsapp.expertMessage;
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-    }, []);
-
-    const handleContactUs = useCallback((e) => {
-        e.preventDefault();
-        const message = NAVIGATION_CONFIG.whatsapp.contactMessage;
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, "_blank");
-    }, []);
-
-    const handleTalk = useCallback((message) => {
-        const mess = `Hi Torque Block! ${message}`;
-        window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mess)}`, "_blank");
-    }, []);
-
-    // Passive scroll listener for sleek backdrop-blur toggles
     useEffect(() => {
         const handleScroll = () => {
             setScrolled(document.documentElement.scrollTop > 50);
@@ -239,7 +218,6 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Global Key Events for full Accessibility (Escape closes overlays)
     useEffect(() => {
         const handleGlobalKeys = (e) => {
             if (e.key === "Escape") {
@@ -251,7 +229,6 @@ function Header() {
         return () => window.removeEventListener("keydown", handleGlobalKeys);
     }, []);
 
-    // Mobile scroll-lock management
     useEffect(() => {
         if (sidebarOpen) {
             document.body.style.overflow = 'hidden';
@@ -269,12 +246,6 @@ function Header() {
     const handleMouseLeave = useCallback(() => {
         const timeout = setTimeout(() => setActiveHover(null), 120);
         setHoverTimeout(timeout);
-    }, []);
-
-    const closeSidebar = useCallback(() => setSidebarOpen(false), []);
-
-    const toggleMobileExpanded = useCallback((name) => {
-        setMobileExpanded(prev => prev === name ? null : name);
     }, []);
 
     return (
@@ -336,43 +307,48 @@ function Header() {
                                             {item.name}
                                         </span>
                                     )}
-                              
+
                                 </li>
                             );
                         })}
                     </ul>
 
-                    <div className='flex items-center justify-end gap-4 w-full lg:max-w-sm xl:max-w-lg'>
+                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-lg'>
                         <SearchBar />
-                        <button
-                            onClick={() => setCartSliderOpen(true)}
-                            className="relative flex items-center justify-center h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20 transition-all duration-200 cursor-pointer text-white gap-2"
-                            aria-label="Open cart"
-                        >
-                            <IoCartOutline className='text-xl' /> 
-                            <span className="text-sm font-bold uppercase  hidden sm:block">Cart</span>
-                            {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
-                                    {totalItems}
-                                </span>
-                            )}
-                        </button>
 
-                        <button
-                            aria-label="Open navigation menu"
-                            aria-expanded={sidebarOpen}
-                            onClick={() => setSidebarOpen(true)}
-                            className="flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] bg-white/10 hover:bg-white/20 transition-all duration-200 cursor-pointer text-white"
-                        >
-                            <IoMdMenu className='text-2xl' />
-                        </button>
+                        <div>
+                            <button
+                                onClick={() => setCartSliderOpen(true)}
+                                className="relative hidden md:flex border border-gray-400  items-center justify-center h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20  transition-all duration-200 cursor-pointer text-white gap-2"
+                                aria-label="Open cart"
+                            >
+                                <IoCartOutline className='text-xl' />
+                                <span className="text-sm font-bold uppercase  hidden sm:block">Cart</span>
+                                {totalItems > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
+                                        {totalItems}
+                                    </span>
+                                )}
+                            </button>
+                        </div>
+
+                        <div className=''>
+                            <button
+                                aria-label="Open navigation menu"
+                                aria-expanded={sidebarOpen}
+                                onClick={() => setSidebarOpen(true)}
+                                className="flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] bg-white/10 hover:bg-white/20 transition-all duration-200 border border-gray-400 cursor-pointer text-white"
+                            >
+                                <IoMdMenu className='text-2xl' />
+                            </button>
+                        </div>
                     </div>
                 </nav>
             </header>
 
-            <ManuSlider 
-                isOpen={sidebarOpen} 
-                onClose={() => setSidebarOpen(false)} 
+            <ManuSlider
+                isOpen={sidebarOpen}
+                onClose={() => setSidebarOpen(false)}
                 setIsLoginOpen={setIsLoginOpen}
                 whatsappNumber={WHATSAPP_NUMBER}
                 whatsappMessage={NAVIGATION_CONFIG.whatsapp.contactMessage}

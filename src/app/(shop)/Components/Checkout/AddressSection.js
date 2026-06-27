@@ -17,15 +17,20 @@ export default function AddressSection({ selectedAddressId, onSelectAddress, set
         }
     }, [isAuthenticated, fetchAddresses, addresses.length]);
 
+    useEffect(() => {
+        if (!isAuthenticated) {
+            window.location.href = '/';
+        }
+    }, [isAuthenticated]);
+
     if (!isAuthenticated) {
-        window.location.href = '/login';
         return null;
     }
 
     return (
-        <div className="p-5 md:p-6 rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-xl space-y-4">
+        <div className="p-4 rounded-3xl bg-zinc-900/40 border border-white/5 backdrop-blur-xl space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-sm font-black uppercase tracking-wider text-white flex items-center gap-2">
+                <h2 className="text-xs md:text-sm font-black md;uppercase md:tracking-wider text-white flex items-center gap-2">
                     <IoLocationOutline className="text-orange-500 text-lg" />
                     Delivery Address
                 </h2>

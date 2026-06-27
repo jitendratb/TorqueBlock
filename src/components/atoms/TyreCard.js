@@ -30,7 +30,8 @@ export default function ProductCard({ product, tyre, className }) {
             : "Request Price";
 
     const labelText = "Price"
-    const sizeCountText = product?.quantity > 0 ? "In Stock" : "Out of Stock";
+    const sizeCountText = product?.isStock ? "In Stock" : "Out of Stock";
+
 
     const handleCardClick = () => {
               router.push(`/tyres/${tyre?.identifier}/${product?.size.toLowerCase().replace(/[\s/]/g, '-')}`);
@@ -39,7 +40,7 @@ export default function ProductCard({ product, tyre, className }) {
     return (
         <div 
             onClick={handleCardClick} 
-            className={`group mt-1 relative flex flex-col w-full bg-zinc-900/40 hover:bg-zinc-900/70 backdrop-blur-md border border-white/5 hover:border-orange-500/30 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 ${className}`}  
+            className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/10 hover:bg-zinc-900/70 backdrop-blur-md border border-white/5 hover:border-orange-500/30 rounded-3xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 ${className}`}  
         >
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-orange-500/0 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -52,16 +53,16 @@ export default function ProductCard({ product, tyre, className }) {
                 />
                 
                 <span className={`absolute top-4 right-4 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase tracking-wider backdrop-blur-md border transition-all duration-300 ${
-                    product?.quantity > 0 
+                    product?.isStock 
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_10px_rgba(16,185,129,0.1)]" 
                         : "bg-red-500/10 border-red-500/20 text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
                 }`}>
                     <span className="relative flex h-1.5 w-1.5">
-                        {product?.quantity > 0 && (
+                        {product?.isStock && (
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         )}
                         <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${
-                            product?.quantity > 0 ? "bg-emerald-500" : "bg-red-500"
+                            product?.isStock ? "bg-emerald-500" : "bg-red-500"
                         }`}></span>
                     </span>
                     <span>{sizeCountText}</span>

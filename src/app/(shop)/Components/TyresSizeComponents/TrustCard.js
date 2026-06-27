@@ -8,7 +8,7 @@ function TrustCard({ tyre }) {
     const whatsappMessage = `Hi! I'm checking out the *${productName}*${sizeLabel ? ` (${sizeLabel})` : ''} on Torque Block. I'd like to confirm the fitment for my bike and claim the exclusive WhatsApp offer!\n\n• Bike Model & Year: \n• Current Tyre Size: `;
 
     return (
-        <div className="border border-white/10 bg-white/[0.02] backdrop-blur-sm p-4 lg:p-8 rounded-2xl flex flex-col lg:flex-row gap-4 items-center transition-colors hover:border-white/20 hover:bg-white/[0.04]">
+        <div className="border border-white/10 bg-white/10 backdrop-blur-sm p-4 lg:p-8 rounded-2xl flex flex-col lg:flex-row gap-4 items-center transition-colors hover:border-white/20 hover:bg-white/[0.04]">
             <div className="md:flex-1 space-y-6 text-center lg:text-left">
                 <div className="space-y-3">
                      <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[10px] md:text-xs font-bold uppercase tracking-wider">

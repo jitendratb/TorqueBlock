@@ -4,6 +4,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import useCartStore from '@/stores/cartStore';
 import useAuthStore from '@/stores/authStore';
+import { useToast } from '@/context/ToastContext';
 import Login from '@/components/organisms/login';
 import Image from "@/components/molecules/CustomImage";
 import Slider from './Slider';
@@ -13,7 +14,17 @@ import { IoCartOutline } from "react-icons/io5";
 export default function CartSlider() {
     const [isLogin, setIsLogin] = useState(false);
     const { isAuthenticated } = useAuthStore();
+    const toast = useToast();
     const { cart, isSliderOpen, setSliderOpen, removeFromCart, updateQuantity, getCartTotal } = useCartStore();
+
+    const hasOutOfStockItems = useMemo(() => {
+        return cart.some(item => {
+            const frontOut = item.selectedFront && item.selectedFront.isStock === false;
+            const rearOut = item.selectedRear && item.selectedRear.isStock === false;
+            const genOut = item.selectedGeneric && item.selectedGeneric.isStock === false;
+            return frontOut || rearOut || genOut;
+        });
+    }, [cart]);
 
     const formatPrice = useCallback((price) => {
         return new Intl.NumberFormat('en-IN', {
@@ -39,9 +50,16 @@ export default function CartSlider() {
         if (item.selectedGeneric) specs.push(`Size: ${item.selectedGeneric.size}`);
 
         const itemImage = product.productImages?.[0] || '';
+        const isFrontOut = item.selectedFront && item.selectedFront.isStock === false;
+        const isRearOut = item.selectedRear && item.selectedRear.isStock === false;
+        const isGenOut = item.selectedGeneric && item.selectedGeneric.isStock === false;
+        const isItemOutOfStock = isFrontOut || isRearOut || isGenOut;
 
         return (
-            <div key={item.id} className="flex items-center gap-4 p-4 rounded-2xl bg-zinc-900/40 border border-white/5 hover:border-white/10 hover:bg-zinc-900/60 transition-all duration-300 group"  >
+            <div key={item.id} className={`flex relative items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${isItemOutOfStock
+                    ? "bg-red-950/10 border border-red-500/15 hover:border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.05)]"
+                    : "bg-zinc-900/40 border border-white/5 hover:border-white/10 hover:bg-zinc-900/60"
+                }`}  >
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black/40 flex items-center justify-center">
                     {itemImage ? (
                         <Image
@@ -54,7 +72,15 @@ export default function CartSlider() {
                     ) : (
                         <span className="text-[9px] font-bold text-zinc-600 uppercase">No Image</span>
                     )}
+
+
                 </div>
+
+                {isItemOutOfStock && (
+                    <span className="absolute top-4 left-4 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-[8px] font-black text-red-400 uppercase tracking-wider">
+                        Out of Stock
+                    </span>
+                )}
 
                 <div className="flex-1 flex flex-col justify-between min-w-0 h-full">
                     <div>
@@ -157,14 +183,20 @@ export default function CartSlider() {
                     <Link
                         href="/checkout"
                         onClick={(e) => {
-                            if (!isAuthenticated) {
+                            if (hasOutOfStockItems) {
+                                e.preventDefault();
+                                toast.warning("Please remove out of stock items from your cart before proceeding.");
+                            } else if (!isAuthenticated) {
                                 e.preventDefault();
                                 setIsLogin(true);
                             } else {
                                 handleClose();
                             }
                         }}
-                        className="group w-full py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] text-center bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer"
+                        className={`group w-full py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] text-center transition-all duration-300 flex items-center justify-center gap-2 ${hasOutOfStockItems
+                                ? "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50 border border-white/5"
+                                : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] cursor-pointer"
+                            }`}
                     >
                         Secure Checkout
                         <FaArrowRightLong className="text-xs group-hover:translate-x-1 transition-transform duration-300" />
@@ -172,7 +204,7 @@ export default function CartSlider() {
                 </div>
             </div>
         );
-    }, [cart, getCartTotal, formatPrice, handleClose, isAuthenticated]);
+    }, [cart, getCartTotal, formatPrice, handleClose, isAuthenticated, hasOutOfStockItems, toast]);
 
     return (
         <>

@@ -84,14 +84,14 @@ export default function TyreDataDetails({ tyreData }) {
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric);
 
-        if (selectedOpposite) {
-            toast.success(`Matched Pair (${tyreData.size} + ${selectedOpposite.size}) added to cart`);
-        } else {
-            toast.success(`${title} (${tyreData.size}) added to cart`);
-        }
     };
 
     const handleBuyNow = () => {
+        if (!tyreData?.isStock) {
+            toast.warning("This product is currently out of stock.");
+            return;
+        }
+
         if (!isAuthenticated) {
             setIslogin(true)
             return
@@ -126,12 +126,12 @@ export default function TyreDataDetails({ tyreData }) {
     };
 
     return (
-        <section className="w-full relative">
+        <section className="w-full relative pb-4 lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
 
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
-                        <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar mx-auto">
+                        <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">
                             {gallery?.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
@@ -155,7 +155,7 @@ export default function TyreDataDetails({ tyreData }) {
                             )}
                         </div>
                     </div>
-                    <div className="relative flex flex-col mb-4 sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
+                    <div className="relative hidden lg:flex flex-col mb-4 sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left gap-2 w-full">
                             <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Need Free Expert Advice?</h3>
                             <p className="text-xs sm:text-xs font-medium text-zinc-400 leading-relaxed sm:border-l-2 sm:border-green-500/50 sm:pl-3">
@@ -181,11 +181,11 @@ export default function TyreDataDetails({ tyreData }) {
                         </div>
 
                         <div className="space-y-2">
-                            <h1 className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] uppercase drop-shadow-2xl">
+                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] uppercase drop-shadow-2xl">
                                 {title}
                             </h1>
                             {subtitle && (
-                                <p className="text-sm font-medium text-zinc-400 leading-relaxed max-w-xl border-l-2 border-orange-500/50 pl-4 py-0.5">
+                                <p className="text-xs md:text-sm font-medium text-zinc-400 leading-relaxed max-w-xl md:border-l-2 md:border-orange-500/50 pl-0 md:pl-4 py-0.5">
                                     {subtitle}
                                 </p>
                             )}
@@ -196,7 +196,7 @@ export default function TyreDataDetails({ tyreData }) {
                         <div className="flex flex-wrap items-center gap-2">
                             <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
                                 <HiFire className="text-orange-500 text-sm" />
-                                <span className="text-[10px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
+                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
                                     High Performance
                                 </span>
                             </div>
@@ -204,7 +204,7 @@ export default function TyreDataDetails({ tyreData }) {
                             {categoryName && (
                                 <div className="flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
                                     <FaTag className="text-orange-400 text-[10px]" />
-                                    <span className="text-[10px] md:text-[11px] font-black text-orange-400 uppercase tracking-widest">
+                                    <span className="text-[9px] md:text-[11px] font-black text-orange-400 uppercase tracking-widest">
                                         {categoryName}
                                     </span>
                                 </div>
@@ -212,14 +212,14 @@ export default function TyreDataDetails({ tyreData }) {
 
                             <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
                                 <FaMotorcycle className="text-orange-500 text-sm" />
-                                <span className="text-[10px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
+                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
                                     {tyreData?.position}
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white/10 p-5 md:p-6 rounded-3xl border border-white/5 shadow-2xl backdrop-blur-xl flex flex-col gap-4 relative overflow-hidden">
+                    <div className="bg-white/10 p-4  rounded-3xl border border-white/5 shadow-2xl backdrop-blur-xl flex flex-col gap-4 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none" />
 
                         <div className="flex flex-col relative z-10 gap-3">
@@ -233,10 +233,16 @@ export default function TyreDataDetails({ tyreData }) {
                                     </span>
                                 </div>
 
-                                <div className="flex items-center gap-1.5 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 backdrop-blur-xl shadow-lg">
-                                    <FaShieldAlt className="text-[10px] text-green-400" />
-                                    <p className="text-[9px] sm:text-[10px] font-bold text-green-100 uppercase tracking-widest">
-                                        {tyreData?.quantity > 0 ? 'In Stock' : 'Pre-order'}
+                                <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${
+                                    tyreData?.isStock 
+                                        ? 'border-green-500/20 bg-green-500/10' 
+                                        : 'border-red-500/20 bg-red-500/10'
+                                }`}>
+                                    <FaShieldAlt className={`text-[9px] ${tyreData?.isStock ? 'text-green-400' : 'text-red-400'}`} />
+                                    <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${
+                                        tyreData?.isStock ? 'text-green-100' : 'text-red-100'
+                                    }`}>
+                                        {tyreData?.isStock ? 'In Stock' : 'Out of Stock'}
                                     </p>
                                 </div>
                             </div>
@@ -277,13 +283,13 @@ export default function TyreDataDetails({ tyreData }) {
                     </div>
 
                     {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
-                        <div className="bg-white/10 border border-white/5 rounded-3xl p-5 space-y-4 backdrop-blur-md relative overflow-hidden">
+                        <div className="bg-white/10 border border-white/5 rounded-3xl p-4 space-y-2 md:space-y-4 backdrop-blur-md relative overflow-hidden">
                             <div className="flex items-center justify-between">
-                                <h3 className="text-xs font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
-                                    <FaMotorcycle className="text-sm text-orange-500 animate-pulse" />
-                                    Complete Your Set (Pairing)
+                                <h3 className="text-xs md:text-md  font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
+                                    <FaMotorcycle className="text-lg text-orange-500 " />
+                                   Complete Your Set <span className="hidden"> (Pairing)</span>
                                 </h3>
-                                <span className="text-[10px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
+                                <span className="text-[10px] hidden md:block bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
                                     Highly Recommended
                                 </span>
                             </div>
@@ -294,7 +300,7 @@ export default function TyreDataDetails({ tyreData }) {
 
                             <Carousel
                                 items={tyreData.oppositeSizes}
-                                itemWidth={260}
+                                itemWidth='w-[240px] md:w-[260px]'
                                 gap={12}
                                 showArrows={true}
                                 showDots={false}
@@ -336,12 +342,10 @@ export default function TyreDataDetails({ tyreData }) {
                                                 </div>
                                             </div>
 
-                                            {/* Middle Row: Size */}
                                             <h4 className={`text-base font-black transition-colors tracking-tight mb-1 ${!inStock ? "text-zinc-500" : "text-white group-hover:text-orange-400"}`}>
                                                 {item.size}
                                             </h4>
 
-                                            {/* Bottom Row: Price label and value */}
                                             <div className="flex justify-between items-baseline w-full mt-2 pt-2 border-t border-white/5">
                                                 <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
                                                     Price
@@ -360,15 +364,15 @@ export default function TyreDataDetails({ tyreData }) {
                     <div className="grid grid-cols-2 gap-4  relative z-10">
                         <button
                             onClick={handleAddToCart}
-                            className="py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md shadow-lg cursor-pointer"
+                            className="py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/10 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                         >
                             Add to Cart
                         </button>
                         <button
                             onClick={handleBuyNow}
-                            className="py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] hover:-translate-y-1 transition-all cursor-pointer"
+                            className="py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                         >
-                            Buy Now {selectedOpposite && `(${formatPrice(totalPrice)})`}
+                            Buy Now {selectedOpposite && <span className="hidden md:block"> ({formatPrice(totalPrice)})</span>}
                         </button>
                     </div>
                 </div>

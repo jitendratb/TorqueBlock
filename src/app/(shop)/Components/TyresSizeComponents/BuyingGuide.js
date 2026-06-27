@@ -20,7 +20,7 @@ function BuyingGuide({ tyreData }) {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {hasWhoShouldBuy && (
-                    <div className=" relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:shadow-[0_12px_24px_-10px_rgba(16,185,129,0.15)]">
+                    <div className=" relative overflow-hidden rounded-2xl bg-white/10 to-zinc-950/60 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:shadow-[0_12px_24px_-10px_rgba(16,185,129,0.15)]">
 
                         <div className="relative z-10 space-y-4">
                             <div className="flex items-center gap-3">
@@ -52,7 +52,7 @@ function BuyingGuide({ tyreData }) {
                 )}
 
                 {hasWhoShouldAvoid && (
-                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-red-500/10 hover:shadow-[0_12px_24px_-10px_rgba(239,68,68,0.15)]">
+                    <div className="relative overflow-hidden rounded-2xl bg-white/10 to-zinc-950/60 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-red-500/10 hover:shadow-[0_12px_24px_-10px_rgba(239,68,68,0.15)]">
                         <div className="relative z-10 space-y-4">
                             <div className="flex items-center gap-3">
                                 <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400">
@@ -83,7 +83,7 @@ function BuyingGuide({ tyreData }) {
                 )}
 
                 {hasBestUseCases && (
-                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-b from-zinc-900/30 to-zinc-950/60 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-orange-500/40 hover:bg-orange-500/10 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
+                    <div className="relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-orange-500/40 hover:bg-orange-500/10 hover:shadow-[0_12px_24px_-10px_rgba(249,115,22,0.15)]">
 
                         <div className="relative z-10 space-y-4">
                             <div className="flex items-center gap-3">

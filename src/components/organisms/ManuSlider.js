@@ -1,18 +1,27 @@
 "use client";
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import Slider from './Slider';
-import { IoHomeOutline, IoDiscOutline, IoSpeedometerOutline, IoGitCompareOutline, IoReceiptOutline, IoChevronForwardOutline, IoLogInOutline, IoLogOutOutline, IoTrendingUpOutline } from 'react-icons/io5';
+import { IoHomeOutline, IoDiscOutline, IoSpeedometerOutline, IoGitCompareOutline, IoReceiptOutline, IoChevronForwardOutline, IoLogInOutline, IoLogOutOutline, IoTrendingUpOutline, IoCartOutline } from 'react-icons/io5';
 import useAuthStore from '@/stores/authStore';
+import useCartStore from '@/stores/cartStore';
 
 export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, whatsappNumber, whatsappMessage }) {
- 
+
   const pathname = usePathname();
   const router = useRouter();
   const { isAuthenticated, logout } = useAuthStore();
+  const { cart, setSliderOpen } = useCartStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const totalItems = mounted ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
   const handleTalkToExpert = useCallback((e) => {
     e.preventDefault();
@@ -35,7 +44,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
 
   const footerContent = (
     <div className="flex flex-col gap-2 w-full pt-1">
-      {isAuthenticated ? (
+      {mounted && isAuthenticated ? (
         <button
           onClick={() => { logout(); onClose(); }}
           className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
@@ -43,16 +52,16 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
           <IoLogOutOutline className="text-sm" />
           Logout
         </button>
-      ):(
-          <button
-        onClick={() => { setIsLoginOpen(true); onClose(); }}
-        className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
-      >
-        <IoLogInOutline className="text-sm" />
-        Login
-      </button>
+      ) : (
+        <button
+          onClick={() => { setIsLoginOpen(true); onClose(); }}
+          className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
+        >
+          <IoLogInOutline className="text-sm" />
+          Login
+        </button>
       )}
-    
+
       <button
         onClick={handleTalkToExpert}
         className="w-full py-3 rounded-xl text-white text-xs font-bold uppercase tracking-widest cursor-pointer transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]"
@@ -103,7 +112,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             </Link>
 
             <button
-              onClick={() => { if(isAuthenticated){router.push('/orders'); onClose();}else{setIsLoginOpen(true); onClose();} }}
+              onClick={() => { if (isAuthenticated) { router.push('/orders'); onClose(); } else { setIsLoginOpen(true); onClose(); } }}
               className={`flex flex-col items-start gap-1.5 p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/orders'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400 shadow-[inset_0_0_12px_rgba(249,115,22,0.05)]'
                 : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-300 hover:text-white hover:bg-white/[0.04]'
@@ -113,6 +122,28 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               <span className="text-[10px] font-bold uppercase tracking-wider">My Orders</span>
             </button>
           </div>
+        </div>
+
+        <div className='space-y-2 md:hidden'>
+          <div className="flex items-center gap-2 px-1">
+            <span className="text-[9px] font-black text-orange-500 tracking-widest uppercase">Shopping Cart</span>
+            <div className="flex-1 h-[1px] bg-white/[0.04]" />
+          </div>
+
+          <button
+            onClick={() => { setSliderOpen(true); onClose(); }}
+            className="col-span-2 flex items-center justify-between p-3 rounded-xl border border-white/[0.05] bg-white/[0.02] hover:border-white/[0.1] hover:bg-white/[0.04] text-zinc-300 hover:text-white transition-all duration-300 active:scale-95 text-left w-full cursor-pointer"
+          >
+            <div className="flex items-center gap-2">
+              <IoCartOutline className="text-lg text-orange-500" />
+              <span className="text-[10px] font-bold uppercase tracking-wider">Shopping Cart</span>
+            </div>
+            {totalItems > 0 && (
+              <span className="px-2 py-0.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-[9px] font-black text-orange-400">
+                {totalItems} Items
+              </span>
+            )}
+          </button>
         </div>
 
         {/* SECTION 2: CATALOGS */}

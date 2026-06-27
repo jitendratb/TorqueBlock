@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const TorqueBlockApi = axios.create({
-    baseURL: 'https://api.torqueblock.com/api/v1',
-//    baseURL:'http://localhost:4000/api/v1',
+    // baseURL: 'https://api.torqueblock.com/api/v1',
+   baseURL:'http://localhost:4000/api/v1',
     timeout: 30000, 
     headers: {
         'Content-Type': 'application/json',

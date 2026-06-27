@@ -38,7 +38,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
     return (
         <div className="space-y-4">
             <div className={desClassName}>
-                <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-3">
+                <div className="flex items-center gap-3  mb-3">
                     <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
                         Description
                     </h2>
@@ -57,7 +57,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
             <section className={`border-t border-white/10  my-4 ${sizesClassName}`}>
                 <div className="">
                     <div className="space-y-4 py-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between border-l-2 border-orange-500 pl-3 mb-6">
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between mb-4">
                             <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
                                 Select Your Size
                             </h2>

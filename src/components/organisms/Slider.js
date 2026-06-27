@@ -16,10 +16,18 @@ export default function Slider({ isOpen = false, onClose, title, children, size 
 
     useEffect(() => {
         if (isOpen) {
-            const originalStyle = window.getComputedStyle(document.body).overflow;
-            document.body.style.overflow = 'hidden';
+            const locks = parseInt(document.body.dataset.scrollLocks || '0', 10);
+            if (locks === 0) {
+                document.body.style.overflow = 'hidden';
+            }
+            document.body.dataset.scrollLocks = (locks + 1).toString();
             return () => {
-                document.body.style.overflow = originalStyle;
+                const currentLocks = parseInt(document.body.dataset.scrollLocks || '0', 10);
+                const newLocks = Math.max(0, currentLocks - 1);
+                document.body.dataset.scrollLocks = newLocks.toString();
+                if (newLocks === 0) {
+                    document.body.style.overflow = '';
+                }
             };
         }
     }, [isOpen]);

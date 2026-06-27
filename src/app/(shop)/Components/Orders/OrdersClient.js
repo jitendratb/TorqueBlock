@@ -21,6 +21,11 @@ export default function OrdersClient() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [cancelOrderId, setCancelOrderId] = useState(null);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -84,55 +89,67 @@ export default function OrdersClient() {
   }, [orders, activeTab, searchQuery]);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (isMounted && !isAuthenticated) {
       router.push('/');
     }
-  }, [isAuthenticated, router]);
+  }, [isMounted, isAuthenticated, router]);
 
-  if (!isAuthenticated) {
+  if (!isMounted || !isAuthenticated) {
     return null;
   }
 
   return (
     <div className="space-y-4">
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white/10 border border-white/5 rounded-2xl p-4.5 backdrop-blur-xl flex items-center justify-between gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-          <div className="space-y-1">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 block">Total Orders</span>
-            <span className="text-xl font-black text-white">{stats.total}</span>
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        {/* Card 1: Total Orders */}
+        <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-orange-500/30 rounded-2xl p-4 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(249,115,22,0.08)]">
+          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-orange-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="space-y-1.5 relative z-10">
+            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block group-hover:text-zinc-300 transition-colors">Total Orders</span>
+            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">{stats.total}</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
-            <IoReceiptOutline className="text-lg" />
+          <div>
+            <div className="w-11 h-11 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400 group-hover:scale-110 group-hover:bg-orange-500/20 group-hover:border-orange-500/40 transition-all duration-300 relative z-10">
+              <IoReceiptOutline className="text-lg" />
+            </div>
           </div>
         </div>
 
-        <div className="bg-white/10 border border-white/5 rounded-2xl p-4.5 backdrop-blur-xl flex items-center justify-between gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-          <div className="space-y-1">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 block">Active Items</span>
-            <span className="text-xl font-black text-white">{stats.active}</span>
+        {/* Card 2: Active Items */}
+        <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-blue-500/30 rounded-2xl p-4 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(59,130,246,0.08)]">
+          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="space-y-1.5 relative z-10">
+            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block group-hover:text-zinc-300 transition-colors">Active Items</span>
+            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">{stats.active}</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400">
+          <div>
+          <div className="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 group-hover:scale-110 group-hover:bg-blue-500/20 group-hover:border-blue-500/40 transition-all duration-300 relative z-10">
             <IoPulseOutline className="text-lg" />
           </div>
+          </div>
         </div>
 
-        <div className="bg-white/10 border border-white/5 rounded-2xl p-4.5 backdrop-blur-xl flex items-center justify-between gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-          <div className="space-y-1">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 block">Completed</span>
-            <span className="text-xl font-black text-white">{stats.completed}</span>
+        {/* Card 3: Completed */}
+        <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-emerald-500/30 rounded-2xl p-5 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(16,185,129,0.08)]">
+          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-emerald-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="space-y-1.5 relative z-10">
+            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block group-hover:text-zinc-300 transition-colors">Completed</span>
+            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">{stats.completed}</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div className="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:scale-110 group-hover:bg-emerald-500/20 group-hover:border-emerald-500/40 transition-all duration-300 relative z-10">
             <IoCheckmarkCircleOutline className="text-lg" />
           </div>
         </div>
 
-        <div className="bg-white/10 border border-white/5 rounded-2xl p-4.5 backdrop-blur-xl flex items-center justify-between gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
-          <div className="space-y-1">
-            <span className="text-[9px] font-black uppercase tracking-wider text-zinc-500 block">Cancelled</span>
-            <span className="text-xl font-black text-white">{stats.cancelled}</span>
+        {/* Card 4: Cancelled */}
+        <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-rose-500/30 rounded-2xl p-5 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(244,63,94,0.08)]">
+          <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-rose-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+          <div className="space-y-1.5 relative z-10">
+            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-400 block group-hover:text-zinc-300 transition-colors">Cancelled</span>
+            <span className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">{stats.cancelled}</span>
           </div>
-          <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400">
+          <div className="w-11 h-11 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center text-rose-400 group-hover:scale-110 group-hover:bg-rose-500/20 group-hover:border-rose-500/40 transition-all duration-300 relative z-10">
             <IoCloseCircleOutline className="text-lg" />
           </div>
         </div>
@@ -140,7 +157,7 @@ export default function OrdersClient() {
 
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-white/10 border border-white/5 p-4 rounded-2xl backdrop-blur-xl shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
 
-        <div className="flex flex-wrap gap-1 w-full md:w-auto">
+        <div className="flex flex-1 overflow-x-auto md:gap-1 w-full md:w-auto">
           {[
             { id: 'all', label: 'All Orders' },
             { id: 'active', label: 'Active' },
@@ -150,9 +167,9 @@ export default function OrdersClient() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 cursor-pointer select-none ${activeTab === tab.id
-                  ? 'bg-white/10 text-white border border-white/10 shadow-[0_2px_10px_rgba(255,255,255,0.05)]'
-                  : 'text-zinc-400 hover:text-zinc-200 border border-transparent'
+              className={`px-4 min-w-28 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 cursor-pointer select-none ${activeTab === tab.id
+                ? 'bg-white/10 text-white border border-white/10 shadow-[0_2px_10px_rgba(255,255,255,0.05)]'
+                : 'text-zinc-400 hover:text-zinc-200 border border-transparent'
                 }`}
             >
               {tab.label}

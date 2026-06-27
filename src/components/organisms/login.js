@@ -78,7 +78,6 @@ function Login({ isOpen, onClose }) {
             setStep('otp');
             setTimer(30);
             setIsTimerActive(true);
-            console.log("otp", data?.otp);
             toast.success(data?.message || "OTP Sent Successfully");
         } catch (err) {
             setError(err?.response?.data?.message || 'Failed to send OTP. Please check your connection.');
@@ -257,7 +256,7 @@ function Login({ isOpen, onClose }) {
                                 </button>
                             </div>
 
-                              <div className="grid grid-cols-6 gap-2 px-4" onPaste={handleOtpPaste}>
+                              <div className="grid grid-cols-6 gap-2 md:px-4" onPaste={handleOtpPaste}>
                                 {otp.map((digit, idx) => (
                                     <Input
                                         key={idx}

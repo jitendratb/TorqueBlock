@@ -163,7 +163,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                 </button>
             )}
 
-            {showArrows && hasRight && (
+            {showArrows && hasRight && items.length > 1 && (
                 <button
                     onClick={(e) => {
                         e.preventDefault();

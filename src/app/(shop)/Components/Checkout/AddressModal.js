@@ -109,7 +109,7 @@ export default function AddressModal({ isOpen, address, onClose }) {
             closeOnBackdropClick={!isLoading}
             showCloseButton={!isLoading}
         >
-            <form onSubmit={handleSubmit} className="max-h-[400px] space-y-4 overflow-y-auto px-2">
+            <form onSubmit={handleSubmit} className="max-h-[300px] lg:max-h-[400px] space-y-4 overflow-y-auto px-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
                         type="text"
@@ -247,7 +247,7 @@ export default function AddressModal({ isOpen, address, onClose }) {
                         onChange={handleChange}
                         disabled={isLoading}
                     />
-                    <label htmlFor="isDefault" className="text-xs font-bold uppercase tracking-wider text-gray-300 select-none cursor-pointer">
+                    <label htmlFor="isDefault" className="text-xs font-bold md:uppercase md:tracking-wider text-gray-300 select-none cursor-pointer">
                         Set as Default Shipping Address
                     </label>
                 </div>
@@ -264,7 +264,7 @@ export default function AddressModal({ isOpen, address, onClose }) {
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.2)] disabled:opacity-50 transition cursor-pointer flex items-center justify-center gap-2"
+                        className="md:px-8 px-4 py-3.5 rounded-xl text-xs font-black md:uppercase md:tracking-widest bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.2)] disabled:opacity-50 transition cursor-pointer flex items-center justify-center gap-2"
                     >
                         {isLoading ? (
                             <>
