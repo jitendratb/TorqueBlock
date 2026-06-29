@@ -11,7 +11,7 @@ import AddressSection from './AddressSection';
 import CartSummary from './CartSummary';
 import PaymentSection from './PaymentSection';
 import Login from '@/components/organisms/login';
-import { IoCartOutline, IoLockClosedOutline } from 'react-icons/io5';
+import { IoCartOutline, IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
 import AddressModal from './AddressModal';
 
@@ -49,9 +49,8 @@ export default function CheckoutClient() {
     }, [addresses, selectedAddressId]);
 
     const subtotal = getCartTotal();
-    const gstAmount = Math.round(subtotal * 0.18);
     const deliveryCharge = subtotal > 0 ? 0 : 0;
-    const finalTotal = subtotal + gstAmount + deliveryCharge;
+    const finalTotal = subtotal + deliveryCharge;
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
@@ -247,7 +246,6 @@ export default function CheckoutClient() {
             <div className="lg:sticky lg:top-24 space-y-4">
                 <CartSummary
                     subtotal={subtotal}
-                    gstAmount={gstAmount}
                     deliveryCharge={deliveryCharge}
                     finalTotal={finalTotal}
                 />
@@ -260,20 +258,27 @@ export default function CheckoutClient() {
                     {isOrderPlacing ? (
                         <>
                             <CgSpinner className="animate-spin text-lg" />
-                            Placing Order...
+                            Processing...
                         </>
                     ) : (
                         <>
                             <IoLockClosedOutline className="text-sm" />
-                            Place Order & Pay
+                            {paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
                         </>
                     )}
                 </button>
 
-                <div className="flex justify-center items-center gap-1.5 text-[9px] text-zinc-400 font-black tracking-wider uppercase select-none">
-                    <IoLockClosedOutline className="text-orange-500 text-xs shrink-0" />
-                    <span>Secure 256-Bit SSL Encrypted Connection</span>
+                <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                        <IoShieldCheckmarkOutline className="text-emerald-400 text-xl" />
+                        <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">Secure Payment</span>
+                    </div>
+                    <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                        <IoRibbonOutline className="text-blue-400 text-xl" />
+                        <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine</span>
+                    </div>
                 </div>
+
             </div>
 
             <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />

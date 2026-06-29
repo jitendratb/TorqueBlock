@@ -3,12 +3,17 @@ import React, { use, useEffect, useState } from 'react'
 
 function H1Tags() {
   const [currentIndex, setCurrentIndex] = useState(0);
+
   const title = [
-  "India’s No.1 Destination for Performance Tyres",
-  "Find the Perfect Tyres for Your Bike & Riding Style",
-  "Get the Right Tyre Setup Without the Guesswork",
-  "Trusted by 50,000+ Riders Nationwide",
-];
+    "India's No.1 Performance Tyre Destination",
+    "India's Performance Tyre Experts",
+    "Trusted by Riders Across India",
+    "Your Performance Riding Partner",
+    "The Tyre Experts Riders Trust",
+    "India's Fastest Growing Tyre Platform",
+  ];
+
+
 
   useEffect(() => {
     const startTimeout = setTimeout(() => {

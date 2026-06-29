@@ -48,21 +48,19 @@ function TyreCard({ tyre }) {
             <span className="w-6 h-[2px] bg-orange-500 rounded-full"></span>
             <span className="text-zinc-400 text-[10px] font-black uppercase tracking-[0.4em]">Compound</span>
           </div>
-          <h2 className='text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-700 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2'>
+          <h2 className='text-2xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-orange-400 bg-[length:200%_auto] bg-left group-hover:bg-right transition-[background-position] duration-700 ease-out uppercase tracking-tighter leading-none drop-shadow-md line-clamp-2'>
             {tyre?.hero?.title}
           </h2>
-          {/* <h2 className='text-2xl md:text-3xl font-black text-white uppercase tracking-tighter leading-none group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-orange-400 transition-all duration-500 drop-shadow-md line-clamp-2'>
-                {tyre?.hero?.title}
-            </h2> */}
         </div>
 
         <div className="flex flex-col gap-5 mt-auto">
           <div className="transform group-hover:scale-[1.03] active:scale-[0.98] transition-transform duration-300">
-            <WhatsAppButton
-              text="Get Expert Recommendation"
-              value={`I'm interested in the *${tyre?.hero?.title}* tyre. ${tyre?.hero?.subtitle ? `(${tyre?.hero?.subtitle}) ` : ''}Can you help me check compatibility with my bike?`}
-              className='py-3'
-            />
+            <button className={`
+        relative overflow-hidden w-full py-2 lg:py-3 rounded-xl flex items-center justify-center font-semibold
+        transition-all duration-300 ease-in-out
+        bg-orange-500 text-white  hover:bg-orange-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:-translate-y-1 active:translate-y-0
+        
+      `} >Explore Tyres</button>
           </div>
         </div>
       </div>

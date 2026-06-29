@@ -18,7 +18,7 @@ function TrendCard({ item, className = "w-full md:w-[320px] lg:w-[360px]" }) {
 
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="absolute top-6 left-6 z-20 flex items-center gap-3 bg-zinc-900/40 border border-white/20 rounded-full px-2 py-1 shadow-2xl">
+            {/* <div className="absolute top-6 left-6 z-20 flex items-center gap-3 bg-zinc-900/40 border border-white/20 rounded-full px-2 py-1 shadow-2xl">
                 <div className={`flex items-center justify-center w-4 h-4 rounded-full ${isTrendingUp ? 'bg-emerald-500/20 text-emerald-400' : 'bg-red-500/20 text-red-400'}`}>
                     {isTrendingUp ? <FiTrendingUp className="text-lg" /> : <FiTrendingDown className="text-lg" />}
                 </div>
@@ -29,7 +29,7 @@ function TrendCard({ item, className = "w-full md:w-[320px] lg:w-[360px]" }) {
                         </span>
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             <div className="absolute bottom-0 inset-x-0 p-4 z-20 flex flex-col justify-end space-y-2">
                 <div className="transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 delay-75">

@@ -147,7 +147,7 @@ export default function CartSlider() {
                 </h3>
                 {totalItems > 0 && (
                     <span className="ml-2 px-2 py-0.5 rounded-lg bg-orange-500/10 border border-orange-500/20 text-[10px] font-black text-orange-400">
-                        {totalItems}
+                        {totalItems} items
                     </span>
                 )}
             </div>
@@ -170,14 +170,7 @@ export default function CartSlider() {
                     </div>
                 </div>
 
-                <div className="flex items-start gap-2 text-[9px] text-zinc-500 leading-relaxed font-medium">
-                    <svg className="w-3.5 h-3.5 text-zinc-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <span>
-                        Shipping charges and taxes are calculated at checkout based on your delivery location and chosen mode. Secured with 256-bit encryption.
-                    </span>
-                </div>
+              
 
                 <div>
                     <Link
@@ -198,7 +191,7 @@ export default function CartSlider() {
                                 : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] cursor-pointer"
                             }`}
                     >
-                        Secure Checkout
+                       Proceed to Checkout 
                         <FaArrowRightLong className="text-xs group-hover:translate-x-1 transition-transform duration-300" />
                     </Link>
                 </div>

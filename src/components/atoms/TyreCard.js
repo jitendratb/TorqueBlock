@@ -92,9 +92,9 @@ export default function ProductCard({ product, tyre, className }) {
                     </div>
 
                     <div 
-                        className="flex items-center justify-center w-8 h-8 md:w-9 md:h-9 rounded-xl bg-white/5 text-zinc-400 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm"
+                        className="flex items-center font-semibold justify-center w-auto h-8 md:h-9 px-4 rounded-md bg-white/10 text-white group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm"
                     >
-                        <FiArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform duration-300" />
+                      View Details
                     </div>
                 </div>
             </div>

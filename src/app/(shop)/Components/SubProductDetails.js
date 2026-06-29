@@ -13,7 +13,8 @@ import useAuthStore from "@/stores/authStore";
 import Login from "@/components/organisms/login";
 
 export default function TyreDataDetails({ tyreData }) {
-    const [isLogin, setIslogin] = useState(false)
+    const [isLogin, setIslogin] = useState(false);
+    const [pendingCheckout, setPendingCheckout] = useState(false);
     const router = useRouter();
     const { isAuthenticated } = useAuthStore()
     const { addToCart } = useCartStore();
@@ -44,6 +45,13 @@ export default function TyreDataDetails({ tyreData }) {
     useEffect(() => {
         setSelectedOpposite(null);
     }, [tyreData]);
+
+    useEffect(() => {
+        if (isAuthenticated && pendingCheckout) {
+            handleBuyNow(true);
+            setPendingCheckout(false);
+        }
+    }, [isAuthenticated, pendingCheckout]);
 
     const basePrice = tyreData?.price || 0;
     const oppositePrice = selectedOpposite ? (selectedOpposite.price || 0) : 0;
@@ -86,15 +94,16 @@ export default function TyreDataDetails({ tyreData }) {
 
     };
 
-    const handleBuyNow = () => {
+    const handleBuyNow = (bypassAuth = false) => {
         if (!tyreData?.isStock) {
             toast.warning("This product is currently out of stock.");
             return;
         }
 
-        if (!isAuthenticated) {
-            setIslogin(true)
-            return
+        if (!isAuthenticated && bypassAuth !== true) {
+            setPendingCheckout(true);
+            setIslogin(true);
+            return;
         }
 
         if (!parentTyre) {
@@ -173,13 +182,24 @@ export default function TyreDataDetails({ tyreData }) {
                 </div>
 
                 <div className="space-y-4">
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between gap-4">
-                            <p className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-orange-500">
-                                {`${brandName} PERFORMANCE SERIES`}
-                            </p>
-                        </div>
+                       <div className="space-y-4 mt-2 md:mt-0">
+                        <div className="flex items-center gap-4">
 
+                            <p className="text-[10px] lg:text-sm font-medium uppercase tracking-[0.2em] text-orange-500">
+                                {brandName} PERFORMANCE SERIES
+                            </p>
+
+                            <div className="absolute top-0 right-0 md:relative flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5 backdrop-blur-xl">
+                                <FaShieldAlt className="text-xs text-green-400" />
+
+                                <p className="text-xs font-medium text-green-100">
+                                    Trusted by 50,000+ riders
+                                </p>
+                            </div>
+
+                        </div>
+                        </div>
+                
                         <div className="space-y-2">
                             <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] uppercase drop-shadow-2xl">
                                 {title}
@@ -190,7 +210,7 @@ export default function TyreDataDetails({ tyreData }) {
                                 </p>
                             )}
                         </div>
-                    </div>
+        
 
                     <div className="space-y-5">
                         <div className="flex flex-wrap items-center gap-2">
@@ -228,9 +248,14 @@ export default function TyreDataDetails({ tyreData }) {
                                     <span className="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-[0.3em]">
                                         {selectedOpposite ? "Combined Price" : "Price"}
                                     </span>
-                                    <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
-                                        {formatPrice(totalPrice)}
-                                    </span>
+                                    <div className="flex gap-2 items-end">
+                                        <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
+                                            {formatPrice(totalPrice)}
+                                        </span>
+                                        <span className="text-[10px] font-medium text-zinc-400 ">
+                                            (Incl. of all taxes)
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${
@@ -272,11 +297,11 @@ export default function TyreDataDetails({ tyreData }) {
                         </div>
                         <div className="flex flex-col">
                             <span className="text-xs font-black uppercase tracking-wider">
-                                {isExpressEligible ? "Express 24h Delivery" : "Standard Delivery"}
+                                {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
                             </span>
                             <span className="text-[10px] font-medium text-zinc-400">
                                 {isExpressEligible
-                                    ? "Delivery within 24 hours*"
+                                    ? "Order dispatched within 24 hours*"
                                     : "Pre-ordered items are delivered in 5-7 business days"}
                             </span>
                         </div>
@@ -377,7 +402,10 @@ export default function TyreDataDetails({ tyreData }) {
                     </div>
                 </div>
             </div>
-            <Login isOpen={isLogin} onClose={() => setIslogin(false)} />
+            <Login isOpen={isLogin} onClose={() => {
+                setIslogin(false);
+                if (!isAuthenticated) setPendingCheckout(false);
+            }} />
         </section>
     );
 }

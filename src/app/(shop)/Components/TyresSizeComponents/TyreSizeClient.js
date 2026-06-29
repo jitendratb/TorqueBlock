@@ -15,7 +15,7 @@ function TyreSizeClient({ initialData }) {
             <SubProductDetails tyreData={tyreSize} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
-            <TrustCard tyre={tyreSize} />
+            {/* <TrustCard tyre={tyreSize} /> */}
             <FAQSection faqs={tyreSize?.faqs} />
         </div>
     )

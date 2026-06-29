@@ -98,17 +98,6 @@ export default function TyresPage() {
                     <p className="text-zinc-400 max-w-2xl text-sm md:text-xl mb-12 font-medium italic opacity-80">
                         ENGINEERED FOR MAXIMUM ADHERENCE. SELECT YOUR COMPOUND BELOW.
                     </p>
-
-                    <div className="group/btn relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-orange-500 to-emerald-500 rounded-full blur opacity-20 group-hover/btn:opacity-60 transition duration-1000 group-hover/btn:duration-200" />
-                        <div className="relative min-w-[400px]">
-                            <WhatsAppButton 
-                                text="CLAIM FREE UPGRADE PLAN" 
-                                value="Hey Torque Block! I'm looking to upgrade my tyres. Can I get my free Performance Fitment Plan to see what compounds match my riding style?" 
-                                className='h-14'
-                            />
-                        </div>
-                    </div>
                 </div>
             </section>
 

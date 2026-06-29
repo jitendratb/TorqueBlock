@@ -69,7 +69,7 @@ export default function Slider({ isOpen = false, onClose, title, children, size 
         >
             <div
                 onClick={handleBackdropClick}
-                className={`absolute inset-0 bg-black/5 backdrop-blur-xs transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+                className={`absolute inset-0 bg-black/5 backdrop-blur-[1px] transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0'}`}
             />
             <aside
                 role="dialog"

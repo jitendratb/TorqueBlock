@@ -48,7 +48,7 @@ function FloatingWhatsAppClient({ data }) {
     const [unreadCount, setUnreadCount] = useState(1);
     const [statusText, setStatusText] = useState('Online');
     const [mounted, setMounted] = useState(false);
-    
+
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const isDraggingRef = useRef(false);
     const dragStartPos = useRef({ x: 0, y: 0 });
@@ -90,17 +90,6 @@ function FloatingWhatsAppClient({ data }) {
             sequenceTimers.current.push(t2);
 
             const t3 = setTimeout(() => {
-                // setIsTyping(false);
-                // setStatusText('Online');
-                // setMessages(prev => [
-                //     ...prev,
-                //     {
-                //         id: 2,
-                //         text: "Not sure which tyre is right for you? Just let me know and I'll help you pick the best one!",
-                //         time: getFormattedTime()
-                //     }
-                // ]);
-
                 if (data?.message) {
                     const t4 = setTimeout(() => {
                         setIsTyping(true);
@@ -151,31 +140,6 @@ function FloatingWhatsAppClient({ data }) {
         return () => clearTimeout(scrollTimer);
     }, [messages, isTyping]);
 
-    const handleToggle = () => {
-        if (autoOpenTimer.current) {
-            clearTimeout(autoOpenTimer.current);
-        }
-        const nextState = !isOpen;
-        setIsOpen(nextState);
-        if (nextState) {
-            setUnreadCount(0);
-            startSequence();
-        }
-    };
-
-    const handleSendMessage = (e) => {
-        e.preventDefault();
-
-        const baseMessage = `Hi Team Torque Block!,
-        ${inputValue.trim() ? inputValue.trim() : "I’m enquiring about motorcycle tyres from the website."}`;
-        const phoneNumber = "916366625625";
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
-        const url = isMobile
-            ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(baseMessage)}`
-            : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(baseMessage)}`;
-        window.open(url, "_blank");
-    };
-
     const HandleFormClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -192,10 +156,10 @@ function FloatingWhatsAppClient({ data }) {
     const handleDragStart = (e) => {
         if (e.type === 'mousedown') e.preventDefault();
         isDraggingRef.current = false;
-        
+
         const clientX = e.touches ? e.touches[0].clientX : e.clientX;
         const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-        
+
         dragStartPos.current = {
             startX: clientX - position.x,
             startY: clientY - position.y,
@@ -206,8 +170,8 @@ function FloatingWhatsAppClient({ data }) {
         const handleDragMove = (moveEvent) => {
             const currentX = moveEvent.touches ? moveEvent.touches[0].clientX : moveEvent.clientX;
             const currentY = moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY;
-            
-            if (Math.abs(currentX - dragStartPos.current.clickX) > 5 || 
+
+            if (Math.abs(currentX - dragStartPos.current.clickX) > 5 ||
                 Math.abs(currentY - dragStartPos.current.clickY) > 5) {
                 isDraggingRef.current = true;
             }
@@ -223,7 +187,7 @@ function FloatingWhatsAppClient({ data }) {
             document.removeEventListener('mouseup', handleDragEnd);
             document.removeEventListener('touchmove', handleDragMove);
             document.removeEventListener('touchend', handleDragEnd);
-            
+
             setTimeout(() => {
                 isDraggingRef.current = false;
             }, 100);
@@ -238,103 +202,10 @@ function FloatingWhatsAppClient({ data }) {
     if (!mounted) return null;
 
     return (
-        <div 
+        <div
             className="fixed bottom-3 lg:bottom-9 right-3 lg:right-9 z-[9999] font-[Inter,sans-serif] text-zinc-100 select-none"
             style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
         >
-            <div className={`
-                absolute bottom-20 right-0 w-[350px] max-w-[calc(100vw-32px)] 
-                rounded-3xl  bg-zinc-950 shadow-[0_20px_50px_rgba(0,0,0,0.85)] 
-                overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] origin-bottom-right
-                ${isOpen
-                    ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-                    : 'opacity-0 scale-75 translate-y-10 pointer-events-none'
-                }
-            `}>
-                <div className="relative px-5 py-4 bg-gradient-to-r from-emerald-600 to-teal-700 flex items-center gap-3.5 border-b border-white/[0.06] shadow-md">
-                    <div className="absolute inset-0 bg-black/10 backdrop-blur-xs" />
-
-                    <div className="relative z-10 w-11 h-11 rounded-xl bg-white/15 border border-white/20 flex items-center justify-center overflow-hidden">
-                        {data?.avatar ? (
-                            <Image src={data.avatar} alt="Real Avatar" className="w-full h-full object-cover" fill sizes="44px" priority />
-                        ) : (
-                            <span className="text-lg font-black text-white select-none">
-                                {(data?.name || formatAdminName(data?.adminemail))?.charAt(0).toUpperCase()}
-                            </span>
-                        )}
-                    </div>
-
-                    <div className="relative z-10 flex-1 flex flex-col">
-                        <span className="text-sm font-black uppercase tracking-tight text-white leading-none">
-                            {data?.name || formatAdminName(data?.adminemail)}
-                        </span>
-                        <div className="flex items-center gap-1.5 mt-1">
-                            <span className={`w-1.5 h-1.5 rounded-full ${statusText === 'typing...' ? 'bg-orange-400 animate-pulse' : 'bg-green-400'}`} />
-                            <span className="text-[10px] font-bold tracking-wide text-emerald-100 uppercase">{statusText}</span>
-                        </div>
-                    </div>
-
-                    <button
-                        onClick={() => setIsOpen(false)}
-                        className="relative z-10 p-2 rounded-xl text-emerald-100 hover:text-white hover:bg-white/10 transition-all active:scale-90"
-                        aria-label="Minimize Chat"
-                    >
-                        <FaTimes size={16} />
-                    </button>
-                </div>
-
-                <div
-                    ref={chatContainerRef}
-                    className="h-[240px] p-5 overflow-y-auto bg-zinc-900/60 bg-[radial-gradient(ellipse_at_bottom,rgba(16,185,129,0.06)_0%,transparent_70%)] flex flex-col gap-3 scrollbar-hide"
-                >
-                    {messages.map((msg) => (
-                        <div
-                            key={msg.id}
-                            className={`relative max-w-[85%] rounded-2xl p-3.5  shadow-md animate-[slideUp_0.4s_ease-out_both] ${msg.isUser
-                                ? 'rounded-tr-none bg-gradient-to-br from-emerald-600 to-teal-700 self-end'
-                                : 'rounded-tl-none bg-gradient-to-br from-zinc-900 to-zinc-950 border border-white/5 self-start'
-                                }`}
-                        >
-                            <p className={`leading-relaxed text-sm font-medium m-0 font-[Inter,sans-serif] pb-2 ${msg.isUser ? 'text-white' : 'text-zinc-300'}`}>
-                                {msg.text}
-                            </p>
-                            <span className={`absolute right-3 bottom-1.5 text-[8px] font-bold uppercase tracking-wider ${msg.isUser ? 'text-emerald-100' : 'text-zinc-500'}`}>
-                                {msg.time}
-                            </span>
-                        </div>
-                    ))}
-
-                    {isTyping && (
-                        <div className="max-w-[75%] rounded-2xl rounded-tl-none bg-zinc-900 border border-white/5 p-3 flex items-center gap-2 self-start animate-fade-in shadow-md">
-                            <div className="flex gap-1 items-center py-1 px-1">
-                                <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full dot-anim-1" />
-                                <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full dot-anim-2" />
-                                <div className="w-1.5 h-1.5 bg-zinc-400 rounded-full dot-anim-3" />
-                            </div>
-                        </div>
-                    )}
-
-                    <div ref={chatEndRef} />
-                </div>
-
-                <form onSubmit={handleSendMessage} className="p-3 border-t border-white/[0.06] bg-zinc-950 flex gap-2 items-center">
-                    <input
-                        type="text"
-                        placeholder="Type message & ask expert..."
-                        value={inputValue}
-                        onChange={(e) => setInputValue(e.target.value)}
-                        className="flex-1 bg-zinc-900/90 border border-white/[0.08] hover:border-white/15 focus:border-emerald-500/50 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-zinc-500 outline-none transition-all"
-                    />
-                    <button
-                        type="submit"
-                        className="p-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white shadow-md shadow-emerald-500/10 hover:shadow-emerald-400/25 transition-all hover:-translate-y-0.5 active:translate-y-0 active:scale-95 flex items-center justify-center"
-                        aria-label="Send Message"
-                    >
-                        <FaPaperPlane size={12} />
-                    </button>
-                </form>
-            </div>
-
             <button
                 onMouseDown={handleDragStart}
                 onTouchStart={handleDragStart}
@@ -343,18 +214,12 @@ function FloatingWhatsAppClient({ data }) {
                 style={{ animation: 'float-gentle 4s ease-in-out infinite' }}
                 aria-label="WhatsApp Support Chat"
             >
-                {!isOpen && (
-                    <>
-                        <div className="radar-wave" />
-                        <div className="radar-wave-delayed" />
-                    </>
-                )}
 
-                {unreadCount > 0 && !isOpen && (
-                    <span className="absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 rounded-full bg-orange-500 text-[10px] font-black text-white flex items-center justify-center border-2 border-transparent animate-bounce shadow-md">
-                        {unreadCount}
-                    </span>
-                )}
+                <div className="radar-wave" />
+                <div className="radar-wave-delayed" />
+
+
+
 
                 <div className="transition-transform duration-300 group-hover:scale-110">
                     <FaWhatsapp size={28} />

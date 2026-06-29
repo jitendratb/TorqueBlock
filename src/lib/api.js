@@ -49,7 +49,11 @@ TorqueBlockApi.interceptors.response.use(
         const originalRequest = error.config;
 
         if (error.response) {
-            console.error('API Error Response:', error.response.status, error.response.data);
+            if (error.response.status === 401 || error.response.status === 400) {
+                console.warn('API Auth/Error Response:', error.response.status, error.response.data);
+            } else {
+                console.error('API Error Response:', error.response.status, error.response.data);
+            }
             
             if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/refresh-token')) {
                 originalRequest._retry = true;

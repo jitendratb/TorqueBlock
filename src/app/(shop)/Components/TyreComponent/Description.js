@@ -1,6 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import { FaMotorcycle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill, RiCheckboxCircleFill, RiCloseCircleFill } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
 import TyreCard from "@/components/atoms/TyreCard";
@@ -151,7 +152,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
                     <div className="border-t border-white/10 "></div>
                     <div className="py-4">
-                        <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-4">
+                        <div className="flex items-center gap-3 mb-4">
                             <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
                                 Commonly Used On
                             </h2>
@@ -167,7 +168,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                     tyre?.compatibleVehicles?.map((brand, idx) => (
                                         <div
                                             key={idx}
-                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
+                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-white/10 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
                                         >
                                             <FaMotorcycle className="text-orange-500 text-sm md:text-base" />
                                             <span>{brand?.brand} {brand?.model}</span>
@@ -175,7 +176,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                     ))) : (tyre?.commonlyUsedBikes?.map((bike, idx) => (
                                         <div
                                             key={idx}
-                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
+                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-white/10 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
                                         >
                                             <FaMotorcycle className="text-orange-500 text-sm md:text-base" />
                                             <span>{bike}</span>
@@ -193,49 +194,47 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
             </section>
             {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
                 <section className="relative border-t border-white/10 mt-4 py-4">
-                    <div className="flex items-center justify-between mb-6">
+
+                    {/* Section Header */}
+                    <div className="flex items-center gap-3 mb-5">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 ring-1 ring-orange-500/30 shadow-[0_0_14px_rgba(249,115,22,0.15)]">
+                            <RiShieldCheckFill className="text-orange-400 text-base" />
+                        </div>
                         <div>
-                            <div className="flex items-center gap-3 border-l-2 border-orange-500 pl-3 mb-2">
-                                <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
-                                    Performance Analysis
-                                </h2>
-                            </div>
-                            <p className="text-zinc-400 text-xs">
-                                Real-world strengths and limitations of this tyre.
+                            <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                                Performance Analysis
+                            </h2>
+                            <p className="text-zinc-500 text-[10px] mt-0.5">
+                                Real-world strengths &amp; limitations of this tyre
                             </p>
                         </div>
-
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        {tyre?.pros?.length > 0 && (
-                            <div className="group relative overflow-hidden rounded-2xl border border-green-500/20 ">
-                                <div className="p-4 lg:p-6">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="h-12 w-12 rounded-xl bg-green-500/10 border border-green-500/20 flex items-center justify-center">
-                                            <FaCheckCircle className="text-green-400 text-xl" />
-                                        </div>
 
+                        {tyre?.pros?.length > 0 && (
+                            <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-green-500/10 cursor-pointer transition-all duration-300 hover:border-green-500/40 hover:shadow-[0_4px_24px_rgba(16,185,129,0.10)]">
+
+                                <div className="p-4 lg:p-5">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/15 transition-all duration-300 group-hover:bg-green-500/25">
+                                            <RiThumbUpFill className="text-green-400 text-lg" />
+                                        </div>
                                         <div>
-                                            <h3 className="text-white font-bold text-lg">
+                                            <h3 className="text-white font-bold text-sm leading-tight">
                                                 Advantages
                                             </h3>
-                                            <p className="text-zinc-400 text-xs">
+                                            <p className="text-zinc-500 text-[10px] mt-0.5">
                                                 What riders love about this tyre
                                             </p>
                                         </div>
                                     </div>
 
                                     <ul className="space-y-2">
-                                        {tyre.pros.map((pro, index) => (
-                                            <li
-                                                key={index}
-                                                className="flex gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-all"
-                                            >
-                                                <div className="mt-1.5 h-2 w-2 rounded-full bg-green-400 shrink-0" />
-                                                <span className="leading-relaxed">
-                                                    {pro}
-                                                </span>
+                                        {tyre.pros?.slice(0,6).map((pro, index) => (
+                                            <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
+                                                <RiCheckboxCircleFill className="mt-0.5 shrink-0 text-sm text-green-400" />
+                                                <span className="leading-relaxed">{pro}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -245,35 +244,28 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
                         {/* CONS */}
                         {tyre?.cons?.length > 0 && (
-                            <div className="group relative overflow-hidden rounded-2xl border border-red-500/20">
+                            <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-red-500/10 cursor-pointer transition-all duration-300 hover:border-red-500/40 hover:shadow-[0_4px_24px_rgba(239,68,68,0.10)]">
 
-
-                                <div className="p-4 md:p-6">
-                                    <div className="flex items-center gap-3 mb-6">
-                                        <div className="h-12 w-12 rounded-xl shrink-0 bg-red-500/10 border border-red-500/20 flex items-center justify-center">
-                                            <FaTimesCircle className="text-red-400 text-xl" />
+                                <div className="p-4 lg:p-5">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/15 transition-all duration-300 group-hover:bg-red-500/25">
+                                            <RiThumbDownFill className="text-red-400 text-lg" />
                                         </div>
-
                                         <div>
-                                            <h3 className="text-white font-bold text-lg">
+                                            <h3 className="text-white font-bold text-sm leading-tight">
                                                 Limitations
                                             </h3>
-                                            <p className="text-zinc-400 text-xs">
+                                            <p className="text-zinc-500 text-[10px] mt-0.5">
                                                 Areas where alternatives may perform better
                                             </p>
                                         </div>
                                     </div>
 
                                     <ul className="space-y-2">
-                                        {tyre.cons.map((con, index) => (
-                                            <li
-                                                key={index}
-                                                className="flex gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-all"
-                                            >
-                                                <div className="mt-1.5 h-2 w-2 rounded-full bg-red-400 shrink-0" />
-                                                <span className="leading-relaxed">
-                                                    {con}
-                                                </span>
+                                        {tyre.cons?.slice(0,6)?.map((con, index) => (
+                                            <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
+                                                <RiCloseCircleFill className="mt-0.5 shrink-0 text-sm text-red-400" />
+                                                <span className="leading-relaxed">{con}</span>
                                             </li>
                                         ))}
                                     </ul>

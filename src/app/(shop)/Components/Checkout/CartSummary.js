@@ -5,7 +5,7 @@ import useCartStore from '@/stores/cartStore';
 import Image from '@/components/molecules/CustomImage';
 import { IoReceiptOutline } from 'react-icons/io5';
 
-export default function CartSummary({ subtotal, gstAmount, deliveryCharge, finalTotal }) {
+export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
     const { cart } = useCartStore();
 
     const formatPrice = useCallback((price) => {
@@ -81,12 +81,7 @@ export default function CartSummary({ subtotal, gstAmount, deliveryCharge, final
                     <span>Subtotal</span>
                     <span className="text-zinc-200">{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-1.5">
-                        <span>GST (18%)</span>
-                    </div>
-                    <span className="text-zinc-200">{formatPrice(gstAmount)}</span>
-                </div>
+
                 <div className="flex justify-between">
                     <span>Delivery Charge</span>
                     <span className="text-zinc-200">{formatPrice(deliveryCharge)}</span>

@@ -1,51 +1,95 @@
 "use client";
 
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
-import Image from "@/components/molecules/CustomImage"
+import Image from "@/components/molecules/CustomImage";
 import { useMemo, useState } from "react";
-import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag } from "react-icons/fa";
+import {
+    FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered,
+    FaShieldAlt, FaTag, FaTools, FaTruck, FaUserTie,
+    FaStar, FaRegStar, FaStarHalfAlt, FaCheckCircle,
+    FaFireAlt, FaAward, FaTimesCircle, FaLightbulb, FaBiking, FaLayerGroup,
+} from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
-import { FaTools, FaTruck, FaUserTie } from "react-icons/fa";
+import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
+import { RiSparkling2Fill } from "react-icons/ri";
 
 const tagConfig = {
-    Street: {
-        icon: <FaRoad className="text-zinc-300 text-sm" />,
-    },
-
-    "Weekend Rides": {
-        icon: <FaMotorcycle className="text-zinc-300 text-sm" />,
-    },
-
-    "High Performance": {
-        icon: <HiFire className="text-orange-500 text-sm" />,
-    },
-
-    "Extreme Grip": {
-        icon: <FaBolt className="text-yellow-400 text-sm" />,
-    },
-
-    "Bi-Compound": {
-        icon: <FaFlagCheckered className="text-green-400 text-sm" />,
-    },
-
-    Supersport: {
-        icon: <FaMotorcycle className="text-zinc-300 text-sm" />,
-    },
-
-    "Naked Sport": {
-        icon: <FaMotorcycle className="text-zinc-300 text-sm" />,
-    },
+    Street: { icon: <FaRoad className="text-zinc-300 text-xs" /> },
+    "Weekend Rides": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
+    "High Performance": { icon: <HiFire className="text-orange-500 text-xs" /> },
+    "Extreme Grip": { icon: <FaBolt className="text-yellow-400 text-xs" /> },
+    "Bi-Compound": { icon: <FaFlagCheckered className="text-green-400 text-xs" /> },
+    Supersport: { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
+    "Naked Sport": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
 };
+
+function StarRating({ rating = 4.5, count = 356 }) {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+        if (i <= Math.floor(rating)) {
+            stars.push(<FaStar key={i} className="text-orange-400 text-xs" />);
+        } else if (i === Math.ceil(rating) && rating % 1 !== 0) {
+            stars.push(<FaStarHalfAlt key={i} className="text-orange-400 text-xs" />);
+        } else {
+            stars.push(<FaRegStar key={i} className="text-zinc-600 text-xs" />);
+        }
+    }
+    return (
+        <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-0.5">{stars}</div>
+            <span className="text-orange-400 text-xs font-bold">{Number(rating).toFixed(1)}</span>
+            <span className="text-zinc-500 text-xs">({Number(count).toLocaleString()} reviews)</span>
+        </div>
+    );
+}
+
+function PriceCard({ tyre }) {
+    const startingPrice = tyre?.startingPrice;
+    const pricing = tyre?.pricing;
+    const inStock = tyre?.availability?.inStock;
+    const stockCount = tyre?.availability?.stockCount;
+
+    if (!startingPrice && !pricing) return null;
+
+    return (
+        <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
+            <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-orange-600/5 rounded-full blur-xl pointer-events-none" />
+
+            <div className="relative p-4">
+                <div className="flex items-start justify-between">
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">Starting Price</p>
+                        <div className="flex items-end gap-2">
+                            <span className="text-3xl md:text-4xl font-black text-white tracking-tight">
+                                &#8377;{Number(startingPrice).toLocaleString("en-IN")}
+                            </span>
+                            {tyre?.endingPrice && (
+                                <span className="text-zinc-500 text-sm mb-1 line-through">
+                                    &#8377;{Number(tyre.endingPrice).toLocaleString("en-IN")}
+                                </span>
+                            )}
+                        </div>
+                        <p className="text-zinc-500 text-[11px] mt-0.5">Price varies by size &bull; Inclusive of taxes</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    );
+}
+
+
 
 export default function ProductDetails({ tyre }) {
     const gallery = useMemo(() => tyre?.productImages || [], [tyre]);
-    const [activeImage, setActiveImage] = useState(gallery[0])
+    const [activeImage, setActiveImage] = useState(gallery[0]);
 
     const allTags = useMemo(() => {
         const eyebrow = tyre?.hero?.eyebrowText || "";
         const subtitle = tyre?.hero?.subtitle || "";
         const combinedText = `${eyebrow} ${subtitle}`.toLowerCase();
-        const tags = []
+        const tags = [];
 
         Object.keys(tagConfig).forEach(tag => {
             if (tag !== "High Performance" && combinedText.includes(tag.toLowerCase())) {
@@ -58,157 +102,150 @@ export default function ProductDetails({ tyre }) {
 
     return (
         <section className="w-full relative">
-            <div className="grid grid-cols-1 gap-2 md:gap-4 lg:grid-cols-2">
-                <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
-                    <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1">
-                        {gallery?.map((item, idx) => {
-                            const isActive = activeImage === item;
+            <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
+                <div className="flex flex-col gap-4">
+                    <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
+                        <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1">
+                            {gallery?.map((item, idx) => {
+                                const isActive = activeImage === item;
+                                return (
+                                    <button
+                                        key={idx}
+                                        type="button"
+                                        onClick={() => setActiveImage(item)}
+                                        onMouseEnter={() => setActiveImage(item)}
+                                        className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-95" : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"}`}
+                                    >
+                                        <Image
+                                            src={item}
+                                            alt={`${tyre?.productName || "Tyre"} thumbnail ${idx + 1}`}
+                                            fill
+                                            sizes="70px"
+                                            imageClassName="object-cover"
+                                        />
+                                    </button>
+                                );
+                            })}
+                        </div>
 
-                            return (
-                                <button key={idx} type="button" onClick={() => setActiveImage(item)} onMouseEnter={() => setActiveImage(item)} className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-lg border transition-all duration-300 ${isActive ? "border-orange-500" : "border-zinc-800 hover:border-zinc-600"}`}>
-                                    <Image src={item} alt={`${tyre?.name || "Tyre"} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
-                                </button>
-                            );
-                        })}
-                    </div>
-
-                    <div className="relative flex h-[350px] md:h-[450px] w-auto  items-center justify-center overflow-hidden">
-                        {activeImage && (
-                            <Image
-                                src={activeImage}
-                                alt={tyre?.name || "Tyre"}
-                                fill
-                                priority
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                imageClassName="object-contain transition-transform w-full duration-300 hover:scale-105"
-                            />
-                        )}
+                        <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
+                            {activeImage && (
+                                <Image
+                                    src={activeImage}
+                                    alt={tyre?.productName || "Tyre"}
+                                    fill
+                                    priority
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
+                                />
+                            )}
+                        </div>
                     </div>
                 </div>
 
-                <div className="space-y-4 mt-2 md:mt-0">
-                    <div className="flex items-center gap-4">
+                <div className="flex flex-col gap-4">
+                    <div className="space-y-4 mt-2 md:mt-0">
+                        <div className="flex items-center gap-4">
 
-                        <p className="text-[10px] lg:text-sm font-medium uppercase tracking-[0.2em] text-orange-500">
-                            {tyre?.brand?.name} PERFORMANCE SERIES
-                        </p>
-
-                        <div className="absolute top-0 right-0 md:relative flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5 backdrop-blur-xl">
-                            <FaShieldAlt className="text-xs text-green-400" />
-
-                            <p className="text-xs font-medium text-green-100">
-                                Trusted by 50,000+ riders
+                            <p className="text-[10px] lg:text-sm font-medium uppercase tracking-[0.2em] text-orange-500">
+                                {tyre?.brand?.name} PERFORMANCE SERIES
                             </p>
-                        </div>
 
-                    </div>
+                            <div className="absolute top-0 right-0 md:relative flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5 backdrop-blur-xl">
+                                <FaShieldAlt className="text-xs text-green-400" />
 
-
-                    <div className="max-w-4xl">
-                        <h1 className="flex flex-wrap items-end gap-x-4 gap-y-2 text-2xl font-semibold leading-[1.05] tracking-tight text-white md:text-5xl">
-                            <span className="text-zinc-400 text-lg md:text-2xl font-normal">
-                                Is
-                            </span>
-                            <span>{tyre?.productName}</span>
-                            <span className="text-zinc-400 text-lg md:text-2xl font-normal">
-                                right for your bike?
-                            </span>
-                        </h1>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-3">
-                        {allTags?.map((tag) => {
-                            return (
-                                <div key={tag} className="flex items-center gap-2 rounded border border-white/10 bg-zinc-900/80 px-2 md:px-4 py-1 shadow-md backdrop-blur-md transition-all duration-300   "  >
-                                    {tagConfig[tag]?.icon}
-                                    <span className="text-xs md:text-sm font-medium text-white">
-                                        {tag}
-                                    </span>
-                                </div>
-                            )
-                        })}
-                        {tyre?.categoryId?.name && (
-                            <div className="flex items-center gap-2 rounded border border-white/10 bg-zinc-900/80 px-2 md:px-4 py-1 shadow-md backdrop-blur-md transition-all duration-300   "  >
-                                <FaTag className="text-blue-400 text-sm" />
-                                <span className="text-xs md:text-sm font-medium text-white">
-                                    {tyre?.categoryId?.name}
-                                </span>
+                                <p className="text-xs font-medium text-green-100">
+                                    Trusted by 50,000+ riders
+                                </p>
                             </div>
-                        )}
 
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-2">
-                        <div className="">
-                            <h3 className="mb-2 text-[10px] md:text-sm font-extrabold uppercase tracking-[0.2em] text-white">
-                                Best Suited For
-                            </h3>
-
-                            <ul className="space-y-1">
-                                {tyre?.bestSuitedFor?.map((item, index) => (
-                                    <li key={index} className="flex items-center gap-3" >
-                                        <div className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(74,222,128,0.8)]" />
-                                        <span className="text-xs md:text-sm leading-relaxed text-zinc-200">
-                                            {item}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
+                        </div>
+
 
                         <div>
-                            <h3 className="mb-2 text-[10px] md:text-sm font-extrabold uppercase tracking-[0.2em] text-white">
-                                Not Ideal If
-                            </h3>
-
-                            <ul className="space-y-1">
-                                {tyre?.notIdealIf?.map((item, index) => (
-                                    <li key={index} className="flex items-center gap-3" >
-                                        <div className="h-2 w-2 rounded-full bg-red-400 shadow-[0_0_10px_rgba(248,113,113,0.8)]" />
-                                        <span className="text-xs md:text-sm leading-relaxed text-zinc-200">
-                                            {item}
-                                        </span>
-                                    </li>
-                                ))}
-                            </ul>
+                            <h1 className="text-2xl md:text-4xl font-black leading-[1.08] tracking-tight text-white">
+                                Is{" "}
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-100 to-orange-400">
+                                    {tyre?.productName}
+                                </span>
+                                <br />
+                                <span className="text-zinc-400 text-xl md:text-2xl font-semibold">right for your bike?</span>
+                            </h1>
+                            <div className="mt-2.5">
+                                <StarRating
+                                    rating={tyre?.schemaMarkup?.aggregateRating || 4.5}
+                                    count={tyre?.schemaMarkup?.reviewCount || 0}
+                                />
+                            </div>
                         </div>
-                        <div className="pt-4 space-y-6">
-                            <WhatsAppButton className="py-3" value={` I’m interested in ${tyre?.productName}. Please share: - Price - Available size - Delivery time -Installation support`} text="Get Best Price on WhatsApp" />
 
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-
-                                <div className="flex items-center gap-2  text-center">
-                                    <div className="rounded-full bg-green-500/10 p-3 text-green-400">
-                                        <FaTools className="text-xs md:text-sm" />
+                        {tyre?.hero?.highlights?.length > 0 && (
+                            <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1">
+                                {tyre.hero.highlights.map((h, i) => (
+                                    <div key={i} className="shrink-0 flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/5 px-3 py-1.5">
+                                        <RiSparkling2Fill className="text-orange-400 text-[10px] shrink-0" />
+                                        <span className="text-[10px] font-semibold text-orange-300 whitespace-nowrap">{h}</span>
                                     </div>
-                                    <p className="text-xs md:text-sm font-medium text-white">
-                                        Installation Support
-                                    </p>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="flex flex-wrap items-center gap-2">
+                            {allTags?.map((tag) => (
+                                <div
+                                    key={tag}
+                                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-900/70 px-3 py-1 hover:border-orange-500/30 transition-colors duration-200"
+                                >
+                                    {tagConfig[tag]?.icon}
+                                    <span className="text-[11px] font-semibold text-zinc-300">{tag}</span>
+                                </div>
+                            ))}
+                            {tyre?.categoryId?.name && (
+                                <div className="flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-500/8 px-3 py-1">
+                                    <FaTag className="text-blue-400 text-xs" />
+                                    <span className="text-[11px] font-semibold text-blue-300">{tyre.categoryId.name}</span>
+                                </div>
+                            )}
+                        </div>
+                        <PriceCard tyre={tyre} />
+
+                        <div className="relative mt-1">
+                            <div className="grid grid-cols-3 gap-2 px-1">
+                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(249,115,22,0.15)]">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30 transition-all duration-300 group-hover:ring-orange-500/60 group-hover:shadow-[0_0_10px_rgba(249,115,22,0.3)]">
+                                        <MdLocalShipping className="text-orange-400 text-lg" />
+                                    </div>
+                                    <div className="text-center">
+                                        <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Free Delivery</p>
+                                        <p className="text-[8px] text-zinc-500 md:text-[9px]">Pan India</p>
+                                    </div>
                                 </div>
 
-                                <div className=" flex  items-center text-center gap-2 ">
-                                    <div className="rounded-full bg-orange-500/10 p-3 text-orange-400">
-                                        <FaTruck className="text-xs md:text-sm" />
+                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-emerald-500/20 bg-gradient-to-b from-emerald-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:from-emerald-500/15 hover:shadow-[0_0_18px_rgba(16,185,129,0.15)]">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30 transition-all duration-300 group-hover:ring-emerald-500/60 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+                                        <MdVerified className="text-emerald-400 text-lg" />
                                     </div>
-                                    <p className="text-xs md:text-sm font-medium text-white ">
-                                        Pan India Delivery
-                                    </p>
+                                    <div className="text-center">
+                                        <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">100% Genuine</p>
+                                        <p className="text-[8px] text-zinc-500 md:text-[9px]">Certified Brand</p>
+                                    </div>
                                 </div>
 
-                                <div className=" hidden md:flex items-center text-center gap-2">
-                                    <div className=" rounded-full bg-blue-500/10 p-3 text-blue-400">
-                                        <FaUserTie className="text-xs md:text-sm" />
+                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-blue-500/20 bg-gradient-to-b from-blue-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:from-blue-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
+                                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 ring-1 ring-blue-500/30 transition-all duration-300 group-hover:ring-blue-500/60 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                                        <MdSupportAgent className="text-blue-400 text-lg" />
                                     </div>
-                                    <p className="text-xs md:text-sm font-medium text-white">
-                                        Expert Assistance
-                                    </p>
+                                    <div className="text-center">
+                                        <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Expert Help</p>
+                                        <p className="text-[8px] text-zinc-500 md:text-[9px]">24/7 Support</p>
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+
                 </div>
-            </div>
         </section>
     );
 }
