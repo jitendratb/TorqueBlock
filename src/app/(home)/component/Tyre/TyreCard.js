@@ -55,12 +55,13 @@ function TyreCard({ tyre }) {
 
         <div className="flex flex-col gap-5 mt-auto">
           <div className="transform group-hover:scale-[1.03] active:scale-[0.98] transition-transform duration-300">
-            <button className={`
+            <div onClick={handleCardClick}
+             className={`
         relative overflow-hidden w-full py-2 lg:py-3 rounded-xl flex items-center justify-center font-semibold
         transition-all duration-300 ease-in-out
         bg-orange-500 text-white  hover:bg-orange-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.4)] hover:-translate-y-1 active:translate-y-0
         
-      `} >Explore Tyres</button>
+      `} >Explore Tyres</div>
           </div>
         </div>
       </div>

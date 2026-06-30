@@ -48,8 +48,9 @@ function PriceCard({ tyre }) {
     const pricing = tyre?.pricing;
     const inStock = tyre?.availability?.inStock;
     const stockCount = tyre?.availability?.stockCount;
+    console.log(pricing)
 
-    if (!startingPrice) {
+    if (!startingPrice && !pricing) {
         return (
             <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 p-4 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
                 <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
@@ -84,7 +85,7 @@ function PriceCard({ tyre }) {
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">Starting Price</p>
                         <div className="flex items-end gap-2">
                             <span className="text-3xl md:text-4xl font-black text-white tracking-tight">
-                                &#8377;{Number(startingPrice).toLocaleString("en-IN")}
+                                &#8377;{Number(startingPrice || pricing?.frontTyrePrice ).toLocaleString("en-IN")}
                             </span>
                             {tyre?.endingPrice && (
                                 <span className="text-zinc-500 text-sm mb-1 line-through">
