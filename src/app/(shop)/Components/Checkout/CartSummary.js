@@ -4,9 +4,10 @@ import React, { useCallback } from 'react';
 import useCartStore from '@/stores/cartStore';
 import Image from '@/components/molecules/CustomImage';
 import { IoReceiptOutline } from 'react-icons/io5';
+import { FiTrash2 } from 'react-icons/fi';
 
 export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
-    const { cart } = useCartStore();
+    const { cart, removeFromCart } = useCartStore();
 
     const formatPrice = useCallback((price) => {
         return new Intl.NumberFormat('en-IN', {
@@ -34,7 +35,14 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                     const itemImage = product.productImages?.[0] || '';
 
                     return (
-                        <div key={item.id} className="flex items-center gap-3.5 p-3 rounded-2xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300">
+                        <div key={item.id} className="relative flex items-center gap-3.5 p-3 rounded-2xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 pr-8">
+                            <button
+                                onClick={() => removeFromCart(item.id)}
+                                className="absolute top-3 right-3 text-zinc-500 hover:text-orange-500 transition-colors p-1 rounded-lg hover:bg-white/5"
+                                title="Remove Item"
+                            >
+                                <FiTrash2 className="text-xs" />
+                            </button>
                             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black/40 flex items-center justify-center">
                                 {itemImage ? (
                                     <Image
