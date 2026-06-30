@@ -29,7 +29,7 @@ const getDeterministicViews = (id = '') => {
 };
 
 const ViewDetailsButton = ({ text = "View Details" }) => (
-    <div className="mt-4 px-4 inline-flex items-center justify-center w-full py-3 max-w-[150px] rounded-xl bg-orange-500 py-1 text-sm font-semibold text-white hover:bg-orange-400 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 ease-in-out gap-1"
+    <div className="mt-4 px-4 inline-flex items-center justify-center w-full py-3 max-w-fit rounded-xl bg-orange-500 py-1 text-sm font-semibold text-white hover:bg-orange-400 hover:-translate-y-1 active:translate-y-0 transition-all duration-300 ease-in-out gap-1"
     >
         <span>{text}</span>
         <FiArrowRight className="text-base transition-transform duration-300 group-hover:translate-x-1" />
@@ -44,7 +44,7 @@ const Card = ({ item }) => {
             const parentSlug = item.availableTyres?.identifier || item.identifier.replace(`-${sizeSlug}`, '');
             const route = `/tyres/${parentSlug}/${sizeSlug}`;
             return (
-                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-zinc-800/80 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
                     <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center">
                         <div className="relative w-full h-full min-h-[140px] md:min-h-0">
                             <Image
@@ -108,7 +108,7 @@ const Card = ({ item }) => {
             const rating = getDeterministicRating(item._id || item.identifier);
             const quickFacts = item.quickFacts || item.aiSearch?.quickFacts || {};
             return (
-                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-zinc-800/80 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
                     <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <Image
                             src={item.hero?.heroImage || '/newlogo.webp'}
@@ -198,7 +198,7 @@ const Card = ({ item }) => {
         case 'Trending': {
             const route = `/trending/${item.slug || item.identifier}`;
             return (
-                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-zinc-800/80 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
                     <div className="relative h-[100px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <Image
                             src={item.image || item.bannerImage || '/newlogo.webp'}
@@ -241,7 +241,7 @@ const Card = ({ item }) => {
         case 'Blogs': {
             const route = `/blogs/${item.slug || item.identifier}`;
             return (
-                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-zinc-800/80 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
                     <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <Image
                             src={item.image || '/newlogo.webp'}
@@ -288,7 +288,7 @@ const Card = ({ item }) => {
             const view = getDeterministicViews(item._id || item.identifier);
             const rating = getDeterministicRating(item._id || item.identifier);
             return (
-                <article onClick={() => router.push(`/compare/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-[240px] rounded-2xl border border-white/30 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(`/compare/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-[240px] rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
                     <div className="relative grid h-[180px] md:h-full grid-cols-2 overflow-hidden w-full bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <div className="relative h-full w-full">
                             <Image
@@ -345,7 +345,7 @@ const Card = ({ item }) => {
         }
         case 'Bike': {
             return (
-                <article onClick={() => router.push(`/bikes/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-zinc-800/80 bg-gradient-to-r from-white/10 to-orange-500/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(`/bikes/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
                     <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <Image
                             src={item.image || '/newlogo.webp'}
