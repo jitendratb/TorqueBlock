@@ -19,7 +19,7 @@ function TyresClient({ initialData }) {
             <Description tyre={tyre} />
 
             {/* <TrustSection tyre={tyre} /> */}
-            <ReviewsCard reviews={tyre?.reviews} />
+            {/* <ReviewsCard reviews={tyre?.reviews} /> */}
             <FitmentSection tyre={tyre} scale={false} />
             <Similar tyre={tyre} />
             {tyre?.faqs && <FAQSection faqs={tyre?.faqs} />}

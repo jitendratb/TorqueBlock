@@ -40,6 +40,8 @@ class SearchService {
                 ...options,
             });
 
+            console.log(response)
+
             // Cache the result
             this.cache.set(cacheKey, {
                 data: response,

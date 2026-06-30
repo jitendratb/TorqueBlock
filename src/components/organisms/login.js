@@ -186,7 +186,7 @@ function Login({ isOpen, onClose }) {
             onClose={onClose}
             title={step === 'success' ? '' : 'Authentication'}
             subtitle={
-                step === 'phone' ? 'Enter your mobile number to receive an OTP' : step === 'otp' ? `Enter the 6-digit code sent to +91 ${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}` : ''
+                step === 'phone' ? 'Enter your mobile number to receive an OTP on WhatsApp' : step === 'otp' ? `Enter the 6-digit code sent on WhatsApp to +91 ${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}` : ''
             }
             themeGlow={step === 'success' ? 'green' : 'orange'}
             size="sm"
@@ -232,6 +232,9 @@ function Login({ isOpen, onClose }) {
                                 <FaArrowRight className="text-xs" />
                             )}
                         </button>
+                        <p className="text-[10px] text-zinc-500 text-center font-medium mt-2">
+                            Note: Verification code (OTP) will be delivered to your number on WhatsApp.
+                        </p>
                     </form>
                 )}
 

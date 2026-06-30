@@ -11,7 +11,6 @@ const useSearchStore = create(
             error: null,
             activeIndex: 0,
 
-            // Actions
             setSearchInput: (input) => {
                 set({ searchInput: input }, false, 'setSearchInput');
                 if (input.trim()) {
@@ -39,14 +38,13 @@ const useSearchStore = create(
                 activeIndex: 0
             }, false, 'clearSearch'),
 
-            // Debounced search function
             debouncedSearch: (() => {
                 let timeoutId;
                 return (query) => {
                     clearTimeout(timeoutId);
                     timeoutId = setTimeout(() => {
                         get().performSearch(query);
-                    }, 250);
+                    }, 150);
                 };
             })(),
 
@@ -73,7 +71,6 @@ const useSearchStore = create(
                 }
             },
 
-            // Utility functions
             getSuggestions: () => {
                 const { searchResults } = get();
                 const items = [];
@@ -100,6 +97,7 @@ const useSearchStore = create(
                             label: tyre.productName,
                             query: tyre.productName,
                             identifier: tyre.identifier,
+                            relevanceScore: tyre.relevanceScore || 0,
                         });
                     });
                 }
@@ -112,6 +110,7 @@ const useSearchStore = create(
                             label: cleanComparisonLabel(comparison.identifier),
                             query: cleanComparisonLabel(comparison.identifier),
                             identifier: comparison.identifier,
+                            relevanceScore: comparison.relevanceScore || 0,
                         });
                     });
                 }
@@ -124,9 +123,54 @@ const useSearchStore = create(
                             label: formatBikeLabel(bike),
                             query: formatBikeLabel(bike),
                             identifier: bike.identifier,
+                            relevanceScore: bike.relevanceScore || 0,
                         });
                     });
                 }
+
+                // Add all tyre sizes
+                if (searchResults?.results?.tyreSizes?.data) {
+                    searchResults.results.tyreSizes.data.forEach(sizeItem => {
+                        items.push({
+                            type: 'Tyre Sizes',
+                            label: sizeItem.hero?.title || sizeItem.size,
+                            query: sizeItem.size,
+                            identifier: sizeItem.identifier,
+                            availableTyres: sizeItem.availableTyres,
+                            size: sizeItem.size,
+                            relevanceScore: sizeItem.relevanceScore || 0,
+                        });
+                    });
+                }
+
+                // Add all blogs
+                if (searchResults?.results?.blogs?.data) {
+                    searchResults.results.blogs.data.forEach(blog => {
+                        items.push({
+                            type: 'Blogs',
+                            label: blog.header,
+                            query: blog.header,
+                            identifier: blog.slug || blog.identifier,
+                            relevanceScore: blog.relevanceScore || 0,
+                        });
+                    });
+                }
+
+                // Add all trending
+                if (searchResults?.results?.trending?.data) {
+                    searchResults.results.trending.data.forEach(trend => {
+                        items.push({
+                            type: 'Trending',
+                            label: trend.name,
+                            query: trend.name,
+                            identifier: trend.slug || trend.identifier,
+                            relevanceScore: trend.relevanceScore || 0,
+                        });
+                    });
+                }
+
+                // Sort items by relevanceScore descending
+                items.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
                 return items;
             },

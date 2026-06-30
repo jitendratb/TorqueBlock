@@ -49,7 +49,29 @@ function PriceCard({ tyre }) {
     const inStock = tyre?.availability?.inStock;
     const stockCount = tyre?.availability?.stockCount;
 
-    if (!startingPrice && !pricing) return null;
+    if (!startingPrice) {
+        return (
+            <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 p-4 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
+                <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
+                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-orange-600/5 rounded-full blur-xl pointer-events-none" />
+                
+                <div className="relative space-y-3">
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">Pricing Info</p>
+                        <h4 className="text-lg font-bold text-white leading-tight">Price on Request</h4>
+                        <p className="text-zinc-400 text-xs mt-1 leading-relaxed">
+                            Connect with our experts to get the best custom rate and verified size compatibility for your motorcycle.
+                        </p>
+                    </div>
+                    <WhatsAppButton 
+                        text="Query Price & Size"
+                        message={`Hi TorqueBlock, I'd like to check the price and size availability for the tyre: ${tyre?.productName}`}
+                        className="w-full justify-center"
+                    />
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
@@ -172,11 +194,12 @@ export default function ProductDetails({ tyre }) {
                                 <br />
                                 <span className="text-zinc-400 text-xl md:text-2xl font-semibold">right for your bike?</span>
                             </h1>
-                            <div className="mt-2.5">
+                            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                                 <StarRating
-                                    rating={tyre?.schemaMarkup?.aggregateRating || 4.5}
-                                    count={tyre?.schemaMarkup?.reviewCount || 0}
+                                    rating={tyre?.schemaMarkup?.aggregateRating || 4.9}
+                                    count={tyre?.schemaMarkup?.reviewCount || 150}
                                 />
+                                <span className="text-zinc-400 text-xs">on Google</span>
                             </div>
                         </div>
 

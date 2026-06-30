@@ -204,9 +204,19 @@ function Header() {
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
     const totalItems = isMounted ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
+    const handleAction = useCallback((message) => {
+        if (typeof window !== 'undefined') {
+            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+    }, []);
+
 
     useEffect(() => {
-        setIsMounted(true);
+        const timer = setTimeout(() => {
+            setIsMounted(true);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
     useEffect(() => {
@@ -253,7 +263,7 @@ function Header() {
             <header className="header-root fixed left-0 right-0 w-full z-50" data-scrolled={scrolled}>
                 <nav className={`header-nav flex text-white justify-between items-center gap-4 max-w-7xl mx-auto ${scrolled ? "bg-white/10 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
                     <Link href="/" className="text-2xl font-bold" aria-label="Torque Block Home">
-                        <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="inline-block h-auto w-[130px]" style={{ height: 'auto' }} />
+                        <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block h-auto w-[130px]" style={{ height: 'auto' }} />
                     </Link>
 
                     <ul className='flex items-center gap-6 hidden lg:flex' role="menubar">
@@ -307,14 +317,14 @@ function Header() {
                                             {item.name}
                                         </span>
                                     )}
-
                                 </li>
                             );
                         })}
                     </ul>
 
-                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-lg'>
-                        <SearchBar />
+                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
+                        <SearchBar className='xl:min-w-[360px]' />
+
 
                         <div>
                             <button
@@ -344,6 +354,25 @@ function Header() {
                         </div>
                     </div>
                 </nav>
+
+                {activeHover && activeHover !== "Home" && (
+                    <div 
+                        className="Hover-Modal absolute left-0 right-0 top-full mx-auto max-w-7xl mt-2 bg-white rounded-2xl border border-slate-200/70 shadow-2xl p-8 text-gray-900 z-50 overflow-hidden"
+                        onMouseEnter={() => handleMouseEnter(activeHover)}
+                        onMouseLeave={handleMouseLeave}
+                        data-scrolled={scrolled}
+                    >
+                        {activeHover === "Tyres" && (
+                            <TyresMegaMenu onAction={handleAction} />
+                        )}
+                        {activeHover === "Motorcycles" && (
+                            <BikeBrandsMegaMenu onAction={handleAction} />
+                        )}
+                        {activeHover === "Tyre Comparison" && (
+                            <TyreComparisonMegaMenu onAction={handleAction} />
+                        )}
+                    </div>
+                )}
             </header>
 
             <ManuSlider

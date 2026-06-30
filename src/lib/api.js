@@ -27,6 +27,14 @@ TorqueBlockApi.interceptors.request.use(
     }
 );
 
+const cookies = {
+    get: (name) => {
+        if (typeof window === 'undefined') return null;
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        return match ? decodeURIComponent(match[2]) : null;
+    }
+};
+
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -76,7 +84,7 @@ TorqueBlockApi.interceptors.response.use(
                 try {
                     const refreshRes = await axios.post(
                         `${TorqueBlockApi.defaults.baseURL}/auth/refresh-token`,
-                        {},
+                        { refreshToken: cookies.get('refreshToken') },
                         { withCredentials: true }
                     );
 
@@ -93,6 +101,16 @@ TorqueBlockApi.interceptors.response.use(
                         
                         originalRequest.headers.Authorization = `Bearer ${newToken}`;
                         return TorqueBlockApi(originalRequest);
+                    } else {
+                        const refreshError = new Error('Token refresh failed');
+                        processQueue(refreshError, null);
+                        isRefreshing = false;
+                        console.warn('Unauthorized - Logging out user after failed token refresh...');
+                        if (typeof window !== 'undefined') {
+                            const authStoreModule = await import('@/stores/authStore');
+                            authStoreModule.default.getState().logout();
+                        }
+                        return Promise.reject(refreshError);
                     }
                 } catch (refreshError) {
                     processQueue(refreshError, null);
