@@ -48,6 +48,10 @@ export default function CheckoutClient() {
         }
     }, [addresses, selectedAddressId]);
 
+    const subtotal = getCartTotal();
+    const deliveryCharge = subtotal > 0 ? 0 : 0;
+    const finalTotal = subtotal + deliveryCharge;
+
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
