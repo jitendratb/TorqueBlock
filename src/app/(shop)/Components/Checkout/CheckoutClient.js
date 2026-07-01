@@ -60,10 +60,8 @@ export default function CheckoutClient() {
 
         setIsOrderPlacing(true);
         try {
-            const items = cart.map((item, index) => {
+            const items = cart.map((item) => {
                 const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric;
-                const itemSubtotal = item.price * item.quantity;
-                const itemTax = Math.round(itemSubtotal * 0.18);
                 
                 return {
                     productId: sizeObj._id,
@@ -72,8 +70,8 @@ export default function CheckoutClient() {
                     installation: false,
                     addressId: selectedAddressId,
                     size: sizeObj.size,
-                    shippingCharge: index === 0 ? 0 : 0,
-                    taxAmount: itemTax,
+                    shippingCharge: 0,
+                    taxAmount: 0,
                     discount: 0
                 };
             });
