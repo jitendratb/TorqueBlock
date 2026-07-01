@@ -48,9 +48,6 @@ export default function CheckoutClient() {
         }
     }, [addresses, selectedAddressId]);
 
-    const subtotal = getCartTotal();
-    const deliveryCharge = subtotal > 0 ? 0 : 0;
-    const finalTotal = subtotal + deliveryCharge;
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
@@ -62,7 +59,7 @@ export default function CheckoutClient() {
         try {
             const items = cart.map((item) => {
                 const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric;
-                
+
                 return {
                     productId: sizeObj._id,
                     quantity: item.quantity,
@@ -164,21 +161,21 @@ export default function CheckoutClient() {
 
                 <div className="p-5 rounded-2xl bg-black/40 border border-white/5 w-full text-left space-y-3">
                     <div className="flex justify-between border-b border-white/5 pb-2.5 text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                        <span>Order Details</span>
-                        <span className="text-white normal-case font-black">ID: {placedOrderDetails._id || placedOrderDetails.transactionId}</span>
+                        <span>Order ID</span>
+                        <span className="text-white text-xs normal-case font-black">{placedOrderDetails._id || placedOrderDetails.transactionId}</span>
                     </div>
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Payment Method</span>
-                        <span className="text-white uppercase font-bold">{placedOrderDetails.paymentMethod}</span>
+                        <span className="text-white text-xs uppercase font-bold">{placedOrderDetails?.paymentMethod}</span>
                     </div>
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Payment Status</span>
-                        <span className="text-emerald-400 uppercase font-bold">{placedOrderDetails.paymentStatus}</span>
+                        <span className="text-emerald-400 text-xs uppercase font-bold">{placedOrderDetails?.paymentStatus}</span>
                     </div>
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Total Amount Paid</span>
-                        <span className="text-orange-400 font-black">
-                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(finalTotal)}
+                        <span className="text-orange-400 text-xs font-black">
+                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(placedOrderDetails?.items?.totalPrice)}
                         </span>
                     </div>
                 </div>
