@@ -5,9 +5,10 @@ import useCartStore from '@/stores/cartStore';
 import Image from '@/components/molecules/CustomImage';
 import { IoReceiptOutline } from 'react-icons/io5';
 import { FiTrash2 } from 'react-icons/fi';
+import { FaPlus, FaMinus } from 'react-icons/fa6';
 
 export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
-    const { cart, removeFromCart } = useCartStore();
+    const { cart, removeFromCart, updateQuantity } = useCartStore();
 
     const formatPrice = useCallback((price) => {
         return new Intl.NumberFormat('en-IN', {
@@ -71,9 +72,30 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                                 </div>
 
                                 <div className="flex items-center justify-between mt-1.5">
-                                    <span className="text-[10px] text-zinc-500 font-bold">
-                                        Qty: <span className="text-white font-black">{item.quantity}</span>
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[10px] text-zinc-500 font-bold">
+                                            Qty:
+                                        </span>
+                                        <div className="flex items-center bg-black/50 border border-white/10 rounded-xl p-0.5">
+                                            <button
+                                                onClick={() => updateQuantity(item.id, -1)}
+                                                className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                                                aria-label="Decrease quantity"
+                                            >
+                                                <FaMinus className="text-[7px]" />
+                                            </button>
+                                            <span className="w-6 text-center text-[10px] font-black text-white select-none">
+                                                {item.quantity}
+                                            </span>
+                                            <button
+                                                onClick={() => updateQuantity(item.id, 1)}
+                                                className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                                                aria-label="Increase quantity"
+                                            >
+                                                <FaPlus className="text-[7px]" />
+                                            </button>
+                                        </div>
+                                    </div>
                                     <span className="text-xs font-black text-white">
                                         {formatPrice(item.price * item.quantity)}
                                     </span>
