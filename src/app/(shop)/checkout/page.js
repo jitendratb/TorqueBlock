@@ -2,7 +2,7 @@ import React from 'react';
 import CheckoutClient from '../Components/Checkout/CheckoutClient';
 
 export const metadata = {
-    title: 'Checkout | TorqueBlock',
+    title: 'Checkout',
     description: 'Complete your purchase of premium, high-performance motorcycle tyres on TorqueBlock.',
 };
 

@@ -201,7 +201,7 @@ export default function TyreDataDetails({ tyreData }) {
                         </div>
                 
                         <div className="space-y-2">
-                            <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] uppercase drop-shadow-2xl">
+                            <h1 className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
                                 {title}
                             </h1>
                             {subtitle && (
