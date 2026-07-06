@@ -73,20 +73,12 @@ export default async function sitemap() {
 
   let tyreSizeRoutes = [];
   try {
-    const sizesRes = await TorqueBlockApi.get("size", { params: { limit: 1000 } });
+    const sizesRes = await TorqueBlockApi.get("size/id-list");
     const sizes = sizesRes?.data || sizesRes || [];
     if (Array.isArray(sizes)) {
       tyreSizeRoutes = sizes.map((size) => {
-        const fullIdentifier = size?.identifier || '';
         const tyreIdentifier = size?.availableTyres?.identifier || size?.availableTyres?.slug || '';
-        let sizeSlug = '';
-        if (tyreIdentifier && fullIdentifier.startsWith(tyreIdentifier + '-')) {
-          sizeSlug = fullIdentifier.substring(tyreIdentifier.length + 1);
-        } else {
-          // Fallback if parsing fails
-          const parts = fullIdentifier.split('-');
-          sizeSlug = parts.slice(-3).join('-'); // Usually something like 150-60-r17
-        }
+        const sizeSlug = size?.size ? size.size.toLowerCase().replace(/[\s/]/g, '-') : '';
 
         if (tyreIdentifier && sizeSlug) {
             return {

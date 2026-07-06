@@ -58,7 +58,6 @@ async function Page({ params }) {
     const { slug, size } = await params;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
 
-    console.log(tyreBySize)
 
     const breadcrumbItems = [
         { label: 'Tyres', href: '/tyres' }, 
