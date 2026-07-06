@@ -5,7 +5,7 @@ import cartService from '@/services/cartService';
 
 const reconstructCart = (backendItems) => {
   const cartGrouped = [];
-  const groupsByProduct = {};
+  const itemsMap = {};
 
   backendItems.forEach((item) => {
     const sizeObj = item.productId;
@@ -18,16 +18,6 @@ const reconstructCart = (backendItems) => {
       brand: { name: 'Performance' }
     };
 
-    const productId = parentProduct._id || 'fallback';
-    if (!groupsByProduct[productId]) {
-      groupsByProduct[productId] = {
-        product: parentProduct,
-        fronts: [],
-        rears: [],
-        generics: []
-      };
-    }
-
     const sizeItem = {
       _id: sizeObj?._id || item.productId || item._id,
       size: sizeObj?.size || item.size || 'Standard',
@@ -37,94 +27,36 @@ const reconstructCart = (backendItems) => {
     };
 
     const position = (sizeItem.position || '').toLowerCase();
+    let itemId = '';
+    let selectedFront = null;
+    let selectedRear = null;
+    let selectedGeneric = null;
+
     if (position.includes('front')) {
-      groupsByProduct[productId].fronts.push({ sizeItem, quantity: item.quantity });
+      itemId = `${parentProduct._id}-${sizeItem._id}--`;
+      selectedFront = sizeItem;
     } else if (position.includes('rear')) {
-      groupsByProduct[productId].rears.push({ sizeItem, quantity: item.quantity });
+      itemId = `${parentProduct._id}--${sizeItem._id}-`;
+      selectedRear = sizeItem;
     } else {
-      groupsByProduct[productId].generics.push({ sizeItem, quantity: item.quantity });
-    }
-  });
-
-  Object.keys(groupsByProduct).forEach((productId) => {
-    const { product, fronts, rears, generics } = groupsByProduct[productId];
-
-    let fIdx = 0;
-    let rIdx = 0;
-
-    // Pair Front and Rear tyres together where possible
-    while (fIdx < fronts.length && rIdx < rears.length) {
-      const front = fronts[fIdx];
-      const rear = rears[rIdx];
-      const matchedQty = Math.min(front.quantity, rear.quantity);
-
-      if (matchedQty > 0) {
-        const itemId = `${product._id}-${front.sizeItem._id}-${rear.sizeItem._id}-`;
-        cartGrouped.push({
-          id: itemId,
-          product,
-          selectedFront: front.sizeItem,
-          selectedRear: rear.sizeItem,
-          selectedGeneric: null,
-          price: front.sizeItem.price + rear.sizeItem.price,
-          quantity: matchedQty
-        });
-
-        front.quantity -= matchedQty;
-        rear.quantity -= matchedQty;
-      }
-
-      if (front.quantity === 0) fIdx++;
-      if (rear.quantity === 0) rIdx++;
+      itemId = `${parentProduct._id}---${sizeItem._id}`;
+      selectedGeneric = sizeItem;
     }
 
-    // Add remaining fronts as single items
-    fronts.forEach((front) => {
-      if (front.quantity > 0) {
-        const itemId = `${product._id}-${front.sizeItem._id}--`;
-        cartGrouped.push({
-          id: itemId,
-          product,
-          selectedFront: front.sizeItem,
-          selectedRear: null,
-          selectedGeneric: null,
-          price: front.sizeItem.price,
-          quantity: front.quantity
-        });
-      }
-    });
-
-    // Add remaining rears as single items
-    rears.forEach((rear) => {
-      if (rear.quantity > 0) {
-        const itemId = `${product._id}--${rear.sizeItem._id}-`;
-        cartGrouped.push({
-          id: itemId,
-          product,
-          selectedFront: null,
-          selectedRear: rear.sizeItem,
-          selectedGeneric: null,
-          price: rear.sizeItem.price,
-          quantity: rear.quantity
-        });
-      }
-    });
-
-    // Add generic size items
-    generics.forEach((gen) => {
-      if (gen.quantity > 0) {
-        const itemId = `${product._id}---${gen.sizeItem._id}`;
-        cartGrouped.push({
-          id: itemId,
-          product,
-          selectedFront: null,
-          selectedRear: null,
-          selectedGeneric: gen.sizeItem,
-          price: gen.sizeItem.price,
-          quantity: gen.quantity
-        });
-      }
-    });
+    if (itemsMap[itemId]) {
+      itemsMap[itemId].quantity += item.quantity;
+    } else {
+      itemsMap[itemId] = {
+        id: itemId,
+        product: parentProduct,
+        selectedFront,
+        selectedRear,
+        selectedGeneric,
+        price: sizeItem.price,
+        quantity: item.quantity
+      };
+      cartGrouped.push(itemsMap[itemId]);
+    }
   });
 
   return cartGrouped;
@@ -211,30 +143,54 @@ const useCartStore = create(
       },
 
       addToCart: async (product, selectedFront, selectedRear, selectedGeneric, isSliderOpen = true) => {
-        const frontId = selectedFront?._id || selectedFront?.size || '';
-        const rearId = selectedRear?._id || selectedRear?.size || '';
-        const genericId = selectedGeneric?._id || selectedGeneric?.size || '';
-
-        const itemId = `${product._id}-${frontId}-${rearId}-${genericId}`;
-        const itemPrice = (selectedFront?.price || 0) + (selectedRear?.price || 0) + (selectedGeneric?.price || 0);
+        const itemsToAdd = [];
+        if (selectedFront) {
+          itemsToAdd.push({
+            id: `${product._id}-${selectedFront._id || selectedFront.size}--`,
+            selectedFront,
+            selectedRear: null,
+            selectedGeneric: null,
+            price: selectedFront.price || 0
+          });
+        }
+        if (selectedRear) {
+          itemsToAdd.push({
+            id: `${product._id}--${selectedRear._id || selectedRear.size}-`,
+            selectedFront: null,
+            selectedRear,
+            selectedGeneric: null,
+            price: selectedRear.price || 0
+          });
+        }
+        if (selectedGeneric) {
+          itemsToAdd.push({
+            id: `${product._id}---${selectedGeneric._id || selectedGeneric.size}`,
+            selectedFront: null,
+            selectedRear: null,
+            selectedGeneric,
+            price: selectedGeneric.price || 0
+          });
+        }
 
         set((state) => {
-          const existingItemIndex = state.cart.findIndex((item) => item.id === itemId);
           let newCart = [...state.cart];
 
-          if (existingItemIndex > -1) {
-            newCart[existingItemIndex].quantity += 1;
-          } else {
-            newCart.push({
-              id: itemId,
-              product,
-              selectedFront,
-              selectedRear,
-              selectedGeneric,
-              price: itemPrice,
-              quantity: 1,
-            });
-          }
+          itemsToAdd.forEach((itemToAdd) => {
+            const existingItemIndex = newCart.findIndex((item) => item.id === itemToAdd.id);
+            if (existingItemIndex > -1) {
+              newCart[existingItemIndex].quantity += 1;
+            } else {
+              newCart.push({
+                id: itemToAdd.id,
+                product,
+                selectedFront: itemToAdd.selectedFront,
+                selectedRear: itemToAdd.selectedRear,
+                selectedGeneric: itemToAdd.selectedGeneric,
+                price: itemToAdd.price,
+                quantity: 1,
+              });
+            }
+          });
 
           return {
             cart: newCart,
@@ -301,7 +257,6 @@ const useCartStore = create(
       removeFromCart: async (itemId) => {
         const itemToDelete = get().cart.find((item) => item.id === itemId);
 
-        // Optimistic local update
         set((state) => ({
           cart: state.cart.filter((item) => item.id !== itemId),
         }));
