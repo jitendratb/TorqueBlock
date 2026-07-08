@@ -16,7 +16,8 @@ class TyresService {
                 const path = await import('path');
                 fs.appendFileSync(path.join(process.cwd(), 'debug.log'), `[getTyreBySlug] Error for slug: ${slug}, message: ${error.message}, status: ${error.response?.status}\n`);
             }
-            console.log(error)
+            console.error("Error fetching tyre by slug:", error?.message || error);
+            return null;
         }
     }
 
@@ -25,7 +26,8 @@ class TyresService {
             const response = await TorqueBlockApi.get(`/size/${size}`);
             return response?.data
         } catch (error) {
-            console.log(error)
+            console.error("Error fetching tyre by size:", error?.message || error);
+            return null;
         }
     }
 }
