@@ -19,7 +19,7 @@ function TyreCard({ tyre }) {
       <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-transparent to-orange-500/0 group-hover:from-orange-500/10 group-hover:to-transparent transition-colors duration-700 pointer-events-none z-0" />
       <div className='relative h-[240px] w-full overflow-hidden shrink-0'>
         <Image
-          src={tyre?.hero?.heroImage || '/placeholder-tyre.jpg'}
+          src={tyre?.hero?.heroImage || '/newLogo.webp'}
           alt={tyre?.hero?.title || "Motorcycle Tyre"}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

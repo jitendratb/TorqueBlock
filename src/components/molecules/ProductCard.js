@@ -27,7 +27,7 @@ export default function ProductCard({ item }) {
         <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="group cursor-pointer grid grid-cols-1 md:grid-cols-[40%_60%] md:h-[260px] rounded-2xl border border-zinc-800 bg-zinc-900/50 overflow-hidden hover:bg-zinc-800/60 hover:border-orange-500/50 transition-all duration-300">
             <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 flex items-center justify-center p-4">
                 <Image
-                    src={item.hero?.heroImage || '/placeholder-tyre.jpg'}
+                    src={item.hero?.heroImage || '/newLogo.webp'}
                     alt={item.productName || item.hero?.title || "Motorcycle Tyre"}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
