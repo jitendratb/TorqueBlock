@@ -12,7 +12,6 @@ import ReviewsCard from "@/components/atoms/reviewCard";
 function TyresClient({ initialData }) {
     const [tyre] = useState(initialData);
 
-    console.log(tyre)
     return (
         <div className="py-4 space-y-4">
             <ProductDetails tyre={tyre} />

@@ -24,7 +24,6 @@ function Description({ tyreData }) {
 
     if (!text && activeSpecs.length === 0) return null;
 
-    console.log(tyreData  , "sadfghjkhgfdsadfghjkhgfdsadfghjm")
 
     return (
         <div className='space-y-4'>

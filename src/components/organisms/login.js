@@ -143,7 +143,6 @@ function Login({ isOpen, onClose }) {
 
         try {
             const data = await storeVerifyOtp(otpCode);
-            console.log(data);
        
                 setStep('success');
                 setTimeout(() => {

@@ -126,7 +126,6 @@ function SearchBar({
                     <div className="p-1 max-h-60 overflow-y-auto">
                   
                         {!loading && !error && suggestions.map((item, index) => {
-                            // console.log(item, "item in search bar");
                             const getRoute = (type, identifier) => {
                                 const id = identifier || item.query || item.label;
                                 switch (type) {

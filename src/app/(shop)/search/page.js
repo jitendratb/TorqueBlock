@@ -454,7 +454,6 @@ function SearchPageContent() {
 
             try {
                 const results = await searchServiceInstance.search(searchQuery, { limit: 10, page: currentPage, category: filters.type.length > 0 ? filters.type.join(',') : undefined, brand: filters.brand.length > 0 ? filters.brand.join(',') : undefined, sorted: sortBy, rating: filters.rating > 0 ? filters.rating : undefined });
-                console.log(results)
                 if (results && results.results) {
                     const flattenedResults = [];
                     const counts = { tyreIntent: 0, vehicleIntent: 0, comparison: 0 };

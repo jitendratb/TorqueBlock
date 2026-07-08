@@ -27,7 +27,6 @@ class CartService {
                 totalPrice
             });
 
-            console.log("Cart response is ", response);
             return response;
         } catch (error) {
             console.error('Error adding to cart:', error);

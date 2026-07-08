@@ -48,7 +48,6 @@ function PriceCard({ tyre }) {
     const pricing = tyre?.pricing;
     const inStock = tyre?.availability?.inStock;
     const stockCount = tyre?.availability?.stockCount;
-    console.log(pricing)
 
     if (!startingPrice && !pricing) {
         return (
