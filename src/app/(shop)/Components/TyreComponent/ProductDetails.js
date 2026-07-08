@@ -135,7 +135,7 @@ export default function ProductDetails({ tyre }) {
                                         className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-95" : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"}`}
                                     >
                                         <Image
-                                            src={item}
+                                            src={item || '/newlogo.webp'}
                                             alt={`${tyre?.productName || "Tyre"} thumbnail ${idx + 1}`}
                                             fill
                                             sizes="70px"
@@ -149,7 +149,7 @@ export default function ProductDetails({ tyre }) {
                         <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
                             {activeImage && (
                                 <Image
-                                    src={activeImage}
+                                    src={activeImage || '/newlogo.webp'}
                                     alt={tyre?.productName || "Tyre"}
                                     fill
                                     priority

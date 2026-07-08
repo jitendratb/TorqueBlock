@@ -55,7 +55,7 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
 
   return (
     <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
-      aria-hidden={!isOpen}
+      inert={!isOpen ? "" : undefined}
     >
       <div
         onClick={handleBackdropClick}
