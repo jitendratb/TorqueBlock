@@ -8,6 +8,10 @@ import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 
+const getTyre = cache(async (slug) => {
+    return await tyresService.getTyreBySlug(slug);
+});
+
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
