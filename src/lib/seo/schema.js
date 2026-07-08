@@ -216,7 +216,10 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
         url: `${SITE_URL}/tyres/${tyreSlug}/${sizeSlug}`,
         priceCurrency: sizeData?.currency || "INR",
         price: sizeData?.price || sizeData?.pricing?.minPrice || 0,
-        availability: sizeData?.isStock !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        availability: sizeData?.availability === "in_stock" ? "https://schema.org/InStock" 
+            : sizeData?.availability === "backorder" ? "https://schema.org/BackOrder"
+            : sizeData?.availability === "preorder" ? "https://schema.org/PreOrder"
+            : "https://schema.org/OutOfStock",
         itemCondition: "https://schema.org/NewCondition",
         priceValidUntil: priceValidUntil.toISOString().split('T')[0],
         seller: seller,

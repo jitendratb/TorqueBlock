@@ -185,13 +185,23 @@ function ProductTyreDetails({ tyreData }) {
                     <div className="absolute bottom-0 left-0 w-20 h-20 bg-orange-600/5 rounded-full blur-xl pointer-events-none" />
 
                     <div className="">
-                        {tyreData?.isStock !== undefined && (
-                            <div className={`absolute top-2 right-2 flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border ${tyreData.isStock
+                        {tyreData?.availability !== undefined && (
+                            <div className={`absolute top-2 right-2 flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider border ${tyreData.availability === "in_stock"
                                 ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                                : tyreData.availability === "backorder"
+                                ? 'border-yellow-500/30 bg-yellow-500/10 text-yellow-400'
+                                : tyreData.availability === "preorder"
+                                ? 'border-blue-500/30 bg-blue-500/10 text-blue-400'
                                 : 'border-red-500/30 bg-red-500/10 text-red-400'
                                 }`}>
-                                <FaCircle className={`text-[5px] ${tyreData.isStock ? 'text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.8)]' : 'text-red-400 drop-shadow-[0_0_4px_rgba(248,113,113,0.8)]'}`} />
-                                {tyreData.isStock ? 'In Stock' : 'Out of Stock'}
+                                <FaCircle className={`text-[5px] ${tyreData.availability === "in_stock" ? 'text-emerald-400 drop-shadow-[0_0_4px_rgba(52,211,153,0.8)]' 
+                                    : tyreData.availability === "backorder" ? 'text-yellow-400 drop-shadow-[0_0_4px_rgba(250,204,21,0.8)]'
+                                    : tyreData.availability === "preorder" ? 'text-blue-400 drop-shadow-[0_0_4px_rgba(96,165,250,0.8)]'
+                                    : 'text-red-400 drop-shadow-[0_0_4px_rgba(248,113,113,0.8)]'}`} />
+                                {tyreData.availability === "in_stock" ? 'In Stock' 
+                                    : tyreData.availability === "backorder" ? 'Available For Order'
+                                    : tyreData.availability === "preorder" ? 'Pre Order'
+                                    : 'Out of Stock'}
                             </div>
                         )}
 

@@ -87,11 +87,7 @@ function PriceCard({ tyre }) {
                             <span className="text-3xl md:text-4xl font-black text-white tracking-tight">
                                 &#8377;{Number(startingPrice || pricing?.frontTyrePrice ).toLocaleString("en-IN")}
                             </span>
-                            {tyre?.endingPrice && (
-                                <span className="text-zinc-500 text-sm mb-1 line-through">
-                                    &#8377;{Number(tyre.endingPrice).toLocaleString("en-IN")}
-                                </span>
-                            )}
+                            
                         </div>
                         <p className="text-zinc-500 text-[11px] mt-0.5">Price varies by size &bull; Inclusive of taxes</p>
                     </div>

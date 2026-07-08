@@ -19,9 +19,9 @@ export default function CartSlider() {
 
     const hasOutOfStockItems = useMemo(() => {
         return cart.some(item => {
-            const frontOut = item.selectedFront && item.selectedFront.isStock === false;
-            const rearOut = item.selectedRear && item.selectedRear.isStock === false;
-            const genOut = item.selectedGeneric && item.selectedGeneric.isStock === false;
+            const frontOut = item.selectedFront && item.selectedFront.availability === "out_of_stock";
+            const rearOut = item.selectedRear && item.selectedRear.availability === "out_of_stock";
+            const genOut = item.selectedGeneric && item.selectedGeneric.availability === "out_of_stock";
             return frontOut || rearOut || genOut;
         });
     }, [cart]);
@@ -50,9 +50,9 @@ export default function CartSlider() {
         if (item.selectedGeneric) specs.push(`Size: ${item.selectedGeneric.size}`);
 
         const itemImage = product.productImages?.[0] || '';
-        const isFrontOut = item.selectedFront && item.selectedFront.isStock === false;
-        const isRearOut = item.selectedRear && item.selectedRear.isStock === false;
-        const isGenOut = item.selectedGeneric && item.selectedGeneric.isStock === false;
+        const isFrontOut = item.selectedFront && item.selectedFront.availability === "out_of_stock";
+        const isRearOut = item.selectedRear && item.selectedRear.availability === "out_of_stock";
+        const isGenOut = item.selectedGeneric && item.selectedGeneric.availability === "out_of_stock";
         const isItemOutOfStock = isFrontOut || isRearOut || isGenOut;
 
         return (

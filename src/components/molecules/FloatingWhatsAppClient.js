@@ -215,8 +215,8 @@ function FloatingWhatsAppClient({ data }) {
                 aria-label="WhatsApp Support Chat"
             >
 
-                <div className="radar-wave" />
-                <div className="radar-wave-delayed" />
+                {/* <div className="radar-wave" />
+                <div className="radar-wave-delayed" /> */}
 
 
 

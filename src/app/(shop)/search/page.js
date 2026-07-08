@@ -74,8 +74,8 @@ const Card = ({ item }) => {
                                 <span className="bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full text-zinc-300 font-medium">
                                     Size: {item.size}
                                 </span>
-                                <span className={`border px-2.5 py-0.5 rounded-full font-medium ${item.isStock ? 'border-orange-500/20 bg-orange-500/10 text-orange-400' : 'border-rose-500/20 bg-rose-500/10 text-rose-400'}`}>
-                                    {item.isStock ? 'In Stock' : 'Out of Stock'}
+                                <span className={`border px-2.5 py-0.5 rounded-full font-medium ${item.availability === "in_stock" ? 'border-green-500/20 bg-green-500/10 text-green-400' : item.availability === "backorder" ? 'border-yellow-500/20 bg-yellow-500/10 text-yellow-400' : item.availability === "preorder" ? 'border-blue-500/20 bg-blue-500/10 text-blue-400' : 'border-red-500/20 bg-red-500/10 text-red-400'}`}>
+                                    {item.availability === "in_stock" ? 'In Stock' : item.availability === "backorder" ? 'Available For Order' : item.availability === "preorder" ? 'Pre Order' : 'Out of Stock'}
                                 </span>
                             </div>
                             <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed font-normal">

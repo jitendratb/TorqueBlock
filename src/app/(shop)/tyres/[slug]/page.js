@@ -9,7 +9,13 @@ import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 
 
 const getTyre = cache(async (slug) => {
-    return await tyresService.getTyreBySlug(slug);
+    const res = await tyresService.getTyreBySlug(slug);
+    if (typeof window === 'undefined') {
+        const fs = await import('fs');
+        const path = await import('path');
+        fs.appendFileSync(path.join(process.cwd(), 'debug.log'), `[getTyre Cache] slug: ${slug}, res exists: ${res ? 'yes' : 'no'}\n`);
+    }
+    return res;
 });
 
 export async function generateMetadata({ params }) {

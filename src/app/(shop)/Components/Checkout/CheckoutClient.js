@@ -29,6 +29,7 @@ export default function CheckoutClient() {
     const [isOrderPlacing, setIsOrderPlacing] = useState(false);
     const [orderPlacedSuccess, setOrderPlacedSuccess] = useState(false);
     const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
+    const [verifyLoading, setVerifyLoading] = useState(false);
 
     const handleCloseAddressModal = useCallback(() => {
         setAddressModalOpen(false);
@@ -94,6 +95,7 @@ export default function CheckoutClient() {
                         description: "Purchase of High-Performance Tyres",
                         order_id: response.razorpayOrder.id,
                         handler: async (payResponse) => {
+                            setVerifyLoading(true)
                             try {
                                 const verifyRes = await verifyPayment({
                                     razorpay_payment_id: payResponse.razorpay_payment_id,
@@ -111,6 +113,8 @@ export default function CheckoutClient() {
                                 }
                             } catch (err) {
                                 toast.error("Payment verification failed.");
+                            } finally {
+                                setVerifyLoading(false)
                             }
                         },
                         prefill: {
@@ -147,9 +151,65 @@ export default function CheckoutClient() {
         }
     }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, addresses, clearCart, toast]);
 
+    if (verifyLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center py-16 px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.3)]">
+
+
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
+
+                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
+                    <div className="w-full h-[3px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent absolute top-0 left-0 animate-scan-line"></div>
+                </div>
+
+                <div className="relative w-32 h-32 flex items-center justify-center">
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 opacity-20 blur-xl animate-pulse"></div>
+
+                    <div className="absolute inset-0 rounded-full border-4 border-dashed border-orange-500/20 animate-[spin_20s_linear_infinite]"></div>
+
+                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-orange-500 border-r-amber-500 animate-spin"></div>
+
+                    <div className="relative z-10 w-20 h-20 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-orange-500 shadow-[inset_0_0_20px_rgba(249,115,22,0.15)]">
+                        <IoShieldCheckmarkOutline className="w-10 h-10 animate-pulse" />
+                    </div>
+                </div>
+
+                <div className="space-y-3 z-10 max-w-md">
+                    <h3 className="text-xl font-black uppercase tracking-widest text-white">
+                        Verifying Payment
+                    </h3>
+                    <p className="text-zinc-400 text-xs font-semibold leading-relaxed">
+                        Please do not close this window, refresh the page, or click the back button. We are securely validating your transaction with the payment gateway.
+                    </p>
+                </div>
+
+                <div className="flex flex-col items-center gap-2 z-10">
+                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider animate-pulse">
+                        Securing transaction details...
+                    </span>
+                    <div className="w-28 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
+                        <div className="h-full bg-orange-500 rounded-full w-1/2 absolute top-0 left-0 animate-progress-slide"></div>
+                    </div>
+                </div>
+
+                <div className="flex gap-4 items-center justify-center pt-4 border-t border-white/5 w-full max-w-xs z-10">
+                    <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold tracking-wider">
+                        <IoLockClosedOutline className="text-orange-500 text-xs" />
+                        <span>SSL Encrypted</span>
+                    </div>
+                    <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
+                    <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold tracking-wider">
+                        <IoShieldCheckmarkOutline className="text-emerald-500 text-xs" />
+                        <span>Razorpay Secure</span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     if (orderPlacedSuccess && placedOrderDetails) {
         return (
-            <div className="flex flex-col items-center justify-center text-center py-16 px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-6">
+            <div className="flex flex-col items-center justify-center text-center px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-6">
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.15)]">
                     <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -165,8 +225,8 @@ export default function CheckoutClient() {
 
                 <div className="p-5 rounded-2xl bg-black/40 border border-white/5 w-full text-left space-y-3">
                     <div className="flex justify-between border-b border-white/5 pb-2.5 text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                        <span>Order ID</span>
-                        <span className="text-white text-xs normal-case font-black">{placedOrderDetails._id || placedOrderDetails.transactionId}</span>
+                        <span className='min-w-[70px]'>Order ID</span>
+                        <span className="text-white text-xs normal-case font-black break-all text-right ml-4">{placedOrderDetails._id || placedOrderDetails.transactionId}</span>
                     </div>
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Payment Method</span>
@@ -179,7 +239,7 @@ export default function CheckoutClient() {
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Total Amount Paid</span>
                         <span className="text-orange-400 text-xs font-black">
-                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(placedOrderDetails?.items?.totalPrice)}
+                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(placedOrderDetails?.paidAmount)}
                         </span>
                     </div>
                 </div>
