@@ -14,7 +14,7 @@ function TyresClient({ initialData }) {
 
     return (
         <div className="py-4 space-y-4">
-            {/* <ProductDetails tyre={tyre} /> */}
+            <ProductDetails tyre={tyre} />
             <Description tyre={tyre} />
 
             {/* <TrustSection tyre={tyre} /> */}

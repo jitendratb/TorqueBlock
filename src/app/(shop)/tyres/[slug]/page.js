@@ -84,7 +84,7 @@ async function Page({ params }) {
     return (
         <div className="">
             <Breadcrumb items={breadcrumbItems} />
-            <TyresClient initialData={tyre} />
+            {/* <TyresClient initialData={tyre} /> */}
             
             <ProductSchema product={tyre} />
             <BreadcrumbSchema items={breadcrumbItems} />
