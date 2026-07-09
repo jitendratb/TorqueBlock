@@ -98,26 +98,49 @@ export function generateProductSchema(product) {
     priceValidUntil.setFullYear(priceValidUntil.getFullYear() + 1);
     const priceValidUntilStr = priceValidUntil.toISOString().split('T')[0];
 
-    const hasPriceRange = product?.startingPrice && product?.endingPrice;
+    const prices = product?.sizesIds && Array.isArray(product.sizesIds)
+        ? product.sizesIds.map(s => s.price).filter(p => typeof p === 'number' && p > 0)
+        : [];
+
+    const lowPrice = product?.schemaMarkup?.offersPrice 
+        || product?.startingPrice 
+        || (prices.length > 0 ? Math.min(...prices) : null)
+        || product?.pricing?.frontTyrePrice 
+        || product?.pricing?.comboPrice;
+
+    const highPrice = product?.endingPrice 
+        || (prices.length > 0 ? Math.max(...prices) : null)
+        || product?.pricing?.rearTyrePrice 
+        || product?.pricing?.comboPrice;
+
+    const hasPriceRange = lowPrice && highPrice && lowPrice !== highPrice;
+
+    const isAvailable = product?.availability?.inStock !== undefined 
+        ? product.availability.inStock 
+        : (product?.inStock !== false);
+
     const offers = hasPriceRange ? {
         "@type": "AggregateOffer",
         url: `${SITE_URL}/tyres/${slug}`,
-        priceCurrency: "INR",
-        lowPrice: product.startingPrice,
-        highPrice: product.endingPrice,
-        offerCount: (product?.frontSizes?.length || 0) + (product?.rearSizes?.length || 0) || 1,
-        availability: product?.availability?.inStock || product?.inStock !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        priceCurrency: product?.schemaMarkup?.currency || "INR",
+        lowPrice: lowPrice,
+        highPrice: highPrice,
+        offerCount: (product?.frontSizes?.length || 0) + (product?.rearSizes?.length || 0) || product?.sizesIds?.length || 1,
+        availability: isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
         seller: seller,
     } : {
         "@type": "Offer",
         url: `${SITE_URL}/tyres/${slug}`,
-        priceCurrency: "INR",
-        price: product?.price || 0,
-        availability: product?.availability?.inStock || product?.inStock !== false ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        priceCurrency: product?.schemaMarkup?.currency || "INR",
+        price: lowPrice || 0,
+        availability: isAvailable ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
         itemCondition: "https://schema.org/NewCondition",
         priceValidUntil: priceValidUntilStr,
         seller: seller,
     };
+
+    const ratingValue = product?.schemaMarkup?.aggregateRating || product?.rating || 4.8;
+    const reviewCount = product?.schemaMarkup?.reviewCount || product?.ratingCount || 459;
 
     const schema = {
         "@context": "https://schema.org",
@@ -127,15 +150,15 @@ export function generateProductSchema(product) {
         image: imagesList,
         sku: product?.sku || `TB-${(slug || 'SKU').substring(0, 40)}`,
         mpn: product?.mpn || product?.sku || `TB-${(slug || 'MPN').substring(0, 40)}`,
-        category: product?.category || "Motorcycle Parts",
+        category: product?.categoryId?.name || product?.category || "Motorcycle Parts",
         url: `${SITE_URL}/tyres/${slug}`,
         brand: { "@type": "Brand", name: brandName },
         offers: offers,
 
         aggregateRating: {
             "@type": "AggregateRating",
-            ratingValue: product?.rating || 4.8,
-            reviewCount: product?.ratingCount || 459,
+            ratingValue: ratingValue,
+            reviewCount: reviewCount,
         },
 
         review: [
@@ -143,7 +166,7 @@ export function generateProductSchema(product) {
                 "@type": "Review",
                 reviewRating: {
                     "@type": "Rating",
-                    ratingValue: product?.rating || 4.8,
+                    ratingValue: ratingValue,
                     bestRating: "5",
                 },
                 author: {
