@@ -21,8 +21,6 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
         router.push(`/products/${tyre?.identifier}/${sizeValue.toLowerCase().replace(/[\s/]/g, '-')}`);
     };
 
-
-    console.log(tyre)
     return (
         <div className="space-y-4">
             <div className={desClassName}>

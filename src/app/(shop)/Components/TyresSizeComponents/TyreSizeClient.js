@@ -9,7 +9,6 @@ import SubProductDetails from '../SubProductDetails';
 
 function TyreSizeClient({ initialData }) {
     const [tyreSize] = useState(initialData);
-
     return (
         <div>
             <SubProductDetails tyreData={tyreSize} />
