@@ -75,7 +75,7 @@ const Card = ({ item }) => {
                                     Size: {item.size}
                                 </span>
                                 <span className={`border px-2.5 py-0.5 rounded-full font-medium ${item.availability === "in_stock" ? 'border-green-500/20 bg-green-500/10 text-green-400' : item.availability === "backorder" ? 'border-yellow-500/20 bg-yellow-500/10 text-yellow-400' : item.availability === "preorder" ? 'border-blue-500/20 bg-blue-500/10 text-blue-400' : 'border-red-500/20 bg-red-500/10 text-red-400'}`}>
-                                    {item.availability === "in_stock" ? 'In Stock' : item.availability === "backorder" ? 'Available For Order' : item.availability === "preorder" ? 'Pre Order' : 'Out of Stock'}
+                                    {item.availability === "in_stock" ? 'In Stock' : item.availability === "backorder" ? 'Available To Order' : item.availability === "preorder" ? 'Pre Order' : 'Out of Stock'}
                                 </span>
                             </div>
                             <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed font-normal">
@@ -258,7 +258,7 @@ const Card = ({ item }) => {
                     <div className="p-5 flex flex-col justify-between h-full min-w-0">
                         <div className="space-y-1 flex-1 flex flex-col justify-center">
                             <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-orange-400 flex items-center gap-1.5">
-                              <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'><FiCalendar className="text-xs"/> Article</div>
+                                <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'><FiCalendar className="text-xs" /> Article</div>
                             </div>
                             <h3 className="text-lg md:text-xl xl:text-2xl font-bold text-white leading-snug line-clamp-2">
                                 {item.header}
@@ -317,7 +317,7 @@ const Card = ({ item }) => {
                     <div className="p-5 flex flex-col justify-between h-full min-w-0">
                         <div className="space-y-1 flex-1 flex flex-col justify-center">
                             <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-orange-400 flex items-center gap-1.5">
-                              <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'><FiCalendar className="text-xs"/> Tyre Comparison</div>
+                                <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'><FiCalendar className="text-xs" /> Tyre Comparison</div>
                             </div>
                             <h3 className="text-lg md:text-xl xl:text-2xl font-bold text-white leading-snug line-clamp-1">
                                 {item.tyre1?.productName} <span className="text-zinc-500 font-normal">vs</span> {item.tyre2?.productName}
@@ -362,9 +362,9 @@ const Card = ({ item }) => {
                     <div className="p-4 flex flex-col justify-between h-full min-w-0">
                         <div className="space-y-1 flex-1 flex flex-col justify-center">
                             <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-orange-400 flex items-center gap-1.5">
-                              <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'>
-                                  <FiCompass className="text-xs"/> {item.bikeBrand}
-                              </div>
+                                <div className='flex items-center gap-1.5 px-2 py-1 bg-white/10 border border-orange-300/10 rounded-full'>
+                                    <FiCompass className="text-xs" /> {item.bikeBrand}
+                                </div>
                             </div>
                             <h3 className="text-lg md:text-xl xl:text-2xl font-bold text-white leading-snug line-clamp-2 mt-1">
                                 {item.bikeModel}

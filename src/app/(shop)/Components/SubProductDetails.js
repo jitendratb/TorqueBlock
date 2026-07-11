@@ -309,7 +309,7 @@ export default function TyreDataDetails({ tyreData }) {
                                                 : 'text-red-100'
                                         }`}>
                                         {tyreData?.availability === "in_stock" ? 'In Stock'
-                                            : tyreData?.availability === "backorder" ? 'Available For Order'
+                                            : tyreData?.availability === "backorder" ? 'Available To Order'
                                                 : tyreData?.availability === "preorder" ? 'Pre Order'
                                                     : 'Out of Stock'}
                                     </p>
@@ -460,7 +460,7 @@ export default function TyreDataDetails({ tyreData }) {
                                 onClick={handleNotify}
                                 className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                               CHECK AVAILABILITY
+                                CHECK AVAILABILITY
                                 <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} />
                             </button>
                         ) : tyreData?.availability === "out_of_stock" ? (
@@ -468,7 +468,7 @@ export default function TyreDataDetails({ tyreData }) {
                                 onClick={handleNotify}
                                 className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                               CHECK AVAILABILITY
+                                CHECK AVAILABILITY
                                 <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} />
                             </button>
                         ) : (
