@@ -13,6 +13,8 @@ import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 
 import { CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
+import AiSearchBar from './component/BigSearchBar'
+import HeroSearchObserver from './component/HeroSearchObserver'
 
 const Category = dynamic(() => import('./component/Category'), {
   ssr: true,
@@ -93,11 +95,17 @@ function page() {
           <source media="(min-width: 768px)" srcSet={desktop} />
           <img {...rest} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-cover" />
         </picture>
-        <span className='absolute bg-gradient-to-r from-black/80 to-black/40 inset-0 z-0' />
-        <div className='w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 z-10'>
+        <span className='absolute bg-gradient-to-r from-black/60 to-black/40 inset-0 z-0' />
+          <div className='w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 z-10'>
           <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 px-4 pt-20 pb-6 md:py-0 text-white text-2xl font-bold gap-5 items-center'>
             <H1Tags />
-            <QueryBox />
+          </div>
+        </div>
+        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-10 z-10'>
+          <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center'>
+            <HeroSearchObserver>
+              <AiSearchBar />
+            </HeroSearchObserver>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ class SearchService {
 
         const params = {
             search: query.trim(),
-            limit: options.limit || 10,
+            limit: options.limit || 8,
             page: options.page || 1,
             category: options.category,
             brand: options.brand,
@@ -41,7 +41,6 @@ class SearchService {
             });
 
 
-            // Cache the result
             this.cache.set(cacheKey, {
                 data: response,
                 timestamp: Date.now(),

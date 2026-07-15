@@ -12,6 +12,7 @@ import ManuSlider from './ManuSlider';
 import CartSlider from './CartSlider';
 import Login from './login';
 import useCartStore from '@/stores/cartStore';
+import useUiStore from '@/stores/uiStore';
 
 const WHATSAPP_NUMBER = "916366625625";
 
@@ -193,6 +194,7 @@ TyreComparisonMegaMenu.displayName = "TyreComparisonMegaMenu";
 function Header() {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
+    const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
     const [activeHover, setActiveHover] = useState(null);
     const [hoverTimeout, setHoverTimeout] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -221,12 +223,15 @@ function Header() {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(document.documentElement.scrollTop > 50);
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            setScrolled(scrollTop > 50);
         };
         window.addEventListener("scroll", handleScroll, { passive: true });
         handleScroll();
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
+
+    const showSearchBar = pathname !== '/' || !isHeroSearchVisible;
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
@@ -323,9 +328,15 @@ function Header() {
                     </ul>
 
                     <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
-                        <SearchBar className='xl:min-w-[360px]' />
-
-
+                        <div 
+                            className={`transition-all duration-500 ease-in-out  ${
+                                showSearchBar 
+                                ? 'opacity-100 max-w-[500px] translate-x-0 visible' 
+                                : 'opacity-0 max-w-0 translate-x-4 invisible'
+                            }`}
+                        >
+                            <SearchBar className='xl:min-w-[360px]' />
+                        </div>
                         <div>
                             <button
                                 onClick={() => setCartSliderOpen(true)}

@@ -89,7 +89,7 @@ const useSearchStore = create(
                     return `${item.bikeBrand || ''} ${item.bikeModel || ''}`.trim();
                 };
 
-                // Add all tyres
+
                 if (searchResults?.results?.tyreIntent?.data) {
                     searchResults.results.tyreIntent.data.forEach(tyre => {
                         items.push({
@@ -98,11 +98,13 @@ const useSearchStore = create(
                             query: tyre.productName,
                             identifier: tyre.identifier,
                             relevanceScore: tyre.relevanceScore || 0,
+                            sizesIds: tyre?.sizesIds,
+                            productImages:tyre?.productImages,
+                            category:tyre?.category?.name
                         });
                     });
                 }
 
-                // Add all comparisons
                 if (searchResults?.results?.comparison?.data) {
                     searchResults.results.comparison.data.forEach(comparison => {
                         items.push({
@@ -146,11 +148,12 @@ const useSearchStore = create(
                 // Add all blogs
                 if (searchResults?.results?.blogs?.data) {
                     searchResults.results.blogs.data.forEach(blog => {
+                        console.log(searchResults?.results?.blogs?.data)
                         items.push({
                             type: 'Blogs',
                             label: blog.header,
                             query: blog.header,
-                            identifier: blog.slug || blog.identifier,
+                            identifier: blog.blogid?.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-'),
                             relevanceScore: blog.relevanceScore || 0,
                         });
                     });

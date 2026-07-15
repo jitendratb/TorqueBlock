@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, useCallback, } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-export default function Carousel({ items = [], renderItem, autoPlay = false, interval = 4000, itemWidth = 280, gap = 16, showArrows = true, showDots = true, onReachEnd, endThreshold = 80, className = "", children, }) {
+export default function Carousel({ items = [], renderItem, autoPlay = false, interval = 4000, itemWidth = 280, gap = 16, showArrows = true, showDots = false, onReachEnd, endThreshold = 80, className = "", children, arrowSize = 20, leftArrowClassName = "-left-4 p-2", rightArrowClassName = "-right-4 p-2" }) {
     const containerRef = useRef(null);
     const trackRef = useRef(null);
     const timerRef = useRef(null);
@@ -157,9 +157,9 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                         scrollToIndex(current - 1);
                     }}
                     aria-label="Previous slide"
-                    className="absolute -left-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white hover:text-white transition-all duration-300 shadow-xl"
+                    className={`absolute top-1/2 -translate-y-1/2 z-20 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white transition-all duration-300 shadow-xl ${leftArrowClassName}`}
                 >
-                    <FiChevronLeft size={20} />
+                    <FiChevronLeft size={arrowSize} />
                 </button>
             )}
 
@@ -171,9 +171,9 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                         scrollToIndex(current + 1);
                     }}
                     aria-label="Next slide"
-                    className="absolute -right-4 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white  transition-all duration-300 shadow-xl"
+                    className={`absolute top-1/2 -translate-y-1/2 z-20 rounded-full border border-gray-300 bg-white/40 backdrop-blur-sm hover:bg-orange-500 text-white transition-all duration-300 shadow-xl ${rightArrowClassName}`}
                 >
-                    <FiChevronRight size={20} />
+                    <FiChevronRight size={arrowSize} />
                 </button>
             )}
 
