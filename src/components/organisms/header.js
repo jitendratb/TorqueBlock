@@ -231,7 +231,7 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const showSearchBar = pathname !== '/' || !isHeroSearchVisible;
+    const showSearchBar = pathname !== '/' ? true : (isMounted && !isHeroSearchVisible);
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
@@ -329,7 +329,7 @@ function Header() {
 
                     <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
                         <div 
-                            className={`transition-all duration-500 ease-in-out  ${
+                            className={`transition-all duration-500 ease-in-out overflow-hidden ${
                                 showSearchBar 
                                 ? 'opacity-100 max-w-[500px] translate-x-0 visible' 
                                 : 'opacity-0 max-w-0 translate-x-4 invisible'
