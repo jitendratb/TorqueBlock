@@ -194,7 +194,7 @@ function SearchBar({
     return (
         <div ref={searchBarRef} className={`relative w-full search-container-ignore-outside ${className}`} style={{ maxWidth }} {...props}>
             <div
-                className="relative flex items-center w-full bg-white/10 border border-white/30 rounded-full px-2 lg:px-4 py-0.5 md:py-1 lg:py-2 transition-all duration-300 hover:bg-white/20 hover:border-gray-300 hover:shadow-sm focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
+                className="relative flex items-center w-full bg-white/10 border border-white/30 rounded-full px-2 lg:px-4 py-2 transition-all duration-300 hover:bg-white/20 hover:border-gray-300 hover:shadow-sm focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
                 onClick={() => inputRef.current?.focus()}
             >
                 <IoSearchSharp className="text-white text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />

@@ -195,6 +195,7 @@ function Header() {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
     const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
+    const heroObserverReady = useUiStore((state) => state.heroObserverReady);
     const [activeHover, setActiveHover] = useState(null);
     const [hoverTimeout, setHoverTimeout] = useState(null);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -231,7 +232,7 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const showSearchBar = pathname !== '/' ? true : (isMounted && !isHeroSearchVisible);
+    const showSearchBar = pathname !== '/' ? true : (heroObserverReady && !isHeroSearchVisible);
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
