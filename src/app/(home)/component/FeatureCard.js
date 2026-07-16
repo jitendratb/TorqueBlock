@@ -45,11 +45,6 @@ function FeatureCard() {
                         showArrows={true}
                         autoPlay={false}
                     >
-                        {recommendedLoading && (
-                            <div className="flex shrink-0 w-[280px] px-2 h-full">
-                                <TyreCardSkeleton />
-                            </div>
-                        )}
                     </Carousel>
                 ) : recommendedLoading ? (
                     <div className="flex gap-4 overflow-hidden px-4">
