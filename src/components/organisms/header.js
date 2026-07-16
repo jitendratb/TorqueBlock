@@ -231,7 +231,7 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const showSearchBar = pathname !== '/' || !isHeroSearchVisible;
+    const showSearchBar = pathname !== '/' ? true : (isMounted && !isHeroSearchVisible);
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
