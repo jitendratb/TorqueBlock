@@ -99,7 +99,7 @@ function page() {
             <H1Tags />
           </div>
         </div>
-        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-16 md:bottom-10 z-10 '>
+        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-20 md:bottom-10 z-10 '>
           <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center '>
             <HeroSearchObserver>
               <AiSearchBar />
