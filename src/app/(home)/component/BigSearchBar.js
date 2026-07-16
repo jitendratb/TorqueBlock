@@ -57,9 +57,9 @@ function SearchBar({ onSearch, searchItems = [] }) {
     clearSearch
   } = useSearchStore();
 
-  const [placeholderText, setPlaceholderText] = useState("");
+  const [placeholderText, setPlaceholderText] = useState(PLACEHOLDERS[0]);
   const [placeholderIndex, setPlaceholderIndex] = useState(0);
-  const [charIndex, setCharIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(PLACEHOLDERS[0].length);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
     const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
