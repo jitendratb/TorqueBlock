@@ -95,7 +95,7 @@ export default function RootLayout({ children }) {
           {children}
           <CartSlider />
         </ToastProvider>
-        <FloatingWhatsApp />
+        {/* <FloatingWhatsApp /> */}
         <LocalBusinessSchema />
 
         <Script

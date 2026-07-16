@@ -22,7 +22,7 @@ export async function generateMetadata({ params }) {
     const brandName = tyre?.brand?.name || tyre?.brand || "Torque Block";
     const displayDescription = tyre?.hero?.subtitle || (displayName ? `Buy ${displayName} performance motorcycle tyres online in India. Check sizes, compatibility, verified reviews, price, and professional installation support near you.` : "Explore high performance motorcycle tyre sizes, compatibility, pricing, and local installation support.");
 
-    const displayTitle = displayName ? `${displayName} Price, Sizes & Compatible Bikes` : "Performance Motorcycle Tyres - Review, Sizes & Price";
+    const displayTitle = displayName ? `${displayName} Price, Sizes & Compatible Motorcycles` : "Performance Motorcycle Tyres - Review, Sizes & Price";
 
     const mainImage = tyre?.productImages?.[0] || tyre?.hero?.heroImage || "/newLogo.webp";
     const metaTitle = tyre?.seo?.metaTitle || tyre?.seo?.title || displayTitle;

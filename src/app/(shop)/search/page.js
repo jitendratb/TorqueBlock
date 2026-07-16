@@ -356,7 +356,7 @@ const Card = ({ item }) => {
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
                         <div className="absolute bottom-4 left-4 rounded-full border border-orange-500/30 bg-orange-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400 backdrop-blur-md">
-                            Bike
+                            Motorcycle
                         </div>
                     </div>
                     <div className="p-4 flex flex-col justify-between h-full min-w-0">

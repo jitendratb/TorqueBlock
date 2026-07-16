@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
     if (!blog) return {};
 
     const displayTitle = blog?.metaTitle || blog?.header || "Blog Post";
-    const displayDescription = blog?.metaDescription || blog?.subHeader || "Read this high-performance motorcycle tyre and bike review on Torque Block.";
+    const displayDescription = blog?.metaDescription || blog?.subHeader || "Read this high-performance motorcycle tyre and Motorcycle review on Torque Block.";
     const mainImage = blog?.image || "/newLogo.webp";
     const keywords = [
       displayTitle,

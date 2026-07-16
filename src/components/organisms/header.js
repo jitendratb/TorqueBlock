@@ -118,7 +118,7 @@ TyresMegaMenu.displayName = "TyresMegaMenu";
 const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="col-span-3">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Find Perfect Tyres for Your Bike</h3>
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Find Perfect Tyres for Your Motorcycle</h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
                 {NAVIGATION_CONFIG.mobileSubMenus["Motorcycles"].map((bike) => (
                     <Link
@@ -231,7 +231,7 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const showSearchBar = pathname !== '/' ? true : (isMounted && !isHeroSearchVisible);
+    const showSearchBar = pathname !== '/' || !isHeroSearchVisible;
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
@@ -265,8 +265,8 @@ function Header() {
 
     return (
         <div>
-            <header className="header-root fixed left-0 right-0 w-full z-50" data-scrolled={scrolled}>
-                <nav className={`header-nav flex text-white justify-between items-center gap-4 max-w-7xl mx-auto ${scrolled ? "bg-white/10 backdrop-blur-sm shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
+            <header className={`header-root fixed left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled ? "bg-transparent" : "bg-white/20 backdrop-blur-sm"}`} data-scrolled={scrolled}>
+                <nav className={`header-nav flex text-white justify-between items-center gap-4 max-w-7xl mx-auto transition-all duration-300 ease-in-out ${scrolled ? "bg-white/20 backdrop-blur-sm border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
                     <Link href="/" className="text-2xl font-bold" aria-label="Torque Block Home">
                         <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block h-auto w-[130px]" style={{ height: 'auto' }} />
                     </Link>
@@ -329,8 +329,8 @@ function Header() {
 
                     <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
                         <div 
-                            className={`transition-all duration-500 ease-in-out overflow-hidden ${
-                                showSearchBar 
+                            className={`transition-all duration-500 ease-in-out ${
+                                showSearchBar
                                 ? 'opacity-100 max-w-[500px] translate-x-0 visible' 
                                 : 'opacity-0 max-w-0 translate-x-4 invisible'
                             }`}
@@ -367,7 +367,7 @@ function Header() {
                 </nav>
 
                 {activeHover && activeHover !== "Home" && (
-                    <div 
+                    <div
                         className="Hover-Modal absolute left-0 right-0 top-full mx-auto max-w-7xl mt-2 bg-white rounded-2xl border border-slate-200/70 shadow-2xl p-8 text-gray-900 z-50 overflow-hidden"
                         onMouseEnter={() => handleMouseEnter(activeHover)}
                         onMouseLeave={handleMouseLeave}

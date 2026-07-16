@@ -6,15 +6,23 @@ import { IoSearchSharp } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
 
+const PLACEHOLDERS = [
+  'Search "Royal Enfield Hunter 350"...',
+  'Search "TVS Apache RTR 310"...',
+  'Search tyre size "110/70-17"...',
+  'Search "140/70 R17 Rear"...',
+  'Search "Pirelli Diablo Rosso IV"...',
+  'Search "Michelin Road 6"...',
+  'Search "Apollo Alpha H1"...',
+  'Search "CEAT Zoom Cruz"...',
+  "Search by brand or tyre model...",
+  "Find front & rear tyre sets...",
+  "Compare motorcycle tyres...",
+];
+
 function SearchBar({
     placeholder = "Search for",
-    searchItems = [
-        { label: 'Tyres' },
-        { label: 'Bike Brands' },
-        { label: 'Models' },
-        { label: 'Sizes' },
-        { label: 'Tyre Comparisons' },
-    ],
+    searchItems = [],
     onSearch,
     className = "",
     maxWidth = "320px",
@@ -27,6 +35,12 @@ function SearchBar({
     const searchBarRef = useRef(null);
     const suggestionsContainerRef = useRef(null);
     const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+    
+    const [placeholderText, setPlaceholderText] = useState("");
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(0);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     const {
         searchInput,
@@ -40,6 +54,29 @@ function SearchBar({
         getSuggestions,
         clearSearch
     } = useSearchStore();
+
+    useEffect(() => {
+        if (isFocused || searchInput.length > 0) return;
+
+        const currentPlaceholder = PLACEHOLDERS[placeholderIndex];
+        let typingSpeed = isDeleting ? 30 : 60;
+
+        if (!isDeleting && charIndex === currentPlaceholder.length) {
+            const timeout = setTimeout(() => setIsDeleting(true), 2500);
+            return () => clearTimeout(timeout);
+        } else if (isDeleting && charIndex === 0) {
+            setIsDeleting(false);
+            setPlaceholderIndex((prev) => (prev + 1) % PLACEHOLDERS.length);
+            return;
+        }
+
+        const timeout = setTimeout(() => {
+            setPlaceholderText(currentPlaceholder.substring(0, charIndex + (isDeleting ? -1 : 1)));
+            setCharIndex((prev) => prev + (isDeleting ? -1 : 1));
+        }, typingSpeed);
+
+        return () => clearTimeout(timeout);
+    }, [charIndex, isDeleting, placeholderIndex, isFocused, searchInput.length]);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -73,10 +110,12 @@ function SearchBar({
     }, [selectedSuggestionIndex]);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setActiveIndex((activeIndex + 1) % searchItems.length);
-        }, 3000);
-        return () => clearInterval(interval);
+        if (searchItems.length > 0) {
+            const interval = setInterval(() => {
+                setActiveIndex((activeIndex + 1) % searchItems.length);
+            }, 3000);
+            return () => clearInterval(interval);
+        }
     }, [searchItems.length, activeIndex, setActiveIndex]);
 
     useEffect(() => {
@@ -153,42 +192,26 @@ function SearchBar({
     };
 
     return (
-        <div ref={searchBarRef} className={`relative w-full search-container-ignore-outside ${className}`} style={{ maxWidth  }} {...props}>
+        <div ref={searchBarRef} className={`relative w-full search-container-ignore-outside ${className}`} style={{ maxWidth }} {...props}>
             <div
-                className="relative flex items-center w-full bg-gray-50 border border-gray-200 rounded-full px-2 lg:px-4 py-0.5 md:py-1 lg:py-2 transition-all duration-300 hover:bg-white hover:border-gray-300 hover:shadow-sm focus-within:bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
+                className="relative flex items-center w-full bg-white/10 border border-white/30 rounded-full px-2 lg:px-4 py-0.5 md:py-1 lg:py-2 transition-all duration-300 hover:bg-white/20 hover:border-gray-300 hover:shadow-sm focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
                 onClick={() => inputRef.current?.focus()}
             >
-                <IoSearchSharp className="text-gray-400 text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />
-                <div className="relative flex-1 min-h-[1.5rem] flex items-center">
-                    {!searchInput && (
-                        <div className="absolute inset-0 flex items-center pointer-events-none ">
-                            <span className="text-gray-500 text-xs whitespace-nowrap mr-1 ">{placeholder}</span>
-
-                            <div className="relative flex-1 h-full overflow-hidden">
-                                <div
-                                    className="absolute inset-0 w-full flex flex-col transition-transform duration-500 ease-in-out"
-                                    style={{ transform: `translateY(-${activeIndex * 100}%)` }}
-                                >
-                                    {searchItems?.map((item, i) => (
-                                        <div key={i} className="h-full w-full flex-shrink-0 flex items-center">
-                                            <span className="font-semibold text-gray-700 text-xs truncate w-full">
-                                                {item.label}
-                                            </span>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
+                <IoSearchSharp className="text-white text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />
+                <div className="relative flex-1 min-h-[1.6rem] flex items-center">
                     <input
                         ref={inputRef}
                         type="text"
                         value={searchInput}
                         onChange={(e) => setSearchInput(e.target.value)}
                         onKeyDown={handleKeyDown}
-                        onFocus={() => searchInput.trim() && showSuggestions && setShowSuggestions(true)}
-                        className="w-full bg-transparent text-gray-900 text-sm outline-none z-10 pl-0"
+                        placeholder={placeholderText}
+                        onFocus={() => {
+                            setIsFocused(true);
+                            searchInput.trim() && showSuggestions && setShowSuggestions(true);
+                        }}
+                        onBlur={() => setIsFocused(false)}
+                        className="w-full bg-transparent text-white text-sm outline-none z-10 pl-0"
                         aria-label="Search"
                     />
                 </div>
@@ -212,7 +235,7 @@ function SearchBar({
                                 >
                                     <span className="font-semibold text-slate-800 truncate text-[10px] md:text-xs">{item.label}</span>
                                     <span className="rounded-full bg-black/5 text-slate-600 px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider">
-                                        {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type} 
+                                        {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type} 
                                     </span>
                                 </Link>
                             );

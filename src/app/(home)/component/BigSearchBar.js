@@ -9,10 +9,11 @@ import Link from 'next/link';
 import TyreCard from '@/components/atoms/TyreCard';
 import Carousel from '@/components/organisms/Carousel';
 import SearchCard from '@/components/atoms/SearchCard';
+import useUiStore from '@/stores/uiStore';
 
 const PLACEHOLDERS = [
   "Search by Motorcycle, Tyre, Size or Brand...",
-  "Find tyres for your bike...",
+  "Find tyres for your motorcycle...",
   'Search "Royal Enfield Hunter 350"...',
   'Search "TVS Apache RTR 310"...',
   'Search tyre size "110/70-17"...',
@@ -21,8 +22,8 @@ const PLACEHOLDERS = [
   'Search "Michelin Road 6"...',
   'Search "Apollo Alpha H1"...',
   'Search "CEAT Zoom Cruz"...',
-  "Find adventure bike tyres...",
-  "Find sport bike tyres...",
+  "Find adventure motorcycle tyres...",
+  "Find sport motorcycle tyres...",
   "Find touring motorcycle tyres...",
   "Search by brand or tyre model...",
   "Find front & rear tyre sets...",
@@ -61,6 +62,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
   const [charIndex, setCharIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+    const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
 
   useEffect(() => {
     if (isFocused || searchInput.length > 0) return;
@@ -94,7 +96,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
       }
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         if (!document.contains(event.target)) return;
-        
+
         setShowSearch(false);
         setShowSuggestions(false);
       }
@@ -220,16 +222,16 @@ function SearchBar({ onSearch, searchItems = [] }) {
   const firstTyreIndex = suggestions.findIndex(i => i.type === "Tyre" && i.sizesIds && i.sizesIds.length > 0);
 
   return (
-    <div ref={wrapperRef} className='relative search-container-ignore-outside'>
+    <div ref={wrapperRef} className={`relative search-container-ignore-outside ${isHeroSearchVisible ? "" : "hidden"}`}>
 
-      <div className={`absolute left-0 right-0 w-full rounded-2xl border border-white/20 bg-white/30 backdrop-blur-sm text-white shadow-xl z-50 overflow-hidden transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'} ${storeShowSuggestions && suggestions.length > 0 ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"}`} >
+      <div className={`absolute   left-0 right-0 w-full rounded-2xl border border-white/20 bg-white/20 backdrop-blur-sm text-white shadow-xl z-50  transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'} ${storeShowSuggestions && suggestions.length > 0 ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"}`} >
         <div ref={suggestionsContainerRef} className="p-2 max-h-80 overflow-y-auto">
           {!loading && !error && suggestions.map((item, index) => {
             const isSelected = selectedSuggestionIndex === index;
-            
+
             return (
-              <div 
-                key={`${item.type}-${index}`} 
+              <div
+                key={`${item.type}-${index}`}
                 className={`w-full flex flex-col mb-1 rounded-xl transition ${isSelected ? 'bg-white/30' : 'hover:bg-white/20'}`}
               >
                 <Link
@@ -243,7 +245,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
                 >
                   <span className="font-semibold text-white truncate text-[10px] md:text-xs">{item.label}</span>
                   <span className="rounded-full bg-white/30 text-white px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider">
-                    {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type}
+                    {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type}
                   </span>
                 </Link>
 
@@ -257,7 +259,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
                       leftArrowClassName="!-left-2 !p-1.5"
                       rightArrowClassName="!-right-2 !p-1.5"
                       renderItem={(sizeItem) => (
-                        <SearchCard product={sizeItem} tyre={item}  />
+                        <SearchCard product={sizeItem} tyre={item} />
                       )}
                     />
                   </div>
@@ -268,30 +270,30 @@ function SearchBar({ onSearch, searchItems = [] }) {
         </div>
       </div>
 
-      <div className={`absolute text-base p-3 z-50 bg-white/30  backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 left-0 w-72 flex flex-col gap-1 overflow-hidden transform transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-3 origin-bottom-left' : 'top-full mt-3 origin-top-left'} ${showSearch ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
+      <div className={`absolute text-base p-3 z-50 bg-white/20  backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 left-0 w-92 flex flex-col gap-1 overflow-hidden transform transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-3 origin-bottom-left' : 'top-full mt-3 origin-top-left'} ${showSearch ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
         <button className='flex rounded-xl items-center gap-4 p-2 hover:bg-white/20 transition-all duration-300 text-left group'>
-          <div className='p-2.5 bg-white/20 text-orange-400 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm'>
+          <div className='p-2.5 bg-white/20 text-orange-500 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm'>
             <FiUpload size={20} />
           </div>
           <div className='flex-1'>
             <p className='font-semibold text-white group-hover:text-orange-400 transition-colors'>Upload Images</p>
             <p className='text-xs text-gray-300 group-hover:text-white/90 transition-colors'>Search by uploading</p>
           </div>
-          <span className='text-[10px] font-bold tracking-widest uppercase bg-white/20 text-white px-2.5 py-1 rounded-full'>Soon</span>
+          <span className='text-[10px] font-bold tracking-widest uppercase bg-white/20 text-white px-2.5 py-1 rounded-full'> Coming Soon</span>
         </button>
         <button className='flex rounded-xl items-center gap-4 p-2 hover:bg-white/20 transition-all duration-300 text-left group'>
-          <div className='p-2.5 bg-white/20 text-orange-400 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm'>
+          <div className='p-2.5 bg-white/20 text-orange-500 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm'>
             <FiCamera size={20} />
           </div>
           <div className='flex-1'>
             <p className='font-semibold text-white group-hover:text-orange-400 transition-colors'>Click Photo</p>
             <p className='text-xs text-gray-300 group-hover:text-white/90 transition-colors'>Take a picture</p>
           </div>
-          <span className='text-[10px] font-bold tracking-widest uppercase bg-white/20 text-white px-2.5 py-1 rounded-full'>Soon</span>
+          <span className='text-[10px] font-bold tracking-widest uppercase bg-white/20 text-white px-2.5 py-1 rounded-full'> Coming Soon</span>
         </button>
       </div>
 
-      <div ref={searchBarRef} className='relative bg-white/30 rounded-full backdrop-blur-sm  h-12 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20'>
+      <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"'>
         <div>
           <button onClick={() => setShowSearch(!showSearch)} className={`p-2 bg-white/30 rounded-full transition-transform duration-300 ${showSearch ? "rotate-45" : "rotate-0"}`} >
             <AiOutlinePlus className='text-lg md:text-xl' />
@@ -320,11 +322,9 @@ function SearchBar({ onSearch, searchItems = [] }) {
             disabled={!searchInput.trim()}
             className={`p-2 rounded-full transition-all duration-300 ${searchInput.trim() ? 'bg-orange-500/80 cursor-pointer' : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}
           >
-            <FaArrowUp  className='text-lg md:text-xl' />
+            <FaArrowUp className='text-lg md:text-xl' />
           </button>
         </div>
-
-
       </div>
     </div>
 

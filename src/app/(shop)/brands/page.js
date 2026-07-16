@@ -31,7 +31,6 @@ export async function generateMetadata() {
       'Pirelli tyres Bangalore',
       'Metzeler tyres Bangalore',
       'Michelin tyres near me',
-      'Bridgestone bike tyres'
     ],
     alternates: {
       canonical: url,

@@ -23,8 +23,8 @@ export async function generateMetadata({ params }) {
     if (!bikeBrand) return {};
 
     const displayTitle = bikeBrand?.bikeBrand
-        ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} Review, Sizes & Compatible Bikes`
-        : "Bike Brand Review, Sizes & Compatible Bikes";
+        ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} Review, Sizes & Compatible Motorcycle`
+        : "Motorcycle Brand Review, Sizes & Compatible Motorcycle";
 
     const displayDescription = bikeBrand?.subTitle || (bikeBrand?.bikeBrand ? `Explore ${bikeBrand.bikeBrand} ${bikeBrand.bikeModel} sizes, compatibility, grip performance, and reviews.` : "Explore bike brand sizes, compatibility, grip performance, and reviews.");
 

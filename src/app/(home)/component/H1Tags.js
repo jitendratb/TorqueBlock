@@ -28,10 +28,10 @@ function H1Tags() {
 
   return (
     <div className='py-4 md:py-0 flex flex-col justify-center md:block min-h-[160px] md:min-h-[350px]'>
-      <p className='text-2xl lg:text-5xl py-2 lg:py-4'>We are</p>
+      <p className='text-2xl lg:text-5xl py-2 lg:py-4'>We Are</p>
       <h1
         key={currentIndex}
-        className='text-3xl md:text-4xl lg:text-6xl font-bold text-orange-500 animate-slide-down-fade'
+        className='text-4xl lg:text-6xl font-bold text-orange-500  transition-[background-position] duration-700 ease-out  tracking-tighter leading-none drop-shadow-md animate-slide-down-fade'
         id="dynamic-title"
       >
         {title[currentIndex]}

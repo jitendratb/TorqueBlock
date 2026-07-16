@@ -71,7 +71,7 @@ export default function CompareSizes({
                     <div className="pt-4">
                         <WhatsAppButton
                             text="Secure My Fitment Size"
-                            value={`I was checking the ${name} tyre sizes and I'm interested in buying it for my bike. Can you help me with availability, pricing, and fitment for my motorcycle?`}
+                            value={`I was checking the ${name} tyre sizes and I'm interested in buying it for my motorcycle. Can you help me with availability, pricing, and fitment for my motorcycle?`}
                         />
                     </div>
                 </div>

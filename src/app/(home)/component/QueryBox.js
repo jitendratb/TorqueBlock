@@ -44,7 +44,7 @@ function QueryBox() {
 
   const HandleFormClick = (e) => {
     e.preventDefault();
-    let message = `Hi Torque Block, I need a tyre recommendation for my bike. My bike is:\nBike: ${selectedTyre?.value}\nModel: ${selectedModel?.value}`;
+    let message = `Hi Torque Block, I need a tyre recommendation for my Motorcycle. My Motorcycle is:\Motorcycle: ${selectedTyre?.value}\nModel: ${selectedModel?.value}`;
     const phoneNumber = "916366625625";
     const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
     const url = isMobile
@@ -65,14 +65,14 @@ function QueryBox() {
             Get Expert Tyre Recommendations
           </span>
         </h2>
-        <p className='text-center text-orange-500 text-xs md:text-sm'>Bike-specific tyre advice on WhatsApp in under 2 minutes.</p>
+        <p className='text-center text-orange-500 text-xs md:text-sm'>Motorcycle-specific tyre advice on WhatsApp in under 2 minutes.</p>
         <div>
-          <p className='text-white text-sm pb-2'>Select Bike</p>
+          <p className='text-white text-sm pb-2'>Select Motorcycle</p>
           <CustomDropdown
             options={tyreOptions?.map((item) => ({ label: item.brandName, value: item.brandName, ...item })) || []}
             value={selectedTyre?.value}
             onChange={(option) => { setSelectedTyre(option) }}
-            placeholder="Choose Your Bike Brand"
+            placeholder="Choose Your Motorcycle Brand"
             searchable={true}
           />
         </div>
@@ -83,7 +83,7 @@ function QueryBox() {
             options={modelOptions?.map((item) => ({ label: item.modelName, value: item.modelName, ...item })) || []}
             value={selectedModel?.value}
             onChange={(option) => { setSelectedModel(option) }}
-            placeholder="Choose Your Bike Model"
+            placeholder="Choose Your Motorcycle Model"
             searchable={true}
             disabled={!selectedTyre?._id}
           />

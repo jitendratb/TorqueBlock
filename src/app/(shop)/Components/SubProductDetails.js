@@ -206,7 +206,7 @@ export default function TyreDataDetails({ tyreData }) {
                         <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                             <WhatsAppButton
                                 text="Chat with a Tyre Expert"
-                                value="I need some personalized advice on choosing the perfect tyres for my bike."
+                                value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
                                 className="!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
                             />
                         </div>

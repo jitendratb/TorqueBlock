@@ -85,14 +85,6 @@ button {
 
 .header-root {
   top: 0;
-   background: rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(4px);
-  /* -webkit-backdrop-filter: blur(24px); */
-  /* border-bottom: 1px solid rgba(209, 213, 219, 0.6); */
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04); */
-  /* background: transparent; */
-  border-bottom-color: transparent;
-  box-shadow: none;
   transition:
     top var(--transition-smooth),
     background var(--transition-smooth),
@@ -367,4 +359,35 @@ button {
 
 .animate-toast-slide-in {
   animation: slideInFromRight 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@property --border-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes rotate-border {
+  to {
+    --border-angle: 360deg;
+  }
+}
+
+.search-bar-animated-border::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 1.5px;
+  background: conic-gradient(from var(--border-angle), transparent 70%, #f97316 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: rotate-border 3s linear infinite;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.search-bar-animated-border:focus-within::after {
+  opacity: 0;
 }

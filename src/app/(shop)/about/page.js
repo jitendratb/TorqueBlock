@@ -15,7 +15,7 @@ export async function generateMetadata() {
       'Metzeler tyres India',
       'Michelin motorcycle tyres',
       'performance motorcycle tyres',
-      'bike tyre experts India',
+      'motorcycle tyre experts India',
       'Torque Block'
     ],
     alternates: { canonical: 'https://www.torqueblock.com/about' },

@@ -51,7 +51,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                 </span>
                             ) : (
                                 <span className="text-[10px] md:text-xs text-zinc-500 font-medium">
-                                    Select your bike size below
+                                    Select your motorcycle size below
                                 </span>
                             )}
                         </div>

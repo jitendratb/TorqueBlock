@@ -41,37 +41,31 @@ function page() {
       id: 2,
       image: "https://cdn.torqueblock.com/GT-650-tyre-18ebf1ae-fdd0-47d0-ac66-c6d13131e4d8.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
+      alt: "Premium Motorcycle Tyres India || Royal Enfield Continental GT 650 Tyres || Torque Block",
     },
     {
       id: 3,
       image: "https://cdn.torqueblock.com/brand-tyre-7b173d58-a7a2-4ba4-a0a0-96531ffc6f63.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
-    },
-    {
-      id: 4,
-      image: "https://cdn.torqueblock.com/brand-tyre-bcbac7bf-3391-4730-864e-2ee0fa43c82d.webp",
-      mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
+      alt: "Premium Motorcycle Tyres India || Royal Enfield Himalayan 450 Tyres || Torque Block",
     },
     {
       id: 5,
       image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
+      alt: "Premium Motorcycle Tyres India || KTM Duke 250 Tyres || Torque Block",
     },
     {
       id: 6,
       image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
+      alt: "Premium Motorcycle Tyres India || KTM Duke 390 Tyres || Torque Block",
     },
     {
       id: 7,
       image: "https://cdn.torqueblock.com/brand-tyre-53adac61-7de9-4113-8b10-90526ae6cba7.webp",
       mobileImage: "/Home/HomeBannerMobile.webp",
-      alt: "Premium Motorcycle Tyres India",
+      alt: "Premium Motorcycle Tyres India || Royal Enfield Interceptor 650 Tyres || Torque Block",
     }
   ];
 
@@ -83,7 +77,7 @@ function page() {
   preload(mobile, { as: 'image', fetchPriority: 'high', media: "(max-width: 767px)" });
 
   return (
-    <div className=''>
+    <div className='overflow-hidden'>
       <WebPageSchema
         type="WebSite"
         title="Torque Block | Premium Motorcycle Tyres India"
@@ -96,13 +90,13 @@ function page() {
           <img {...rest} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="object-cover" />
         </picture>
         <span className='absolute bg-gradient-to-r from-black/60 to-black/40 inset-0 z-0' />
-          <div className='w-full h-full flex flex-col items-center justify-center absolute top-0 left-0 z-10'>
-          <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-2 px-4 pt-20 pb-6 md:py-0 text-white text-2xl font-bold gap-5 items-center'>
+        <div className='w-full h-full flex flex-col items-start md:items-center justify-center absolute top-0 left-0 z-10'>
+          <div className='max-w-7xl w-full mx-auto grid grid-cols-1 md:grid-cols-[55%_45%] px-4 lg:pt-20 lg:pb-6 md:py-0 text-white text-2xl font-bold gap-5 items-start md:items-center'>
             <H1Tags />
           </div>
         </div>
-        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-10 z-10'>
-          <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center'>
+        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-16 md:bottom-10 z-10 '>
+          <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center '>
             <HeroSearchObserver>
               <AiSearchBar />
             </HeroSearchObserver>

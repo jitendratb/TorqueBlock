@@ -22,7 +22,7 @@ export default function CategoryHero() {
                 </h1>
 
                 <p className="text-zinc-400 text-sm md:text-sm  leading-relaxed md:leading-loose">
-                    Whether you ride on the track, tour across highways, commute daily, or explore off the beaten path, choosing the right motorcycle tyre makes all the difference. Compare performance tyres from Pirelli, Metzeler, and Michelin based on grip, mileage, comfort, wet-weather confidence, and riding conditions to find the perfect match for your bike.
+                    Whether you ride on the track, tour across highways, commute daily, or explore off the beaten path, choosing the right motorcycle tyre makes all the difference. Compare performance tyres from Pirelli, Metzeler, and Michelin based on grip, mileage, comfort, wet-weather confidence, and riding conditions to find the perfect match for your motorcycle.
                 </p>
             </div>
         </div>

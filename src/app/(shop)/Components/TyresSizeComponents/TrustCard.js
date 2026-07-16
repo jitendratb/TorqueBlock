@@ -19,7 +19,7 @@ function TrustCard({ tyre }) {
                         Unlock Special Pricing & Fitment Check
                     </h2>
                     <p className="text-zinc-400 text-xs md:text-sm leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                        Don't risk a wrong fit! Connect with our technical experts on WhatsApp to guarantee 100% compatibility for your bike and get an exclusive offer on your purchase today.
+                        Don't risk a wrong fit! Connect with our technical experts on WhatsApp to guarantee 100% compatibility for your motorcycle and get an exclusive offer on your purchase today.
                     </p>
                 </div>
 

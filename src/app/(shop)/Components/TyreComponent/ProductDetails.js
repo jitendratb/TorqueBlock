@@ -188,7 +188,7 @@ export default function ProductDetails({ tyre }) {
                                     {tyre?.productName}
                                 </span>
                                 <br />
-                                <span className="text-zinc-400 text-xl md:text-2xl font-semibold">right for your bike?</span>
+                                <span className="text-zinc-400 text-xl md:text-2xl font-semibold">right for your motorcycle?</span>
                             </h1>
                             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                                 <StarRating

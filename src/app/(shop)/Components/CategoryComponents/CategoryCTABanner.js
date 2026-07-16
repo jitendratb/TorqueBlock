@@ -21,7 +21,7 @@ export default function CategoryCTABanner() {
                         Not Sure Which Category Fits?
                     </h2>
                     <p className="text-zinc-400 text-sm leading-relaxed">
-                        Our certified tyre specialists will help you pick the perfect rubber for your bike and riding style — completely free of charge.
+                        Our certified tyre specialists will help you pick the perfect rubber for your motorcycle and riding style — completely free of charge.
                     </p>
                     <ul className="flex flex-wrap gap-x-5 gap-y-2 pt-1">
                         {['Free Expert Advice', 'Live Stock Check', 'Best Price Guarantee'].map(item => (
