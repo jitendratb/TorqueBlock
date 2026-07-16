@@ -1,4 +1,25 @@
 import React from 'react';
+import TyreCardSkeleton from '@/app/(home)/component/Tyre/TyreCardSkeleton';
+
+export function FeatureCardSkeleton({ count = 4 }) {
+    return (
+        <div className='w-full flex flex-col gap-8 overflow-hidden animate-pulse my-10'>
+            <div className='flex mx-auto flex-col items-center text-center space-y-2'>
+                <div className="h-3 w-48 bg-orange-500/20 rounded-full" />
+                <div className="h-10 md:h-12 w-64 md:w-96 bg-zinc-900/50 rounded-lg mt-2" />
+            </div>
+            <div className='w-full relative px-2'>
+                <div className="flex gap-4 overflow-hidden px-4">
+                    {Array.from({ length: count }).map((_, i) => (
+                        <div key={i} className="flex-none w-[280px]">
+                            <TyreCardSkeleton />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export function CategorySkeleton() {
     return (

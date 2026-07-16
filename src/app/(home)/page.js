@@ -12,10 +12,14 @@ import dynamic from 'next/dynamic'
 import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 
-import { CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
+import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
 import AiSearchBar from './component/BigSearchBar'
 import HeroSearchObserver from './component/HeroSearchObserver'
 
+const FeatureCard = dynamic(() => import('./component/FeatureCard'), {
+  ssr: true,
+  loading: () => <FeatureCardSkeleton count={4} />
+});
 const Category = dynamic(() => import('./component/Category'), {
   ssr: true,
   loading: () => <CategorySkeleton />
@@ -109,8 +113,12 @@ function page() {
             <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
               <BrandsSection />
             </Suspense>
+
             <Suspense fallback={<TrendCardSkelton count={4} />} >
               <TrendingSection />
+            </Suspense>
+            <Suspense fallback={<FeatureCardSkeleton count={4} />} >
+              <FeatureCard />
             </Suspense>
             <Category />
             <Suspense fallback={<ValuePerformanceBrandsSkeleton />} >

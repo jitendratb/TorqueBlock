@@ -22,9 +22,9 @@ async function Category() {
     <div className='' id="category-section">
       <CategorySchema categories={categories} />
       <div className="mb-10 text-center">
-          <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">Riding Styles</span>
+          <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">RIDE STYLES</span>
           <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000">
-              Select Your <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Playground</span>
+             Choose Your <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Ride</span>
           </h2>
       </div>
 

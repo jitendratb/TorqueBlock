@@ -11,14 +11,16 @@ async function BrandsCard() {
   }
 
   return (
-    <div className='w-full mx-auto flex flex-col gap-8 overflow-hidden'>
+    <div className='w-full mx-auto flex flex-col gap-8 overflow-hidden' id='brand-section'>
 
       <div className='flex flex-col items-center text-center space-y-2'>
-        <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">Trusted Motorcycle Tyre Brands</span>
+        <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">PREMIUM BRANDS</span>
         <h2 className='text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
           Ultimate <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Performance</span>
         </h2>
       </div>
+
+      
 
       <div className='flex flex-col md:flex-row gap-4 w-full items-center md:justify-center'>
         {brands?.length > 0 ? (

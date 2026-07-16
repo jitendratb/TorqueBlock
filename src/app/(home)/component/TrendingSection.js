@@ -19,10 +19,10 @@ async function TrendingSection() {
     }
 
     return (
-        <section className='py-4'>
+        <section className='py-4' id='trending-section'>
             <div className='flex flex-col items-center mb-8 text-center space-y-2'>
                 <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">Top Performance</span>
-                <h2 className='text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
+                <h2 className='text-3xl md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
                     Featured<span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000"> Upgrades</span>
                 </h2>
             </div>

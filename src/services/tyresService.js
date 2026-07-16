@@ -20,6 +20,16 @@ class TyresService {
             return null;
         }
     }
+
+    async getRecommandation({ limit = 16, page = 1 }) {
+        try {
+            const response = await TorqueBlockApi.post(`/size/recommended`, { limit, page });
+            return response;
+        } catch (error) {
+            console.error("Error fetching recommendation:", error?.message || error);
+            return null;
+        }
+    }
 }
 
 export default new TyresService();
