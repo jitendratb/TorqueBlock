@@ -202,6 +202,7 @@ function Header() {
     const [mobileExpanded, setMobileExpanded] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(false);
 
     const cart = useCartStore((state) => state.cart || []);
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
@@ -232,7 +233,17 @@ function Header() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const showSearchBar = pathname !== '/' ? true : (heroObserverReady && !isHeroSearchVisible);
+
+    const shouldRenderSearchBar = pathname !== '/' ? isMounted : (heroObserverReady && !isHeroSearchVisible);
+
+    useEffect(() => {
+        if (shouldRenderSearchBar) {
+            const raf = requestAnimationFrame(() => setSearchBarAnimatedIn(true));
+            return () => cancelAnimationFrame(raf);
+        } else {
+            setSearchBarAnimatedIn(false);
+        }
+    }, [shouldRenderSearchBar]);
 
     useEffect(() => {
         const handleGlobalKeys = (e) => {
@@ -329,15 +340,17 @@ function Header() {
                     </ul>
 
                     <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
-                        <div 
-                            className={`transition-all duration-500 ease-in-out ${
-                                showSearchBar
-                                ? 'opacity-100 max-w-[500px] translate-x-0 visible' 
-                                : 'opacity-0 max-w-0 translate-x-4 invisible'
-                            }`}
-                        >
-                            <SearchBar className='xl:min-w-[360px]' />
-                        </div>
+                        {shouldRenderSearchBar && (
+                            <div 
+                                className={`transition-all duration-500 ease-in-out ${
+                                    searchBarAnimatedIn
+                                    ? 'opacity-100 max-w-[500px] translate-x-0 visible' 
+                                    : 'opacity-0 max-w-0 translate-x-4 invisible'
+                                }`}
+                            >
+                                <SearchBar className='xl:min-w-[360px]' />
+                            </div>
+                        )}
                         <div>
                             <button
                                 onClick={() => setCartSliderOpen(true)}
