@@ -30,9 +30,9 @@ function ProductFamilyFeatureCardClient({ recommendedTyre }) {
     return (
         <div className='w-full flex flex-col gap-8 '>
             <div className='flex mx-auto flex-col items-center text-center space-y-2'>
-                <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">NEW RELEASES</span>
+                <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">PREMIUM SELECTION</span>
                 <h2 className='text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-black [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000'>
-                    Fresh  <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Stock</span>
+                    RECENTLY <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">ADDED</span>
                 </h2>
             </div>
 
