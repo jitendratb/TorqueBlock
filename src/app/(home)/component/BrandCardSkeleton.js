@@ -21,6 +21,10 @@ function BrandCardSkeleton() {
 export function BrandCardSkeletonGroup({ count = 3 }) {
   return (
     <div className="w-full mx-auto flex flex-col gap-6 overflow-hidden">
+      <div className="mb-10 text-center flex flex-col items-center">
+        <div className="h-3 w-48 bg-orange-500/20 rounded-full" />
+        <div className="h-10 md:h-12 w-64 md:w-96 bg-zinc-900/50 rounded-lg mt-2" />
+      </div>
       <div className="flex flex-col md:flex-row gap-4 w-full items-center md:justify-center md:py-6">
         {Array.from({ length: count }).map((_, i) => (
           <BrandCardSkeleton key={i} />

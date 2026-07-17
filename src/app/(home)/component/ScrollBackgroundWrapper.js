@@ -7,7 +7,7 @@ export default function ScrollBackgroundWrapper({ children }) {
 
   useEffect(() => {
     let ticking = false;
-    const categoryEl = document.getElementById('trending-section');
+    const categoryEl = document.getElementById('brand-section');
 
     const handleScroll = () => {
       if (!ticking) {

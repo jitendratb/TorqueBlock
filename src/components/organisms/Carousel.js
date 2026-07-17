@@ -28,16 +28,28 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
         );
     }, [itemWidth, gap]);
 
+    const checkScrollEnd = useCallback(() => {
+        if (!trackRef.current) return;
+        const el = trackRef.current;
+        setIsEnd(el.scrollWidth - el.clientWidth <= 2);
+    }, []);
+
     useEffect(() => {
         if (!containerRef.current) return;
 
         const observer = new ResizeObserver(() => {
             setItemsPerView(computeItemsPerView());
+            checkScrollEnd();
         });
 
         observer.observe(containerRef.current);
         return () => observer.disconnect();
-    }, [computeItemsPerView]);
+    }, [computeItemsPerView, checkScrollEnd]);
+
+    // Check scroll state after items or layout change
+    useEffect(() => {
+        checkScrollEnd();
+    }, [items.length, itemsPerView, checkScrollEnd]);
 
     const maxIndex = Math.max(total - itemsPerView, 0);
 
@@ -119,7 +131,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
     ]);
 
     const hasLeft = current > 0;
-    const hasRight = !isEnd;
+    const hasRight = !isEnd && total > itemsPerView;
 
     if (!items.length || !renderItem) return null;
 

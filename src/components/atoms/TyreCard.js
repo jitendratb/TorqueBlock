@@ -8,11 +8,9 @@ import { FiArrowRight } from "react-icons/fi";
 export default function ProductCard({ product, tyre, className  }) {
     const router = useRouter();
 
-    console.log(product)
-
     const isSingleSize = !!product?.price;
-    const title = product?.hero?.title || product?.productName || product?.name || product?.size || "Tyre";
-    const categoryName = product?.categoryId?.name || product?.category || "Premium Tyre";
+    const title = product?.hero?.title || tyre?.productName || "Tyre";
+    const categoryName = product?.categoryId?.name || product?.availableTyres?.categoryId?.name || "Premium Tyre";
 
 
     const formatPrice = (price) => {
@@ -23,7 +21,7 @@ export default function ProductCard({ product, tyre, className  }) {
         }).format(price);
     };
 
-    const displayPrice = formatPrice(product.price)
+    const displayPrice = formatPrice(product?.price)
 
 
     const labelText = "Price"
@@ -41,7 +39,7 @@ export default function ProductCard({ product, tyre, className  }) {
     return (
         <div
             onClick={handleCardClick}
-            className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/10 [.light-mode_&]:bg-white/70 hover:bg-zinc-900/70 [.light-mode_&]:hover:bg-white/90 backdrop-blur-md border border-white/5 [.light-mode_&]:border-zinc-200/80 hover:border-orange-500/30 [.light-mode_&]:hover:border-orange-400/50 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] [.light-mode_&]:shadow-[0_2px_15px_rgba(0,0,0,0.04)] [.light-mode_&]:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${className}`}
+            className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/20 hover:bg-white/10 [.light-mode_&]:bg-white/20  [.light-mode_&]:backdrop-blur-3xl hover:bg-white/10 [.light-mode_&]:hover:bg-zinc-950/20 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 hover:border-orange-500/30 [.light-mode_&]:hover:border-orange-400/50 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] [.light-mode_&]:shadow-[0_2px_15px_rgba(0,0,0,0.04)] [.light-mode_&]:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${className}`}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-orange-500/0 to-orange-500/5 [.light-mode_&]:to-orange-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -77,30 +75,31 @@ export default function ProductCard({ product, tyre, className  }) {
 
             <div className="flex flex-col p-4 gap-3 flex-1 justify-between">
                 <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[10px] font-bold text-zinc-400 [.light-mode_&]:text-zinc-500 uppercase tracking-wider transition-colors duration-500">
-                        <span className="bg-white/5 [.light-mode_&]:bg-zinc-100 border border-white/10 [.light-mode_&]:border-zinc-200 px-2 py-0.5 rounded-md transition-colors duration-500">
+                    <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 [.light-mode_&]:text-black/60 uppercase tracking-wider transition-colors duration-500">
+                        <span className="bg-white/5 [.light-mode_&]:bg-white/10  border border-white/10  px-2 py-0.5 rounded-md transition-colors duration-500">
                             {categoryName}
                         </span>
 
                     </div>
 
-                    <h3 className="text-base md:text-lg font-bold text-zinc-100 [.light-mode_&]:text-zinc-800 group-hover:text-white [.light-mode_&]:group-hover:text-zinc-950 uppercase tracking-tight line-clamp-2 transition-colors duration-500">
+                    <h3 className="text-base md:text-lg font-black text-zinc-100 [.light-mode_&]:text-zinc-800 group-hover:text-white [.light-mode_&]:group-hover:text-zinc-950 uppercase tracking-tight line-clamp-2 transition-colors duration-500">
                         {title}
                     </h3>
                 </div>
 
-                <div className="flex items-end justify-between gap-2 pt-3 border-t border-white/10 [.light-mode_&]:border-zinc-200 transition-colors duration-500">
+                <div className="flex items-end justify-between gap-2 pt-3 border-t border-white/10 transition-colors duration-500">
                     <div className="flex flex-col">
-                        <span className="text-[9px] text-zinc-500 [.light-mode_&]:text-zinc-400 font-bold uppercase tracking-wider mb-0.5 transition-colors duration-500">{labelText}</span>
+                        <span className="text-[9px] text-white/80 [.light-mode_&]:text-zinc-600 font-bold uppercase tracking-wider mb-0.5 transition-colors duration-500">{labelText}</span>
                         <span className="text-base md:text-lg font-black text-white [.light-mode_&]:text-zinc-900 transition-colors duration-500">
                             {displayPrice}
                         </span>
                     </div>
 
                     <div
-                        className="flex items-center text-xs font-semibold justify-center w-auto h-8 md:h-9 px-4 rounded-lg bg-white/10 [.light-mode_&]:bg-zinc-100 [.light-mode_&]:border [.light-mode_&]:border-zinc-200 text-white [.light-mode_&]:text-zinc-700 group-hover:bg-orange-500 [.light-mode_&]:group-hover:bg-orange-500 group-hover:text-white [.light-mode_&]:group-hover:text-white [.light-mode_&]:group-hover:border-orange-500 transition-all duration-300"
+                        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider justify-center w-auto h-9 px-4 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 text-white [.light-mode_&]:text-zinc-800 border border-white/10 [.light-mode_&]:border-zinc-200 group-hover:bg-orange-500 group-hover:border-orange-500 group-hover:text-white transition-all duration-300"
                     >
                         View Details
+                        <FiArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform duration-300" />
                     </div>
                 </div>
             </div>

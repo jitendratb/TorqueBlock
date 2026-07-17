@@ -44,7 +44,7 @@ export default function SearchCard({ product, tyre, className }) {
     return (
         <div
             onClick={handleCardClick}
-            className={`group cursor-pointer mt-1 relative flex flex-col w-full bg-zinc-900/70 backdrop-blur-md border border-white/5 hover:border-orange-500/30 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 ${className}`}
+            className={`group cursor-pointer mt-1 relative flex flex-col w-full bg-zinc-900/30 backdrop-blur-md border border-white/5 hover:border-orange-500/30 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] hover:-translate-y-1 ${className}`}
         >
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-orange-500/0 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
@@ -76,7 +76,7 @@ export default function SearchCard({ product, tyre, className }) {
                     </span>
                     <span>{sizeCountText}</span>
                 </span>
-                <div className="flex absolute bottom-0 left-2 items-center gap-2 text-[8px] font-bold text-zinc-400 uppercase tracking-wider">
+                <div className="flex absolute bottom-0 left-2 items-center gap-2 text-[8px] font-bold text-white/80 uppercase tracking-wider">
                     <span className="bg-white/5 border border-white/10 px-2 py-0.5 rounded-md">
                         {categoryName}
                     </span>
@@ -95,7 +95,7 @@ export default function SearchCard({ product, tyre, className }) {
 
                 <div className="flex items-end justify-between gap-2">
                     <div className="flex flex-col">
-                        <span className="text-[9px] text-zinc-500 font-bold uppercase tracking-wider mb-0.5">{labelText}</span>
+                        <span className="text-[9px] text-white/80 font-bold uppercase tracking-wider mb-0.5">{labelText}</span>
                         <span className="text-sm font-black text-white">
                             {displayPrice}
                         </span>

@@ -1,7 +1,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
+import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
 
 const brandLinks = [
     { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
@@ -46,12 +46,17 @@ function Footer() {
                             and more.
                         </p>
 
-                        <div className="mt-8 space-y-5">
+                        <div className="mt-8 space-y-3">
                             <a href="tel:+916366625625" className="flex items-center gap-3 text-zinc-300 hover:text-white transition" >
                                 <FaPhoneAlt className="text-sm" />
-                                <span className="text-sm">
+                                <span className="text-md">
                                     +91 6366 625 625
                                 </span>
+                            </a>
+
+                            <a href="https://wa.me/916366625625" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-zinc-300 hover:text-green-400 transition">
+                                <FaWhatsapp className="text-lg" />
+                                <span className="text-md">WhatsApp Us</span>
                             </a>
 
                             <a
@@ -62,31 +67,37 @@ function Footer() {
                             >
                                 <FaEnvelope className="text-sm" />
 
-                                <span className="text-sm">
+                                <span className="text-md">
                                     ops@torqueblock.com
                                 </span>
                             </a>
 
                             <div className="space-y-4 border-t border-zinc-900 pt-4">
-                                <div className="flex items-start gap-3 text-zinc-300">
+                                <a href="https://share.google/4KLMb3GXpf429cCFn" target="_blank" rel="noopener noreferrer" className="flex items-start cursor-pointer gap-3 text-zinc-300 hover:text-white transition">
                                     <FaMapMarkerAlt className="mt-1 text-sm text-orange-500 shrink-0" />
                                     <div>
                                         <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 block mb-1">Bengaluru Hub</span>
                                         <p className="text-xs leading-5">
                                             8, Andree Rd, next to Bangalore Cafe, Bheemanna Garden, Shanti Nagar, Bengaluru, Karnataka 560027
                                         </p>
+                                        <span className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-semibold text-orange-400 hover:text-orange-300 transition">
+                                            View on Map <FaChevronRight className="text-[8px]" />
+                                        </span>
                                     </div>
-                                </div>
+                                </a>
 
-                                <div className="flex items-start gap-3 text-zinc-300">
+                                <a href="https://share.google/tUeXufqut8begnL9f" target="_blank" rel="noopener noreferrer" className="flex items-start gap-3 text-zinc-300 hover:text-white transition">
                                     <FaMapMarkerAlt className="mt-1 text-sm text-orange-500 shrink-0" />
                                     <div>
                                         <span className="text-[10px] font-black uppercase tracking-wider text-orange-500 block mb-1">Delhi Hub</span>
                                         <p className="text-xs leading-5">
                                             Basement, Community Center, NH - 1, behind Block C, Naraina, New Delhi, Delhi 110028
                                         </p>
+                                        <span className="inline-flex items-center gap-1 mt-1.5 text-[11px] font-semibold text-orange-400 hover:text-orange-300 transition">
+                                            View on Map <FaChevronRight className="text-[8px]" />
+                                        </span>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                         <div className="flex items-center gap-4 mt-8">

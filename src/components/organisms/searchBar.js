@@ -211,7 +211,7 @@ function SearchBar({
                             searchInput.trim() && showSuggestions && setShowSuggestions(true);
                         }}
                         onBlur={() => setIsFocused(false)}
-                        className="w-full bg-transparent text-white text-sm outline-none z-10 pl-0"
+                        className="w-full bg-transparent text-white text-sm outline-none z-10 pl-0 truncate"
                         aria-label="Search"
                     />
                 </div>

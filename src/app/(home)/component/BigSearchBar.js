@@ -62,7 +62,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
   const [charIndex, setCharIndex] = useState(PLACEHOLDERS[0].length);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-    const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
+  const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
 
   useEffect(() => {
     if (isFocused || searchInput.length > 0) return;
@@ -110,6 +110,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
   useEffect(() => {
     setSelectedSuggestionIndex(-1);
   }, [searchInput]);
+
 
   useEffect(() => {
     if (selectedSuggestionIndex >= 0 && suggestionsContainerRef.current) {
@@ -192,8 +193,6 @@ function SearchBar({ onSearch, searchItems = [] }) {
     }
   };
 
-
-
   const handleKeyDown = (e) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -224,7 +223,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
   return (
     <div ref={wrapperRef} className={`relative search-container-ignore-outside ${isHeroSearchVisible ? "" : "hidden"}`}>
 
-      <div className={`absolute   left-0 right-0 w-full rounded-2xl border border-white/20 bg-white/20 backdrop-blur-sm text-white shadow-xl z-50  transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-2 origin-bottom' : 'top-full mt-2 origin-top'} ${storeShowSuggestions && suggestions.length > 0 ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"}`} >
+      <div className={`absolute   left-0 right-0 w-full rounded-2xl border border-white/20 bg-zinc-950/10 backdrop-blur-3xl text-white shadow-xl z-50  transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-2 origin-bottom ' : 'top-full mt-2 origin-top '} ${storeShowSuggestions && suggestions.length > 0 ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"}`} >
         <div ref={suggestionsContainerRef} className="p-2 max-h-80 overflow-y-auto">
           {!loading && !error && suggestions.map((item, index) => {
             const isSelected = selectedSuggestionIndex === index;
