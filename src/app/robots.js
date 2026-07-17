@@ -28,28 +28,19 @@ export default function robots() {
           "/search/",
         ],
       },
-      {
-        userAgent: ["GPTBot", "OAI-SearchBot", "ChatGPT-User"],
-        allow: "/",
-      },
-      {
-        userAgent: ["Googlebot", "Google-Extended"],
-        allow: "/",
-      },
-      {
-        userAgent: ["ClaudeBot", "Claude-User", "anthropic-ai"],
-        allow: "/",
-      },
-      {
-        userAgent: ["PerplexityBot", "Perplexity-User"],
-        allow: "/",
-      },
-      {
-        userAgent: ["CCBot", "Omgilibot"],
-        allow: "/",
-      },
+      { userAgent: "GPTBot", allow: "/" },
+      { userAgent: "OAI-SearchBot", allow: "/" },
+      { userAgent: "ChatGPT-User", allow: "/" },
+      { userAgent: "Googlebot", allow: "/" },
+      { userAgent: "Google-Extended", allow: "/" },
+      { userAgent: "ClaudeBot", allow: "/" },
+      { userAgent: "Claude-User", allow: "/" },
+      { userAgent: "anthropic-ai", allow: "/" },
+      { userAgent: "PerplexityBot", allow: "/" },
+      { userAgent: "Perplexity-User", allow: "/" },
+      { userAgent: "CCBot", allow: "/" },
+      { userAgent: "Omgilibot", allow: "/" },
     ],
     sitemap: `${SITE_URL}/sitemap.xml`,
-    Host: SITE_URL,
   };
 }
