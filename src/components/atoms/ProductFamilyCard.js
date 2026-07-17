@@ -45,14 +45,14 @@ export default function ProductCard({ tyre, className }) {
             className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/20 hover:bg-white/10 [.light-mode_&]:bg-white/20  [.light-mode_&]:backdrop-blur-3xl hover:bg-white/10 [.light-mode_&]:hover:bg-zinc-950/20 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 hover:border-orange-500/30 [.light-mode_&]:hover:border-orange-400/50 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] [.light-mode_&]:shadow-[0_2px_15px_rgba(0,0,0,0.04)] [.light-mode_&]:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${className}`}
         >
 
-            <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10 pointer-events-none">
+            {/* <div className="absolute top-4 left-4 right-4 flex justify-between items-start z-10 pointer-events-none">
                 <div className="flex flex-col gap-1.5">
                     <span className="flex items-center gap-1 border text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full bg-emerald-500/10 [.light-mode_&]:bg-emerald-50 border-emerald-500/20 [.light-mode_&]:border-emerald-200 text-emerald-400 [.light-mode_&]:text-emerald-600 shadow-[0_0_10px_rgba(16,185,129,0.1)]">
                             <FaCheckCircle className="text-[10px]" />
                             Fresh Stock
                         </span>
                 </div>
-            </div>
+            </div> */}
 
             <div className="relative w-full h-50 flex items-center justify-center p-2  transition-colors duration-500">
                 <Image
