@@ -15,7 +15,7 @@ async function BrandsCard() {
 
       <div className='flex flex-col items-center text-center space-y-2'>
         <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">PREMIUM BRANDS</span>
-        <h2 className='text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
+        <h2 className='text-3xl md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
           Ultimate <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Performance</span>
         </h2>
       </div>
