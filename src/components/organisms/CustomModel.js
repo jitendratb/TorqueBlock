@@ -66,7 +66,7 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
         role="dialog"
         aria-modal="true"
         aria-labelledby={typeof title === 'string' ? 'modal-title' : undefined}
-        className={`relative w-full ${selectedSizeClass} max-h-[85vh] rounded-xl bg-white/10 backdrop-blur-xl border border-white/[0.08] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] flex flex-col z-[101] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
+        className={`relative w-full ${selectedSizeClass} max-h-[85vh] rounded-xl bg-white/10 backdrop-blur-3xl border border-white/[0.08] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] flex flex-col z-[101] overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 translate-y-4'
           } ${className}`}
       >
         <div className="absolute inset-0 bg-gradient-to-br from-purple-500/[0.03] via-cyan-500/[0.02] to-orange-500/[0.03] opacity-80 pointer-events-none mix-blend-screen" />

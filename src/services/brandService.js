@@ -14,6 +14,8 @@ class BrandService {
     async getPerformanceBrands() {
         try {
             const res = await TorqueBlockApi.get("/brands/performance");
+
+            console.log(res)
             return res?.data || [];
         } catch (error) {
             console.error("Failed to fetch brands:", error);

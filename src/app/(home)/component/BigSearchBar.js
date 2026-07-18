@@ -310,7 +310,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
               searchInput.trim() && setShowSuggestions(true);
             }}
             onBlur={() => setIsFocused(false)}
-            className='w-full flex items-center font-normal placeholder:font-normal truncate line-clamp-1 bg-transparent outline-none text-sm lg:text-lg py-2'
+            className='w-full flex items-center font-normal placeholder:font-normal truncate line-clamp-1 bg-transparent outline-none text-base lg:text-lg py-2'
             placeholder={placeholderText}
           />
         </div>

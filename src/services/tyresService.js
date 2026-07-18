@@ -38,7 +38,7 @@ class TyresService {
 
     async getRecommandation({ limit = 16, page = 1 }) {
         try {
-            const response = await TorqueBlockApi.post(`/size/recommended`, { limit, page });
+            const response = await TorqueBlockApi.post(`/size/recommended`, { limit, page , isFeatured:true });
             return response;
         } catch (error) {
             console.error("Error fetching recommendation:", error?.message || error);

@@ -68,7 +68,7 @@ const NAVIGATION_CONFIG = {
     }
 };
 
-const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
+const TyresMegaMenu = React.memo(({ tabIndex }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div>
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">High Demanding Tyres</h3>
@@ -94,8 +94,8 @@ const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
                 ))}
             </ul>
         </div>
-        <button
-            onClick={() => onAction("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")}
+        <Link
+            href="/tyres"
             tabIndex={tabIndex}
             className="col-span-2 text-left bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100 relative overflow-hidden group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -110,12 +110,12 @@ const TyresMegaMenu = React.memo(({ tabIndex, onAction }) => (
             <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-8 translate-y-8 group-hover:scale-110 transition-transform duration-700 pointer-events-none">
                 <div className="w-48 h-48 rounded-full border-[16px] border-blue-500"></div>
             </div>
-        </button>
+        </Link>
     </div>
 ));
 TyresMegaMenu.displayName = "TyresMegaMenu";
 
-const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
+const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="col-span-3">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Find Perfect Tyres for Your Motorcycle</h3>
@@ -135,8 +135,8 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
                 ))}
             </div>
         </div>
-        <button
-            onClick={() => onAction("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")}
+        <Link
+            href="/bikes"
             tabIndex={tabIndex}
             className="text-left bg-gradient-to-br from-gray-900 to-black rounded-2xl p-6 text-white flex flex-col justify-center relative overflow-hidden shadow-lg group focus:outline-none focus:ring-2 focus:ring-orange-500"
         >
@@ -149,12 +149,12 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex, onAction }) => (
                 </div>
             </div>
             <div className="absolute right-0 top-0 opacity-20 w-32 h-32 bg-blue-500 blur-3xl rounded-full"></div>
-        </button>
+        </Link>
     </div>
 ));
 BikeBrandsMegaMenu.displayName = "BikeBrandsMegaMenu";
 
-const TyreComparisonMegaMenu = React.memo(({ tabIndex, onAction }) => (
+const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
     <div className="flex justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="flex-1">
             <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Key Comparisons</h3>
@@ -168,8 +168,8 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex, onAction }) => (
                 ))}
             </ul>
         </div>
-        <button
-            onClick={() => onAction("I want to find the perfect tyre for my motorcycle. Can you help me find the best match based on my bike model and riding style?")}
+        <Link
+            href="/compare"
             tabIndex={tabIndex}
             className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-2xl overflow-hidden"
         >
@@ -185,7 +185,7 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex, onAction }) => (
                     </div>
                 </div>
             </div>
-        </button>
+        </Link>
     </div>
 ));
 TyreComparisonMegaMenu.displayName = "TyreComparisonMegaMenu";
@@ -208,12 +208,7 @@ function Header() {
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
     const totalItems = isMounted ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
-    const handleAction = useCallback((message) => {
-        if (typeof window !== 'undefined') {
-            const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-    }, []);
+   
 
 
     useEffect(() => {
@@ -388,13 +383,13 @@ function Header() {
                         data-scrolled={scrolled}
                     >
                         {activeHover === "Tyres" && (
-                            <TyresMegaMenu onAction={handleAction} />
+                            <TyresMegaMenu  />
                         )}
                         {activeHover === "Motorcycles" && (
-                            <BikeBrandsMegaMenu onAction={handleAction} />
+                            <BikeBrandsMegaMenu  />
                         )}
                         {activeHover === "Tyre Comparison" && (
-                            <TyreComparisonMegaMenu onAction={handleAction} />
+                            <TyreComparisonMegaMenu  />
                         )}
                     </div>
                 )}
