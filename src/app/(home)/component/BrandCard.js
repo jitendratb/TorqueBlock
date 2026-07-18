@@ -5,7 +5,6 @@ import { FiCompass, FiArrowRight } from 'react-icons/fi';
 
 function BrandCard({ brand, className = "w-[280px]  lg:w-[320px]" }) {
 
-  console.log(brand)
   return (
     <Link href={`/brands/${brand?._id}`} className={`group block cursor-pointer relative h-[240px] md:h-[180px] lg:h-[240px] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden bg-zinc-900 shadow-xl w-full ${className}`}>
       <Image
@@ -16,7 +15,7 @@ function BrandCard({ brand, className = "w-[280px]  lg:w-[320px]" }) {
         className='object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-110'
       />
 
-      <div className='absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent pointer-events-none' />
+      <div className='absolute inset-0 bg-gradient-to-t from-black via-black/5 to-transparent pointer-events-none' />
       <div className='absolute bottom-0 left-0 w-full p-6 md:p-8 flex items-center justify-between z-10'>
         <div className='w-full'>
           <div className="">

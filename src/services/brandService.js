@@ -4,7 +4,7 @@ class BrandService {
     async getBrands(params = { isActive: true }) {
         try {
             const res = await TorqueBlockApi.get("/brands", { params });
-            return res?.data || [];
+            return res?.brands || [];
         } catch (error) {
             console.error("Failed to fetch brands:", error);
             throw error;
