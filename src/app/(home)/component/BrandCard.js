@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link';
 import React from 'react'
-import { FiArrowRight } from 'react-icons/fi';
+import { FiCompass, FiArrowRight } from 'react-icons/fi';
 
 function BrandCard({ brand, className = "w-[280px]  lg:w-[320px]" }) {
 
@@ -21,7 +21,7 @@ function BrandCard({ brand, className = "w-[280px]  lg:w-[320px]" }) {
         <div className='w-full'>
           <div className="">
             <span className="inline-flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-[0.2em]  shadow-xl">
-              <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+              <FiCompass className="text-orange-500" size={12} />
               Explore Brand
             </span>
           </div>

@@ -258,7 +258,14 @@ function SearchBar({ onSearch, searchItems = [] }) {
                       leftArrowClassName="!-left-2 !p-1.5"
                       rightArrowClassName="!-right-2 !p-1.5"
                       renderItem={(sizeItem) => (
-                        <SearchCard product={sizeItem} tyre={item} />
+                        <SearchCard 
+                          product={sizeItem} 
+                          tyre={item} 
+                          onClick={() => {
+                            setShowSuggestions(false);
+                            setSearchInput("");
+                          }}
+                        />
                       )}
                     />
                   </div>

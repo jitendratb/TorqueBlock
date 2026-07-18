@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
 
 export default function ProductCard({ product, tyre, className  }) {
     const router = useRouter();
@@ -59,16 +59,13 @@ export default function ProductCard({ product, tyre, className  }) {
                             ? "bg-blue-500/10 [.light-mode_&]:bg-blue-50 border-blue-500/20 [.light-mode_&]:border-blue-200 text-blue-400 [.light-mode_&]:text-blue-600 shadow-[0_0_10px_rgba(59,130,246,0.1)]"
                             : "bg-red-500/10 [.light-mode_&]:bg-red-50 border-red-500/20 [.light-mode_&]:border-red-200 text-red-400 [.light-mode_&]:text-red-600 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
                     }`}>
-                    <span className="relative flex h-1.5 w-1.5">
-                        {product?.availability === "in_stock" && (
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        )}
-                        <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${product?.availability === "in_stock" ? "bg-emerald-500"
-                            : product?.availability === "backorder" ? "bg-yellow-500"
-                                : product?.availability === "preorder" ? "bg-blue-500"
-                                    : "bg-red-500"
-                            }`}></span>
-                    </span>
+                    {product?.availability === "in_stock" ? (
+                        <FiCheckCircle size={10} className="" />
+                    ) : product?.availability === "backorder" || product?.availability === "preorder" ? (
+                        <FiClock size={10} />
+                    ) : (
+                        <FiXCircle size={10} />
+                    )}
                     <span>{sizeCountText}</span>
                 </span>
             </div>

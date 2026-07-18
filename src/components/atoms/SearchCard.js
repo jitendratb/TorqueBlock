@@ -3,9 +3,9 @@
 import React from 'react';
 import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
-import { FiArrowRight } from "react-icons/fi";
+import { FiArrowRight, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
 
-export default function SearchCard({ product, tyre, className }) {
+export default function SearchCard({ product, tyre, className, onClick }) {
     const router = useRouter();
 
     const isSingleSize = !!product?.price;
@@ -37,8 +37,9 @@ export default function SearchCard({ product, tyre, className }) {
                 : "Out of Stock";
 
 
-    const handleCardClick = () => {
+    const handleCardClick = (e) => {
         router.push(`/tyres/${tyre?.identifier}/${product?.size.toLowerCase().replace(/[\s/]/g, '-')}`);
+        if (onClick) onClick(e);
     };
 
     return (
@@ -64,16 +65,13 @@ export default function SearchCard({ product, tyre, className }) {
                             ? "bg-blue-500/10 border-blue-500/20 text-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.1)]"
                             : "bg-red-500/10 border-red-500/20 text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.1)]"
                     }`}>
-                    <span className="relative flex h-1.5 w-1.5">
-                        {product?.availability === "in_stock" && (
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        )}
-                        <span className={`relative inline-flex rounded-full h-1.5 w-1.5 ${product?.availability === "in_stock" ? "bg-emerald-500"
-                            : product?.availability === "backorder" ? "bg-yellow-500"
-                                : product?.availability === "preorder" ? "bg-blue-500"
-                                    : "bg-red-500"
-                            }`}></span>
-                    </span>
+                    {product?.availability === "in_stock" ? (
+                        <FiCheckCircle size={10} className="" />
+                    ) : product?.availability === "backorder" || product?.availability === "preorder" ? (
+                        <FiClock size={10} />
+                    ) : (
+                        <FiXCircle size={10} />
+                    )}
                     <span>{sizeCountText}</span>
                 </span>
                 <div className="flex absolute bottom-0 left-2 items-center gap-2 text-[8px] font-bold text-white/80 uppercase tracking-wider">
