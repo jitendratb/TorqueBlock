@@ -173,7 +173,7 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
             tabIndex={tabIndex}
             className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-purple-500 rounded-2xl overflow-hidden"
         >
-            <div className="relative flex-1 bg-gradient-to-br from-purple-900/90 to-indigo-950/95 p-6 text-white hover:shadow-[0_20px_50px_rgba(139,92,246,0.15)] transition-all duration-500 hover:-translate-y-1.5 group border border-purple-500/20 shadow-xl flex flex-col justify-between h-full w-full">
+            <div className="relative flex-1 bg-gradient-to-br from-purple-900/90 to-indigo-950/95 p-6 text-white hover:shadow-[0_20px_50px_rgba(139,92,246,0.15)] transition-all duration-500 group border border-purple-500/20 shadow-xl flex flex-col justify-between h-full w-full">
                 <div className="absolute -right-8 -bottom-8 opacity-30 w-36 h-36 bg-purple-500 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-700 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col h-full">
