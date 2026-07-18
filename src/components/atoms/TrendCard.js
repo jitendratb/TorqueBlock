@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link';
-import { FiTrendingUp, FiTrendingDown, FiEye, FiHeart } from 'react-icons/fi';
+import { FiTrendingUp, FiTrendingDown, FiEye, FiHeart, FiActivity } from 'react-icons/fi';
 import CustomImage from '../molecules/CustomImage';
 
 function TrendCard({ item, className = "w-full md:w-[320px] lg:w-[360px]" }) {
@@ -23,7 +23,7 @@ function TrendCard({ item, className = "w-full md:w-[320px] lg:w-[360px]" }) {
             <div className="absolute bottom-0 inset-x-0 p-4 z-20 flex flex-col justify-end space-y-2">
                 <div className="transform translate-y-8 group-hover:translate-y-0 transition-all duration-500 delay-75">
                     <span className="inline-flex items-center gap-2 px-2 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-[0.2em]  shadow-xl">
-                        <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></span>
+                        <FiActivity className="text-orange-500" size={12} />
                         {item?.bike?.bikeBrand?.brandName} {item?.bike?.bikeModel}
                     </span>
                 </div>
