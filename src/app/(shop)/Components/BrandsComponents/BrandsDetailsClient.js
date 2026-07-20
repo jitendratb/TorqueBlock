@@ -1,11 +1,35 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiArrowLeft, FiAward, FiShield, FiZap, FiActivity, FiCheckCircle } from 'react-icons/fi';
-import WhatsAppButton from '@/components/atoms/WhatsAppButton';
+import { FiArrowLeft, FiZap, FiCheckCircle, FiStar, FiInfo, FiLayers, } from 'react-icons/fi';
+import { RiShieldCheckFill, RiThumbUpFill, RiCheckboxCircleFill, RiThumbDownFill, RiCloseCircleFill } from 'react-icons/ri';
 import CustomImage from '@/components/molecules/CustomImage';
+import RecommendedTyres from './RecommendedTyres';
+import NewLaunchTyres from './NewLaunchTyres';
+
+const ExpandableText = ({ text, color }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  if (!text) return null;
+
+  return (
+    <div className="space-y-3">
+      <div className={`text-zinc-400 text-sm leading-relaxed whitespace-pre-line ${!isExpanded ? 'line-clamp-4' : ''}`}>
+        {text}
+      </div>
+      {text.length > 250 && (
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          style={{ color: color }}
+          className="text-xs font-bold hover:brightness-125 transition-all uppercase tracking-wider"
+        >
+          {isExpanded ? 'Read Less' : 'Read More'}
+        </button>
+      )}
+    </div>
+  );
+};
 
 function BrandsDetailsClient({ brand }) {
   if (!brand) {
@@ -23,210 +47,253 @@ function BrandsDetailsClient({ brand }) {
   }
 
   const brandName = brand?.name || brand?.brandName || "Premium Partner";
-
-  const getCleanTagline = () => {
-    if (!brand?.brandKeyword) {
-      return `Premium high-performance ${brandName} compounds.`;
-    }
-
-    let rawKeyword = brand.brandKeyword.trim().toLowerCase();
-
-    const commonBrands = ['pirelli', 'michelin', 'bridgestone', 'metzeler', 'dunlop', 'continental', 'mrf', 'ceat', 'apollo', 'tvs'];
-    commonBrands.forEach(b => {
-      if (b !== brandName.toLowerCase() && rawKeyword.includes(b)) {
-        rawKeyword = rawKeyword.replace(b, brandName.toLowerCase());
-      }
-    });
-
-    if (rawKeyword.endsWith(' near me')) {
-      const core = rawKeyword.replace(' near me', '');
-      const capitalizedCore = core.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-      return `Find ${capitalizedCore} Near You`;
-    }
-
-    return rawKeyword.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
-  };
-
-  const techSpecs = [
-    {
-      icon: <FiZap className="text-orange-500" size={20} />,
-      title: "Performance Focus",
-      value: "Street, Sport & Track",
-      desc: "Compounds tailored for maximum cornering precision and acceleration."
-    },
-    {
-      icon: <FiShield className="text-orange-500" size={20} />,
-      title: "Safety Standard",
-      value: "Elite Wet Grip",
-      desc: "Award-winning tread designs engineered for absolute aquaplaning resistance."
-    },
-    {
-      icon: <FiAward className="text-orange-500" size={20} />,
-      title: "Official Guarantee",
-      value: "Torque Certified Dealer",
-      desc: "100% genuine products sourced directly from authorized manufacturer pipelines."
-    },
-    {
-      icon: <FiActivity className="text-orange-500" size={20} />,
-      title: "Tread Technology",
-      value: "Multi-Compound Silica",
-      desc: "Advanced rubber compounds designed for extended mileage and thermals."
-    }
-  ];
-
+  const primaryColor = brand?.featuredData?.primaryColor || '#f97316';
   return (
-    <div className="space-y-4 animate-[fadeIn_0.5s_ease-out]">
+    <div className="space-y-6 animate-[fadeIn_0.5s_ease-out] w-full max-w-[1400px] mx-auto">
 
-      <section className="relative h-[250px] sm:h-[340px] md:h-[420px] w-full overflow-hidden rounded-[1rem] border border-white/5 shadow-2xl">
+      <section className="relative h-[300px] sm:h-[400px] md:h-[480px] w-full overflow-hidden rounded-[2rem] border border-white/5 shadow-2xl">
         {brand?.brandBanner ? (
           <CustomImage
             src={brand.brandBanner}
             alt={`${brandName} Banner`}
             fill
             priority
-            className="object-cover brightness-[0.9]"
+            className="object-cover brightness-[0.7]"
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
-            <div className="text-[120px] font-black text-white/[0.02] tracking-widest select-none uppercase">
+            <div className="text-[80px] sm:text-[140px] font-black text-white/[0.02] tracking-widest select-none uppercase">
               {brandName}
             </div>
           </div>
         )}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19] via-[#0B0F19]/10 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0B0F19]/40 via-transparent to-transparent z-10" />
+        <div
+          className="absolute inset-0 opacity-40 mix-blend-overlay"
+          style={{ background: `linear-gradient(to top right, ${primaryColor}, transparent)` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent z-10" />
 
-        {/* Content Overlays */}
-        <div className="absolute inset-x-0 bottom-0 p-6 sm:p-10 z-20 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-6">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-
-            {/* Glass Logo Container */}
-            {brand?.brandLogo ? (
-              <div className="relative overflow-hidden w-[120px] h-[120px] md:w-[140px] md:h-[140px] shrink-0 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-xl flex items-center justify-center">
-                <CustomImage
-                  src={brand?.brandLogo}
-                  alt={`${brandName} Logo`}
-                  fill
-                  imageClassName="object-center"
-                />
-              </div>
-            ) : (
-              <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-2xl bg-white/[0.03] border border-white/10 backdrop-blur-md shadow-xl flex items-center justify-center text-4xl font-black text-orange-500 uppercase select-none">
-                {brandName.substring(0, 2)}
-              </div>
-            )}
-
-            {/* Title & Taglines */}
-            <div className="space-y-1.5 text-left">
-              <div className="flex items-center gap-2 text-[9px] sm:text-[10px] font-bold text-orange-500 uppercase tracking-[0.3em]">
-                <FiCheckCircle size={10} className="animate-pulse" /> Certified Partner
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-tighter leading-none uppercase">
-                {brandName}
-              </h1>
-              <p className="text-zinc-300 text-xs sm:text-sm font-semibold tracking-wide max-w-md">
-                {getCleanTagline()}
-              </p>
+        <div className="absolute inset-x-0 bottom-0 px-6 py-4 z-20 flex  items-center gap-4">
+          {brand?.brandLogo ? (
+            <div className="relative overflow-hidden w-20 h-20 sm:w-32 sm:h-32 rounded-3xl bg-white border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.1)] flex items-center justify-center">
+              <CustomImage
+                src={brand?.brandLogo}
+                alt={`${brandName} Logo`}
+                fill
+                imageClassName="object-contain"
+              />
             </div>
+          ) : (
+            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-zinc-950 border border-white/10 shadow-2xl flex items-center justify-center text-5xl font-black text-white uppercase select-none transform translate-y-4" style={{ color: primaryColor }}>
+              {brandName.substring(0, 2)}
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <div className="inline-flex items-center justify-center gap-2 px-2 md:px-4 py-1 md:py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-[8px] md:text-xs font-bold text-white uppercase tracking-[0.2em] shadow-lg">
+              <FiCheckCircle size={14} style={{ color: primaryColor }} className="animate-pulse" /> Official Partner
+            </div>
+            <h1 className="text-2xl sm:text-6xl md:text-5xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-2xl">
+              {brandName}
+            </h1>
+            <p className="text-zinc-300 text-[10px] md:text-sm font-medium tracking-wide max-w-2xl mx-auto drop-shadow-md">
+              {brand?.focusKeyword}
+            </p>
           </div>
         </div>
       </section>
 
-      {/* Info & Columns Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4  sm:px-0 relative">
 
-        {/* Left Columns - Description & Engineering DNA */}
-        <div className="lg:col-span-2 space-y-4">
-
-          {/* Engineering Bio Card */}
-          <div className="p-6 sm:p-8 rounded-[1rem] bg-white/[0.01] border border-white/5 shadow-xl space-y-4">
-            <h3 className="text-xl font-bold text-white uppercase tracking-wider">
-              Engineering DNA & Heritage
-            </h3>
-            <p className="text-zinc-400 text-sm leading-relaxed">
-              We collaborate closely with {brandName} to deliver tyre technology that redefines the bounds of safety, road feel, and cornering stability. Sourced directly from authorized manufacturer channels, each set undergoes rigorous quality audits.
-            </p>
-            <p className="text-zinc-400 text-sm leading-relaxed">
-              Whether you are carving mountain passes, tracking laps, or commuting on long road trips, {brandName} compounds provide elite-level durability, high heat dispersion, and predictable wet-road grip index when it matters most.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {techSpecs.map((spec, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-2xl bg-white/[0.01] border border-white/5 hover:border-orange-500/20 transition-colors duration-300 flex items-start gap-4"
-              >
-                <div className="p-3 rounded-xl bg-orange-500/5 border border-orange-500/10 flex-shrink-0">
-                  {spec.icon}
+        <div className="lg:col-span-2 space-y-6">
+          {brand?.description && (
+            <div className="p-6 rounded-xl bg-white/10 border border-white/5 backdrop-blur-md shadow-xl space-y-4">
+              <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                  style={{
+                    background: `linear-gradient(to bottom right, ${primaryColor}33, ${primaryColor}1A)`,
+                    boxShadow: `0 0 0 1px ${primaryColor}4D, 0 0 14px ${primaryColor}26`
+                  }}
+                >
+                  <FiInfo size={18} style={{ color: primaryColor }} />
                 </div>
-                <div className="space-y-1 text-left">
-                  <h4 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">{spec.title}</h4>
-                  <div className="text-sm font-bold text-white uppercase tracking-tight">{spec.value}</div>
-                  <p className="text-zinc-500 text-[11px] leading-relaxed">{spec.desc}</p>
+                <div>
+                  <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                    About {brandName}
+                  </h2>
+                  <p className="text-zinc-500 text-[10px] mt-0.5">
+                    Learn more about their legacy and mission
+                  </p>
                 </div>
               </div>
-            ))}
+              <div className="space-y-5 ">
+                {brand?.description && (
+                  <ExpandableText text={brand.description} color={primaryColor} />
+                )}
+              </div>
+            </div>
+          )}
+
+          {brand?.whyChooseBrand && (
+            <div className="p-6 rounded-xl bg-white/10 border border-white/5 backdrop-blur-md shadow-xl space-y-4">
+              <div className="flex items-center gap-3 border-b border-white/5 pb-4">
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                  style={{
+                    background: `linear-gradient(to bottom right, ${primaryColor}33, ${primaryColor}1A)`,
+                    boxShadow: `0 0 0 1px ${primaryColor}4D, 0 0 14px ${primaryColor}26`
+                  }}
+                >
+                  <FiStar size={18} style={{ color: primaryColor }} />
+                </div>
+                <div>
+                  <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                    Why Choose {brandName}
+                  </h2>
+                  <p className="text-zinc-500 text-[10px] mt-0.5">
+                    What makes their products stand out
+                  </p>
+                </div>
+              </div>
+              <ExpandableText text={brand.whyChooseBrand} color={primaryColor} />
+            </div>
+          )}
+
+          {(brand?.pros?.length > 0 || brand?.cons?.length > 0) && (
+            <section className="relative ">
+
+              <div className="flex items-center gap-3 border-b border-white/10 pb-4 mb-4">
+                <div
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
+                  style={{
+                    background: `linear-gradient(to bottom right, ${primaryColor}33, ${primaryColor}1A)`,
+                    boxShadow: `0 0 0 1px ${primaryColor}4D, 0 0 14px ${primaryColor}26`
+                  }}
+                >
+                  <RiShieldCheckFill style={{ color: primaryColor }} className="text-base" />
+                </div>
+                <div>
+                  <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                    Brand Analysis
+                  </h2>
+                  <p className="text-zinc-500 text-[10px] mt-0.5">
+                    Key strengths &amp; limitations of {brandName}
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+
+                {brand?.pros?.length > 0 && (
+                  <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-green-500/10 cursor-pointer transition-all duration-300 hover:border-green-500/40 hover:shadow-[0_4px_24px_rgba(16,185,129,0.10)]">
+
+                    <div className="p-4 lg:p-5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/15 transition-all duration-300 group-hover:bg-green-500/25">
+                          <RiThumbUpFill className="text-green-400 text-lg" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-bold text-sm leading-tight">
+                            Advantages
+                          </h3>
+                          <p className="text-zinc-500 text-[10px] mt-0.5">
+                            What riders love about this brand
+                          </p>
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2">
+                        {brand.pros?.slice(0, 6).map((pro, index) => (
+                          <li key={index} className="flex items-center gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
+                            <RiCheckboxCircleFill className="mt-0.5 shrink-0 text-sm text-green-400" />
+                            <span className="leading-relaxed">{pro}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+                {brand?.cons?.length > 0 && (
+                  <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-red-500/10 cursor-pointer transition-all duration-300 hover:border-red-500/40 hover:shadow-[0_4px_24px_rgba(239,68,68,0.10)]">
+
+                    <div className="p-4 lg:p-5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/15 transition-all duration-300 group-hover:bg-red-500/25">
+                          <RiThumbDownFill className="text-red-400 text-lg" />
+                        </div>
+                        <div>
+                          <h3 className="text-white font-bold text-sm leading-tight">
+                            Limitations
+                          </h3>
+                          <p className="text-zinc-500 text-[10px] mt-0.5">
+                            Areas where alternatives may perform better
+                          </p>
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2">
+                        {brand.cons?.slice(0, 6)?.map((con, index) => (
+                          <li key={index} className="flex items-center gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
+                            <RiCloseCircleFill className="mt-0.5 shrink-0 text-sm text-red-400" />
+                            <span className="leading-relaxed">{con}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+              </div>
+            </section>
+          )}
+
+          <div className="grid grid-cols-1 gap-2 ">
+            {brand?.popularSeries?.length > 0 && (
+              <div className="relative ">
+                <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-4">
+                  <div
+                    className="flex h-9 w-9 shrink-0 items-center  justify-center rounded-xl"
+                    style={{
+                      background: `linear-gradient(to bottom right, ${primaryColor}33, ${primaryColor}1A)`,
+                      boxShadow: `0 0 0 1px ${primaryColor}4D, 0 0 14px ${primaryColor}26`
+                    }}
+                  >
+                    <FiLayers size={18} style={{ color: primaryColor }} />
+                  </div>
+                  <div>
+                    <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                      Popular Series
+                    </h2>
+                    <p className="text-zinc-500 text-[10px] mt-0.5">
+                      Top-performing lineups from {brandName}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap gap-2">
+                  {brand.popularSeries.map((series, i) => (
+                    <span key={i} className="px-3 py-1.5 rounded-lg bg-white/10 border border-white/10 text-xs sm:text-sm text-zinc-300 font-medium tracking-wide hover:bg-white/15 transition-colors cursor-default">
+                      {series}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
         </div>
 
-        <div className="lg:col-span-1">
-          <div className="p-6 sm:p-8 rounded-[1rem] bg-gradient-to-b from-white/[0.02] to-transparent border border-white/5 shadow-2xl space-y-6 flex flex-col sticky top-24">
-
-            <div className='flex gap-4'>
-              <div>
-                <div className="w-12 h-12 rounded-full bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-500">
-                  <FiShield size={24} />
-                </div>
-              </div>
-
-              <div className="space-y-2 ">
-                <h3 className="text-lg font-bold text-white uppercase tracking-wider leading-tight">
-                  Request Fitment & Sizing Quotes
-                </h3>
-
-              </div>
-            </div>
-            <p className="text-zinc-500 text-xs leading-relaxed">
-              Looking for exclusive pricing or specific sizing catalogs for {brandName} compounds? Contact our certified specialist pipeline directly.
-            </p>
-
-            <ul className="space-y-3 font-medium text-[11px] text-zinc-400 tracking-wide uppercase select-none">
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Direct Warehouse Pricing
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Live Stock Availability
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Complimentary Fitment Review
-              </li>
-            </ul>
-
-            {/* Direct Action WhatsApp Button */}
-            <div className="pt-2">
-              <WhatsAppButton
-                text={`Request ${brandName} Quote`}
-                value={` I'm interested in premium tyres from ${brandName}. Can you check active deals and warehouse stock lists for my vehicle?`}
-                className="w-full h-12"
-              />
-            </div>
-
-            {/* Subtle disclaimer */}
-            <p className="text-[10px] text-zinc-600 text-center leading-relaxed">
-              We respond instantly to all fitment and direct sourcing inquiries. Secure pricing guaranteed.
-            </p>
-          </div>
+        <div className="lg:col-span-1 space-y-4 lg:sticky lg:top-24 self-start z-10">
+          <RecommendedTyres brandId={brand?._id} primaryColor={primaryColor} />
         </div>
-
+      </div>
+      <div className="">
+        <NewLaunchTyres brandId={brand?._id} primaryColor={primaryColor} />
       </div>
     </div>
   );
 }
 
-export default BrandsDetailsClient;
+export default React.memo(BrandsDetailsClient);

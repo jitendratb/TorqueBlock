@@ -11,15 +11,16 @@ class TyresService {
         }
     }
 
-    async getTyreByFamily({ isNewLaunch, isBestSeller, isFeatured, limit = 16, page = 1 } = {}) {
+    async getTyreByFamily({ isNewLaunch,brandId, isBestSeller, isFeatured, limit = 16, page = 1 } = {}) {
         try {
             const params = { limit, page };
             if (isNewLaunch !== undefined) params.isNewLaunch = isNewLaunch;
             if (isBestSeller !== undefined) params.isBestSeller = isBestSeller;
             if (isFeatured !== undefined) params.isFeatured = isFeatured;
+            if (brandId !== undefined) params.brandId = brandId;
 
             const response = await TorqueBlockApi.get(`/intent/recommended` , { params });
-            return response?.data;
+            return response;
         } catch (error) {
             console.error("Error fetching tyre by family:", error?.message || error);
             return null;
@@ -36,9 +37,9 @@ class TyresService {
         }
     }
 
-    async getRecommandation({ limit = 16, page = 1 }) {
+    async getRecommandation({ brandId, isFeatured, limit = 16, page = 1 }) {
         try {
-            const response = await TorqueBlockApi.post(`/size/recommended`, { limit, page , isFeatured:true });
+            const response = await TorqueBlockApi.post(`/size/recommended`, { limit, page, isFeatured, brandId });
             return response;
         } catch (error) {
             console.error("Error fetching recommendation:", error?.message || error);

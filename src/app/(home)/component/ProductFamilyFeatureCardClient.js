@@ -6,7 +6,7 @@ import TyresService from '@/services/tyresService';
 import { TyreCardSkeletonGroup } from '@/app/(home)/component/Tyre/TyreCardSkeleton';
 
 function ProductFamilyFeatureCardClient({ recommendedTyre }) {
-    const [tyres, setTyres] = useState(recommendedTyre || []);
+    const [tyres, setTyres] = useState(recommendedTyre?.data || recommendedTyre || []);
     const [page, setPage] = useState(1);
     const [hasMore, setHasMore] = useState(recommendedTyre?.pagination?.totalPages > 1);
     const [loading, setLoading] = useState(false);

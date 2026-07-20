@@ -16,7 +16,7 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
     const computeItemsPerView = useCallback(() => {
         if (!containerRef.current) return 1;
         const width = containerRef.current.clientWidth;
-        
+
         let actualItemWidth = typeof itemWidth === 'number' ? itemWidth : 280;
         if (trackRef.current && trackRef.current.firstElementChild) {
             actualItemWidth = trackRef.current.firstElementChild.clientWidth || actualItemWidth;
@@ -46,7 +46,6 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
         return () => observer.disconnect();
     }, [computeItemsPerView, checkScrollEnd]);
 
-    // Check scroll state after items or layout change
     useEffect(() => {
         checkScrollEnd();
     }, [items.length, itemsPerView, checkScrollEnd]);

@@ -7,7 +7,7 @@ async function FeatureCard() {
     let initialPagination = null;
     
     try {
-        const response = await tyresService.getRecommandation({ limit: 16, page: 1 });
+        const response = await tyresService.getRecommandation({ limit: 16, page: 1 , isFeatured:true });
         if (response?.success) {
             initialTyres = response.data || [];
             initialPagination = response.pagination || { totalPages: 1, currentPage: 1 };
