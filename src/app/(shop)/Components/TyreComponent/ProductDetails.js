@@ -1,6 +1,7 @@
 "use client";
 
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
+import PriceCard from "./PriceCard";
 import Image from "@/components/molecules/CustomImage";
 import { useMemo, useState } from "react";
 import {
@@ -8,6 +9,7 @@ import {
     FaShieldAlt, FaTag, FaTools, FaTruck, FaUserTie,
     FaStar, FaRegStar, FaStarHalfAlt, FaCheckCircle,
     FaFireAlt, FaAward, FaTimesCircle, FaLightbulb, FaBiking, FaLayerGroup,
+    FaChevronDown,
 } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
@@ -43,62 +45,6 @@ function StarRating({ rating = 4.5, count = 356 }) {
     );
 }
 
-function PriceCard({ tyre }) {
-    const startingPrice = tyre?.startingPrice;
-    const pricing = tyre?.pricing;
-    const inStock = tyre?.availability?.inStock;
-    const stockCount = tyre?.availability?.stockCount;
-
-    if (!startingPrice && !pricing) {
-        return (
-            <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 p-4 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
-                <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-orange-600/5 rounded-full blur-xl pointer-events-none" />
-                
-                <div className="relative space-y-3">
-                    <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">Pricing Info</p>
-                        <h4 className="text-lg font-bold text-white leading-tight">Price on Request</h4>
-                        <p className="text-zinc-400 text-xs mt-1 leading-relaxed">
-                            Connect with our experts to get the best custom rate and verified size compatibility for your motorcycle.
-                        </p>
-                    </div>
-                    <WhatsAppButton 
-                        text="Query Price & Size"
-                        message={`Hi TorqueBlock, I'd like to check the price and size availability for the tyre: ${tyre?.productName}`}
-                        className="w-full justify-center"
-                    />
-                </div>
-            </div>
-        );
-    }
-
-    return (
-        <div className="relative overflow-hidden rounded-2xl border border-orange-500/20 bg-white/10 shadow-[0_0_40px_rgba(249,115,22,0.08)]">
-            <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/10 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-6 -left-6 w-24 h-24 bg-orange-600/5 rounded-full blur-xl pointer-events-none" />
-
-            <div className="relative p-4">
-                <div className="flex items-start justify-between">
-                    <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500 mb-1">Starting Price</p>
-                        <div className="flex items-end gap-2">
-                            <span className="text-3xl md:text-4xl font-black text-white tracking-tight">
-                                &#8377;{Number(startingPrice || pricing?.frontTyrePrice ).toLocaleString("en-IN")}
-                            </span>
-                            
-                        </div>
-                        <p className="text-zinc-500 text-[11px] mt-0.5">Price varies by size &bull; Inclusive of taxes</p>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    );
-}
-
-
-
 export default function ProductDetails({ tyre }) {
     const gallery = useMemo(() => tyre?.productImages || [], [tyre]);
     const [activeImage, setActiveImage] = useState(gallery[0]);
@@ -117,6 +63,7 @@ export default function ProductDetails({ tyre }) {
 
         return [...new Set(tags), "High Performance"];
     }, [tyre]);
+
 
     return (
         <section className="w-full relative">
@@ -164,44 +111,46 @@ export default function ProductDetails({ tyre }) {
                 <div className="flex flex-col gap-4">
                     <div className="space-y-4 mt-2 md:mt-0">
                         <div className="flex items-center gap-4">
-
-                            <p className="text-[10px] lg:text-sm font-medium uppercase tracking-[0.2em] text-orange-500">
-                                {tyre?.brand?.name} PERFORMANCE SERIES
-                            </p>
-
-                            <div className="absolute top-0 right-0 md:relative flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5 backdrop-blur-xl">
-                                <FaShieldAlt className="text-xs text-green-400" />
-
-                                <p className="text-xs font-medium text-green-100">
-                                    Trusted by 50,000+ riders
-                                </p>
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] ]" />
+                                <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" />
+                                <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400 z-10">
+                                    {tyre?.brand?.name}
+                                </span>
                             </div>
 
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-gradient-to-r from-green-500/15 via-green-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2.5s_infinite]" />
+                                <FaShieldAlt className="text-xs text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" />
+                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-green-100 z-10">
+                                 100% Fitment Guarantee
+                                </span>
+                            </div>
                         </div>
                         </div>
 
 
                         <div>
-                            <h1 className="text-2xl md:text-4xl font-black leading-[1.08] tracking-tight text-white">
-                                Is{" "}
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-orange-100 to-orange-400">
+                            <h1 className="text-3xl md:text-5xl lg:text-3xl font-black leading-[1.05] tracking-tighter text-white">
+                                Is {" "}
+                                <span className="text-transparent lg:text-[3rem] bg-clip-text bg-gradient-to-br from-white via-orange-300 to-orange-600 drop-shadow-lg">
                                     {tyre?.productName}
                                 </span>
-                                <br />
-                                <span className="text-zinc-400 text-xl md:text-2xl font-semibold">right for your motorcycle?</span>
+                                <span className="block text-zinc-400 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight">
+                                    right for your motorcycle?
+                                </span>
                             </h1>
                             <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                                 <StarRating
                                     rating={tyre?.schemaMarkup?.aggregateRating || 4.9}
                                     count={tyre?.schemaMarkup?.reviewCount || 150}
                                 />
-                                <span className="text-zinc-400 text-xs">on Google</span>
                             </div>
                         </div>
 
                         {tyre?.hero?.highlights?.length > 0 && (
                             <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1">
-                                {tyre.hero.highlights.map((h, i) => (
+                                {tyre.hero.highlights?.slice(0,3).map((h, i) => (
                                     <div key={i} className="shrink-0 flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/5 px-3 py-1.5">
                                         <RiSparkling2Fill className="text-orange-400 text-[10px] shrink-0" />
                                         <span className="text-[10px] font-semibold text-orange-300 whitespace-nowrap">{h}</span>
@@ -229,9 +178,28 @@ export default function ProductDetails({ tyre }) {
                         </div>
                         <PriceCard tyre={tyre} />
 
+                        <div className="w-full mt-1"> 
+                            <button 
+                                onClick={() => {
+                                    const el = document.getElementById("allSizesLink");
+                                    if (el) {
+                                        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    }
+                                }}
+                                className="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4 transition-all duration-300 hover:scale-[1.02]  active:scale-[0.98]"
+                            >
+                                <span className="relative z-10 text-xs md:text-sm font-black uppercase tracking-[0.25em] text-white drop-shadow-md">
+                                    View All Sizes
+                                </span>
+                                <div className="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white/20 transition-transform duration-300 group-hover:translate-y-1">
+                                    <FaChevronDown className="text-white text-xs drop-shadow-sm" />
+                                </div>
+                            </button>
+                        </div>
+
                         <div className="relative mt-1">
                             <div className="grid grid-cols-3 gap-2 px-1">
-                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(249,115,22,0.15)]">
+                                <div className="group relative flex justify-center items-center gap-3 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(249,115,22,0.15)]">
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30 transition-all duration-300 group-hover:ring-orange-500/60 group-hover:shadow-[0_0_10px_rgba(249,115,22,0.3)]">
                                         <MdLocalShipping className="text-orange-400 text-lg" />
                                     </div>
@@ -241,7 +209,7 @@ export default function ProductDetails({ tyre }) {
                                     </div>
                                 </div>
 
-                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-emerald-500/20 bg-gradient-to-b from-emerald-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:from-emerald-500/15 hover:shadow-[0_0_18px_rgba(16,185,129,0.15)]">
+                                <div className="group relative flex justify-center  items-center gap-3 rounded-xl border border-emerald-500/20 bg-gradient-to-b from-emerald-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:from-emerald-500/15 hover:shadow-[0_0_18px_rgba(16,185,129,0.15)]">
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30 transition-all duration-300 group-hover:ring-emerald-500/60 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.3)]">
                                         <MdVerified className="text-emerald-400 text-lg" />
                                     </div>
@@ -251,7 +219,7 @@ export default function ProductDetails({ tyre }) {
                                     </div>
                                 </div>
 
-                                <div className="group relative flex flex-col items-center gap-1.5 rounded-xl border border-blue-500/20 bg-gradient-to-b from-blue-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:from-blue-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
+                                <div className="group relative flex justify-center items-center gap-3 rounded-xl border border-blue-500/20 bg-gradient-to-b from-blue-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:from-blue-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
                                     <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 ring-1 ring-blue-500/30 transition-all duration-300 group-hover:ring-blue-500/60 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.3)]">
                                         <MdSupportAgent className="text-blue-400 text-lg" />
                                     </div>

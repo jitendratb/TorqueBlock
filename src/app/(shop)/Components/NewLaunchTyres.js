@@ -6,7 +6,7 @@ import ProductFamilyCard from '@/components/atoms/ProductFamilyCard';
 import tyresService from '@/services/tyresService';
 import { TyreCardSkeletonGroup } from '@/app/(home)/component/Tyre/TyreCardSkeleton';
 
-export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
+export default function TyreSection({ categoryId, brandId, isNewLaunch, isBestSeller, isFeatured, title = "Available Products", subtitle = "Explore all products", primaryColor = '#f97316' }) {
   const [tyres, setTyres] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const loadingRef = useRef(false);
@@ -19,6 +19,10 @@ export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
       setIsLoading(true);
       const res = await tyresService.getTyreByFamily({
         brandId,
+        categoryId,
+        isNewLaunch,
+        isBestSeller,
+        isFeatured,
         limit: 16,
         page: currentPage
       });
@@ -33,7 +37,7 @@ export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
         setHasMore(false);
       }
     } catch (error) {
-      console.error("Failed to fetch new launch tyres", error);
+      console.error("Failed to fetch Section tyres", error);
     } finally {
       loadingRef.current = false;
       setIsLoading(false);
@@ -41,10 +45,8 @@ export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
   };
 
   useEffect(() => {
-    if (brandId) {
-      fetchTyres(page);
-    }
-  }, [brandId, page]);
+    fetchTyres(page);
+  }, [brandId, categoryId, isNewLaunch, isBestSeller, isFeatured, page]);
 
   const handleReachEnd = () => {
     if (hasMore && !loadingRef.current) {
@@ -64,12 +66,7 @@ export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
             <div className="h-2 w-48 bg-white/5 rounded-md"></div>
           </div>
         </div>
-        <div className="relative flex gap-4 overflow-hidden animate-pulse pb-4">
-          <div className="w-[280px] md:w-[320px] h-[380px] shrink-0 bg-white/5 rounded-3xl border border-white/5"></div>
-          <div className="w-[280px] md:w-[320px] h-[380px] shrink-0 bg-white/5 rounded-3xl border border-white/5 hidden sm:block"></div>
-          <div className="w-[280px] md:w-[320px] h-[380px] shrink-0 bg-white/5 rounded-3xl border border-white/5 hidden lg:block"></div>
-          <div className="w-[280px] md:w-[320px] h-[380px] shrink-0 bg-white/5 rounded-3xl border border-white/5 hidden xl:block"></div>
-        </div>
+        <TyreCardSkeletonGroup count={4} />
       </div>
     );
   }
@@ -89,10 +86,10 @@ export default function NewLaunchTyres({ brandId, primaryColor = '#f97316' }) {
         </div>
         <div>
           <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-            Available Products
+            {title}
           </h2>
           <p className="text-zinc-500 text-[10px] mt-0.5">
-            Explore all products from this brand
+            {subtitle}
           </p>
         </div>
       </div>

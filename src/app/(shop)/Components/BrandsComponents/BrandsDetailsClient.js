@@ -7,7 +7,7 @@ import { FiArrowLeft, FiZap, FiCheckCircle, FiStar, FiInfo, FiLayers, } from 're
 import { RiShieldCheckFill, RiThumbUpFill, RiCheckboxCircleFill, RiThumbDownFill, RiCloseCircleFill } from 'react-icons/ri';
 import CustomImage from '@/components/molecules/CustomImage';
 import RecommendedTyres from './RecommendedTyres';
-import NewLaunchTyres from './NewLaunchTyres';
+import TyreSection from '../NewLaunchTyres';
 
 const ExpandableText = ({ text, color }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -290,7 +290,7 @@ function BrandsDetailsClient({ brand }) {
         </div>
       </div>
       <div className="">
-        <NewLaunchTyres brandId={brand?._id} primaryColor={primaryColor} />
+        <TyreSection brandId={brand?._id} primaryColor={primaryColor} />
       </div>
     </div>
   );

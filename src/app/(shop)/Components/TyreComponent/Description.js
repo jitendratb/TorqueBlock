@@ -1,9 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import { FaMotorcycle, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
+import { FaMotorcycle, FaCheckCircle, FaTimesCircle, FaFileAlt, FaChevronDown, FaTools } from 'react-icons/fa';
 import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill, RiCheckboxCircleFill, RiCloseCircleFill } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
 import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
+import { GiCarWheel, GiTyre } from 'react-icons/gi';
 import TyreCard from "@/components/atoms/TyreCard";
 import Carousel from '@/components/organisms/Carousel';
 
@@ -38,158 +39,199 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
     return (
         <div className="space-y-4">
-            <div className={desClassName}>
-                <div className="flex items-center gap-3  mb-3">
-                    <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
-                        Description
-                    </h2>
+            <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl ${desClassName}`}>
+                <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+                
+                <div className="relative flex items-center gap-3.5 mb-2">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+                        <FaFileAlt className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+                    </div>
+                    <div>
+                        <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                            Description
+                        </h2>
+                        <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                            Tyre Details & Overview
+                        </p>
+                    </div>
                 </div>
-                <div>
-                    <p className="text-xs md:text-base text-zinc-400" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', } : {}} >
+
+                <div className='relative border-t border-white/10 pt-2'>
+                    <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}} >
                         {tyre?.description || tyre?.hero?.subtitle}
                     </p>
+                    
                     {(tyre?.description || tyre?.hero?.subtitle) && (
-                        <button onClick={() => setIsExpanded(!isExpanded)} className="text-orange-500 hover:text-orange-400 text-xs md:text-sm font-semibold mt-1"  >
-                            {isExpanded ? 'Hide' : 'more'}
-                        </button>
+                        <div className="mt-4 flex justify-start">
+                            <button 
+                                onClick={() => setIsExpanded(!isExpanded)} 
+                                className="group flex items-center gap-2 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-orange-600/5 px-2 py-1 text-[10px] font-black uppercase tracking-wider text-orange-400 transition-all duration-300 hover:border-orange-500/50 hover:bg-orange-500/20 hover:text-orange-300"
+                            >
+                                {isExpanded ? 'Read Less' : 'Read More'}
+                                <FaChevronDown className={`text-[10px] transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>
-            <section className={`border-t border-white/10  my-4 ${sizesClassName}`}>
-                <div className="">
-                    <div className="space-y-4 py-4">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between mb-4">
-                            <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
-                                Select Your Size
-                            </h2>
+            <section className={`space-y-4 my-4 ${sizesClassName}`} id="fitment-section">
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
+                    <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+                    
+                    <div className="relative flex items-center gap-3.5 mb-2">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+                            <FaTools className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 justify-between flex-1">
+                            <div>
+                                <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                                    Select Your Size
+                                </h2>
+                                <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                                    Available Fitments For This Model
+                                </p>
+                            </div>
                             {tyre?.sizesIds?.length > 0 ? (
-                                <span className="text-[9px] md:text-[10px] text-orange-400 font-black uppercase tracking-wider bg-orange-500/10 px-2.5 py-1 rounded-full border border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.1)]">
-                                    Interactive Size Specs Available
+                                <span className="text-[9px] md:text-[10px] text-orange-400 font-black uppercase tracking-wider bg-orange-500/10 px-3 py-1.5 rounded-full border border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.1)] w-fit shrink-0">
+                                    Interactive Size Specs
                                 </span>
                             ) : (
-                                <span className="text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-wider">
-                                    Select your bike size below
+                                <span className="text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-wider w-fit shrink-0">
+                                    Select Below
                                 </span>
                             )}
                         </div>
-
-                        <div className="space-y-4">
-                            {Front.length > 0 && (
-                                <div className="flex flex-col gap-4">
-                                    <div className="flex items-center gap-2 border-l border-orange-500/50 pl-3">
-                                        <h3 className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
-                                            Front Fitment
-                                        </h3>
-                                        <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
-                                    </div>
-
-                                    <div className="flex-1 min-w-0">
-                                        <Carousel
-                                            items={Front}
-                                            itemWidth={isFrontObjects ? 280 : "320"}
-                                            showDots={false}
-                                            showArrows={true}
-                                            gap={16}
-                                            renderItem={(item) => {
-                                                const isInteractive = typeof item === 'object';
-                                                const sizeValue = isInteractive ? item?.size : item;
-                                                const sizeId = isInteractive ? item?._id : item;
-                                                return isInteractive ? (
-                                                    <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
-                                                ) : (
-                                                    <span
-                                                        key={sizeId}
-                                                        onClick={() => handleWhatsapp(item)}
-                                                        className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
-                                                    >
-                                                        {sizeValue}
-                                                    </span>
-                                                );
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-
-                            {Rear.length > 0 && (
-                                <div className="flex flex-col  gap-4">
-                                    <div className="flex items-center gap-2 border-l border-orange-500/50 pl-3">
-                                        <h3 className="text-[11px] md:text-xs font-black uppercase tracking-[0.2em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent">
-                                            Rear Fitment
-                                        </h3>
-                                        <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
-                                    </div>
-
-                                    <div className=" flex flex-1 min-w-0 ">
-                                        <Carousel
-                                            items={Rear}
-                                            itemWidth={isRearObjects ? 280 : "w-auto"}
-                                            showDots={false}
-                                            showArrows={true}
-                                            gap={16}
-                                            renderItem={(item) => {
-                                                const isInteractive = typeof item === 'object';
-                                                const sizeValue = isInteractive ? item?.size : item;
-                                                const sizeId = isInteractive ? item?._id : item;
-                                                return isInteractive ? (
-                                                    <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
-                                                ) : (
-                                                    <span
-                                                        key={sizeId}
-                                                        onClick={() => handleWhatsapp(item)}
-                                                        className="group relative inline-flex items-center gap-1.5 px-3 py-1.5 md:px-4 md:py-2 rounded border border-white/10 bg-zinc-900/60 hover:bg-zinc-900 hover:border-orange-500/50 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-semibold transition-all duration-300 cursor-pointer whitespace-nowrap"
-                                                    >
-                                                        {sizeValue}
-                                                    </span>
-                                                );
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            )}
-                        </div>
                     </div>
 
-                    <div className="border-t border-white/10 "></div>
-                    <div className="py-4">
-                        <div className="flex items-center gap-3 mb-4">
-                            <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                    <div className="relative border-t border-white/10 pt-2 space-y-6">
+                        {Front.length > 0 && (
+                            <div id='allSizesLink' className="flex flex-col gap-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_10px_rgba(249,115,22,0.15)]">
+                                        <GiTyre className="text-orange-400 text-sm animate-[spin_4s_linear_infinite]" />
+                                    </div>
+                                    <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                                        Front Fitment
+                                    </h3>
+                                </div>
+
+                                <div className="flex-1 min-w-0">
+                                    <Carousel
+                                        items={Front}
+                                        itemWidth={isFrontObjects ? 280 : "320"}
+                                        showDots={false}
+                                        showArrows={true}
+                                        gap={16}
+                                        renderItem={(item) => {
+                                            const isInteractive = typeof item === 'object';
+                                            const sizeValue = isInteractive ? item?.size : item;
+                                            const sizeId = isInteractive ? item?._id : item;
+                                            return isInteractive ? (
+                                                <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
+                                            ) : (
+                                                <span
+                                                    key={sizeId}
+                                                    onClick={() => handleWhatsapp(item)}
+                                                    className="group relative inline-flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-orange-500/10 hover:border-orange-500/40 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-bold transition-all duration-300 cursor-pointer whitespace-nowrap"
+                                                >
+                                                    {sizeValue}
+                                                </span>
+                                            );
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+
+                        {Rear.length > 0 && (
+                            <div className="flex flex-col gap-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_10px_rgba(249,115,22,0.15)]">
+                                        <GiTyre className="text-orange-400 text-sm animate-[spin_4s_linear_infinite]" />
+                                    </div>
+                                    <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white to-zinc-400 bg-clip-text text-transparent">
+                                        Rear Fitment
+                                    </h3>
+                                </div>
+
+                                <div className="flex flex-1 min-w-0">
+                                    <Carousel
+                                        items={Rear}
+                                        itemWidth={isRearObjects ? 280 : "w-auto"}
+                                        showDots={false}
+                                        showArrows={true}
+                                        gap={16}
+                                        renderItem={(item) => {
+                                            const isInteractive = typeof item === 'object';
+                                            const sizeValue = isInteractive ? item?.size : item;
+                                            const sizeId = isInteractive ? item?._id : item;
+                                            return isInteractive ? (
+                                                <TyreCard key={item.id} tyre={tyre} product={item} className="w-full" />
+                                            ) : (
+                                                <span
+                                                    key={sizeId}
+                                                    onClick={() => handleWhatsapp(item)}
+                                                    className="group relative inline-flex items-center gap-1.5 px-4 py-2 md:px-5 md:py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-orange-500/10 hover:border-orange-500/40 hover:shadow-[0_0_20px_rgba(249,115,22,0.15)] text-xs md:text-sm text-zinc-300 hover:text-white font-bold transition-all duration-300 cursor-pointer whitespace-nowrap"
+                                                >
+                                                    {sizeValue}
+                                                </span>
+                                            );
+                                        }}
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Commonly Used On Card */}
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
+                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+                    
+                    <div className="relative flex items-center gap-3.5 mb-2">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+                            <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+                        </div>
+                        <div>
+                            <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
                                 Commonly Used On
                             </h2>
-                        </div>
-
-                        <div className="space-y-2">
-                            <p className="text-xs md:text-md text-zinc-200 leading-relaxed">
-                                {tyre?.commonlyUsedOn}
-                            </p>
-
-                            <div className="flex flex-wrap gap-2">
-                                {tyre?.compatibleVehicles?.length > 0 ? (
-                                    tyre?.compatibleVehicles?.map((brand, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-white/10 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
-                                        >
-                                            <FaMotorcycle className="text-orange-500 text-sm md:text-base" />
-                                            <span>{brand?.brand} {brand?.model}</span>
-                                        </div>
-                                    ))) : (tyre?.commonlyUsedBikes?.map((bike, idx) => (
-                                        <div
-                                            key={idx}
-                                            className="flex items-center gap-2 px-2 py-1 md:px-4 md:py-2 rounded border border-white/10 bg-white/10 text-xs md:text-sm text-white font-semibold hover:border-orange-500 hover:bg-zinc-800 transition-all duration-300"
-                                        >
-                                            <FaMotorcycle className="text-orange-500 text-sm md:text-base" />
-                                            <span>{bike}</span>
-                                        </div>)
-                                    ))}
-                            </div>
-
-                            <p className="text-zinc-400 italic text-[8px] md:text-xs">
-                                Final fitment depends on model year and tyre size. Confirmed on WhatsApp.
+                            <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                                Verified Compatible Vehicles
                             </p>
                         </div>
                     </div>
 
+                    <div className="relative border-t border-white/10 pt-2 space-y-4">
+                        {tyre?.commonlyUsedOn && (
+                            <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide">
+                                {tyre?.commonlyUsedOn}
+                            </p>
+                        )}
+
+                        <div className="flex flex-wrap gap-2.5">
+                            {/* {tyre?.compatibleVehicles?.length > 0 ? (
+                                tyre?.compatibleVehicles?.map((brand, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300"
+                                    >
+                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm" />
+                                        <span>{brand?.brand} {brand?.model}</span>
+                                    </div>
+                                ))) : (tyre?.commonlyUsedBikes?.map((bike, idx) => (
+                                    <div
+                                        key={idx}
+                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300"
+                                    >
+                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm" />
+                                        <span>{bike}</span>
+                                    </div>)
+                                ))} */}
+                        </div>
+
+                  
+                    </div>
                 </div>
             </section>
             {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
@@ -231,7 +273,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                     </div>
 
                                     <ul className="space-y-2">
-                                        {tyre.pros?.slice(0,6).map((pro, index) => (
+                                        {tyre.pros?.slice(0, 6).map((pro, index) => (
                                             <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
                                                 <RiCheckboxCircleFill className="mt-0.5 shrink-0 text-sm text-green-400" />
                                                 <span className="leading-relaxed">{pro}</span>
@@ -262,7 +304,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                     </div>
 
                                     <ul className="space-y-2">
-                                        {tyre.cons?.slice(0,6)?.map((con, index) => (
+                                        {tyre.cons?.slice(0, 6)?.map((con, index) => (
                                             <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
                                                 <RiCloseCircleFill className="mt-0.5 shrink-0 text-sm text-red-400" />
                                                 <span className="leading-relaxed">{con}</span>

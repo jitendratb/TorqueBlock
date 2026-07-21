@@ -11,13 +11,14 @@ class TyresService {
         }
     }
 
-    async getTyreByFamily({ isNewLaunch,brandId, isBestSeller, isFeatured, limit = 16, page = 1 } = {}) {
+    async getTyreByFamily({ isNewLaunch,brandId, categoryId, isBestSeller, isFeatured, limit = 16, page = 1 } = {}) {
         try {
             const params = { limit, page };
             if (isNewLaunch !== undefined) params.isNewLaunch = isNewLaunch;
             if (isBestSeller !== undefined) params.isBestSeller = isBestSeller;
             if (isFeatured !== undefined) params.isFeatured = isFeatured;
             if (brandId !== undefined) params.brandId = brandId;
+            if (categoryId !== undefined) params.categoryId = categoryId;
 
             const response = await TorqueBlockApi.get(`/intent/recommended` , { params });
             return response;

@@ -16,9 +16,7 @@ function TyresClient({ initialData }) {
         <div className="py-4 space-y-4">
             <ProductDetails tyre={tyre} />
             <Description tyre={tyre} />
-
-            {/* <TrustSection tyre={tyre} /> */}
-            {/* <ReviewsCard reviews={tyre?.reviews} /> */}
+            {/* <ReviewsCard reviews={tyre} /> */}
             <FitmentSection tyre={tyre} scale={false} />
             <Similar tyre={tyre} />
             {tyre?.faqs && <FAQSection faqs={tyre?.faqs} />}

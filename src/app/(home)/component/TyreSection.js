@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import TyreCard from "./Tyre/TyreCard";
+import TyreCard from "@/components/atoms/ProductFamilyCard";
 import { TyreCardSkeletonGroup } from "./Tyre/TyreCardSkeleton";
 import TorqueBlockApi from "@/lib/api";
 import Link from "next/link";
@@ -36,7 +36,6 @@ const TyreCategorySection = ({ title, highlight, description, data = [], isLoadi
                 </div>
             </div>
 
-            {/* Cards */}
             <div className="flex overflow-x-auto gap-6 px-2 scrollbar-hide py-2">
                 {isLoading ? (
                     <TyreCardSkeletonGroup count={4} />
@@ -63,32 +62,7 @@ function TyreSection() {
     });
     const [isLoading, setIsLoading] = useState(true);
 
-    const categories = [
-        {
-            key: "limitedStock",
-            category: "Limited Stock",
-            title: "Limited Stock Essentials",
-            highlight: "Limited Stock",
-            description:
-                "High-demand compounds with extremely low availability. Secure your fitment before the next restock cycle.",
-        },
-        {
-            key: "highPerformance",
-            category: "Popular High Performance",
-            title: "Elite Performance Tyres",
-            highlight: "Elite Performance",
-            description:
-                "The most sought-after rubber by track enthusiasts and canyon carvers. Maximum grip, zero compromises.",
-        },
-        {
-            key: "touringAdventure",
-            category: "Endurance & Adventure",
-            title: "Endurance & Adventure Tyres",
-            highlight: "Endurance & Adventure",
-            description:
-                "Engineered for the long haul. Unbreakable durability meets all-weather confidence for cross-country exploration.",
-        },
-    ];
+
 
     useEffect(() => {
 

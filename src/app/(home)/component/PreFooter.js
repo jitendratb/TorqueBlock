@@ -1,5 +1,5 @@
-
 import Link from "next/link";
+import { FiChevronRight } from "react-icons/fi";
 
 const footerSections = [
   {
@@ -93,7 +93,7 @@ export default function EnterprisePreFooter() {
                 {section.links.map((link, i) => (
                   <li key={i}>
                     <Link href={link.href} className="group flex items-center text-gray-300 hover:text-orange-400 transition-all duration-300">
-                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500/70 mr-3 flex-shrink-0 group-hover:bg-orange-400" />
+                      <FiChevronRight strokeWidth={3} size={16} className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-400 group-hover:translate-x-1 transition-all duration-300" />
                       <span className="text-sm">
                         {link.label}
                       </span>

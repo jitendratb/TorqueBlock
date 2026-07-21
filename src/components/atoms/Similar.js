@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import TyreCard from "@/app/(home)/component/Tyre/TyreCard";
+import ProductCard from "@/components/atoms/ProductFamilyCard";
 import TorqueBlockApi from "@/lib/api";
 import { TyreCardSkeletonGroup } from "@/app/(home)/component/Tyre/TyreCardSkeleton";
 import Carousel from "../organisms/Carousel";
@@ -72,12 +73,12 @@ function Similar({ tyre }) {
                         <Carousel
                             items={similarTyres || []}
                             renderItem={(item) => (
-                                <TyreCard
+                                <ProductCard
                                     key={item?._id}
                                     tyre={item}
                                 />
                             )}
-                            itemWidth="w-[280px] md:w-[320px]"
+                            itemWidth="w-[280px] md:w-[300px]"
                             gap={16}
                             showDots={false}
                         />
