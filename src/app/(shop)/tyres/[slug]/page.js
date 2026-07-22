@@ -71,8 +71,7 @@ async function Page({ params }) {
     if (!tyre) {
         notFound();
     }
-       console.log(tyre , "sdfdghjkhgfds")
-
+    
     const displayName = tyre?.productName || tyre?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tyres", href: "/tyres", }, { label: displayName, isLast: true, },];
 

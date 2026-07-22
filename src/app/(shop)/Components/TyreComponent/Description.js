@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaMotorcycle, FaCheckCircle, FaTimesCircle, FaFileAlt, FaChevronDown, FaTools } from 'react-icons/fa';
 import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill, RiCheckboxCircleFill, RiCloseCircleFill } from 'react-icons/ri';
 import { useRouter } from 'next/navigation';
@@ -7,23 +7,17 @@ import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
 import { GiCarWheel, GiTyre } from 'react-icons/gi';
 import TyreCard from "@/components/atoms/TyreCard";
 import Carousel from '@/components/organisms/Carousel';
+import VehicleService from '@/services/vehicleService';
 
 function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
     const [isExpanded, setIsExpanded] = useState(false);
+    const [vehicale, setVehicale] = useState([])
     const router = useRouter();
 
-    const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front').map(item => ({
-        ...item,
-        productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []),
-        categoryId: tyre?.categoryId || tyre?.category || null,
-    })) || [];
+    const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front').map(item => ({ ...item, productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []), categoryId: tyre?.categoryId || tyre?.category || null, })) || [];
     const Front = sizesIdsFront.length > 0 ? sizesIdsFront : (tyre?.frontSizes || []);
 
-    const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear').map(item => ({
-        ...item,
-        productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : [])),
-        categoryId: tyre?.categoryId || tyre?.category || null,
-    })) || [];
+    const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear').map(item => ({ ...item, productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : [])), categoryId: tyre?.categoryId || tyre?.category || null, })) || [];
     const Rear = sizesIdsRear.length > 0 ? sizesIdsRear : (tyre?.rearSizes || []);
 
     const isFrontObjects = Front.length > 0 && typeof Front[0] === 'object';
@@ -37,11 +31,24 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
         window.open(url, "_blank");
     }
 
+    useEffect(() => {
+        const vehicale = async () => {
+            try {
+                const vehicale = await VehicleService.getVehicleByProductId(tyre?._id)
+                setVehicale(vehicale , "dsfghjkljhgfds")
+            } catch (error) {
+                console.log(error || "failed to fetch vehicle")
+            }
+        }
+
+        vehicale()
+    }, [tyre])
+
     return (
         <div className="space-y-4">
             <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl ${desClassName}`}>
                 <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-                
+
                 <div className="relative flex items-center gap-3.5 mb-2">
                     <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
                         <FaFileAlt className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
@@ -60,11 +67,11 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                     <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}} >
                         {tyre?.description || tyre?.hero?.subtitle}
                     </p>
-                    
+
                     {(tyre?.description || tyre?.hero?.subtitle) && (
                         <div className="mt-4 flex justify-start">
-                            <button 
-                                onClick={() => setIsExpanded(!isExpanded)} 
+                            <button
+                                onClick={() => setIsExpanded(!isExpanded)}
                                 className="group flex items-center gap-2 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-orange-600/5 px-2 py-1 text-[10px] font-black uppercase tracking-wider text-orange-400 transition-all duration-300 hover:border-orange-500/50 hover:bg-orange-500/20 hover:text-orange-300"
                             >
                                 {isExpanded ? 'Read Less' : 'Read More'}
@@ -77,7 +84,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
             <section className={`space-y-4 my-4 ${sizesClassName}`} id="fitment-section">
                 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-                    
+
                     <div className="relative flex items-center gap-3.5 mb-2">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
                             <FaTools className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
@@ -91,15 +98,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                     Available Fitments For This Model
                                 </p>
                             </div>
-                            {tyre?.sizesIds?.length > 0 ? (
-                                <span className="text-[9px] md:text-[10px] text-orange-400 font-black uppercase tracking-wider bg-orange-500/10 px-3 py-1.5 rounded-full border border-orange-500/20 shadow-[0_0_12px_rgba(249,115,22,0.1)] w-fit shrink-0">
-                                    Interactive Size Specs
-                                </span>
-                            ) : (
-                                <span className="text-[9px] md:text-[10px] text-zinc-500 font-bold uppercase tracking-wider w-fit shrink-0">
-                                    Select Below
-                                </span>
-                            )}
+
                         </div>
                     </div>
 
@@ -183,61 +182,78 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                         )}
                     </div>
                 </div>
+            </section>
+            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
+                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                {/* Commonly Used On Card */}
-                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
-                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-                    
-                    <div className="relative flex items-center gap-3.5 mb-2">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
-                            <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
-                        </div>
-                        <div>
-                            <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
-                                Commonly Used On
-                            </h2>
-                            <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
-                                Verified Compatible Vehicles
-                            </p>
-                        </div>
+                <div className="relative flex items-center gap-3.5 mb-2">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+                        <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
                     </div>
-
-                    <div className="relative border-t border-white/10 pt-2 space-y-4">
-                        {tyre?.commonlyUsedOn && (
-                            <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide">
-                                {tyre?.commonlyUsedOn}
-                            </p>
-                        )}
-
-                        <div className="flex flex-wrap gap-2.5">
-                            {/* {tyre?.compatibleVehicles?.length > 0 ? (
-                                tyre?.compatibleVehicles?.map((brand, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300"
-                                    >
-                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm" />
-                                        <span>{brand?.brand} {brand?.model}</span>
-                                    </div>
-                                ))) : (tyre?.commonlyUsedBikes?.map((bike, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300"
-                                    >
-                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm" />
-                                        <span>{bike}</span>
-                                    </div>)
-                                ))} */}
-                        </div>
-
-                  
+                    <div>
+                        <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                            Commonly Used On
+                        </h2>
+                        <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                            Verified Compatible Vehicles
+                        </p>
                     </div>
                 </div>
-            </section>
-            {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
-                <section className="relative border-t border-white/10 mt-4 py-4">
 
-                    {/* Section Header */}
+                <div className="relative border-t border-white/10 pt-2 space-y-4">
+                    {tyre?.commonlyUsedOn && (
+                        <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide">
+                            {tyre?.commonlyUsedOn}
+                        </p>
+                    )}
+
+                        <div className="w-full min-w-0">
+                            {tyre?.compatibleVehicles?.length > 0 ? (
+                                <Carousel
+                                    items={tyre?.compatibleVehicles}
+                                    itemWidth="w-auto"
+                                    showDots={false}
+                                    showArrows={true}
+                                    arrowSize = {16}
+                                    leftArrowClassName = "-left-2 p-1"
+                                     rightArrowClassName = "-right-2 p-1"
+                                    gap={12}
+                                    renderItem={(brand, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 whitespace-nowrap cursor-pointer"
+                                        >
+                                            <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm shrink-0" />
+                                            <span>{brand?.brand} {brand?.model}</span>
+                                        </div>
+                                    )}
+                                />
+                            ) : tyre?.commonlyUsedBikes?.length > 0 ? (
+                                <Carousel
+                                    items={tyre?.commonlyUsedBikes}
+                                    itemWidth="w-auto"
+                                    showDots={false}
+                                    showArrows={true}
+                                    gap={12}
+                                    renderItem={(bike, idx) => (
+                                        <div
+                                            key={idx}
+                                            className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 whitespace-nowrap cursor-pointer"
+                                        >
+                                            <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm shrink-0" />
+                                            <span>{bike}</span>
+                                        </div>
+                                    )}
+                                />
+                            ) : null}
+                        </div>
+
+
+                </div>
+            </div>
+            {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
+                <section className="relative">
+
                     <div className="flex items-center gap-3 mb-5">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/10 ring-1 ring-orange-500/30 shadow-[0_0_14px_rgba(249,115,22,0.15)]">
                             <RiShieldCheckFill className="text-orange-400 text-base" />
@@ -252,7 +268,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 border-t border-white/10 mt-4 py-4">
 
                         {tyre?.pros?.length > 0 && (
                             <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-green-500/10 cursor-pointer transition-all duration-300 hover:border-green-500/40 hover:shadow-[0_4px_24px_rgba(16,185,129,0.10)]">

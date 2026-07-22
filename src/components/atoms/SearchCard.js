@@ -12,8 +12,6 @@ export default function SearchCard({ product, tyre, className, onClick }) {
     const title = product?.hero?.title || product?.productName || product?.name || product?.size || "Tyre";
     const categoryName = tyre?.category || "Premium Tyre";
 
-    console.log(product, tyre)
-
     const formatPrice = (price) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',

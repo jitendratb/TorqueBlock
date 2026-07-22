@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { FiPlus, FiMinus, FiHelpCircle } from "react-icons/fi";
+import { FiPlus, FiMinus } from "react-icons/fi";
+import { FaQuestionCircle } from "react-icons/fa";
 import FAQSchema from "@/components/seo/FAQSchema";
 
 export default function FAQSection({ faqs = [] }) {
@@ -13,16 +14,25 @@ export default function FAQSection({ faqs = [] }) {
   };
 
   return (
-    <div className="w-full  space-y-4 pt-4 pb-8">
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl w-full">
       <FAQSchema faqs={faqs} />
-      <div className="flex items-center gap-3">
-        <FiHelpCircle className="text-orange-500" size={22} />
-        <h2 className="text-sm lg:text-2xl font-black text-white uppercase tracking-wider">
-          Frequently Asked Questions
-        </h2>
+      <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+
+      <div className="relative flex items-center gap-3.5 mb-2">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+            <FaQuestionCircle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+        </div>
+        <div>
+            <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                FAQs
+            </h2>
+            <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                Frequently Asked Questions
+            </p>
+        </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="relative border-t border-white/10 pt-4 mt-2 space-y-4">
         {faqs.map((faq, index) => {
           const isOpen = activeIndex === index;
           return (

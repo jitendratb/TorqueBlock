@@ -8,9 +8,6 @@ import { FaChevronLeft, FaChevronRight, FaCheckCircle, FaArrowRight } from 'reac
 export default function ProductCard({ tyre, className }) {
     const router = useRouter();
     const [currentImg, setCurrentImg] = useState(0);
-
-    console.log(tyre, "tyre")
-
     const title = tyre?.productName || "Tyre";
     const categoryName = tyre?.categoryId?.name || "Premium Tyre";
     const brandName = tyre?.brand?.name;

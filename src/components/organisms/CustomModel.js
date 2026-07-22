@@ -3,7 +3,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 
-const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, size = 'md', closeOnBackdropClick = true, showCloseButton = true, className = '', bodyClassName = '', headerClassName = '', footerClassName = '', themeGlow = 'orange' }) => {
+const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, size = 'md', closeOnBackdropClick = true, showCloseButton = true, className = '', bodyClassName = '', headerClassName = '', footerClassName = 'bg-black/10', themeGlow = 'orange' }) => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -54,11 +54,11 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
   const selectedGlowClass = glowClasses[themeGlow] || glowClasses.orange;
 
   return (
-    <div className={`fixed inset-0 z-[100] flex items-center justify-center p-4 transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+    <div className={`fixed inset-0 min-h-screen z-[100] flex items-center justify-center transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
     >
       <div
         onClick={handleBackdropClick}
-        className={`absolute inset-0 bg-white/05 backdrop-blur-sm transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0'
+        className={`absolute inset-0 bg-white/5 backdrop-blur-sm transition-opacity duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen ? 'opacity-100' : 'opacity-0'
           }`}
       />
 
@@ -112,7 +112,7 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
         </div>
 
         {footer && (
-          <div className={`relative px-4 py-2 border-t border-white/[0.06] shrink-0 z-10 bg-black/10 ${footerClassName}`}>
+          <div className={`relative px-4 py-2 border-t border-white/[0.06] shrink-0 z-10  ${footerClassName}`}>
             {footer}
           </div>
         )}
