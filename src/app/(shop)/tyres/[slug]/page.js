@@ -27,7 +27,7 @@ export async function generateMetadata({ params }) {
     const mainImage = tyre?.productImages?.[0] || tyre?.hero?.heroImage || "/newLogo.webp";
     const metaTitle = tyre?.seo?.metaTitle || tyre?.seo?.title || displayTitle;
     const metaDescription = tyre?.seo?.metaDescription || tyre?.seo?.description || displayDescription;
-    const canonical = tyre?.seo?.canonicalUrl || `https://www.torqueblock.com/tyres/${slug}`;
+    const canonical = `https://www.torqueblock.com/tyres/${slug}`;
     
     const robotsString = tyre?.seo?.robots?.toLowerCase() || "index,follow";
     const robots = {

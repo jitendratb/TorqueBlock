@@ -24,7 +24,7 @@ export async function generateMetadata({ params }) {
         title,
         description,
         alternates: {
-            canonical: tyreBySize?.seo?.canonicalUrl || `https://www.torqueblock.com/tyres/${slug}/${size}`,
+            canonical: `https://www.torqueblock.com/tyres/${slug}/${size}`,
         },
         openGraph: {
             title,

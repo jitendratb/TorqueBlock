@@ -12,8 +12,6 @@ import CommentCard from "./commentCard";
 import { ReviewContentSkeleton } from "./ReviewCardSkeleton";
 
 export default function ReviewsCard({ tyreId }) {
-    const [hovered, setHovered] = useState(0);
-    const [submitted, setSubmitted] = useState(false);
     const [showRatingModal, setShowRatingModal] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [rating, setRating] = useState(null);

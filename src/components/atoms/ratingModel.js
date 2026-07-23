@@ -124,7 +124,7 @@ function RatingModel({ isOpen, onClose, onSubmit, rating, setRating, submitLoadi
             <div className="flex flex-col gap-4 py-0 px-1">
                 <div className="flex flex-col items-center justify-center pb-2 pb-4 border-b border-white/[0.04]">
                     <span className="text-white/60 text-xs font-semibold uppercase tracking-wider mb-4">Overall Rating</span>
-                    <div 
+                    <div
                         className="flex gap-2"
                         onMouseLeave={() => setRatingHover(0)}
                     >
@@ -162,7 +162,7 @@ function RatingModel({ isOpen, onClose, onSubmit, rating, setRating, submitLoadi
                         value={formData.review}
                         onChange={(e) => handleChange('review', e.target.value)}
                         placeholder="What did you like or dislike? How did this tyre perform on the road?"
-                        characterLimit={2000}
+                        characterLimit={200}
                     />
                 </div>
             </div>

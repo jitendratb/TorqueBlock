@@ -172,7 +172,7 @@ export default function ProductDetails({ tyre }) {
                             onClick={() => {
                                 const el = document.getElementById("allSizesLink");
                                 if (el) {
-                                    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                                 }
                             }}
                             className="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4 transition-all duration-300 hover:scale-[1.02]  active:scale-[0.98]"

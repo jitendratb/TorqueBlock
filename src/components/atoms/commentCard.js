@@ -11,12 +11,11 @@ export default function CommentCard({ review }) {
     const words = reviewText.split(" ");
     const isLong = words.length > 18;
     const preview = words.slice(0, 18).join(" ") + (isLong ? "…" : "");
-    console.log(review)
     const name = review?.name || review?.userId?.address?.fullName || review?.userId?.name || "Anonymous";
     const rating = review?.rating || 0;
 
     return (
-        <div className={`rounded-xl border border-zinc-800/70 bg-white/10 p-3 transition-all duration-300 hover:border-zinc-700/70 overflow-hidden flex flex-col ${expanded ? 'max-h-[260px]' : 'max-h-[100px]'}`}>
+        <div className={`rounded-xl border border-zinc-800/70 bg-white/10 p-3 transition-all duration-300 hover:border-zinc-700/70 overflow-hidden flex flex-col ${expanded ? 'max-h-[120px]' : 'max-h-[100px]'}`}>
             <div className="flex items-center justify-between mb-1.5 shrink-0">
                 <div className="flex items-center gap-2">
                     <div className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-orange-500/30 to-orange-600/10 ring-1 ring-orange-500/30">
@@ -51,7 +50,7 @@ export default function CommentCard({ review }) {
             {isLong && (
                 <button
                     onClick={() => setExpanded((p) => !p)}
-                    className="mt-1 text-[9px] font-bold text-orange-400 hover:text-orange-300 transition-colors duration-150"
+                    className="mt-1 text-[9px] text-start font-bold text-orange-400 hover:text-orange-300 transition-colors duration-150"
                 >
                     {expanded ? "Hide ↑" : "Read more ↓"}
                 </button>
