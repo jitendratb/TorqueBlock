@@ -1,10 +1,12 @@
 "use client";
 
+import React, { useMemo, useState, useEffect, useCallback } from "react";
+import PropTypes from 'prop-types';
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
-import Image from "@/components/molecules/CustomImage"
-import { useMemo, useState, useEffect, useRef } from "react";
-import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaCheck, FaBell } from "react-icons/fa";
+import Image from "@/components/molecules/CustomImage";
+import { FaMotorcycle, FaBolt, FaShieldAlt, FaTag, FaBell } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
+import { RiSparkling2Fill } from "react-icons/ri";
 import useCartStore from "@/stores/cartStore";
 import { useToast } from "@/context/ToastContext";
 import Carousel from "@/components/organisms/Carousel";
@@ -12,22 +14,32 @@ import { useRouter } from "next/navigation";
 import useAuthStore from "@/stores/authStore";
 import Login from "@/components/organisms/login";
 import { notifyService } from "@/services/notifyService";
+import StarRating from "@/components/atoms/StarRating";
+import MatchingTyreItem from "./MatchingTyreItem";
 
-export default function TyreDataDetails({ tyreData }) {
-    const [isLogin, setIslogin] = useState(false);
+const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
+const formatPrice = (price) => priceFormatter.format(price);
+
+const TyreDataDetails = React.memo(({ tyreData, reviewData }) => {
+    const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
     const [isRinging, setIsRinging] = useState(false);
+    
     const router = useRouter();
-    const { isAuthenticated } = useAuthStore()
+    const { isAuthenticated } = useAuthStore();
     const { addToCart } = useCartStore();
     const toast = useToast();
 
-    const parentTyre = tyreData?.availableTyres;
-    const title = tyreData?.hero?.title
-    const subtitle = tyreData?.hero?.subtitle || tyreData?.description || parentTyre?.hero?.subtitle || parentTyre?.description || "";
-    const brandName = parentTyre?.brand?.name || tyreData?.brand?.name || "Torque Block";
-    const categoryName = parentTyre?.categoryId?.name || tyreData?.categoryId?.name || tyreData?.category || "Premium Tyre";
+    const { parentTyre, title, brandName, categoryName } = useMemo(() => {
+        const parent = tyreData?.availableTyres;
+        return {
+            parentTyre: parent,
+            title: tyreData?.hero?.title,
+            brandName: parent?.brand?.name || tyreData?.brand?.name || "Torque Block",
+            categoryName: parent?.categoryId?.name || tyreData?.categoryId?.name || tyreData?.category || "Premium Tyre"
+        };
+    }, [tyreData]);
 
     const gallery = useMemo(() => {
         if (tyreData?.sizeSpecificImages?.length > 0) {
@@ -36,8 +48,11 @@ export default function TyreDataDetails({ tyreData }) {
         return parentTyre?.productImages || parentTyre?.gallery || [];
     }, [tyreData, parentTyre]);
 
+    const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
+
     const [activeImage, setActiveImage] = useState(gallery[0]);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
+    const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
 
     useEffect(() => {
         if (gallery.length > 0) {
@@ -46,22 +61,53 @@ export default function TyreDataDetails({ tyreData }) {
     }, [gallery]);
 
     useEffect(() => {
+        if (tubeTypes.length > 0 && !tubeTypes.includes(selectedTubeType)) {
+            setSelectedTubeType(tubeTypes[0]);
+        }
+    }, [tubeTypes, selectedTubeType]);
+
+    useEffect(() => {
         setSelectedOpposite(null);
     }, [tyreData]);
 
-    const basePrice = tyreData?.price || 0;
-    const oppositePrice = selectedOpposite ? (selectedOpposite.price || 0) : 0;
-    const totalPrice = basePrice + oppositePrice;
+    const {
+        basePrice,
+        oppositePrice,
+        totalPrice,
+        baseOriginalPrice,
+        baseDiscountAmount,
+        baseDiscountPercentage
+    } = useMemo(() => {
+        const bp = tyreData?.price || 0;
+        const bd = tyreData?.discount || 0;
+        const baseSalePrice = Math.max(0, bp - bd);
+        const basePerc = bp > 0 ? Math.round((bd / bp) * 100) : 0;
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price);
-    };
+        const op = selectedOpposite?.price || 0;
+        const od = selectedOpposite?.discount || 0;
+        const oppositeSalePrice = op > 0 ? Math.max(0, op - od) : 0;
 
-    const isMainInStock = tyreData?.quantity > 0 || tyreData?.availability === "in_stock";
-    const isOppositeInStock = !selectedOpposite || (selectedOpposite.quantity > 0 || selectedOpposite.availability !== "out_of_stock");
-    const isExpressEligible = isMainInStock && isOppositeInStock;
+        const sale = baseSalePrice + oppositeSalePrice;
 
-    const handleAddToCart = () => {
+        return {
+            basePrice: baseSalePrice,
+            oppositePrice: oppositeSalePrice,
+            totalPrice: sale,
+            baseOriginalPrice: bp,
+            baseDiscountAmount: bd,
+            baseDiscountPercentage: basePerc
+        };
+    }, [tyreData?.price, tyreData?.discount, selectedOpposite?.price, selectedOpposite?.discount]);
+
+    const { isExpressEligible } = useMemo(() => {
+        const mainInStock = tyreData?.quantity > 0 || tyreData?.availability === "in_stock";
+        const oppInStock = !selectedOpposite || (selectedOpposite.quantity > 0 || selectedOpposite.availability !== "out_of_stock");
+        return {
+            isExpressEligible: mainInStock && oppInStock
+        };
+    }, [tyreData?.quantity, tyreData?.availability, selectedOpposite]);
+
+    const handleAddToCart = useCallback(() => {
         if (!parentTyre) {
             toast.error("Product details not fully loaded");
             return;
@@ -72,25 +118,26 @@ export default function TyreDataDetails({ tyreData }) {
         let selectedRear = null;
         let selectedGeneric = null;
 
+        const updatedTyreData = { ...tyreData, selectedTubeType };
+
         if (position?.includes('front')) {
-            selectedFront = tyreData;
+            selectedFront = updatedTyreData;
             if (selectedOpposite) {
                 selectedRear = selectedOpposite;
             }
         } else if (position?.includes('rear')) {
-            selectedRear = tyreData;
+            selectedRear = updatedTyreData;
             if (selectedOpposite) {
                 selectedFront = selectedOpposite;
             }
         } else {
-            selectedGeneric = tyreData;
+            selectedGeneric = updatedTyreData;
         }
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric);
+    }, [parentTyre, tyreData, selectedTubeType, selectedOpposite, addToCart, toast]);
 
-    };
-
-    const handleBuyNow = (bypassAuth = false) => {
+    const handleBuyNow = useCallback((bypassAuth = false) => {
         if (!tyreData?.availability) {
             toast.warning("This product is currently out of stock.");
             return;
@@ -98,7 +145,7 @@ export default function TyreDataDetails({ tyreData }) {
 
         if (!isAuthenticated && bypassAuth !== true) {
             setPendingCheckout(true);
-            setIslogin(true);
+            setIsLogin(true);
             return;
         }
 
@@ -128,7 +175,30 @@ export default function TyreDataDetails({ tyreData }) {
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric, false);
         router.push('/checkout');
-    };
+    }, [tyreData, isAuthenticated, parentTyre, selectedOpposite, addToCart, router, toast]);
+
+    const handleNotify = useCallback(async (bypassAuth = false) => {
+        setIsRinging(true);
+        setTimeout(() => setIsRinging(false), 600);
+
+        if (!isAuthenticated && bypassAuth !== true) {
+            setPendingNotify(true);
+            setIsLogin(true);
+            return;
+        }
+
+        try {
+            const notification = await notifyService.createNotification({
+                tyreSizeId: [tyreData?._id, selectedOpposite?._id].filter(Boolean),
+            });
+
+            toast.success(notification?.data?.message || notification?.message || "Notification set successfully!");
+        } catch (error) {
+            console.log(error || "");
+            const errorMessage = error?.response?.data?.message || error?.message || "Failed to set notification";
+            toast.error(errorMessage);
+        }
+    }, [isAuthenticated, tyreData?._id, selectedOpposite?._id, toast]);
 
     useEffect(() => {
         if (isAuthenticated && pendingCheckout) {
@@ -139,44 +209,47 @@ export default function TyreDataDetails({ tyreData }) {
             handleNotify(true);
             setPendingNotify(false);
         }
-    }, [isAuthenticated, pendingCheckout, pendingNotify]);
+    }, [isAuthenticated, pendingCheckout, pendingNotify, handleBuyNow, handleNotify]);
 
-    const handleNotify = async (bypassAuth = false) => {
-        setIsRinging(true);
-        setTimeout(() => setIsRinging(false), 600);
-
-        if (!isAuthenticated && bypassAuth !== true) {
-            setPendingNotify(true);
-            setIslogin(true);
-            return;
+    const handleCloseLogin = useCallback(() => {
+        setIsLogin(false);
+        if (!isAuthenticated) {
+            setPendingCheckout(false);
+            setPendingNotify(false);
         }
+    }, [isAuthenticated]);
 
-        try {
-            const notification = await notifyService.createNotification({
-                tyreSizeId: [tyreData._id, selectedOpposite?._id].filter(Boolean),
-            });
-
-            toast.success(notification?.data?.message || notification?.message || "Notification set successfully!");
-        } catch (error) {
-            console.log(error || "");
-            const errorMessage = error?.response?.data?.message || error?.message || "Failed to set notification";
-            toast.error(errorMessage);
-        }
-    }
-
-
+    const renderCarouselItem = useCallback((item) => (
+        <MatchingTyreItem
+            key={item._id}
+            item={item}
+            parentTyre={parentTyre}
+            isSelected={selectedOpposite?._id === item._id}
+            parentAvailability={tyreData?.availability}
+            onSelect={setSelectedOpposite}
+            formatPrice={formatPrice}
+        />
+    ), [selectedOpposite, tyreData?.availability, parentTyre]);
 
     return (
-        <section className="w-full relative pb-4 lg:pb-0">
+        <section aria-labelledby="product-details-heading" className="w-full relative pb-4 lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
-
+                {/* Left Column - Gallery and Expert Advice */}
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
-                        <div className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">
+                        <div role="tablist" aria-label="Product images" className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">
                             {gallery?.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
-                                    <button key={idx} type="button" onClick={() => setActiveImage(item)} onMouseEnter={() => setActiveImage(item)} className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}>
+                                    <button 
+                                        key={idx} 
+                                        type="button" 
+                                        role="tab"
+                                        aria-selected={isActive}
+                                        onClick={() => setActiveImage(item)} 
+                                        onMouseEnter={() => setActiveImage(item)} 
+                                        className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}
+                                    >
                                         <Image src={item} alt={`${title} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
                                     </button>
                                 );
@@ -196,10 +269,10 @@ export default function TyreDataDetails({ tyreData }) {
                             )}
                         </div>
                     </div>
-                    <div className="relative hidden lg:flex flex-col mb-4 sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
-                        <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left gap-2 w-full">
+                    <aside className="relative hidden lg:flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
+                        <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                             <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Need Free Expert Advice?</h3>
-                            <p className="text-xs sm:text-xs font-medium text-zinc-400 leading-relaxed sm:border-l-2 sm:border-green-500/50 sm:pl-3">
+                            <p className="text-xs sm:text-xs font-medium text-zinc-400 leading-relaxed">
                                 Ask our <span className="text-green-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
                             </p>
                         </div>
@@ -210,44 +283,46 @@ export default function TyreDataDetails({ tyreData }) {
                                 className="!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
                             />
                         </div>
-                    </div>
+                    </aside>
                 </div>
 
+                {/* Right Column - Product Details */}
                 <div className="space-y-4">
-                    <div className="space-y-4 mt-2 md:mt-0">
+                    <header className="space-y-4 mt-2 md:mt-0">
                         <div className="flex items-center gap-4">
-
-                            <p className="text-[10px] lg:text-sm font-medium uppercase tracking-[0.2em] text-orange-500">
-                                {brandName} PERFORMANCE SERIES
-                            </p>
-
-                            <div className="absolute top-0 right-0 md:relative flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-4 py-1.5 backdrop-blur-xl">
-                                <FaShieldAlt className="text-xs text-green-400" />
-
-                                <p className="text-xs font-medium text-green-100">
-                                    Trusted by 50,000+ riders
-                                </p>
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] ]" />
+                                <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
+                                <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400 z-10">
+                                    {brandName}
+                                </span>
                             </div>
 
+                            <div className="absolute top-0 right-0 md:relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-gradient-to-r from-green-500/15 via-green-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group overflow-hidden">
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2.5s_infinite]" />
+                                <FaShieldAlt className="text-xs text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" aria-hidden="true" />
+                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-green-100 z-10">
+                                    Trusted by 50,000+ riders
+                                </span>
+                            </div>
                         </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <h1 className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
-                            {title}
-                        </h1>
-                        {subtitle && (
-                            <p className="text-xs md:text-sm font-medium text-zinc-400 leading-relaxed max-w-xl md:border-l-2 md:border-orange-500/50 pl-0 md:pl-4 py-0.5">
-                                {subtitle}
-                            </p>
-                        )}
-                    </div>
-
+                        
+                        <div className="space-y-2">
+                            <h1 id="product-details-heading" className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
+                                {title}
+                            </h1>
+                            <div className="flex flex-wrap items-center gap-1">
+                                <StarRating      rating={reviewData?.avgRating?.overall}
+                                count={reviewData?.pagination?.total}
+                                isLoading={reviewData?.data?.length > 0} />
+                            </div>
+                        </div>
+                    </header>
 
                     <div className="space-y-5">
-                        <div className="flex flex-wrap items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2" aria-label="Product features">
                             <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                <HiFire className="text-orange-500 text-sm" />
+                                <HiFire className="text-orange-500 text-sm" aria-hidden="true" />
                                 <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
                                     High Performance
                                 </span>
@@ -255,7 +330,7 @@ export default function TyreDataDetails({ tyreData }) {
 
                             {categoryName && (
                                 <div className="flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                    <FaTag className="text-orange-400 text-[10px]" />
+                                    <FaTag className="text-orange-400 text-[10px]" aria-hidden="true" />
                                     <span className="text-[9px] md:text-[11px] font-black text-orange-400 uppercase tracking-widest">
                                         {categoryName}
                                     </span>
@@ -263,7 +338,7 @@ export default function TyreDataDetails({ tyreData }) {
                             )}
 
                             <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                <FaMotorcycle className="text-orange-500 text-sm" />
+                                <FaMotorcycle className="text-orange-500 text-sm" aria-hidden="true" />
                                 <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
                                     {tyreData?.position}
                                 </span>
@@ -271,26 +346,51 @@ export default function TyreDataDetails({ tyreData }) {
                         </div>
                     </div>
 
-                    <div className="bg-white/10 p-4  rounded-3xl border border-white/5 shadow-2xl backdrop-blur-xl flex flex-col gap-4 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none" />
+                    <article className="relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-transparent p-4 shadow-[0_0_40px_rgba(249,115,22,0.1)] backdrop-blur-xl group transition-all duration-500 hover:border-orange-500/50 flex flex-col gap-4">
+                        <div className="absolute -top-12 -right-12 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-orange-500/30 transition-colors duration-700" />
+                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-600/10 rounded-full blur-2xl pointer-events-none" />
 
                         <div className="flex flex-col relative z-10 gap-3">
                             <div className="flex justify-between items-start">
                                 <div className="flex flex-col gap-1">
-                                    <span className="text-[10px] md:text-xs font-black text-zinc-500 uppercase tracking-[0.3em]">
-                                        {selectedOpposite ? "Combined Price" : "Price"}
+                                    <span className="text-[10px] md:text-xs font-black text-orange-500 uppercase tracking-[0.3em] drop-shadow-sm">
+                                        Price
                                     </span>
-                                    <div className="flex gap-2 items-end">
-                                        <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
-                                            {formatPrice(totalPrice)}
-                                        </span>
-                                        <span className="text-[10px] font-medium text-zinc-400 ">
-                                            (Incl. of all taxes)
-                                        </span>
-                                    </div>
+                                    {baseDiscountAmount > 0 ? (
+                                        <div className="flex flex-col gap-1 mt-1">
+                                            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
+                                                <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 drop-shadow-sm tracking-tight">
+                                                    {formatPrice(basePrice)}
+                                                </span>
+                                                <div className="flex items-center gap-2.5 bg-black/20 rounded-full pl-3 pr-1 py-1 border border-white/5 backdrop-blur-md shadow-inner">
+                                                    <span className="text-xs md:text-sm font-semibold text-zinc-400 line-through decoration-red-500/60 decoration-[1.5px]" aria-label="Original price">
+                                                        {formatPrice(baseOriginalPrice)}
+                                                    </span>
+                                                    <div className="inline-flex min-w-[120px] items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)] relative overflow-hidden">
+                                                        <span className="relative z-10 drop-shadow-md flex items-center gap-1">
+                                                            Save {formatPrice(baseDiscountAmount)}
+                                                            <span className="bg-black/20 px-1.5 py-0.5 rounded font-bold">({baseDiscountPercentage}%)</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <span className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase">
+                                                (Incl. of all taxes)
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex gap-2 items-end">
+                                            <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
+                                                {formatPrice(basePrice)}
+                                            </span>
+                                            <span className="text-[10px] font-medium text-zinc-400 pb-1.5">
+                                                (Incl. of all taxes)
+                                            </span>
+                                        </div>
+                                    )}
                                 </div>
 
-                                <div className={`flex items-center gap-1.5 rounded-full border px-3 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${tyreData?.availability === "in_stock"
+                                <div className={`flex min-w-[90px] absolute top-0 right-0 items-center gap-1.5 rounded-xl border px-2 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${tyreData?.availability === "in_stock"
                                     ? 'border-green-500/20 bg-green-500/10'
                                     : tyreData?.availability === "backorder"
                                         ? 'border-yellow-500/20 bg-yellow-500/10'
@@ -302,7 +402,7 @@ export default function TyreDataDetails({ tyreData }) {
                                         : tyreData?.availability === "backorder" ? 'text-yellow-400'
                                             : tyreData?.availability === "preorder" ? 'text-blue-400'
                                                 : 'text-red-400'
-                                        }`} />
+                                        }`} aria-hidden="true" />
                                     <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${tyreData?.availability === "in_stock" ? 'text-green-100'
                                         : tyreData?.availability === "backorder" ? 'text-yellow-100'
                                             : tyreData?.availability === "preorder" ? 'text-blue-100'
@@ -317,59 +417,93 @@ export default function TyreDataDetails({ tyreData }) {
                             </div>
 
                             {selectedOpposite && (
-                                <div className="border-t border-white/5 pt-3 space-y-1.5 text-xs text-zinc-400">
-                                    <div className="flex justify-between">
-                                        <span>Current Tyre ({tyreData.size})</span>
-                                        <span className="font-bold text-zinc-200">{formatPrice(basePrice)}</span>
-                                    </div>
-                                    <div className="flex justify-between">
-                                        <span>Matching {selectedOpposite.position} ({selectedOpposite.size})</span>
-                                        <span className="font-bold text-zinc-200">{formatPrice(oppositePrice)}</span>
+                                <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5 relative">
+                                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Order Summary</h4>
+                                    <div className="flex flex-col gap-2 rounded-xl bg-white/10 border border-white/5 p-3.5 shadow-inner">
+                                        <div className="flex justify-between items-center">
+                                            <div className="flex items-center gap-1">
+                                                <span className="text-[10px] font-medium text-zinc-500">{tyreData.size}</span>
+                                                <span className="text-xs font-bold text-zinc-200 capitalize">( {tyreData?.position || 'Current Tyre'} )</span>
+                                            </div>
+                                            <span className="text-sm font-black text-zinc-200">{formatPrice(basePrice)}</span>
+                                        </div>
+                                        <div className="h-px w-full bg-white/5" />
+                                        <div className="flex justify-between items-center">
+                                            <div className="flex items-center gap-1">
+                                                <span className="text-[10px] font-medium text-zinc-500">{selectedOpposite.size}</span>
+                                                <span className="text-xs font-bold text-emerald-400 capitalize">Matching {selectedOpposite.position}</span>
+                                            </div>
+                                            <span className="text-sm font-black text-emerald-400">{formatPrice(oppositePrice)}</span>
+                                        </div>
                                     </div>
                                 </div>
                             )}
                         </div>
-                    </div>
-                    {
-                        tyreData?.availability !== "backorder" && (
-                            <div className={` p-4 rounded-2xl border backdrop-blur-md flex items-center gap-3.5 transition-all duration-300 ${isExpressEligible
-                                ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.05)]"
-                                : "bg-white/10 border-white/5 text-zinc-400"
-                                }`}>
-                                <div className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 ${isExpressEligible ? "bg-emerald-500/15 text-emerald-400" : "bg-zinc-800 text-zinc-500"
-                                    }`}>
-                                    <FaBolt className={`text-sm ${isExpressEligible ? "animate-pulse" : ""}`} />
-                                </div>
-                                <div className="flex flex-col">
-                                    <span className="text-xs font-black uppercase tracking-wider">
-                                        {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
-                                    </span>
-                                    <span className="text-[10px] font-medium text-zinc-400">
-                                        {isExpressEligible
-                                            ? "Order dispatched within 24 hours*"
-                                            : "Pre-ordered items are delivered in 5-7 business days"}
-                                    </span>
-                                </div>
+                    </article>
+
+                    {tubeTypes?.length > 0 && (
+                        <div className="flex flex-col gap-2 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md" role="radiogroup" aria-labelledby="tube-type-label">
+                            <span id="tube-type-label" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Tube Type</span>
+                            <div className="flex flex-wrap gap-2">
+                                {tubeTypes.map((type) => (
+                                    <button
+                                        key={type}
+                                        role="radio"
+                                        aria-checked={selectedTubeType === type}
+                                        onClick={() => setSelectedTubeType(type)}
+                                        className={`relative overflow-hidden px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${selectedTubeType === type
+                                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.2)]"
+                                            : "bg-black/40 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-zinc-200"
+                                            }`}
+                                    >
+                                        <span className="relative z-10">{type}</span>
+                                    </button>
+                                ))}
                             </div>
-                        )
-                    }
+                        </div>
+                    )}
 
-
-                    {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
-                        <div className="bg-white/10 border border-white/5 rounded-3xl p-4 space-y-2 md:space-y-4 backdrop-blur-md relative overflow-hidden">
-                            <div className="flex items-center justify-between">
-                                <h3 className="text-xs md:text-md  font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 uppercase tracking-[0.2em] flex items-center gap-1.5">
-                                    <FaMotorcycle className="text-lg text-orange-500 " />
-                                    Complete Your Set <span className="hidden"> (Pairing)</span>
-                                </h3>
-                                <span className="text-[10px] hidden md:block bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                                    Highly Recommended
+                    {tyreData?.availability !== "backorder" && (
+                        <div className={`p-4 rounded-2xl border backdrop-blur-md flex items-center gap-3.5 transition-all duration-300 ${isExpressEligible
+                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.05)]"
+                            : "bg-white/10 border-white/5 text-zinc-400"
+                            }`}>
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isExpressEligible ? "bg-emerald-500/15 text-emerald-400" : "bg-zinc-800 text-zinc-500"}`}>
+                                <FaBolt className="text-sm" aria-hidden="true" />
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-xs font-black uppercase tracking-wider">
+                                    {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
+                                </span>
+                                <span className="text-[10px] font-medium text-zinc-400">
+                                    {isExpressEligible
+                                        ? "Order dispatched within 24 hours*"
+                                        : "Pre-ordered items are delivered in 5-7 business days"}
                                 </span>
                             </div>
+                        </div>
+                    )}
 
-                            <p className="text-xs text-zinc-400 leading-relaxed">
-                                Select a matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre to purchase the complete front + rear set together.
-                            </p>
+                    {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
+                        <section aria-labelledby="matching-tyres-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 space-y-2 md:space-y-4 backdrop-blur-md overflow-hidden">
+                            <header className="relative flex items-start md:items-center gap-3.5">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 mt-1 md:mt-0">
+                                    <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" aria-hidden="true" />
+                                </div>
+                                <div className="flex flex-col md:flex-row md:items-center gap-2 justify-between flex-1">
+                                    <div className="flex flex-col">
+                                        <h3 id="matching-tyres-heading" className="text-xs md:text-sm font-black uppercase tracking-[0.25em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+                                            Complete Your Set
+                                        </h3>
+                                        <p className="text-zinc-400 text-[10px] md:text-[11px] font-semibold tracking-wide">
+                                            Pair with the matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
+                                        </p>
+                                    </div>
+                                    <span className="hidden md:inline-flex text-[9px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0">
+                                        Highly Recommended
+                                    </span>
+                                </div>
+                            </header>
 
                             <Carousel
                                 items={tyreData.oppositeSizes}
@@ -377,120 +511,46 @@ export default function TyreDataDetails({ tyreData }) {
                                 gap={12}
                                 showArrows={true}
                                 showDots={false}
-                                className="w-full pb-3 pt-1 px-1"
-                                renderItem={(item) => {
-                                    const isSelected = selectedOpposite?._id === item._id;
-                                    const availability = item.availability;
-                                    const isOrderable = availability !== "out_of_stock" && availability === tyreData?.availability;
-
-                                    const availBadgeClass = availability === "in_stock"
-                                        ? "bg-green-500/10 border-green-500/20 text-green-400"
-                                        : availability === "backorder"
-                                            ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
-                                            : availability === "preorder"
-                                                ? "bg-blue-500/10 border-blue-500/20 text-blue-400"
-                                                : "bg-red-500/10 border-red-500/20 text-red-400";
-
-                                    const availLabel = availability === "in_stock" ? "In Stock"
-                                        : availability === "backorder" ? "Avail. For Order"
-                                            : availability === "preorder" ? "Pre Order"
-                                                : "Out of Stock";
-
-                                    return (
-                                        <button
-                                            key={item._id}
-                                            onClick={() => isOrderable && setSelectedOpposite(isSelected ? null : item)}
-                                            disabled={!isOrderable}
-                                            className={`flex flex-col p-4 w-full rounded-2xl border text-left transition-all duration-300 relative group ${!isOrderable
-                                                ? "bg-zinc-900/30 border-white/5 opacity-50 cursor-not-allowed"
-                                                : isSelected
-                                                    ? "bg-orange-500/10 border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.15)] cursor-pointer"
-                                                    : "bg-black/20 border-white/5 hover:border-white/15 hover:bg-white/5 cursor-pointer"
-                                                }`}
-                                        >
-                                            <div className="flex justify-between items-center w-full mb-3">
-                                                <div className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all ${isSelected ? "border-orange-500 bg-orange-500" : "border-zinc-700 bg-zinc-950/50"
-                                                    }`}>
-                                                    {isSelected && (
-                                                        <FaCheck className="text-[8px] text-white" />
-                                                    )}
-                                                </div>
-                                                <div className="flex gap-2">
-                                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${isSelected
-                                                        ? "bg-orange-500/10 border-orange-500/20 text-orange-400"
-                                                        : "bg-white/20 border-white/80 text-white/80 group-hover:text-white"
-                                                        }`}>
-                                                        {item.position}
-                                                    </span>
-
-                                                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${availBadgeClass}`}>
-                                                        {availLabel}
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <h4 className={`text-base font-black transition-colors tracking-tight mb-1 ${!isOrderable ? "text-zinc-500" : "text-white group-hover:text-orange-400"}`}>
-                                                {item.size}
-                                            </h4>
-
-                                            <div className="flex justify-between items-baseline w-full mt-2 pt-2 border-t border-white/5">
-                                                <span className="text-[10px] text-zinc-500 uppercase tracking-wider font-bold">
-                                                    Price
-                                                </span>
-                                                <span className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
-                                                    {formatPrice(item.price)}
-                                                </span>
-                                            </div>
-                                        </button>
-                                    );
-                                }}
+                                arrowSize={10}
+                                leftArrowClassName={"-left-4 p-1"}
+                                rightArrowClassName={"-right-4 p-1"}
+                                className="w-full"
+                                renderItem={renderCarouselItem}
                             />
-                        </div>
+                        </section>
                     )}
 
-                    <div className={`grid gap-4  relative z-10 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    <div className={`grid gap-4 relative z-10 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             onClick={handleAddToCart}
-                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/10 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer `}
+                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
                         >
                             Add to Cart
                         </button>
-                        {tyreData?.availability === "backorder" ? (
+                        
+                        {(tyreData?.availability === "backorder" || tyreData?.availability === "out_of_stock") ? (
                             <button
-                                onClick={handleNotify}
+                                onClick={() => handleNotify(false)}
                                 className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
                                 CHECK AVAILABILITY
-                                <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} />
-                            </button>
-                        ) : tyreData?.availability === "out_of_stock" ? (
-                            <button
-                                onClick={handleNotify}
-                                className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
-                            >
-                                CHECK AVAILABILITY
-                                <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} />
+                                <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} aria-hidden="true" />
                             </button>
                         ) : (
                             <button
-                                onClick={handleBuyNow}
-                                className="py-4 px-4 flex gap-2 justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                onClick={() => handleBuyNow(false)}
+                                className="py-4 px-4 flex gap-2 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                Buy Now {selectedOpposite && <span className="hidden md:block"> ({formatPrice(totalPrice)})</span>}
+                                Buy Now {selectedOpposite && <span className="hidden md:inline-block ml-1"> ({formatPrice(totalPrice)})</span>}
                             </button>
                         )}
-
                     </div>
                 </div>
             </div>
 
-            <Login isOpen={isLogin} onClose={() => {
-                setIslogin(false);
-                if (!isAuthenticated) {
-                    setPendingCheckout(false);
-                    setPendingNotify(false);
-                }
-            }} />
-        </section >
+            <Login isOpen={isLogin} onClose={handleCloseLogin} />
+        </section>
     );
-}
+});
+
+export default TyreDataDetails;

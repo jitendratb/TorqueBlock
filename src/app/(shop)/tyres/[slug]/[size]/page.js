@@ -1,10 +1,11 @@
 import React from 'react'
 import tyresService from '@/services/tyresService';
 import Breadcrumb from '@/components/atoms/BreadCrumb';
-import {formatTitle} from '@/components/atoms/FormatTitle';
+import { formatTitle } from '@/components/atoms/FormatTitle';
 import TyresSizeClient from '../../../Components/TyresSizeComponents/TyreSizeClient';
 import TyreSizeSchema from '@/components/seo/TyreSizeSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
+import ReviewService from '@/services/reviewSevice';
 
 export async function generateMetadata({ params }) {
     const { slug, size } = await params;
@@ -57,11 +58,11 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug, size } = await params;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
-
+    const Review = await ReviewService.getReviews({ productId: tyreBySize?._id })
 
     const breadcrumbItems = [
-        { label: 'Tyres', href: '/tyres' }, 
-        { label: formatTitle(tyreBySize?.availableTyres?.productName ?? slug), href: `/tyres/${slug}` }, 
+        { label: 'Tyres', href: '/tyres' },
+        { label: formatTitle(tyreBySize?.availableTyres?.productName ?? slug), href: `/tyres/${slug}` },
         { label: formatTitle(tyreBySize?.hero?.title ?? size), href: `/tyres/${slug}/${size}` }
     ];
 
@@ -70,7 +71,7 @@ async function Page({ params }) {
             <TyreSizeSchema sizeData={tyreBySize} tyreSlug={slug} sizeSlug={size} />
             <BreadcrumbSchema items={breadcrumbItems} />
             <Breadcrumb items={breadcrumbItems} />
-            <TyresSizeClient initialData={tyreBySize} />
+            <TyresSizeClient initialData={tyreBySize} reviewData={Review} />
         </div>
     )
 }

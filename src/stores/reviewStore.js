@@ -58,9 +58,12 @@ const useReviewStore = create((set, get) => ({
         set({ submitLoading: true, error: null });
         try {
             const response = await ReviewService.addReview(payload);
-            if (response?.success) {
-                set({ submitLoading: false, reviews: [response.data, ...get().reviews] });
-                return { success: true, message: response.message };
+
+            console.log(response)
+            if (response?.success && response?.data) {
+                const currentReviews = get().reviews || [];
+                set({ submitLoading: false, reviews: [response.data, ...currentReviews] });
+                return { success: true, message: response.message, data: response.data };
             }
         } catch (error) {
             const errorMsg = error.message || 'Failed to submit review';

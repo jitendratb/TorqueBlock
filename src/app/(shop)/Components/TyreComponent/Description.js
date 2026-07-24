@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { FaMotorcycle, FaCheckCircle, FaTimesCircle, FaFileAlt, FaChevronDown, FaTools } from 'react-icons/fa';
 import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill, RiCheckboxCircleFill, RiCloseCircleFill } from 'react-icons/ri';
+import { TbCheck, TbX } from 'react-icons/tb';
 import { useRouter } from 'next/navigation';
 import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
 import { GiCarWheel, GiTyre } from 'react-icons/gi';
@@ -277,64 +278,66 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 pt-4">
 
                             {tyre?.pros?.length > 0 && (
-                                <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-green-500/10 cursor-pointer transition-all duration-300 hover:border-green-500/40 hover:shadow-[0_4px_24px_rgba(16,185,129,0.10)]">
-
-                                    <div className="p-4 lg:p-5">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-500/15 transition-all duration-300 group-hover:bg-green-500/25">
-                                                <RiThumbUpFill className="text-green-400 text-lg" />
+                                <article className="relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/30 hover:bg-emerald-500/10 hover:shadow-[0_12px_24px_-10px_rgba(16,185,129,0.15)]">
+                                    <div className="relative z-10 space-y-2">
+                                        <header className="flex items-center gap-2 border-b border-white/10 pb-2">
+                                            <div className="flex items-center justify-center w-10 h-10 rounded-xl border bg-emerald-500/10 border-emerald-500/20 text-emerald-400">
+                                                <RiThumbUpFill className="text-lg md:text-xl" aria-hidden="true" />
                                             </div>
                                             <div>
-                                                <h3 className="text-white font-bold text-sm leading-tight">
+                                                <h3 className="text-sm md:text-base font-bold text-zinc-100">
                                                     Advantages
                                                 </h3>
-                                                <p className="text-zinc-500 text-[10px] mt-0.5">
+                                                <p className="text-[10px] text-zinc-500 font-medium">
                                                     What riders love about this tyre
                                                 </p>
                                             </div>
-                                        </div>
+                                        </header>
 
-                                        <ul className="space-y-2">
+                                        <ul className="space-y-2" aria-label="Advantages">
                                             {tyre.pros?.slice(0, 6).map((pro, index) => (
-                                                <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
-                                                    <RiCheckboxCircleFill className="mt-0.5 shrink-0 text-sm text-green-400" />
-                                                    <span className="leading-relaxed">{pro}</span>
+                                                <li key={index} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
+                                                    <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full border transition-colors mt-0.5 bg-emerald-500/10 border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/20 group-hover:text-emerald-300">
+                                                        <TbCheck size={14} className="stroke-[2.5px]" aria-hidden="true" />
+                                                    </span>
+                                                    <span className="leading-relaxed pt-0.5">{pro}</span>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
-                                </div>
+                                </article>
                             )}
 
                             {/* CONS */}
                             {tyre?.cons?.length > 0 && (
-                                <div className="group relative overflow-hidden rounded-2xl border border-zinc-700/60 bg-white/10 hover:bg-red-500/10 cursor-pointer transition-all duration-300 hover:border-red-500/40 hover:shadow-[0_4px_24px_rgba(239,68,68,0.10)]">
-
-                                    <div className="p-4 lg:p-5">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500/15 transition-all duration-300 group-hover:bg-red-500/25">
-                                                <RiThumbDownFill className="text-red-400 text-lg" />
+                                <article className="relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-red-500/10 hover:shadow-[0_12px_24px_-10px_rgba(239,68,68,0.15)]">
+                                    <div className="relative z-10 space-y-2">
+                                        <header className="flex items-center gap-2 border-b border-white/10 pb-2">
+                                            <div className="flex items-center justify-center w-10 h-10 rounded-xl border bg-red-500/10 border-red-500/20 text-red-400">
+                                                <RiThumbDownFill className="text-lg md:text-xl" aria-hidden="true" />
                                             </div>
                                             <div>
-                                                <h3 className="text-white font-bold text-sm leading-tight">
+                                                <h3 className="text-sm md:text-base font-bold text-zinc-100">
                                                     Limitations
                                                 </h3>
-                                                <p className="text-zinc-500 text-[10px] mt-0.5">
+                                                <p className="text-[10px] text-zinc-500 font-medium">
                                                     Areas where alternatives may perform better
                                                 </p>
                                             </div>
-                                        </div>
+                                        </header>
 
-                                        <ul className="space-y-2">
+                                        <ul className="space-y-2" aria-label="Limitations">
                                             {tyre.cons?.slice(0, 6)?.map((con, index) => (
-                                                <li key={index} className="flex items-start gap-2.5 text-xs md:text-sm text-zinc-300 transition-colors duration-150 hover:text-white">
-                                                    <RiCloseCircleFill className="mt-0.5 shrink-0 text-sm text-red-400" />
-                                                    <span className="leading-relaxed">{con}</span>
+                                                <li key={index} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
+                                                    <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full border transition-colors mt-0.5 bg-red-500/10 border-red-500/20 text-red-400 group-hover:bg-red-500/20 group-hover:text-red-300">
+                                                        <TbX size={14} className="stroke-[2.5px]" aria-hidden="true" />
+                                                    </span>
+                                                    <span className="leading-relaxed pt-0.5">{con}</span>
                                                 </li>
                                             ))}
                                         </ul>
                                     </div>
-                                </div>
+                                </article>
                             )}
 
                         </div>

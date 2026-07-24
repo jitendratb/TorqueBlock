@@ -5,12 +5,7 @@ import Image from "@/components/molecules/CustomImage";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
 import useReviewStore from "@/stores/reviewStore";
-
-// Icons
-import {
-    FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered,
-    FaShieldAlt, FaTag, FaChevronDown,
-} from "react-icons/fa";
+import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaChevronDown, } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
 import { RiSparkling2Fill } from "react-icons/ri";
@@ -25,7 +20,7 @@ const tagConfig = {
     "Naked Sport": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
 };
 
-export default function ProductDetails({ tyre }) {
+export default function ProductDetails({ tyre , reviewData }) {
     const gallery = useMemo(() => tyre?.productImages || [], [tyre]);
     const [activeImage, setActiveImage] = useState(gallery[0]);
 
@@ -130,9 +125,9 @@ export default function ProductDetails({ tyre }) {
                         </h1>
                         <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                             <StarRating
-                                rating={avgRating?.overall}
-                                count={totalReviews}
-                                isLoading={fetchLoading}
+                                rating={reviewData?.avgRating?.overall}
+                                count={reviewData?.pagination?.total}
+                                isLoading={reviewData?.data?.length > 0}
                             />
                         </div>
                     </div>

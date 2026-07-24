@@ -6,6 +6,7 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
+import ReviewService from "@/services/reviewSevice";
 
 
 const getTyre = cache(async (slug) => {
@@ -67,6 +68,8 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
+    const Review = await ReviewService.getReviews({ tyreId: tyre?._id })
+
 
     if (!tyre) {
         notFound();
@@ -78,8 +81,7 @@ async function Page({ params }) {
     return (
         <div className="">
             <Breadcrumb items={breadcrumbItems} />
-            <TyresClient initialData={tyre} />
-            
+            <TyresClient initialData={tyre} reviewData={Review} />
             <ProductSchema product={tyre} />
             <BreadcrumbSchema items={breadcrumbItems} />
         </div>

@@ -1,63 +1,100 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
-import { FaChevronLeft, FaChevronRight, FaCheckCircle, FaArrowRight } from 'react-icons/fa';
+import { FaChevronLeft, FaChevronRight, FaArrowRight } from 'react-icons/fa';
 
-export default function ProductCard({ tyre, className }) {
+const priceFormatter = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+    maximumFractionDigits: 0
+});
+
+const ProductCard = ({ tyre, className = "" }) => {
     const router = useRouter();
     const [currentImg, setCurrentImg] = useState(0);
-    const title = tyre?.productName || "Tyre";
-    const categoryName = tyre?.categoryId?.name || "Premium Tyre";
-    const brandName = tyre?.brand?.name;
+    
+    const { title, categoryName, brandName, images, displayPrice } = useMemo(() => {
+        const title = tyre?.productName || "Tyre";
+        const categoryName = tyre?.categoryId?.name || "Premium Tyre";
+        const brandName = tyre?.brand?.name;
+        
+        const images = tyre?.productImages?.length > 0 
+            ? tyre.productImages 
+            : (tyre?.hero?.heroImage ? [tyre.hero.heroImage] : []);
+            
+        const displayPrice = tyre?.startingPrice != null 
+            ? priceFormatter.format(tyre.startingPrice) 
+            : 'N/A';
 
-    const images = tyre?.productImages?.length > 0 ? tyre.productImages : (tyre?.hero?.heroImage ? [tyre.hero.heroImage] : []);
+        return { title, categoryName, brandName, images, displayPrice };
+    }, [tyre]);
 
-    const formatPrice = (price) => {
-        return new Intl.NumberFormat('en-IN', {
-            style: 'currency',
-            currency: 'INR',
-            maximumFractionDigits: 0
-        }).format(price);
-    };
+    const handleCardClick = useCallback(() => {
+        if (tyre?.identifier) {
+            router.push(`/tyres/${tyre.identifier}`);
+        }
+    }, [router, tyre?.identifier]);
 
-    const displayPrice = formatPrice(tyre?.startingPrice);
+    const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleCardClick();
+        }
+    }, [handleCardClick]);
 
-    const handleCardClick = () => {
-        router.push(`/tyres/${tyre?.identifier}`);
-    };
-
-    const nextImage = (e) => {
+    const nextImage = useCallback((e) => {
         e.stopPropagation();
-        setCurrentImg((prev) => (prev + 1) % images.length);
-    };
+        if (images.length > 0) {
+            setCurrentImg((prev) => (prev + 1) % images.length);
+        }
+    }, [images.length]);
 
-    const prevImage = (e) => {
+    const prevImage = useCallback((e) => {
         e.stopPropagation();
-        setCurrentImg((prev) => (prev - 1 + images.length) % images.length);
-    };
+        if (images.length > 0) {
+            setCurrentImg((prev) => (prev - 1 + images.length) % images.length);
+        }
+    }, [images.length]);
 
     return (
-        <div
+        <article
             onClick={handleCardClick}
+            onKeyDown={handleKeyDown}
+            role="button"
+            tabIndex={0}
+            aria-label={`View details for ${title}`}
             className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/20 hover:bg-white/10 [.light-mode_&]:bg-white/20  [.light-mode_&]:backdrop-blur-3xl hover:bg-white/10 [.light-mode_&]:hover:bg-zinc-950/20 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 hover:border-orange-500/30 [.light-mode_&]:hover:border-orange-400/50 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] [.light-mode_&]:shadow-[0_2px_15px_rgba(0,0,0,0.04)] [.light-mode_&]:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${className}`}
         >
-
-            <div className="relative w-full h-[200px] flex items-center justify-center p-4  transition-colors duration-500">
-                <Image
-                    src={images[currentImg]}
-                    alt={title}
-                    fill
-                    imageClassName="object-contain group-hover:scale-110 transition-transform duration-700"
-                />
+            <div className="relative w-full h-[200px] flex items-center justify-center p-4 transition-colors duration-500">
+                {images.length > 0 ? (
+                    <Image
+                        src={images[currentImg]}
+                        alt={`${title} - Image ${currentImg + 1}`}
+                        fill
+                        imageClassName="object-contain group-hover:scale-110 transition-transform duration-700"
+                    />
+                ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-800/20 [.light-mode_&]:bg-zinc-200/50 rounded-xl">
+                        <span className="text-zinc-500 text-xs font-medium">No image</span>
+                    </div>
+                )}
 
                 {images.length > 1 && (
                     <>
-                        <button onClick={prevImage} className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white opacity-0 group-hover:opacity-100 hover:bg-orange-500 transition-all duration-300 z-20">
+                        <button 
+                            onClick={prevImage} 
+                            aria-label="Previous image"
+                            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white opacity-0 group-hover:opacity-100 hover:bg-orange-500 focus:opacity-100 transition-all duration-300 z-20"
+                        >
                             <FaChevronLeft className="text-xs" />
                         </button>
-                        <button onClick={nextImage} className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white opacity-0 group-hover:opacity-100 hover:bg-orange-500 transition-all duration-300 z-20" >
+                        <button 
+                            onClick={nextImage} 
+                            aria-label="Next image"
+                            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-white/10 text-white opacity-0 group-hover:opacity-100 hover:bg-orange-500 focus:opacity-100 transition-all duration-300 z-20" 
+                        >
                             <FaChevronRight className="text-xs" />
                         </button>
                     </>
@@ -95,6 +132,7 @@ export default function ProductCard({ tyre, className }) {
                     </div>
 
                     <div
+                        aria-hidden="true"
                         className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider justify-center w-auto h-9 px-4 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 text-white [.light-mode_&]:text-zinc-800 border border-white/10 [.light-mode_&]:border-zinc-200 group-hover:bg-orange-500 group-hover:border-orange-500 group-hover:text-white transition-all duration-300"
                     >
                         Explore
@@ -102,6 +140,8 @@ export default function ProductCard({ tyre, className }) {
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
     );
-}
+};
+
+export default React.memo(ProductCard);
