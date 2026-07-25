@@ -441,7 +441,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData }) => {
                         </div>
                     </article>
 
-                    {tubeTypes?.length > 0 && (
+                    {/* {tubeTypes?.length > 0 && (
                         <div className="flex flex-col gap-2 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md" role="radiogroup" aria-labelledby="tube-type-label">
                             <span id="tube-type-label" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Tube Type</span>
                             <div className="flex flex-wrap gap-2">
@@ -461,7 +461,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData }) => {
                                 ))}
                             </div>
                         </div>
-                    )}
+                    )} */}
 
                     {tyreData?.availability !== "backorder" && (
                         <div className={`p-4 rounded-2xl border backdrop-blur-md flex items-center gap-3.5 transition-all duration-300 ${isExpressEligible

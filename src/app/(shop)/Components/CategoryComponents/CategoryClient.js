@@ -22,9 +22,7 @@ export default function CategoryClient({ categories = [] }) {
     return (
         <div className="space-y-4 py-4">
             <CategoryHero />
-            {categories.length > 0 && <StatsBar count={categories.length} />}
-
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent mb-8" />
+            <div className="w-full bg-gradient-to-r from-transparent via-zinc-800 to-transparent mb-4 border-t-1 border-white/20" />
             {!categories || categories.length === 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 auto-rows-[280px]">
                     <CategoryCardSkeleton featured />
@@ -48,7 +46,6 @@ export default function CategoryClient({ categories = [] }) {
                 </div>
             )}
 
-            {/* {categories.length > 0 && <CategoryCTABanner />} */}
         </div>
     );
 }

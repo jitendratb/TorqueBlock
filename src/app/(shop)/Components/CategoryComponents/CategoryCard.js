@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { FiArrowUpRight } from 'react-icons/fi';
+import { FiArrowUpRight, FiArrowRight, FiCompass } from 'react-icons/fi';
 import { getFallback } from './categoryFallbacks';
 
 export default function CategoryCard({ category, featured = false, index = 0 }) {
@@ -36,20 +36,15 @@ export default function CategoryCard({ category, featured = false, index = 0 }) 
             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-500/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-            <div className="absolute top-5 left-5 z-20">
-                <div className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-[0.25em] text-zinc-400 group-hover:border-orange-500/30 group-hover:text-orange-400 transition-all duration-300">
-                    {subtitle}
-                </div>
-            </div>
-
             <div className={`absolute bottom-6 right-6 ${featured ? 'md:bottom-8 ' : ' top-6'} md:right-8 z-20 w-8 h-8 rounded-full bg-white/5 backdrop-blur-xl border border-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transform translate-y-8 group-hover:translate-y-0 group-hover:scale-110 transition-all duration-500 delay-150 group-hover:border-white/50`}>
                 <FiArrowUpRight className="text-white text-lg" />
             </div>
 
             <div className="absolute bottom-0 inset-x-0 p-4 md:px-4 md:py-8 lg:p-8 z-20 flex flex-col justify-end space-y-2">
-                <div className="transform md:translate-y-8 translate-y-6 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                    <span className="text-orange-400 text-[10px] font-black uppercase tracking-[0.35em]">
-                        Explore Collection →
+                <div className="transform md:translate-y-6 translate-y-6 group-hover:translate-y-0 transition-all duration-500 delay-75">
+                    <span className="inline-flex items-center gap-2 text-orange-400 text-[10px] bg-orange-500/10 backdrop-blur-md px-3 py-1.5 border border-orange-500/30 rounded-full font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(249,115,22,0.15)] group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-colors duration-300">
+                      <FiCompass size={14} className="" />
+                          {subtitle}
                     </span>
                 </div>
 

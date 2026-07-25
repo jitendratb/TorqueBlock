@@ -39,8 +39,8 @@ function Description({ tyreData }) {
         { label: 'Aspect Ratio', value: tyreData?.aspectRatio, icon: TbAspectRatio },
         { label: 'Load Index', value: tyreData?.loadIndex, icon: TbWeight },
         { label: 'Speed Rating', value: tyreData?.speedIndex, icon: TbGauge },
-        { label: 'Tube Type', value: Array.isArray(tyreData?.tubeType) ? tyreData.tubeType.join(', ') : tyreData?.tubeType, icon: TbCircleDot },
-        { label: 'Manufacture Year', value: tyreData?.manuFactureYear, icon: FaCalendarAlt },
+        // { label: 'Tube Type', value: Array.isArray(tyreData?.tubeType) ? tyreData.tubeType.join(', ') : tyreData?.tubeType, icon: TbCircleDot },
+     /   // { label: 'Manufacture Year', value: tyreData?.manuFactureYear, icon: FaCalendarAlt },
    ];
 
     const activeSpecs = specs.filter(s => s.value !== null && s.value !== undefined && s.value !== '');
@@ -107,7 +107,7 @@ function Description({ tyreData }) {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 relative z-10">
+                    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 md:gap-4 relative z-10">
                         {activeSpecs.map((spec, idx) => (
                             <SpecItem key={idx} label={spec.label} value={spec.value} icon={spec.icon} />
                         ))}

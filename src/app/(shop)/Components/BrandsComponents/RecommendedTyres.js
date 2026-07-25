@@ -6,7 +6,7 @@ import TyreCard from '@/components/atoms/TyreCard';
 import tyresService from '@/services/tyresService';
 import TyreCardSkelton from '@/components/atoms/TyreCardSkelton';
 
-export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) {
+export default function RecommendedTyres({ categoryId, brandId, title="Recommended Tyres", subTitle="Here are some tyre recommendations for you", primaryColor = '#f97316' , itemWidth="w-[280px] md:w-[300px] lg:w-[350px]", bgStatus = true }) {
   const [recommendedTyres, setRecommendedTyres] = useState([]);
   const [isLoadingTyres, setIsLoadingTyres] = useState(true);
   const loadingRef = useRef(false);
@@ -17,11 +17,15 @@ export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) 
     try {
       loadingRef.current = true;
       setIsLoadingTyres(true);
-      const res = await tyresService.getRecommandation({
-        brandId,
-        limit: 10,
-        page: currentPage
-      });
+
+      let intentFilter = { limit: 10, page: currentPage };
+      if (brandId) {
+        intentFilter.brandId = brandId;
+      }
+      if (categoryId) {
+        intentFilter.categoryId = categoryId;
+      }
+      const res = await tyresService.getRecommandation(intentFilter);
       if (res?.success) {
         const newTyres = res.data || [];
         setRecommendedTyres(prev => currentPage === 1 ? newTyres : [...prev, ...newTyres]);
@@ -44,7 +48,10 @@ export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) 
     if (brandId) {
       fetchTyres(page);
     }
-  }, [brandId, page]);
+    if(categoryId){
+      fetchTyres(page);
+    }
+  }, [brandId,categoryId,page]);
 
   const handleReachEnd = () => {
     if (hasMore && !loadingRef.current) {
@@ -56,7 +63,7 @@ export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) 
 
   if (recommendedTyres.length === 0 && isLoadingTyres) {
     return (
-      <div className="pt-4 lg:p-6 lg:rounded-xl lg:bg-zinc-900/40 border-t lg:border border-white/5 lg:backdrop-blur-md lg:shadow-xl space-y-5">
+      <div className=" pt-4 lg:p-6 lg:rounded-xl lg:bg-zinc-900/40 border-t lg:border border-white/5 lg:backdrop-blur-md lg:shadow-xl space-y-5">
         <div className="flex items-center gap-3 lg:border-b lg:border-white/10 lg:pb-4 animate-pulse">
           <div className="h-9 w-9 shrink-0 rounded-xl bg-white/10"></div>
           <div className="space-y-2">
@@ -73,7 +80,7 @@ export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) 
   }
 
   return (
-    <div className="pt-4 lg:p-6 lg:rounded-xl lg:bg-zinc-900/40 border-t lg:border border-white/5 lg:backdrop-blur-md lg:shadow-xl space-y-5">
+    <div className={`${bgStatus?"pt-4 lg:p-6 lg:rounded-xl lg:bg-zinc-900/40 border-t lg:border border-white/5 lg:backdrop-blur-md lg:shadow-xl space-y-5": ""}`}>
       <div className="flex items-center gap-3 lg:border-b lg:border-white/10 lg:pb-4">
         <div
           className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl"
@@ -86,25 +93,25 @@ export default function RecommendedTyres({ brandId, primaryColor = '#f97316' }) 
         </div>
         <div>
           <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-            Recommended
+           {title}
           </h2>
           <p className="text-zinc-500 text-[10px] mt-0.5">
-            Top picks for this brand
+           {subTitle}
           </p>
         </div>
       </div>
-      <div className="relative">
+      <div className="relative pt-4">
         <Carousel
           items={recommendedTyres}
-          itemWidth="w-[280px] md:w-[300px] lg:w-[350px]"
+          itemWidth={itemWidth || "w-[280px] md:w-[300px] lg:w-[350px]"}
           renderItem={(tyre) => (
-              <TyreCard product={tyre} />
+            <TyreCard product={tyre} />
           )}
           gap={16}
           showArrows={true}
           onReachEnd={handleReachEnd}
         />
-      
+
       </div>
     </div>
   );

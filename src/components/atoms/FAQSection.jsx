@@ -38,7 +38,7 @@ export default function FAQSection({ faqs = [] }) {
           return (
             <div
               key={index}
-              className="rounded-xl border border-white/5 bg-zinc-900/40 hover:border-white/10 transition-colors overflow-hidden"
+              className="rounded-xl border border-white/20 bg-white/10 hover:border-white/10 transition-colors overflow-hidden"
             >
               <button
                 onClick={() => toggleAccordion(index)}
