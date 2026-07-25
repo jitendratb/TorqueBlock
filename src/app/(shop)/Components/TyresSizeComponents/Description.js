@@ -89,7 +89,7 @@ function Description({ tyreData }) {
             )}
 
 
-            {activeSpecs.length > 0 && (
+            {/* {activeSpecs.length > 0 && (
                 <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl`}>
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
                     
@@ -113,7 +113,7 @@ function Description({ tyreData }) {
                         ))}
                     </div>
                 </div>
-            )}
+            )} */}
 
             {tyreData?.quickFacts?.popularBikes?.length > 0 && (
                 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
