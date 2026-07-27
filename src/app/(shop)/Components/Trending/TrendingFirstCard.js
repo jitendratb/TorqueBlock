@@ -61,34 +61,7 @@ function TrendingFirstCard({ trendingFirst }) {
                     </div>
                 </div>
 
-                <div className='w-full sm:w-auto transform sm:translate-y-12 hidden lg:block opacity-100 lg:opacity-0 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-700 ease-out delay-200 shrink-0'>
-                    <div className='flex sm:flex-col gap-4'>
-
-                        <div className='flex items-center gap-4 text-zinc-300 hover:text-white transition-colors group/stat cursor-pointer flex-1 sm:flex-none'>
-                            <div className='p-3 bg-white/5 rounded-xl group-hover/stat:bg-white/15 transition-all shadow-inner border border-white/5'>
-                                <FiEye className='text-lg' />
-                            </div>
-                            <div>
-                                <div className='text-white font-black text-sm leading-none'>{trendingFirst?.totalViews?.toLocaleString() || 0}</div>
-                                <div className='text-[9px] text-zinc-400 font-bold uppercase tracking-widest mt-1.5'>Views</div>
-                            </div>
-                        </div>
-
-                        <div className='hidden sm:block w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent'></div>
-                        <div className='block sm:hidden w-px h-12 bg-gradient-to-b from-transparent via-white/10 to-transparent self-center'></div>
-
-                        <div className='flex items-center gap-4 text-zinc-300 hover:text-white transition-colors group/stat cursor-pointer flex-1 sm:flex-none'>
-                            <div className='p-3 bg-white/5 rounded-xl group-hover/stat:bg-rose-500/20 group-hover/stat:text-rose-400 transition-all shadow-inner border border-white/5'>
-                                <FiHeart className='text-lg' />
-                            </div>
-                            <div>
-                                <div className='text-white font-black text-sm leading-none'>{trendingFirst?.totalClicks?.toLocaleString() || 0}</div>
-                                <div className='text-[9px] text-zinc-400 font-bold uppercase tracking-widest mt-1.5'>Likes</div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
+         
 
             </div>
         </div>
