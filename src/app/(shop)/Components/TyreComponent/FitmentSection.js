@@ -5,7 +5,7 @@ import { useState } from "react";
 
 import { FaImages } from "react-icons/fa";
 
-function FitmentSection({ tyre, h1tag = "Real-World Fitment" , scale=true }) {
+function FitmentSection({ tyre, h1tag = "Real-World Fitment", scale = true }) {
     const [activeIndex, setActiveIndex] = useState();
 
     return (
@@ -49,7 +49,7 @@ function FitmentSection({ tyre, h1tag = "Real-World Fitment" , scale=true }) {
                             {/* Vignette Gradients */}
                             <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-80 transition-opacity duration-500" />
                             <div className="absolute inset-0 bg-orange-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            
+
                             {/* Slide Number / Label */}
                             <div className="absolute bottom-4 left-4 flex items-center gap-2 text-white z-10 transition-transform duration-500 group-hover:translate-x-1">
                                 <span className="text-xs font-black bg-orange-500 text-white w-6 h-6 rounded-full flex items-center justify-center shadow-md">
