@@ -209,7 +209,7 @@ export default function CheckoutClient() {
 
     if (orderPlacedSuccess && placedOrderDetails) {
         return (
-            <div className="flex flex-col items-center justify-center text-center px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-6">
+            <div className="flex flex-col items-center justify-center text-center px-4  max-w-2xl mx-auto space-y-6">
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.15)]">
                     <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
