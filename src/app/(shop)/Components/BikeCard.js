@@ -7,7 +7,7 @@ function BikeCard({ brand , index , className='' }) {
     return (
         <Link
             href={`/bikes/${brand.identifier || brand.bikeBrand.toLowerCase().replace(/\s+/g, '-')}`}
-            className={`group relative h-[24rem] md:h-[30rem] bg-zinc-950 border border-zinc-900 rounded-[1.5rem] md:rounded-[2rem] overflow-hidden hover:border-orange-500/50 transition-all duration-700 shadow-2xl ${className}`}
+            className={`group relative h-[22rem] bg-zinc-950 border border-zinc-900 rounded-xl overflow-hidden hover:border-orange-500/50 transition-all duration-700 shadow-2xl ${className}`}
         >
             <div className="absolute inset-0">
                 <Image

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FiZap } from "react-icons/fi";
+import { FaMotorcycle } from "react-icons/fa6";
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import BikeCard from "../BikeCard";
 import FitmentGalleryClient from "../FitmentGalleryClient";
@@ -12,6 +13,7 @@ import CompareRatings from "./CompareRatings";
 import CompareSizes from "./CompareSizes";
 import CompareChooseIf from "./CompareChooseIf";
 import CompareBestUse from "./CompareBestUse";
+import CompareProducts from "./CompareProducts";
 
 export default function CompareClient({ data, slug }) {
     if (!data) return null;
@@ -79,18 +81,7 @@ export default function CompareClient({ data, slug }) {
                 tyre2Name={tyre2Name}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <WhatsAppButton
-                    text={`Get ${tyre1Name} Deal`}
-                    value={` I was comparing tyres and I'm interested in getting the best deal on the ${tyre1Name} tyre. Can you assist me with stock, price, and fitment?`}
-                />
-
-                <WhatsAppButton
-                    text={`Get ${tyre2Name} Deal`}
-                    value={` I was comparing tyres and I'm interested in getting the best deal on the ${tyre2Name} tyre. Can you assist me with stock, price, and fitment?`}
-                />
-            </div>
-
+        
             {(tyre1Gallery.length > 0 || tyre2Gallery.length > 0) && (
                 <FitmentGalleryClient
                     tyre1Gallery={tyre1Gallery}
@@ -100,41 +91,33 @@ export default function CompareClient({ data, slug }) {
                 />
             )}
 
+            <CompareProducts tyre1={tyre1} tyre2={tyre2} tyre1Name={tyre1Name} tyre2Name={tyre2Name} />
+
             {compatibleBikes.length > 0 && (
-                <div>
-                    <div className="flex items-center gap-3 mb-4">
-                        <FiZap className="text-orange-400" size={16} />
-                        <h2 className="text-lg font-black text-white uppercase tracking-widest">Compatible Bikes</h2>
+                <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl p-4 shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl border border-orange-500/25 bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
+                            <FaMotorcycle size={18} />
+                        </div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-xs md:text-sm font-black tracking-widest text-zinc-100 uppercase">
+                                COMMONLY USED ON
+                            </span>
+                            <span className="text-[10px] text-zinc-500 font-mono font-bold uppercase mt-0.5 tracking-wider">
+                                Verified Compatible Vehicles
+                            </span>
+                        </div>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto w-full scroll-smooth">
+                    <div className="border-t border-white/5 my-4" />
+                    <div className="flex gap-4 overflow-x-auto w-full scroll-smooth pb-2">
                         {compatibleBikes.map((bike, index) => (
-                            <BikeCard key={bike?._id} brand={bike} index={index} className="w-[260px] md:w-[360px] shrink-0" />
+                            <BikeCard key={bike?._id} brand={bike} index={index} className="w-[260px] md:w-[300px] shrink-0" />
                         ))}
                     </div>
                 </div>
             )}
 
-            <div className="relative rounded-xl md:rounded-[1.5rem] overflow-hidden border border-orange-500/20 bg-zinc-950/60 backdrop-blur-2xl shadow-[0_20px_60px_rgba(249,115,22,0.12)]">
-                <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(249,115,22,0.15)_0%,transparent_70%)] pointer-events-none" />
-                <div className="relative z-10 flex flex-col md:flex-row items-center justify-between p-6 md:p-8 gap-6">
-                    <div className="space-y-3 max-w-xl">
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-500/10 border border-orange-500/20 rounded-full">
-                            <div className="w-2 h-2 bg-orange-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(251,146,60,0.8)]" />
-                            <span className="text-[9px] font-black text-orange-400 uppercase tracking-widest">Expert Support Online</span>
-                        </div>
-                        <h3 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter leading-tight">
-                            Can't Decide Your{" "}
-                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-orange-500">Weapon?</span>
-                        </h3>
-                        <p className="text-zinc-400 text-xs md:text-sm leading-relaxed max-w-md">
-                            Skip the guesswork. Our tyre specialists will help you pick the perfect match for your ride & style.
-                        </p>
-                    </div>
-                    <div className="w-full md:max-w-[300px] shrink-0">
-                        <WhatsAppButton text="Get Expert Advice" value={waMessage} />
-                    </div>
-                </div>
-            </div>
+     
         </div>
     );
 }

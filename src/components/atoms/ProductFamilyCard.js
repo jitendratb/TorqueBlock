@@ -69,12 +69,22 @@ const ProductCard = ({ tyre, className = "" }) => {
         >
             <div className="relative w-full h-[200px] flex items-center justify-center p-4 transition-colors duration-500">
                 {images.length > 0 ? (
-                    <Image
-                        src={images[currentImg]}
-                        alt={`${title} - Image ${currentImg + 1}`}
-                        fill
-                        imageClassName="object-contain group-hover:scale-110 transition-transform duration-700"
-                    />
+                    images.map((img, index) => (
+                        <div
+                            key={index}
+                            className={`absolute inset-0 p-4 transition-opacity duration-200 ${
+                                index === currentImg ? "opacity-100 z-10" : "opacity-0 z-0 pointer-events-none"
+                            }`}
+                        >
+                            <Image
+                                src={img}
+                                alt={`${title} - Image ${index + 1}`}
+                                fill
+                                priority={index === 0}
+                                imageClassName="object-contain group-hover:scale-110 transition-transform duration-700"
+                            />
+                        </div>
+                    ))
                 ) : (
                     <div className="w-full h-full flex items-center justify-center bg-zinc-800/20 [.light-mode_&]:bg-zinc-200/50 rounded-xl">
                         <span className="text-zinc-500 text-xs font-medium">No image</span>

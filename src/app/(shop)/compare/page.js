@@ -53,10 +53,15 @@ export default async function ComparePage({ searchParams }) {
         { label: 'Compare', isLast: true },
     ];
 
-    const schemaItems = initialComparisons.map((comp) => ({
-        name: comp.title || "Tyre Comparison",
-        url: `/compare/${comp.slug || ''}`
-    }));
+    const schemaItems = initialComparisons.map((comp) => {
+        const tyre1Name = comp.tyre1?.name || "";
+        const tyre2Name = comp.tyre2?.name || "";
+        const title = tyre1Name && tyre2Name ? `${tyre1Name} vs ${tyre2Name} - Tyre Comparison` : "Tyre Comparison";
+        return {
+            name: title,
+            url: `/compare/${comp.identifier || ''}`
+        };
+    });
 
     return (
         <>

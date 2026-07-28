@@ -121,6 +121,7 @@ function page() {
             <Suspense fallback={<B2BEnterpriseSkeleton />}>
               <B2BEnterpriseSection />
             </Suspense>
+            
           </div>
         </PageShell>
       </ScrollBackgroundWrapper>

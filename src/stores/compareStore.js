@@ -9,12 +9,12 @@ const useCompareStore = create((set, get) => ({
     currentPage: 1,
     hasMore: true,
 
-    fetchComparisons: async ({ page = 1, limit = 20 } = {}) => {
+    fetchComparisons: async ({ page = 1, limit = 20, search = '' } = {}) => {
         set({ loading: true, error: null });
         try {
-            const response = await compareService.getAllCompare({ page, limit });
-            const newComparisons = response?.categories;
-            const pagination = response?.meta;
+            const response = await compareService.getAllCompare({ page, limit, search });
+            const newComparisons = response?.data || [];
+            const pagination = response?.pagination;
 
             set((state) => ({
                 comparisons: page === 1 ? newComparisons : [...(state.comparisons || []), ...newComparisons],

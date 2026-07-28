@@ -22,6 +22,8 @@ export async function generateMetadata({ params }) {
   const tyre1 = compare?.tyre1;
   const tyre2 = compare?.tyre2;
 
+  console.log(compare)
+
   const parts = (slug || '').split('-vs-');
   const tyre1Name = tyre1?.productName || parts[0]?.replace(/-/g, ' ') || 'Tyre 1';
   const tyre2Name = tyre2?.productName || parts[1]?.replace(/-/g, ' ') || 'Tyre 2';
@@ -92,10 +94,7 @@ export default async function CompareDetails({ params }) {
       <Breadcrumb items={breadcrumbItems} />
       <CompareClient data={data} slug={slug} />
 
-      {/* Silent FAQ JSON-LD Schema */}
       <FAQSchema faqs={faqs} />
-
-      {/* Structured JSON-LD Schema */}
       <CompareSchema compare={data} />
       <BreadcrumbSchema items={breadcrumbItems} />
     </div>

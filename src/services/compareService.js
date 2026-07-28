@@ -3,9 +3,9 @@ import TorqueBlockApi from '@/lib/api';
 class CompareService {
     constructor() { }
 
-    async getAllCompare({ page = 1, limit = 20 } = {}) {
+    async getAllCompare({ page = 1, limit = 20, search = '' } = {}) {
         try {
-            const response = await TorqueBlockApi.get('/comparison', { params: { page, limit } });
+            const response = await TorqueBlockApi.get('/comparison', { params: { page, limit, search } });
             return response;
         } catch (error) {
             console.error('Error fetching comparisons:', error);
