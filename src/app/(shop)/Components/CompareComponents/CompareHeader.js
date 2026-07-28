@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "@/components/molecules/CustomImage";
+import Link from "next/link";
 import { FiTarget } from "react-icons/fi";
 
 export default function CompareHeader({
@@ -9,6 +10,8 @@ export default function CompareHeader({
     tyre1Image,
     tyre2Image,
     seo,
+    tyre1,
+    tyre2,
 }) {
     return (
         <div className="relative rounded-xl overflow-hidden border border-white/10 bg-zinc-900/60 backdrop-blur-2xl shadow-[0_8px_40px_rgba(0,0,0,0.5)]">
@@ -39,7 +42,12 @@ export default function CompareHeader({
 
             <div className="relative z-20 flex items-end justify-between px-4 pb-4 md:px-16 gap-4 md:mt-6">
                 <div className="flex-1 flex flex-col items-center gap-2">
-                    <div className="relative w-full min-w-[100px] max-w-[200px] aspect-square mx-auto drop-shadow-2xl">
+                    <Link
+                        href={tyre1?.identifier ? `/tyres/${tyre1.identifier}` : "#"}
+                        className={`relative block w-full min-w-[100px] max-w-[200px] aspect-square mx-auto drop-shadow-2xl ${
+                            tyre1?.identifier ? "cursor-pointer" : "cursor-default"
+                        }`}
+                    >
                         {tyre1Image ? (
                             <Image src={tyre1Image} alt={tyre1Name} fill imageClassName="object-contain" />
                         ) : (
@@ -47,7 +55,7 @@ export default function CompareHeader({
                                 <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">No Image</span>
                             </div>
                         )}
-                    </div>
+                    </Link>
                 </div>
 
                 <div className="flex flex-col items-center shrink-0 mb-12">
@@ -58,7 +66,12 @@ export default function CompareHeader({
                 </div>
 
                 <div className="flex-1 flex flex-col items-center gap-2">
-                    <div className="relative w-full min-w-[100px] max-w-[200px] aspect-square mx-auto drop-shadow-2xl">
+                    <Link
+                        href={tyre2?.identifier ? `/tyres/${tyre2.identifier}` : "#"}
+                        className={`relative block w-full min-w-[100px] max-w-[200px] aspect-square mx-auto drop-shadow-2xl ${
+                            tyre2?.identifier ? "cursor-pointer" : "cursor-default"
+                        }`}
+                    >
                         {tyre2Image ? (
                             <Image src={tyre2Image} alt={tyre2Name} fill imageClassName="object-contain" />
                         ) : (
@@ -66,7 +79,7 @@ export default function CompareHeader({
                                 <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">No Image</span>
                             </div>
                         )}
-                    </div>
+                    </Link>
                 </div>
             </div>
         </div>

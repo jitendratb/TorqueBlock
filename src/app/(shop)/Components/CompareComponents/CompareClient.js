@@ -44,6 +44,8 @@ export default function CompareClient({ data, slug }) {
                 tyre1Image={tyre1Image}
                 tyre2Image={tyre2Image}
                 seo={seo}
+                tyre1={tyre1}
+                tyre2={tyre2}
             />
 
             <CompareDescriptions
