@@ -96,7 +96,7 @@ export default function CompareClient({ data, slug }) {
             <CompareProducts tyre1={tyre1} tyre2={tyre2} tyre1Name={tyre1Name} tyre2Name={tyre2Name} />
 
             {compatibleBikes.length > 0 && (
-                <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-2xl p-4 shadow-[0_12px_40px_rgba(0,0,0,0.5)]">
+                <div className="">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl border border-orange-500/25 bg-orange-500/10 flex items-center justify-center text-orange-500 shrink-0 shadow-[0_0_15px_rgba(249,115,22,0.1)]">
                             <FaMotorcycle size={18} />
