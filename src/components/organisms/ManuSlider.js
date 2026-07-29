@@ -158,7 +158,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               onClick={onClose}
               className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/trending'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                 }`}
             >
               <div className="flex items-center gap-2.5">
@@ -173,7 +173,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               onClick={onClose}
               className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/tyres'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                 }`}
             >
               <div className="flex items-center gap-2.5">
@@ -188,7 +188,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               onClick={onClose}
               className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/bikes'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                 }`}
             >
               <div className="flex items-center gap-2.5">
@@ -203,7 +203,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               onClick={onClose}
               className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/compare'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-300 hover:text-white hover:bg-white/[0.04]'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                 }`}
             >
               <div className="flex items-center gap-2.5">
@@ -230,7 +230,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
                   onClick={onClose}
                   className={`flex items-center p-3 rounded-xl border text-[10px] font-semibold tracking-wide transition-all duration-300 active:scale-95 ${isActive
                     ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
-                    : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-zinc-400 hover:text-white hover:bg-white/[0.04]'
+                    : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                     }`}
                 >
                   <span className="truncate">{tyre.label}</span>
