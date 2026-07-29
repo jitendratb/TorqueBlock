@@ -23,10 +23,9 @@ const NAVIGATION_CONFIG = {
         contactMessage: "Hi Torque Block! I found your website and I'd like to get in touch. Can you assist me?",
     },
     navItems: [
-        { name: "Home", href: "/" },
         { name: "Tyres", href: "/tyres" },
-        { name: "Motorcycles", href: "/bikes" },
-        { name: "Tyre Comparison", href: "/compare" },
+        { name: "Shop by Motorcycle", href: "/bikes" },
+        { name: "Compare Tyres", href: "/compare" },
     ],
     mobileSubMenus: {
         Tyres: [
@@ -42,7 +41,7 @@ const NAVIGATION_CONFIG = {
             { label: "Metzeler Sportec M9 RR", href: "/tyres/pirelli-scorpion-trail-iii" },
             { label: "Michelin Power 6", href: "/tyres/michelin-power-6" },
         ],
-        "Motorcycles": [
+        "Shop by Motorcycle": [
             { label: "Royal Enfield Himalayan 450", href: "/bikes/royal-enfield-himalayan-450-tyres" },
             { label: "KTM 390 Adventure", href: "/bikes/ktm-390-adventure-tyres" },
             { label: "BMW G 310 GS", href: "/bikes/bmw-g-310-gs-tyres" },
@@ -55,7 +54,7 @@ const NAVIGATION_CONFIG = {
             { label: "Royal Enfield Continental GT 650", href: "/bikes/royal-enfield-continental-gt-650-tyres" }
 
         ],
-        "Tyre Comparison": [
+        "Compare Tyres": [
             { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
             { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
             { label: "Michelin Road 6 vs Metzeler Roadtec 02", href: "/compare/michelin-road-6-vs-metzeler-roadtec-02" },
@@ -71,7 +70,7 @@ const NAVIGATION_CONFIG = {
 const TyresMegaMenu = React.memo(({ tabIndex }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">High Demanding Tyres</h3>
+            <h3 className="text-sm font-bold text-gray-900  tracking-wider mb-2 border-b border-gray-100 pb-2">Most Popular Tyres</h3>
             <ul className="space-y-2 text-sm text-gray-600">
                 {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(0, 5).map((item) => (
                     <li key={item.label}>
@@ -83,7 +82,7 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
             </ul>
         </div>
         <div>
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Track & Performance</h3>
+            <h3 className="text-sm font-bold text-gray-900  tracking-wider mb-2 border-b border-gray-100 pb-2">Sport & Performance</h3>
             <ul className="space-y-2 text-sm text-gray-600">
                 {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(5).map((item) => (
                     <li key={item.label}>
@@ -102,9 +101,9 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
             <div className="relative z-10 flex flex-col h-full justify-center">
                 <span className="inline-block px-2 py-1 bg-blue-600 text-white text-[10px] font-bold rounded mb-3 w-max uppercase tracking-widest">Smart Tool</span>
                 <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-blue-700 transition-colors">Find the Perfect Tyre</h3>
-                <p className="text-sm text-gray-600 mb-4 max-w-sm leading-relaxed">Use our advanced recommendation engine to find the exact match for your vehicle.</p>
+                <p className="text-sm text-gray-600 mb-4 max-w-sm leading-relaxed">Find the perfect motorcycle tyre with our intelligent recommendation engine.</p>
                 <span className="text-orange-500 text-sm font-semibold flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                    Try Recommendation Engine <FaArrowRightLong />
+                   Find My Tyre <FaArrowRightLong />
                 </span>
             </div>
             <div className="absolute right-0 bottom-0 opacity-10 transform translate-x-8 translate-y-8 group-hover:scale-110 transition-transform duration-700 pointer-events-none">
@@ -113,14 +112,13 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
         </Link>
     </div>
 ));
-TyresMegaMenu.displayName = "TyresMegaMenu";
 
 const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
     <div className="grid grid-cols-4 gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="col-span-3">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Find Perfect Tyres for Your Motorcycle</h3>
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Shop by Motorcycle</h3>
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                {NAVIGATION_CONFIG.mobileSubMenus["Motorcycles"].map((bike) => (
+                {NAVIGATION_CONFIG.mobileSubMenus["Shop by Motorcycle"].map((bike) => (
                     <Link
                         key={bike.label}
                         href={bike.href}
@@ -141,9 +139,9 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
             className="text-left bg-gradient-to-br from-gray-900 to-black rounded-2xl p-6 text-white flex flex-col justify-center relative overflow-hidden shadow-lg group focus:outline-none focus:ring-2 focus:ring-orange-500"
         >
             <div className="relative z-10">
-                <span className="inline-block px-2 py-1 bg-white/20 text-white text-[10px] font-bold rounded mb-3 uppercase tracking-widest backdrop-blur-sm">Premium Segment</span>
+                <span className="inline-block px-2 py-1 bg-white/20 text-white text-[10px] font-bold rounded mb-3 uppercase tracking-widest backdrop-blur-sm">Featured Collection</span>
                 <h3 className="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">Superbikes & Tourers</h3>
-                <p className="text-sm text-gray-400 mb-6 leading-relaxed">Explore high-performance racing and touring tyres.</p>
+                <p className="text-sm text-gray-400 mb-6 leading-relaxed">Explore premium motorcycle tyres for superbikes and touring.</p>
                 <div className="text-sm font-medium text-white group-hover:text-blue-400 flex items-center gap-2 group-hover:gap-3 transition-all">
                     View Premium Collection <FaArrowRightLong />
                 </div>
@@ -152,14 +150,13 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
         </Link>
     </div>
 ));
-BikeBrandsMegaMenu.displayName = "BikeBrandsMegaMenu";
 
 const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
     <div className="flex justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
         <div className="flex-1">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Key Comparisons</h3>
+            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Compare Popular Tyres</h3>
             <ul className="space-y-3 text-sm text-gray-600 grid grid-cols-2 gap-x-8 gap-y-2">
-                {NAVIGATION_CONFIG.mobileSubMenus["Tyre Comparison"].map((comp) => (
+                {NAVIGATION_CONFIG.mobileSubMenus["Compare Tyres"].map((comp) => (
                     <li key={comp.label}>
                         <Link href={comp.href} tabIndex={tabIndex} className="hover:text-orange-500 transition-all focus:outline-none focus:text-orange-500">
                             {comp.label}
@@ -177,18 +174,17 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
                 <div className="absolute -right-8 -bottom-8 opacity-30 w-36 h-36 bg-purple-500 blur-3xl rounded-full group-hover:scale-125 transition-transform duration-700 pointer-events-none" />
 
                 <div className="relative z-10 flex flex-col h-full">
-                    <span className="inline-block px-3 py-1 bg-purple-500/20 text-purple-300 text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-purple-500/30">Expert Guide</span>
-                    <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-purple-300 transition-colors tracking-tight leading-snug">Ultimate Buying Blueprint</h4>
-                    <p className="text-xs text-purple-200/70 mb-6 leading-relaxed">Master tyre compounds, performance metrics, and track compatibility to build the perfect setup.</p>
-                    <div className="text-sm font-bold text-white group-hover:text-purple-300 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                        Unlock Tyre Guide <FaArrowRightLong className="text-purple-400 group-hover:text-purple-300 transition-colors" />
+                    <span className="inline-block px-3 py-1 bg-purple-500/20 text-purple-300 text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-purple-500/30">Expert Picks</span>
+                    <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-purple-300 transition-colors tracking-tight leading-snug">Find Your Perfect Tyre</h4>
+                    <p className="text-xs text-purple-200/70 mb-6 leading-relaxed">Learn how to choose the right motorcycle tyre based on your riding style, performance needs, and motorcycle.</p>
+                    <div className="text-xs font-bold text-white group-hover:text-purple-300 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
+                        Unlock Tyre Guide with Compare Tyres <FaArrowRightLong className="text-purple-400 group-hover:text-purple-300 transition-colors" />
                     </div>
                 </div>
             </div>
         </Link>
     </div>
 ));
-TyreComparisonMegaMenu.displayName = "TyreComparisonMegaMenu";
 
 
 function Header() {
@@ -302,7 +298,7 @@ function Header() {
                                                     handleMouseLeave();
                                                 }
                                             }}
-                                            className={`nav-link text-xs uppercase font-bold ${isActive ? "active" : ""}`}
+                                            className={`nav-link text-xs font-bold ${isActive ? "active" : ""}`}
                                         >
                                             {item.name}
                                         </Link>
@@ -353,7 +349,7 @@ function Header() {
                                 aria-label="Open cart"
                             >
                                 <IoCartOutline className='text-xl' />
-                                <span className="text-sm font-bold uppercase  hidden sm:block">Cart</span>
+                                <span className="text-sm font-bold   hidden sm:block">Cart</span>
                                 {totalItems > 0 && (
                                     <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
                                         {totalItems}
@@ -385,10 +381,10 @@ function Header() {
                         {activeHover === "Tyres" && (
                             <TyresMegaMenu  />
                         )}
-                        {activeHover === "Motorcycles" && (
+                        {activeHover === "Shop by Motorcycle" && (
                             <BikeBrandsMegaMenu  />
                         )}
-                        {activeHover === "Tyre Comparison" && (
+                        {activeHover === "Compare Tyres" && (
                             <TyreComparisonMegaMenu  />
                         )}
                     </div>

@@ -17,6 +17,8 @@ const valuePerformance = [
     { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
     { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
     { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
+    { label: 'Ralco Tyres', href: '/brands/66cd75e46e659f1d44dff814' },
+
 ]
 
 const helpLinks = [
@@ -47,14 +49,14 @@ function Footer() {
                         </p>
 
                         <div className="mt-8 space-y-3">
-                          
+
 
                             <a href="https://wa.me/916366625625?text=Hi%20Torque%20Block" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-zinc-300 hover:text-green-400 transition">
                                 <FaWhatsapp className="text-lg" />
                                 <span className="text-md">WhatsApp Us</span>
                             </a>
 
-                              <a href="tel:+916366625625" className="flex items-center gap-3 text-zinc-300 hover:text-white transition" >
+                            <a href="tel:+916366625625" className="flex items-center gap-3 text-zinc-300 hover:text-white transition" >
                                 <FaPhoneAlt className="text-sm" />
                                 <span className="text-md">
                                     +91 6366 625 625

@@ -3,7 +3,7 @@ import { FiChevronRight } from "react-icons/fi";
 
 const footerSections = [
   {
-    title: "POPULAR MOTORCYCLES",
+    title: "Shop by Motorcycle",
     links: [
       { label: "Triumph Scrambler 400X", href: "/bikes/triumph-scrambler-400-x-tyres" },
       { label: "BMW R1300 GS", href: "/bikes/bmw-r-1300-gs-tyres" },
@@ -27,7 +27,7 @@ const footerSections = [
   //   ],
   // },
   {
-    title: "ULTIMATE PERFORMANCE",
+    title: "Ultimate Performance",
     links: [
       { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
       { label: "Michelin Tyres", href: "/brands/6638c9c65085dcdf58c8a789" },
@@ -36,7 +36,7 @@ const footerSections = [
     ],
   },
   {
-    title: "VALUE PERFORMANCE",
+    title: "Value Performance",
     links: [
       { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
       { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
@@ -45,11 +45,12 @@ const footerSections = [
       { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
       { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
       { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
-    ]
+      { label: 'Ralco Tyres', href: '/brands/66cd75e46e659f1d44dff814' },
 
+    ]
   },
   {
-    title: "TYRE COMPARISONS",
+    title: "Compare Tyres",
     links: [
       { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
       { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
@@ -86,7 +87,7 @@ export default function EnterprisePreFooter() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {footerSections.map((section, index) => (
             <div key={index}>
-              <h3 className="text-sm font-bold tracking-[0.2em] text-orange-400 uppercase mb-4">
+              <h3 className="text-sm font-bold text-orange-400 mb-4">
                 {section.title}
               </h3>
               <ul className="space-y-1">

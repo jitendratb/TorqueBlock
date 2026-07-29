@@ -47,7 +47,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
       {mounted && isAuthenticated ? (
         <button
           onClick={() => { logout(); onClose(); }}
-          className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
+          className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold  border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
         >
           <IoLogOutOutline className="text-sm" />
           Logout
@@ -55,19 +55,19 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
       ) : (
         <button
           onClick={() => { setIsLoginOpen(true); onClose(); }}
-          className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold uppercase tracking-widest border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
+          className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold   border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
         >
           <IoLogInOutline className="text-sm" />
-          Login
+          Log In
         </button>
       )}
 
       <button
         onClick={handleTalkToExpert}
-        className="w-full py-3 rounded-xl text-white text-xs font-bold uppercase tracking-widest cursor-pointer transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]"
+        className="w-full py-3 rounded-xl text-white text-xs font-bold  cursor-pointer transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]"
         style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
       >
-        Talk to an Expert Free
+       Talk to a Tyre Expert
       </button>
     </div>
   );
@@ -163,7 +163,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             >
               <div className="flex items-center gap-2.5">
                 <IoTrendingUpOutline className="text-lg text-orange-500/80" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Most Search Tyres</span>
+                <span className="text-[10px] font-bold">Most Searched Tyres</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -178,7 +178,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             >
               <div className="flex items-center gap-2.5">
                 <IoDiscOutline className="text-lg text-orange-500/80" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Explore Tyres</span>
+                <span className="text-[10px] font-bold">Explore Tyres</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -193,7 +193,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             >
               <div className="flex items-center gap-2.5">
                 <IoSpeedometerOutline className="text-lg text-orange-500/80" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Motorcycles</span>
+                <span className="text-[10px] font-bold">Shop by Motorcycle</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -208,7 +208,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             >
               <div className="flex items-center gap-2.5">
                 <IoGitCompareOutline className="text-lg text-orange-500/80" />
-                <span className="text-[10px] font-bold uppercase tracking-wider">Tyre Comparison</span>
+                <span className="text-[10px] font-bold">Compare Tyres</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -217,7 +217,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
 
         <div className="space-y-2">
           <div className="flex items-center gap-2 px-1">
-            <span className="text-[9px] font-black text-orange-500 tracking-widest uppercase">Riders Choice</span>
+            <span className="text-[9px] font-black text-orange-500">Rider's Choice</span>
             <div className="flex-1 h-[1px] bg-white/[0.04]" />
           </div>
           <div className="grid grid-cols-2 gap-2">
