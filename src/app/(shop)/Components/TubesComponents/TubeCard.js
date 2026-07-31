@@ -57,6 +57,8 @@ export default function TubeCard({ tube, className = '', addToCartStatus = false
         toast.success("Tube added to cart!");
     };
 
+    console.log(tube?.images?.[0]?.url)
+
     return (
         <div
             onClick={handleCardClick}
@@ -66,7 +68,7 @@ export default function TubeCard({ tube, className = '', addToCartStatus = false
 
             <div className="relative w-full h-[180px] flex items-center justify-center p-4">
                 <Image
-                    src={tube?.images?.[0]?.url || tube?.hero?.heroImage || tube?.productImages?.[0] || '/newLogo.webp'}
+                    src={tube?.images?.[0]?.url || '/newLogo.webp'}
                     alt={title}
                     fill
                     imageClassName="object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-lg"
