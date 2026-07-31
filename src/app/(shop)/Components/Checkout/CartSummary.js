@@ -2,10 +2,8 @@
 
 import React, { useCallback } from 'react';
 import useCartStore from '@/stores/cartStore';
-import Image from '@/components/molecules/CustomImage';
+import CartItem from '@/components/molecules/CartItem';
 import { IoReceiptOutline } from 'react-icons/io5';
-import { FiTrash2 } from 'react-icons/fi';
-import { FaPlus, FaMinus } from 'react-icons/fa6';
 
 export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
     const { cart, removeFromCart, updateQuantity } = useCartStore();
@@ -28,82 +26,15 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
             </div>
 
             <div className="space-y-4 max-h-[320px] overflow-y-auto pr-1 custom-scrollbar">
-                {cart.map((item) => {
-                    const product = item.product;
-                    const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric;
-                    const sizeText = sizeObj ? sizeObj.size : 'Standard';
-                    const positionText = item.selectedFront ? 'Front' : item.selectedRear ? 'Rear' : 'Tyre';
-                    const itemImage = product.productImages?.[0] || '';
-
-                    return (
-                        <div key={item.id} className="relative flex items-center gap-3.5 p-3 rounded-2xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300 pr-8">
-                            <button
-                                onClick={() => removeFromCart(item.id)}
-                                className="absolute top-3 right-3 text-zinc-500 hover:text-orange-500 transition-colors p-1 rounded-lg hover:bg-white/5"
-                                title="Remove Item"
-                            >
-                                <FiTrash2 className="text-xs" />
-                            </button>
-                            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black/40 flex items-center justify-center">
-                                {itemImage ? (
-                                    <Image
-                                        src={itemImage}
-                                        alt={product.productName}
-                                        fill
-                                        sizes="60px"
-                                        imageClassName="object-contain"
-                                    />
-                                ) : (
-                                    <span className="text-[8px] font-bold text-zinc-600 uppercase">No Image</span>
-                                )}
-                            </div>
-
-                            <div className="flex-1 min-w-0 h-full flex flex-col justify-between">
-                                <div>
-                                    <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest block mb-0.5">
-                                        {product.brand?.name || 'Performance'}
-                                    </span>
-                                    <h4 className="text-xs font-bold text-white tracking-tight truncate">
-                                        {product.productName}
-                                    </h4>
-                                    <p className="text-[9px] font-black text-zinc-400 mt-0.5 uppercase tracking-wide">
-                                        {positionText}: <span className="text-zinc-200">{sizeText}</span>
-                                    </p>
-                                </div>
-
-                                <div className="flex items-center justify-between mt-1.5">
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[10px] text-zinc-500 font-bold">
-                                            Qty:
-                                        </span>
-                                        <div className="flex items-center bg-black/50 border border-white/10 rounded-xl p-0.5">
-                                            <button
-                                                onClick={() => updateQuantity(item.id, -1)}
-                                                className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                                                aria-label="Decrease quantity"
-                                            >
-                                                <FaMinus className="text-[7px]" />
-                                            </button>
-                                            <span className="w-6 text-center text-[10px] font-black text-white select-none">
-                                                {item.quantity}
-                                            </span>
-                                            <button
-                                                onClick={() => updateQuantity(item.id, 1)}
-                                                className="w-5 h-5 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
-                                                aria-label="Increase quantity"
-                                            >
-                                                <FaPlus className="text-[7px]" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <span className="text-xs font-black text-white">
-                                        {formatPrice(item.price * item.quantity)}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                {cart.map((item) => (
+                    <CartItem
+                        key={item.id}
+                        item={item}
+                        formatPrice={formatPrice}
+                        updateQuantity={updateQuantity}
+                        removeFromCart={removeFromCart}
+                    />
+                ))}
             </div>
 
             <div className="p-4 rounded-2xl bg-white/10 border border-white/5 space-y-3 text-xs font-semibold text-zinc-400">
@@ -112,12 +43,15 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                     <span className="text-zinc-200">{formatPrice(subtotal)}</span>
                 </div>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                     <span>Delivery Charge</span>
-                    <span className="text-zinc-200">{formatPrice(deliveryCharge)}</span>
+                    {deliveryCharge === 0 ? (
+                        <span className="text-emerald-400 font-black uppercase tracking-wider text-[11px]">FREE</span>
+                    ) : (
+                        <span className="text-zinc-200">{formatPrice(deliveryCharge)}</span>
+                    )}
                 </div>
 
-                {/* Grand Total */}
                 <div className="flex justify-between items-baseline border-t border-white/5 pt-3 mt-1.5">
                     <span className="text-xs font-black uppercase tracking-widest text-white">Total Amount</span>
                     <span className="text-xl font-black text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-500 tracking-tight">

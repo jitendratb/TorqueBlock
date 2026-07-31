@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import Script from 'next/script';
 import useCartStore from '@/stores/cartStore';
 import useAuthStore from '@/stores/authStore';
 import useAddressStore from '@/stores/addressStore';
@@ -11,16 +12,16 @@ import AddressSection from './AddressSection';
 import CartSummary from './CartSummary';
 import PaymentSection from './PaymentSection';
 import Login from '@/components/organisms/login';
+import AddressModal from './AddressModal';
 import { IoCartOutline, IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
-import AddressModal from './AddressModal';
 
 export default function CheckoutClient() {
     const toast = useToast();
     const [addressModalOpen, setAddressModalOpen] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null);
     const { cart, getCartTotal, clearCart } = useCartStore();
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated, user } = useAuthStore();
     const { addresses, fetchAddresses, loading: addressLoading } = useAddressStore();
     const { createOrder, verifyPayment, loading: orderLoading } = useOrderStore();
     const [selectedAddressId, setSelectedAddressId] = useState(null);
@@ -49,10 +50,9 @@ export default function CheckoutClient() {
         }
     }, [addresses, selectedAddressId]);
 
-    const subtotal = getCartTotal();
-    const deliveryCharge = subtotal > 0 ? 0 : 0;
-    const finalTotal = subtotal + deliveryCharge;
-
+    const subtotal = useMemo(() => getCartTotal(), [getCartTotal, cart]);
+    const deliveryCharge = useMemo(() => (subtotal > 0 ? 0 : 0), [subtotal]);
+    const finalTotal = useMemo(() => subtotal + deliveryCharge, [subtotal, deliveryCharge]);
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
@@ -63,15 +63,17 @@ export default function CheckoutClient() {
         setIsOrderPlacing(true);
         try {
             const items = cart.map((item) => {
-                const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric;
+                const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+                const isTube = item.selectedGeneric?.type?.toLowerCase() === 'tube' || item.type?.toLowerCase() === 'tube' || item.product?.type?.toLowerCase() === 'tube';
+                const targetId = item.product?._id || sizeObj._id;
 
                 return {
-                    productId: sizeObj._id,
+                    ...(isTube ? { tubeId: targetId } : { productId: sizeObj._id || targetId }),
                     quantity: item.quantity,
                     deliveryMode: 'standard',
                     installation: false,
                     addressId: selectedAddressId,
-                    size: sizeObj.size,
+                    size: sizeObj.size || 'Standard',
                     shippingCharge: 0,
                     taxAmount: 0,
                     discount: 0
@@ -79,23 +81,30 @@ export default function CheckoutClient() {
             });
 
             const orderData = {
-                paymentMethod: paymentMethod,
-                items: items
+                paymentMethod,
+                items
             };
 
             const response = await createOrder(orderData);
 
             if (response?.success) {
                 if (paymentMethod === 'razorpay' && response.razorpayOrder) {
+                    if (typeof window === 'undefined' || typeof window.Razorpay === 'undefined') {
+                        toast.error("Razorpay payment gateway failed to load. Please refresh the page and try again.");
+                        setIsOrderPlacing(false);
+                        return;
+                    }
+
+                    const selectedAddr = addresses.find(a => a._id === selectedAddressId);
                     const options = {
                         key: response.razorpayKey,
                         amount: response.razorpayOrder.amount,
                         currency: response.razorpayOrder.currency,
                         name: "TorqueBlock",
-                        description: "Purchase of High-Performance Tyres",
+                        description: "Purchase of High-Performance Tyres & Tubes",
                         order_id: response.razorpayOrder.id,
                         handler: async (payResponse) => {
-                            setVerifyLoading(true)
+                            setVerifyLoading(true);
                             try {
                                 const verifyRes = await verifyPayment({
                                     razorpay_payment_id: payResponse.razorpay_payment_id,
@@ -107,20 +116,20 @@ export default function CheckoutClient() {
                                     toast.success("Payment successful! Order placed.");
                                     setPlacedOrderDetails(verifyRes.data);
                                     setOrderPlacedSuccess(true);
-                                    clearCart();
+                                    await clearCart();
                                 } else {
                                     toast.error(verifyRes?.message || "Payment verification failed.");
                                 }
                             } catch (err) {
                                 toast.error("Payment verification failed.");
                             } finally {
-                                setVerifyLoading(false)
+                                setVerifyLoading(false);
                             }
                         },
                         prefill: {
-                            name: addresses.find(a => a._id === selectedAddressId)?.fullName || "",
-                            email: addresses.find(a => a._id === selectedAddressId)?.email || "",
-                            contact: addresses.find(a => a._id === selectedAddressId)?.phone || ""
+                            name: selectedAddr?.fullName || user?.name || "",
+                            email: selectedAddr?.email || user?.email || "",
+                            contact: selectedAddr?.phone || user?.phone || ""
                         },
                         theme: {
                             color: "#f97316"
@@ -139,7 +148,7 @@ export default function CheckoutClient() {
                     toast.success("Order placed successfully!");
                     setPlacedOrderDetails(response.data);
                     setOrderPlacedSuccess(true);
-                    clearCart();
+                    await clearCart();
                 }
             } else {
                 toast.error(response?.message || "Failed to place order.");
@@ -149,13 +158,11 @@ export default function CheckoutClient() {
         } finally {
             setIsOrderPlacing(false);
         }
-    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, addresses, clearCart, toast]);
+    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, addresses, user, clearCart, toast]);
 
     if (verifyLoading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center py-16 px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.3)]">
-
-
+            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center py-16 px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.3)]" role="status" aria-label="Verifying Payment">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
 
                 <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
@@ -164,9 +171,7 @@ export default function CheckoutClient() {
 
                 <div className="relative w-32 h-32 flex items-center justify-center">
                     <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 opacity-20 blur-xl animate-pulse"></div>
-
                     <div className="absolute inset-0 rounded-full border-4 border-dashed border-orange-500/20 animate-[spin_20s_linear_infinite]"></div>
-
                     <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-orange-500 border-r-amber-500 animate-spin"></div>
 
                     <div className="relative z-10 w-20 h-20 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-orange-500 shadow-[inset_0_0_20px_rgba(249,115,22,0.15)]">
@@ -209,7 +214,7 @@ export default function CheckoutClient() {
 
     if (orderPlacedSuccess && placedOrderDetails) {
         return (
-            <div className="flex flex-col items-center justify-center text-center px-4  max-w-2xl mx-auto space-y-6">
+            <div className="flex flex-col items-center justify-center text-center px-4 max-w-2xl mx-auto space-y-6">
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.15)]">
                     <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -218,14 +223,14 @@ export default function CheckoutClient() {
 
                 <div className="space-y-2">
                     <h2 className="text-2xl font-black uppercase tracking-wider text-white">Order Confirmed!</h2>
-                    <p className="text-zinc-400 text-sm max-w-md mx-auto">
+                    <p className="text-zinc-400 text-sm max-w-md mx-auto font-medium">
                         Thank you for your purchase! Your order has been placed and is currently being processed.
                     </p>
                 </div>
 
                 <div className="p-5 rounded-2xl bg-black/40 border border-white/5 w-full text-left space-y-3">
                     <div className="flex justify-between border-b border-white/5 pb-2.5 text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                        <span className='min-w-[70px]'>Order ID</span>
+                        <span className="min-w-[70px]">Order ID</span>
                         <span className="text-white text-xs normal-case font-black break-all text-right ml-4">{placedOrderDetails._id || placedOrderDetails.transactionId}</span>
                     </div>
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
@@ -270,24 +275,24 @@ export default function CheckoutClient() {
                 </div>
                 <div className="space-y-2">
                     <h3 className="text-xs font-black text-white uppercase tracking-widest">Your Cart is Empty</h3>
-                    <p className="text-xs text-gray-400 max-w-[260px] leading-relaxed">
-                        Add high-performance tyres to your cart before proceeding to checkout.
+                    <p className="text-xs text-gray-400 max-w-[260px] leading-relaxed font-medium">
+                        Add high-performance tyres or tubes to your cart before proceeding to checkout.
                     </p>
                 </div>
                 <Link
                     href="/tyres"
                     className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)]"
                 >
-                    Explore Tyres
+                    Explore Products
                 </Link>
             </div>
         );
     }
 
-
-
     return (
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
+            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+
             <div className="space-y-4">
                 <AddressSection
                     selectedAddressId={selectedAddressId}
@@ -312,6 +317,7 @@ export default function CheckoutClient() {
                 <button
                     onClick={handlePlaceOrder}
                     disabled={isOrderPlacing || orderLoading || !selectedAddressId}
+                    aria-busy={isOrderPlacing}
                     className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
                 >
                     {isOrderPlacing ? (
@@ -337,12 +343,10 @@ export default function CheckoutClient() {
                         <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine</span>
                     </div>
                 </div>
-
             </div>
 
             <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
             <AddressModal isOpen={addressModalOpen} address={editingAddress} onClose={handleCloseAddressModal} />
-            <script src="https://checkout.razorpay.com/v1/checkout.js" async />
         </div>
     );
 }

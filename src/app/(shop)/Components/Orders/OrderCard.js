@@ -1,18 +1,24 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from '@/components/molecules/CustomImage';
 import OrderStatusBadge from './OrderStatusBadge';
-import { IoChevronDownOutline, IoChevronUpOutline, IoCalendarOutline, IoCardOutline, IoLocationOutline, IoReceiptOutline, IoCloseCircleOutline, IoTimeOutline } from 'react-icons/io5';
+import { IoChevronDownOutline, IoChevronUpOutline, IoCalendarOutline, IoCardOutline, IoLocationOutline, IoCloseCircleOutline, IoTimeOutline } from 'react-icons/io5';
 
 export default function OrderCard({ order, onCancelClick }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const totalAmount = order.items?.reduce((sum, item) => sum + (item.totalPrice || 0), 0) || 0;
+  const totalAmount = useMemo(() => {
+    return order.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * item.quantity)), 0) || 0;
+  }, [order.items]);
 
   const shippingAddress = order.items?.[0]?.address;
 
-  const formattedDate = order.createdAt ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A';
+  const formattedDate = useMemo(() => {
+    return order.createdAt
+      ? new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+      : 'N/A';
+  }, [order.createdAt]);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat('en-IN', {
@@ -25,8 +31,6 @@ export default function OrderCard({ order, onCancelClick }) {
   const nonCancellableStates = ['shipped', 'out_for_delivery', 'delivered', 'cancelled', 'returned'];
   const isCancellable = order.orderStatus && !nonCancellableStates.includes(order.orderStatus.toLowerCase());
 
-
- 
   return (
     <div className="w-full bg-white/10 border border-white/5 hover:border-white/10 rounded-2xl p-5 md:p-6 backdrop-blur-xl transition-all duration-300 space-y-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
 
@@ -72,22 +76,39 @@ export default function OrderCard({ order, onCancelClick }) {
       {/* Items Section */}
       <div className="space-y-4">
         {order.items?.map((item, idx) => {
-          const productImages = item.productId?.availableTyres?.productImages || [];
-          const itemImage = productImages[0] || '';
+          const isTube = Boolean(item.tubeId);
+          const tubeObj = typeof item.tubeId === 'object' ? item.tubeId : null;
+          const tyreObj = typeof item.productId === 'object' ? item.productId : null;
+
+          const productName = isTube
+            ? (tubeObj?.name || item.productName || 'Tube Product')
+            : (tyreObj?.hero?.title || item.productName || 'Tyre Product');
+
+          const rawBrand = isTube
+            ? (typeof tubeObj?.brand === 'object' ? tubeObj.brand?.name : tubeObj?.brand)
+            : (typeof tyreObj?.brand === 'object' ? tyreObj.brand?.name : tyreObj?.brand);
+          const brandName = rawBrand || (isTube ? 'TorqueBlock' : 'Performance');
+
+          const itemImage = isTube
+            ? (typeof tubeObj?.images?.[0] === 'string' ? tubeObj.images[0] : tubeObj?.images?.[0]?.url || item.image || '')
+            : (tyreObj?.availableTyres?.productImages?.[0] || item.image || '');
+
+          const displaySize = item.size || (isTube ? tubeObj?.size : tyreObj?.size) || 'Standard';
+
           return (
             <div
               key={item._id || idx}
-              className="flex items-center gap-4 p-3 rounded-xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300"
+              className="flex items-center gap-4 p-3.5 rounded-xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300"
             >
               {/* Product Image */}
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black/40 flex items-center justify-center">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl flex items-center justify-center">
                 {itemImage ? (
                   <Image
                     src={itemImage}
-                    alt={item.productName || 'Tyre Product'}
+                    alt={productName}
                     fill
                     sizes="64px"
-                    imageClassName="object-contain p-1"
+                    imageClassName="object-contain"
                   />
                 ) : (
                   <span className="text-[8px] font-bold text-zinc-600 uppercase">No Image</span>
@@ -97,14 +118,19 @@ export default function OrderCard({ order, onCancelClick }) {
               {/* Product Info */}
               <div className="flex-1 min-w-0 flex flex-col justify-between">
                 <div>
-                  <span className="text-[8px] font-black text-orange-500 uppercase tracking-widest block mb-0.5">
-                    Premium Quality
-                  </span>
+                  <div className="flex items-center gap-1.5 mb-0.5">
+                    <span className="text-[9px] font-black text-orange-500 uppercase tracking-widest block">
+                      {brandName}
+                    </span>
+                    <span className="px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-400 text-[8px] font-black tracking-wider border border-orange-500/30">
+                      {isTube ? "TUBE" : "TYRE"}
+                    </span>
+                  </div>
                   <h4 className="text-xs md:text-sm font-bold text-white tracking-tight truncate">
-                    {item.productId?.hero?.title || 'Tyre Item'}
+                    {productName}
                   </h4>
                   <p className="text-[9px] font-black text-zinc-400 mt-1 uppercase tracking-wide">
-                    Size: <span className="text-zinc-200">{item.size || 'Standard'}</span>
+                    Size: <span className="text-zinc-200">{displaySize}</span>
                   </p>
                 </div>
 

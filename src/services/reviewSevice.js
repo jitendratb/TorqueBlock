@@ -5,7 +5,6 @@ class ReviewService {
     static async getReviews(params = {isApproved: true}) {
         try {
             const response = await TorqueBlockApi.get('/reviews', { params });
-            console.log(response)
             return response;
         } catch (error) {
             console.log('Error fetching reviews', error);

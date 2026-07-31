@@ -20,7 +20,7 @@ import MatchingTyreItem from "./MatchingTyreItem";
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
 
-const TyreDataDetails = React.memo(({ tyreData, reviewData }) => {
+const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) => {
     const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
@@ -69,6 +69,16 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData }) => {
     useEffect(() => {
         setSelectedOpposite(null);
     }, [tyreData]);
+
+    useEffect(() => {
+        if (typeof setProductIds === 'function' && tyreData?._id) {
+            const ids = [tyreData._id];
+            if (selectedOpposite?._id) {
+                ids.push(selectedOpposite._id);
+            }
+            setProductIds(ids);
+        }
+    }, [tyreData?._id, selectedOpposite?._id, setProductIds]);
 
     const {
         basePrice,

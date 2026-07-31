@@ -12,10 +12,11 @@ const reconstructCart = (backendItems) => {
 
     const parentProduct = sizeObj?.availableTyres || {
       _id: item.productId ? (typeof item.productId === 'string' ? item.productId : item.productId._id) : item._id,
-      productName: item.productName,
+      productName: item.productName || item.name,
       sku: item.sku,
       productImages: item.image ? [item.image] : [],
-      brand: { name: 'Performance' }
+      brand: { name: 'Performance' },
+      type: item.type || sizeObj?.type || 'Tyre'
     };
 
     const sizeItem = {
@@ -23,7 +24,8 @@ const reconstructCart = (backendItems) => {
       size: sizeObj?.size || item.size || 'Standard',
       price: sizeObj?.price || item.unitPrice || 0,
       position: sizeObj?.position || (item.size?.toLowerCase().includes('front') ? 'Front' : item.size?.toLowerCase().includes('rear') ? 'Rear' : 'Generic'),
-      sku: item.sku
+      sku: item.sku,
+      type: item.type || sizeObj?.type || 'Tyre'
     };
 
     const position = (sizeItem.position || '').toLowerCase();
@@ -80,43 +82,49 @@ const useCartStore = create(
         try {
           const promises = [];
           for (const item of cart) {
+            const itemType = item.selectedGeneric?.type || item.selectedFront?.type || item.selectedRear?.type || item.product?.type || 'Tyre';
+            const getImage = () => item.product.productImages?.[0] || (typeof item.product.images?.[0] === 'string' ? item.product.images[0] : item.product.images?.[0]?.url) || '';
+
             if (item.selectedFront) {
               promises.push(cartService.addToCart({
                 productId: item.selectedFront._id,
-                productName: item.product.productName,
+                productName: item.product.productName || item.product.name,
                 sku: item.selectedFront.sku || item.product.sku || '',
-                image: item.product.productImages?.[0] || '',
+                image: getImage(),
                 size: item.selectedFront.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedFront.price,
                 discountPrice: 0,
-                totalPrice: item.selectedFront.price * item.quantity
+                totalPrice: item.selectedFront.price * item.quantity,
+                type: itemType
               }));
             }
             if (item.selectedRear) {
               promises.push(cartService.addToCart({
                 productId: item.selectedRear._id,
-                productName: item.product.productName,
+                productName: item.product.productName || item.product.name,
                 sku: item.selectedRear.sku || item.product.sku || '',
-                image: item.product.productImages?.[0] || '',
+                image: getImage(),
                 size: item.selectedRear.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedRear.price,
                 discountPrice: 0,
-                totalPrice: item.selectedRear.price * item.quantity
+                totalPrice: item.selectedRear.price * item.quantity,
+                type: itemType
               }));
             }
             if (item.selectedGeneric) {
               promises.push(cartService.addToCart({
                 productId: item.selectedGeneric._id,
-                productName: item.product.productName,
+                productName: item.product.productName || item.product.name,
                 sku: item.selectedGeneric.sku || item.product.sku || '',
-                image: item.product.productImages?.[0] || '',
+                image: getImage(),
                 size: item.selectedGeneric.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedGeneric.price,
                 discountPrice: 0,
-                totalPrice: item.selectedGeneric.price * item.quantity
+                totalPrice: item.selectedGeneric.price * item.quantity,
+                type: itemType
               }));
             }
           }
@@ -204,46 +212,50 @@ const useCartStore = create(
         if (isAuthenticated && token) {
           try {
             const promises = [];
+            const getProductImg = () => product.productImages?.[0] || (typeof product.images?.[0] === 'string' ? product.images[0] : product.images?.[0]?.url) || '';
 
             if (selectedFront) {
               promises.push(cartService.addToCart({
                 productId: selectedFront._id,
-                productName: product.productName,
+                productName: product.productName || product.name,
                 sku: selectedFront.sku || product.sku || '',
-                image: product.productImages?.[0] || '',
+                image: getProductImg(),
                 size: selectedFront.size,
                 quantity: 1,
                 unitPrice: selectedFront.price,
                 discountPrice: 0,
-                totalPrice: selectedFront.price
+                totalPrice: selectedFront.price,
+                type: selectedFront.type || product.type || 'Tyre'
               }));
             }
 
             if (selectedRear) {
               promises.push(cartService.addToCart({
                 productId: selectedRear._id,
-                productName: product.productName,
+                productName: product.productName || product.name,
                 sku: selectedRear.sku || product.sku || '',
-                image: product.productImages?.[0] || '',
+                image: getProductImg(),
                 size: selectedRear.size,
                 quantity: 1,
                 unitPrice: selectedRear.price,
                 discountPrice: 0,
-                totalPrice: selectedRear.price
+                totalPrice: selectedRear.price,
+                type: selectedRear.type || product.type || 'Tyre'
               }));
             }
 
             if (selectedGeneric) {
               promises.push(cartService.addToCart({
                 productId: selectedGeneric._id,
-                productName: product.productName,
+                productName: product.productName || product.name,
                 sku: selectedGeneric.sku || product.sku || '',
-                image: product.productImages?.[0] || '',
+                image: getProductImg(),
                 size: selectedGeneric.size,
                 quantity: 1,
                 unitPrice: selectedGeneric.price,
                 discountPrice: 0,
-                totalPrice: selectedGeneric.price
+                totalPrice: selectedGeneric.price,
+                type: selectedGeneric.type || product.type || 'Tyre'
               }));
             }
 
@@ -288,7 +300,6 @@ const useCartStore = create(
         let targetItem = null;
         let newQty = 0;
 
-        // Optimistic local update
         set((state) => {
           const newCart = state.cart.map((item) => {
             if (item.id === itemId) {
@@ -309,7 +320,6 @@ const useCartStore = create(
 
         if (!targetItem) return;
 
-        // Backend synchronization
         const { isAuthenticated } = useAuthStore.getState();
         const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
         if (isAuthenticated && token) {
@@ -333,7 +343,36 @@ const useCartStore = create(
         }
       },
 
-      clearCart: () => set({ cart: [] }),
+      clearCart: async () => {
+        const currentCart = get().cart;
+        set({ cart: [] });
+
+        if (typeof window !== 'undefined') {
+          try {
+            localStorage.removeItem('cart-storage');
+          } catch (e) {
+            console.error('Error removing cart-storage from localStorage:', e);
+          }
+        }
+
+        const { isAuthenticated } = useAuthStore.getState();
+        const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+
+        if (isAuthenticated && token && currentCart.length > 0) {
+          try {
+            const promises = [];
+            currentCart.forEach((item) => {
+              if (item.selectedFront?._id) promises.push(cartService.deleteCart(item.selectedFront._id));
+              if (item.selectedRear?._id) promises.push(cartService.deleteCart(item.selectedRear._id));
+              if (item.selectedGeneric?._id) promises.push(cartService.deleteCart(item.selectedGeneric._id));
+              if (item.product?._id) promises.push(cartService.deleteCart(item.product._id));
+            });
+            await Promise.all(promises);
+          } catch (error) {
+            console.error('Failed to sync clearCart with backend:', error);
+          }
+        }
+      },
 
       getCartTotal: () => {
         return get().cart.reduce((total, item) => total + (item.price * item.quantity), 0);
