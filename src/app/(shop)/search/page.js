@@ -386,7 +386,7 @@ const Card = ({ item }) => {
             );
         }
         case 'Tube':
-        case 'Tubes': {
+       {
             const identifier = item.identifier || item._id;
             const route = `/tubes/${identifier}`;
             const title = item.name || item.productName || item.title || "Inner Tube";
@@ -398,7 +398,7 @@ const Card = ({ item }) => {
 
             return (
                 <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
-                    <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center bg-zinc-950 p-4 min-h-[160px]">
+                    <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center  p-4 min-h-[160px]">
                         <div className="relative w-full h-full min-h-[140px] md:min-h-0">
                             <Image
                                 src={imageUrl}
@@ -408,7 +408,6 @@ const Card = ({ item }) => {
                                 className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                             />
                         </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                         <div className="absolute bottom-4 left-4 rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400 backdrop-blur-md">
                             Inner Tube
                         </div>
@@ -637,7 +636,7 @@ function SearchPageContent() {
     ];
 
     return (
-        <div className="flex flex-col flex-1 min-h-0 space-y-4">
+        <div className="flex flex-col flex-1 min-h-0 space-y-4 pb-4">
             <Breadcrumb items={breadcrumbItems} />
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[250px_1fr] relative flex flex-col flex-1 min-h-0 overflow-hidden">
                 <aside className="hidden lg:block lg:sticky top-0 self-start mb-4 max-h-[calc(91vh-5rem)] overflow-hidden flex flex-col">
