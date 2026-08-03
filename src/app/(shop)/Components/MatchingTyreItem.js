@@ -2,10 +2,16 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { FaCheck, FaArrowRight } from "react-icons/fa";
 
-export default function MatchingTyreItem({ item, parentTyre, isSelected, parentAvailability, onSelect, formatPrice, onViewDetails }) {
+export default function MatchingTyreItem({ item, parentTyre, isSelected, parentAvailability, isOfferItem, isOfferActive, onSelect, formatPrice, onViewDetails }) {
     const router = useRouter();
     const availability = item.availability;
-    const isOrderable = availability !== "out_of_stock" && availability === parentAvailability;
+    const isInStock = availability !== "out_of_stock" && (item.quantity === undefined || item.quantity > 0);
+    const isOrderable = isInStock && (parentAvailability ? availability === parentAvailability : true);
+
+    const discount = item?.discount || 0;
+    const price = item?.price || 0;
+    const salePrice = discount > 0 ? Math.max(0, price - discount) : price;
+    const discountPercentage = (price > 0 && discount > 0) ? Math.round((discount / price) * 100) : 0;
 
     const availBadgeClass = availability === "in_stock"
         ? "bg-green-500/10 border-green-500/20 text-green-400"
@@ -16,7 +22,7 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
                 : "bg-red-500/10 border-red-500/20 text-red-400";
 
     const availLabel = availability === "in_stock" ? "In Stock"
-        : availability === "backorder" ? "Avail. For Order"
+        : availability === "backorder" ? "Available To Order"
             : availability === "preorder" ? "Pre Order"
                 : "Out of Stock";
 
@@ -27,9 +33,8 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
 
 
     return (
-        <button
+        <div
             onClick={() => isOrderable && onSelect(isSelected ? null : item)}
-            disabled={!isOrderable}
             className={`flex flex-col p-3 w-full rounded-2xl border border-white/10 text-left transition-all duration-300 relative group ${!isOrderable
                 ? "bg-zinc-900/30 border-white/10 opacity-50 cursor-not-allowed"
                 : isSelected
@@ -63,9 +68,27 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
             </h4>
 
             <div className="flex justify-between items-center w-full mt-2 pt-2 border-t border-white/5">
-                <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
-                    {formatPrice(item.price)}
-                </p>
+                <div className="flex flex-col">
+                    {discount > 0 ? (
+                        <div className="flex flex-col">
+                            <div className="flex items-baseline gap-1.5">
+                                <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
+                                    {formatPrice(salePrice)}
+                                </p>
+                                <span className="text-[10px] text-zinc-500 line-through decoration-red-500/60 font-semibold" aria-label="Original price">
+                                    {formatPrice(price)}
+                                </span>
+                            </div>
+                            <span className="text-[9px] font-bold text-emerald-400">
+                                Save {formatPrice(discount)} ({discountPercentage}% OFF)
+                            </span>
+                        </div>
+                    ) : (
+                        <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
+                            {formatPrice(price)}
+                        </p>
+                    )}
+                </div>
 
                 <div
                     onClick={(e) => {
@@ -80,6 +103,6 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
                     <FaArrowRight className="text-[8px] text-zinc-500 group-hover/btn:text-orange-400 transition-all group-hover/btn:translate-x-0.5" />
                 </div>
             </div>
-        </button>
+        </div>
     );
 }

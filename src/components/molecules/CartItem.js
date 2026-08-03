@@ -30,6 +30,17 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
     const isGenOut = item.selectedGeneric && item.selectedGeneric.availability === "out_of_stock";
     const isItemOutOfStock = isFrontOut || isRearOut || isGenOut;
 
+    const selected = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+    const unitDiscount = selected.discount || selected.discountAmount || item.discount || product.discount || 0;
+    const unitOriginalPrice = item.price || selected.price || product.price || 0;
+    const unitSalePrice = unitDiscount > 0 ? Math.max(0, unitOriginalPrice - unitDiscount) : unitOriginalPrice;
+
+    const quantity = item.quantity || 1;
+    const totalOriginalPrice = unitOriginalPrice * quantity;
+    const totalSalePrice = unitSalePrice * quantity;
+    const totalDiscount = unitDiscount * quantity;
+    const discountPercentage = (unitOriginalPrice > 0 && unitDiscount > 0) ? Math.round((unitDiscount / unitOriginalPrice) * 100) : 0;
+
     return (
         <div className={`flex relative items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${isItemOutOfStock
                 ? "bg-red-950/10 border border-red-500/15 hover:border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.05)]"
@@ -108,9 +119,25 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                         </button>
                     </div>
 
-                    <span className="text-sm font-black text-white">
-                        {formatPrice(item.price * item.quantity)}
-                    </span>
+                    <div className="flex flex-col items-end shrink-0">
+                        {unitDiscount > 0 ? (
+                            <div className="flex flex-col items-end gap-0.5">
+                                <div className="flex items-baseline gap-1.5">
+                                    <span className="text-sm font-black text-white tracking-tight drop-shadow-sm">
+                                        {formatPrice(totalSalePrice)}
+                                    </span>
+                                    <span className="text-[10px] font-semibold text-zinc-400 line-through decoration-red-500/70" aria-label="Original total price">
+                                        {formatPrice(totalOriginalPrice)}
+                                    </span>
+                                </div>
+                             
+                            </div>
+                        ) : (
+                            <span className="text-sm font-black text-white">
+                                {formatPrice(totalOriginalPrice)}
+                            </span>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>

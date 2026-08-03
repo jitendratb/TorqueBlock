@@ -16,16 +16,17 @@ import Login from "@/components/organisms/login";
 import { notifyService } from "@/services/notifyService";
 import StarRating from "@/components/atoms/StarRating";
 import MatchingTyreItem from "./MatchingTyreItem";
+import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
 
-const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) => {
+const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => {
     const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
     const [isRinging, setIsRinging] = useState(false);
-    
+
     const router = useRouter();
     const { isAuthenticated } = useAuthStore();
     const { addToCart } = useCartStore();
@@ -66,9 +67,52 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
         }
     }, [tubeTypes, selectedTubeType]);
 
+    const { isOfferActive, hasExclusiveTag, offerExpireDate } = useMemo(() => {
+        const expireDate = tyreData?.offerExpireDate || tyreData?.offer?.offerExpireDate || tyreData?.offer?.expireDate;
+        const active = expireDate ? new Date(expireDate).getTime() > Date.now() : false;
+
+        const tags = tyreData?.tags || tyreData?.offer?.tags || [];
+        const exclusive = Array.isArray(tags) && tags.some(tag => {
+            const normalized = String(tag).toLowerCase().trim();
+            return normalized.includes('excusively') || normalized.includes('exclusively') || normalized.includes('offer only for you') || normalized.includes('order for you only');
+        });
+
+        return { isOfferActive: active, hasExclusiveTag: exclusive, offerExpireDate: expireDate };
+    }, [tyreData?.offerExpireDate, tyreData?.offer, tyreData?.tags]);
+
     useEffect(() => {
+        if (!tyreData) {
+            setSelectedOpposite(null);
+            return;
+        }
+
+        const offerProductId = tyreData?.offerProductId || tyreData?.offer?.offerProductId;
+
+        if (isOfferActive && hasExclusiveTag && offerProductId && tyreData?.oppositeSizes?.length > 0) {
+            const matchingItem = tyreData.oppositeSizes.find(item => {
+                const itemId = String(item._id || item.id || '');
+                const isMatched = Array.isArray(offerProductId)
+                    ? offerProductId.some(id => String(id) === itemId)
+                    : String(offerProductId) === itemId;
+
+                if (!isMatched) return false;
+
+                const availability = item?.availability;
+                const parentAvailability = tyreData?.availability;
+                const isOrderable = availability !== "out_of_stock" && (parentAvailability ? availability === parentAvailability : true);
+                const isStock = item?.quantity === undefined || item?.quantity > 0;
+
+                return isOrderable && isStock;
+            });
+
+            if (matchingItem) {
+                setSelectedOpposite(matchingItem);
+                return;
+            }
+        }
+
         setSelectedOpposite(null);
-    }, [tyreData]);
+    }, [tyreData, isOfferActive, hasExclusiveTag]);
 
     useEffect(() => {
         if (typeof setProductIds === 'function' && tyreData?._id) {
@@ -229,17 +273,33 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
         }
     }, [isAuthenticated]);
 
-    const renderCarouselItem = useCallback((item) => (
-        <MatchingTyreItem
-            key={item._id}
-            item={item}
-            parentTyre={parentTyre}
-            isSelected={selectedOpposite?._id === item._id}
-            parentAvailability={tyreData?.availability}
-            onSelect={setSelectedOpposite}
-            formatPrice={formatPrice}
-        />
-    ), [selectedOpposite, tyreData?.availability, parentTyre]);
+    const renderCarouselItem = useCallback((item) => {
+        const offerProductId = tyreData?.offerProductId || tyreData?.offer?.offerProductId;
+        const itemId = String(item._id || item.id || '');
+        const isOfferItem = Boolean(
+            offerProductId && (
+                Array.isArray(offerProductId)
+                    ? offerProductId.some(id => String(id) === itemId)
+                    : String(offerProductId) === itemId
+            )
+        );
+
+        return (
+            <MatchingTyreItem
+                key={item._id || item.id}
+                item={item}
+                parentTyre={parentTyre}
+                isSelected={selectedOpposite?._id === item._id}
+                parentAvailability={tyreData?.availability}
+                isOfferItem={isOfferItem}
+                isOfferActive={isOfferActive && hasExclusiveTag}
+                onSelect={setSelectedOpposite}
+                formatPrice={formatPrice}
+            />
+        );
+    }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
+
+    console.log('tireData', tyreData)
 
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative pb-4 lg:pb-0">
@@ -251,13 +311,13 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
                             {gallery?.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
-                                    <button 
-                                        key={idx} 
-                                        type="button" 
+                                    <button
+                                        key={idx}
+                                        type="button"
                                         role="tab"
                                         aria-selected={isActive}
-                                        onClick={() => setActiveImage(item)} 
-                                        onMouseEnter={() => setActiveImage(item)} 
+                                        onClick={() => setActiveImage(item)}
+                                        onMouseEnter={() => setActiveImage(item)}
                                         className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}
                                     >
                                         <Image src={item} alt={`${title} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
@@ -276,6 +336,12 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
                                     sizes="(max-width: 768px) 100vw, 50vw"
                                     imageClassName="object-contain transition-transform w-full duration-500 hover:scale-105 drop-shadow-2xl"
                                 />
+                            )}
+
+                            {isOfferActive && hasExclusiveTag && offerExpireDate && (
+                                <div className="absolute bottom-4  right-4 border-t border-white/10 flex items-center justify-between gap-2">
+                                        <OfferCountdownTimer targetDate={offerExpireDate} label="Exclusive Offer Ends In" />
+                                    </div>
                             )}
                         </div>
                     </div>
@@ -316,15 +382,15 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
                                 </span>
                             </div>
                         </div>
-                        
+
                         <div className="space-y-2">
                             <h1 id="product-details-heading" className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
                                 {title}
                             </h1>
                             <div className="flex flex-wrap items-center gap-1">
-                                <StarRating      rating={reviewData?.avgRating?.overall}
-                                count={reviewData?.pagination?.total}
-                                isLoading={reviewData?.data?.length > 0} />
+                                <StarRating rating={reviewData?.avgRating?.overall}
+                                    count={reviewData?.pagination?.total}
+                                    isLoading={reviewData?.data?.length > 0} />
                             </div>
                         </div>
                     </header>
@@ -509,9 +575,15 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
                                             Pair with the matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
                                         </p>
                                     </div>
-                                    <span className="hidden md:inline-flex text-[9px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0">
-                                        Highly Recommended
-                                    </span>
+                                    {isOfferActive && hasExclusiveTag ? (
+                                        <span className="hidden md:inline-flex text-[9px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
+                                            Exclusive Offer Included
+                                        </span>
+                                    ) : (
+                                        <span className="hidden md:inline-flex text-[9px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0">
+                                            Highly Recommended
+                                        </span>
+                                    )}
                                 </div>
                             </header>
 
@@ -537,7 +609,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData , setProductIds }) =>
                         >
                             Add to Cart
                         </button>
-                        
+
                         {(tyreData?.availability === "backorder" || tyreData?.availability === "out_of_stock") ? (
                             <button
                                 onClick={() => handleNotify(false)}

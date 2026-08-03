@@ -66,6 +66,7 @@ export default function CheckoutClient() {
                 const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
                 const isTube = item.selectedGeneric?.type?.toLowerCase() === 'tube' || item.type?.toLowerCase() === 'tube' || item.product?.type?.toLowerCase() === 'tube';
                 const targetId = item.product?._id || sizeObj._id;
+                const unitDiscount = sizeObj.discount || sizeObj.discountAmount || item.discount || item.product?.discount || 0;
 
                 return {
                     ...(isTube ? { tubeId: targetId } : { productId: sizeObj._id || targetId }),
@@ -76,7 +77,7 @@ export default function CheckoutClient() {
                     size: sizeObj.size || 'Standard',
                     shippingCharge: 0,
                     taxAmount: 0,
-                    discount: 0
+                    discount: unitDiscount * (item.quantity || 1)
                 };
             });
 

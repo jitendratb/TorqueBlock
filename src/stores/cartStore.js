@@ -375,7 +375,29 @@ const useCartStore = create(
       },
 
       getCartTotal: () => {
-        return get().cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        return get().cart.reduce((total, item) => {
+          const selected = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+          const disc = selected.discount || selected.discountAmount || item.discount || item.product?.discount || 0;
+          const unitOriginal = item.price || selected.price || 0;
+          const unitSale = disc > 0 ? Math.max(0, unitOriginal - disc) : unitOriginal;
+          return total + (unitSale * (item.quantity || 1));
+        }, 0);
+      },
+
+      getCartOriginalTotal: () => {
+        return get().cart.reduce((total, item) => {
+          const selected = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+          const unitOriginal = item.price || selected.price || 0;
+          return total + (unitOriginal * (item.quantity || 1));
+        }, 0);
+      },
+
+      getCartTotalDiscount: () => {
+        return get().cart.reduce((total, item) => {
+          const selected = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+          const disc = selected.discount || selected.discountAmount || item.discount || item.product?.discount || 0;
+          return total + (disc * (item.quantity || 1));
+        }, 0);
       },
 
       getCartCount: () => {
