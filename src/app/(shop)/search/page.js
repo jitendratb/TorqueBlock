@@ -385,6 +385,95 @@ const Card = ({ item }) => {
                 </article>
             );
         }
+        case 'Tube':
+        case 'Tubes': {
+            const identifier = item.identifier || item._id;
+            const route = `/tubes/${identifier}`;
+            const title = item.name || item.productName || item.title || "Inner Tube";
+            const brandName = item.brand?.name || (typeof item.brand === 'string' ? item.brand : 'Inner Tube');
+            const imageUrl = item.images?.[0]?.url || (typeof item.images?.[0] === 'string' ? item.images[0] : null) || item.image || '/newlogo.webp';
+            const price = item.pricing?.mrp || item.pricing?.price || item.price || null;
+            const sellingPrice = item.pricing?.sellingPrice || price;
+            const discount = item.pricing?.discountAmount || (price && sellingPrice && price > sellingPrice ? price - sellingPrice : 0);
+
+            return (
+                <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
+                    <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center bg-zinc-950 p-4 min-h-[160px]">
+                        <div className="relative w-full h-full min-h-[140px] md:min-h-0">
+                            <Image
+                                src={imageUrl}
+                                alt={title}
+                                fill
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
+                            />
+                        </div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+                        <div className="absolute bottom-4 left-4 rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400 backdrop-blur-md">
+                            Inner Tube
+                        </div>
+                    </div>
+                    <div className="p-4 space-y-2 flex flex-col justify-between h-full min-w-0">
+                        <div className="space-y-2 flex-1 flex flex-col justify-center">
+                            <div className="flex items-center justify-between">
+                                <span className="text-[10px] uppercase tracking-[0.2em] font-extrabold text-orange-400">
+                                    {brandName}
+                                </span>
+                            </div>
+                            <h3 className="text-lg md:text-xl xl:text-2xl font-extrabold text-white leading-snug line-clamp-2">
+                                {title}
+                            </h3>
+                            <div className="flex flex-wrap gap-2 text-xs text-zinc-400 pt-1">
+                                {item.size && (
+                                    <span className="bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full text-zinc-300 font-medium">
+                                        Size: {item.size}
+                                    </span>
+                                )}
+                                {item.valveType && (
+                                    <span className="bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full text-zinc-300 font-medium">
+                                        Valve: {item.valveType}
+                                    </span>
+                                )}
+                                {item.tubeType && (
+                                    <span className="bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-full text-zinc-300 font-medium">
+                                        Type: {item.tubeType}
+                                    </span>
+                                )}
+                                <span className={`border px-2.5 py-0.5 rounded-full font-medium ${item.availability === "in_stock" || !item.availability ? 'border-green-500/20 bg-green-500/10 text-green-400' : item.availability === "backorder" ? 'border-yellow-500/20 bg-yellow-500/10 text-yellow-400' : item.availability === "preorder" ? 'border-blue-500/20 bg-blue-500/10 text-blue-400' : 'border-red-500/20 bg-red-500/10 text-red-400'}`}>
+                                    {item.availability === "in_stock" || !item.availability ? 'In Stock' : item.availability === "backorder" ? 'Available To Order' : item.availability === "preorder" ? 'Pre Order' : 'Out of Stock'}
+                                </span>
+                            </div>
+                            <p className="text-xs text-zinc-400 line-clamp-2 leading-relaxed font-normal">
+                                {item.description || item.shortDescription || 'Heavy-duty inner tube designed for high performance and puncture resistance.'}
+                            </p>
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            {sellingPrice ? (
+                                <div className="flex gap-2 items-baseline">
+                                    <span className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+                                        ₹{Number(sellingPrice).toLocaleString('en-IN')}
+                                    </span>
+                                    {discount > 0 && price && price > sellingPrice && (
+                                        <span className="text-sm font-semibold text-zinc-500 line-through">
+                                            ₹{Number(price).toLocaleString('en-IN')}
+                                        </span>
+                                    )}
+                                    <span className="text-[10px] text-zinc-400 font-medium whitespace-nowrap">
+                                        (inc. all taxes)
+                                    </span>
+                                </div>
+                            ) : (
+                                <div />
+                            )}
+                            <div className="flex items-center justify-end">
+                                <ViewDetailsButton text="View Tube" />
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            );
+        }
         default:
             return (
                 <div className="rounded-xl border border-zinc-800 bg-zinc-900/95 p-4">
@@ -489,6 +578,12 @@ function SearchPageContent() {
                     if (results.results.trending?.data) {
                         const trendingWithType = results.results.trending.data.map(item => ({ ...item, type: 'Trending' }));
                         flattenedResults.push(...trendingWithType);
+                    }
+
+                    if (results.results.tubes?.data) {
+                        const tubesWithType = results.results.tubes.data.map(item => ({ ...item, type: 'Tube' }));
+                        flattenedResults.push(...tubesWithType);
+                        counts.tubes = results.results.tubes.count || results.results.tubes.data.length;
                     }
 
                     // Sort flattened results by relevance score descending

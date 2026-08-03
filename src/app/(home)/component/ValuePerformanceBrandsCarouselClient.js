@@ -23,6 +23,7 @@ export default function ValuePerformanceBrandsCarouselClient({ brands }) {
                                         src={brand?.brandLogo}
                                         alt={brand?.name}
                                         fill
+                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 170px"
                                         priority={index < 4}
                                         className="object-contain p-4 group-hover:scale-110 transition-transform duration-700 ease-out"
                                     />

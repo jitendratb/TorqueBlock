@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IoSearchSharp } from 'react-icons/io5';
+import { IoSearchSharp, IoClose } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
 
@@ -13,6 +13,8 @@ const PLACEHOLDERS = [
   'Search "140/70 R17 Rear"...',
   'Search "Pirelli Diablo Rosso IV"...',
   'Search "Michelin Road 6"...',
+  'Search "17 Inch Inner Tube"...',
+  'Search "Heavy Duty Tube"...',
   'Search "Apollo Alpha H1"...',
   'Search "CEAT Zoom Cruz"...',
   "Search by brand or tyre model...",
@@ -151,6 +153,9 @@ function SearchBar({
                 return `/compare/${id}`;
             case 'blogs':
                 return `/blogs/${id}`;
+            case 'tube':
+            case 'tubes':
+                return `/tubes/${id}`;
             default:
                 return `/search?q=${encodeURIComponent(id)}`;
         }
@@ -198,7 +203,7 @@ function SearchBar({
                 onClick={() => inputRef.current?.focus()}
             >
                 <IoSearchSharp className="text-white text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />
-                <div className="relative flex-1 min-h-[1.6rem] flex items-center">
+                <div className="relative flex-1 min-h-[1.6rem] flex items-center min-w-0">
                     <input
                         ref={inputRef}
                         type="text"
@@ -215,6 +220,20 @@ function SearchBar({
                         aria-label="Search"
                     />
                 </div>
+                {searchInput.length > 0 && (
+                    <button
+                        type="button"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            clearSearch();
+                            inputRef.current?.focus();
+                        }}
+                        className="p-1 text-zinc-400 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-white/10 shrink-0 ml-1 z-20"
+                        aria-label="Clear search input"
+                    >
+                        <IoClose className="text-base md:text-lg" />
+                    </button>
+                )}
             </div>
 
             {showSuggestions && storeShowSuggestions && suggestions.length > 0 && (
@@ -235,7 +254,7 @@ function SearchBar({
                                 >
                                     <span className="font-semibold text-slate-800 truncate text-[10px] md:text-xs">{item.label}</span>
                                     <span className="rounded-full bg-black/5 text-slate-600 px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider">
-                                        {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type} 
+                                        {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type === "Tube" || item.type === "Tubes" ? "Tube" : item.type} 
                                     </span>
                                 </Link>
                             );

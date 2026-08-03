@@ -172,6 +172,21 @@ const useSearchStore = create(
                     });
                 }
 
+                // Add all tubes
+                if (searchResults?.results?.tubes?.data) {
+                    searchResults.results.tubes.data.forEach(tube => {
+                        items.push({
+                            type: 'Tube',
+                            label: tube.name || tube.productName || tube.identifier,
+                            query: tube.name || tube.identifier,
+                            identifier: tube.identifier || tube._id,
+                            relevanceScore: tube.relevanceScore || 0,
+                            brand: tube.brand,
+                            size: tube.size
+                        });
+                    });
+                }
+
                 // Sort items by relevanceScore descending
                 items.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
