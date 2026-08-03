@@ -37,7 +37,7 @@ export default function OfferCountdownTimer({ targetDate, label = "Offer Ends In
     const pad = (n) => String(n).padStart(2, '0');
 
     return (
-        <div className={`flex  items-center justify-center gap-1.5 px-2 lg:px-4 py-1 lg:py-2 rounded-xl border border-orange-500/40 bg-zinc-950/80 backdrop-blur-md shadow-[0_0_20px_rgba(249,115,22,0.2)] max-w-full box-border ${className}`}>
+        <div className={`flex  items-center justify-center gap-1.5 px-2 lg:px-4 py-1 lg:py-2 rounded-xl border border-white/15 bg-white/10 backdrop-blur-3xl shadow-[0_0_20px_rgba(249,115,22,0.2)] max-w-full box-border ${className}`}>
             <div className="flex items-center gap-1 shrink-0">
                 <FaClock className="text-orange-400 text-xs shrink-0 drop-shadow-[0_0_6px_rgba(249,115,22,0.8)]" aria-hidden="true" />
                 <span className="text-[7px] lg:text-xs font-black uppercase text-orange-300 tracking-wider">
