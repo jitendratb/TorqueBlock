@@ -6,6 +6,7 @@ import TyresSizeClient from '../../../Components/TyresSizeComponents/TyreSizeCli
 import TyreSizeSchema from '@/components/seo/TyreSizeSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import ReviewService from '@/services/reviewSevice';
+import { notFound } from 'next/navigation';
 
 export async function generateMetadata({ params }) {
     const { slug, size } = await params;
@@ -58,7 +59,12 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug, size } = await params;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
-    const Review = await ReviewService.getReviews({ productId: tyreBySize?._id })
+
+    if (!tyreBySize) {
+        notFound();
+    }
+
+    const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
 
     const breadcrumbItems = [
         { label: 'Tyres', href: '/tyres' },

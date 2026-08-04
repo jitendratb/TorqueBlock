@@ -3,13 +3,13 @@ import Image from "next/image";
 import { useState } from "react";
 import clsx from "clsx";
 
-export default function CustomImage({ src, alt = "image", width, height, fill = false, className = "", imageClassName = "", priority = false, sizes="100vw", quality = 90, skeletonClassName = "", fallback = "/fallback.webp", ...props }) {
+export default function CustomImage({ src, alt = "image", width, height, fill = false, className = "", imageClassName = "", priority = false, sizes, quality = 90, skeletonClassName = "", fallback = "/fallback.webp", ...props }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const safeSrc = typeof src === "string" ? src.trim() : src;
 
     const defaultSizes = fill ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : undefined;
-    const finalSizes = sizes || defaultSizes;
+    const finalSizes = sizes !== undefined ? sizes : defaultSizes;
 
     return (
         <div className={clsx("relative overflow-hidden", fill ? "w-full h-full" : "", className)} style={!fill ? { width, height } : undefined} >
