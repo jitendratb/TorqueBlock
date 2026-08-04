@@ -7,9 +7,9 @@ import { FaTrash, FaPlus, FaMinus } from "react-icons/fa6";
 const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) => {
     const product = item.product || {};
     const isTube = item.selectedGeneric?.type === 'Tube' || item.type === 'Tube' || product.type === 'Tube';
-
+   console.log(product)
     const productName = product.name || product.productName || 'Product';
-    const rawBrand = typeof product.brand === 'object' ? product.brand?.name : product.brand;
+    const rawBrand =  product.brand?.name
     const brandName = rawBrand || (isTube ? 'TorqueBlock' : 'Performance');
 
     const itemImage = isTube
