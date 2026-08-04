@@ -302,7 +302,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
     console.log('tireData', tyreData)
 
     return (
-        <section aria-labelledby="product-details-heading" className="w-full relative pb-4 lg:pb-0">
+        <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
                 {/* Left Column - Gallery and Expert Advice */}
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
@@ -340,16 +340,16 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
 
                             {isOfferActive && hasExclusiveTag && offerExpireDate && (
                                 <div className="absolute bottom-4  right-4 border-t border-white/10 flex items-center justify-between gap-2">
-                                        <OfferCountdownTimer targetDate={offerExpireDate} label="Exclusive Offer Ends In" />
-                                    </div>
+                                    <OfferCountdownTimer targetDate={offerExpireDate} label="Exclusive Offer Ends In" />
+                                </div>
                             )}
                         </div>
                     </div>
                     <aside className="relative hidden lg:flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                             <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
-                            <p className="text-xs sm:text-xs font-medium text-zinc-400 leading-relaxed">
-                                Ask our <span className="text-green-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
+                            <p className="text-xs font-medium text-zinc-400 leading-relaxed">
+                                Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
                             </p>
                         </div>
                         <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
@@ -572,7 +572,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                                             Complete Your Tyre Set
                                         </h3>
                                         <p className="text-zinc-400 text-[10px] md:text-[11px] font-semibold tracking-wide">
-                                           Recommended matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
+                                            Recommended matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
                                         </p>
                                     </div>
                                     {isOfferActive && hasExclusiveTag && (
@@ -623,7 +623,26 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                             </button>
                         )}
                     </div>
+
+
+                    <aside className="relative  flex lg:hidden flex-col md:flex-row items-center justify-between gap-2 md:gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
+                        <div className="relative z-10  flex flex-col items-center sm:items-start text-center sm:text-left w-full">
+                            <h3 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
+                            <p className="text-[10px] md:text-xs font-medium text-zinc-400 leading-relaxed">
+                                Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
+                            </p>
+                        </div>
+                        <div className="flex items-center shrink-0 w-full md:w-auto  sm:mt-0">
+                            <WhatsAppButton
+                                text="Contact Support"
+                                value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
+                                className="md:!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
+                            />
+                        </div>
+                    </aside>
                 </div>
+
+
             </div>
 
             <Login isOpen={isLogin} onClose={handleCloseLogin} />
