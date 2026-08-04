@@ -167,17 +167,7 @@ export default function OrderCard({ order, onCancelClick }) {
           )}
         </button>
 
-        <div className="flex items-center gap-3">
-          {isCancellable && (
-            <button
-              onClick={() => onCancelClick(order._id)}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border border-rose-500/20 hover:border-rose-500 bg-rose-500/5 hover:bg-rose-500/10 text-rose-400 hover:text-rose-300 transition-all duration-300 cursor-pointer shadow-[0_2px_10px_rgba(244,63,94,0.05)] active:scale-[0.98]"
-            >
-              <IoCloseCircleOutline className="text-xs" />
-              Cancel Order Request
-            </button>
-          )}
-        </div>
+     
       </div>
 
       {isExpanded && (
