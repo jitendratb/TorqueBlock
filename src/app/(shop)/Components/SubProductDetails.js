@@ -347,14 +347,14 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                     </div>
                     <aside className="relative hidden lg:flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                            <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Need Free Expert Advice?</h3>
+                            <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
                             <p className="text-xs sm:text-xs font-medium text-zinc-400 leading-relaxed">
                                 Ask our <span className="text-green-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
                             </p>
                         </div>
                         <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
                             <WhatsAppButton
-                                text="Chat with a Tyre Expert"
+                                text="Contact Support"
                                 value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
                                 className="!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
                             />
@@ -569,19 +569,15 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                                 <div className="flex flex-col md:flex-row md:items-center gap-2 justify-between flex-1">
                                     <div className="flex flex-col">
                                         <h3 id="matching-tyres-heading" className="text-xs md:text-sm font-black uppercase tracking-[0.25em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
-                                            Complete Your Set
+                                            Complete Your Tyre Set
                                         </h3>
                                         <p className="text-zinc-400 text-[10px] md:text-[11px] font-semibold tracking-wide">
-                                            Pair with the matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
+                                           Recommended matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
                                         </p>
                                     </div>
-                                    {isOfferActive && hasExclusiveTag ? (
+                                    {isOfferActive && hasExclusiveTag && (
                                         <span className="hidden md:inline-flex text-[9px] bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0 shadow-[0_0_10px_rgba(16,185,129,0.2)]">
                                             Exclusive Offer Included
-                                        </span>
-                                    ) : (
-                                        <span className="hidden md:inline-flex text-[9px] bg-orange-500/10 text-orange-400 border border-orange-500/20 px-2.5 py-1 rounded-full font-black uppercase tracking-widest whitespace-nowrap shrink-0">
-                                            Highly Recommended
                                         </span>
                                     )}
                                 </div>
