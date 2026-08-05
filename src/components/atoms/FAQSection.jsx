@@ -23,7 +23,7 @@ export default function FAQSection({ faqs = [] }) {
             <FaQuestionCircle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
         </div>
         <div>
-            <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+            <h2 className="text-xs md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
                 FAQs
             </h2>
             <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
@@ -42,7 +42,7 @@ export default function FAQSection({ faqs = [] }) {
             >
               <button
                 onClick={() => toggleAccordion(index)}
-                className="w-full flex items-center justify-between p-3 text-left text-white font-bold text-sm md:text-base focus:outline-none"
+                className="w-full flex items-center justify-between p-3 text-left text-white font-bold text-xs md:text-base focus:outline-none"
               >
                 <span>{faq.question}</span>
                 <span className="shrink-0 ml-4 text-orange-500">
@@ -55,7 +55,7 @@ export default function FAQSection({ faqs = [] }) {
                   isOpen ? "max-h-[500px] border-t border-white/5 p-3" : "max-h-0 overflow-hidden"
                 }`}
               >
-                <p className="text-zinc-400 text-xs md:text-sm leading-relaxed">
+                <p className="text-zinc-400 text-[9px] md:text-sm leading-relaxed">
                   {faq.answer}
                 </p>
               </div>

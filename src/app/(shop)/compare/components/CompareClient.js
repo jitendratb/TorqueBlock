@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { FiSearch, FiChevronRight } from "react-icons/fi";
 import useCompareStore from "@/stores/compareStore";
 import CompareBanner from "./CompareBanner";
 import ComparisonCard from "./ComparisonCard";
 import CardSkeleton from "./CardSkeleton";
+import CompareSearch from "./CompareSearch";
 
 function CompareClient({ initialComparisons, initialPage, initialTotalPages, initialTotalCount }) {
     const { comparisons: storeComparisons, loading, fetchComparisons, hasMore } = useCompareStore();
@@ -87,26 +87,14 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
     return (
         <div className="space-y-6 relative min-h-screen">
             <CompareBanner />
-            
-            <div className="flex justify-end">
-                <div className="relative w-full md:max-w-md group">
-                    <div className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-rose-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
-                    <input
-                        type="text"
-                        placeholder="SEARCH BATTLES..."
-                        className="relative w-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-3.5 text-sm text-white font-bold placeholder:text-zinc-500 focus:outline-none focus:border-orange-500/40 focus:bg-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.4)] transition-all duration-500"
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                    />
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2">
-                        {loading && searchQuery && page === 1 ? (
-                            <div className="animate-spin h-5 w-5 border-2 border-orange-500 border-t-transparent rounded-full" />
-                        ) : (
-                            <FiSearch size={20} className={searchQuery ? "text-orange-400 drop-shadow-[0_0_5px_rgba(251,146,60,0.8)]" : "text-zinc-500"} />
-                        )}
-                    </div>
-                </div>
-            </div>
+
+            <CompareSearch 
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchChange}
+                onClear={handleResetSearch}
+                loading={loading && searchQuery && page === 1}
+                placeholder="Search Compare  Tyres..."
+            />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {loading && page === 1 ? (
@@ -141,7 +129,7 @@ function CompareClient({ initialComparisons, initialPage, initialTotalPages, ini
                 )}
             </div>
 
-            <div ref={observerTarget}  />
+            <div ref={observerTarget} />
         </div>
     );
 }

@@ -19,7 +19,6 @@ export default function CategoryDetailsClient({ category }) {
     const firstPart = nameParts[0];
     const secondPart = nameParts.length > 1 ? nameParts.slice(1).join(' ') : ' Tyres';
 
-    console.log(category)
 
     return (
         <div className="space-y-4 md:space-y-4 pb-4">

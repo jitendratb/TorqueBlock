@@ -2,7 +2,7 @@ import TorqueBlockApi from '@/lib/api';
 
 class VehicleService {
     async getVehicleBrands(params = {}) {
-        const { page = 1, limit = 24, query = '' } = params;
+        const { page = 1, limit = 16, query = '' } = params;
 
         try {
             const res = await TorqueBlockApi.get('intent/vehicle/data', {

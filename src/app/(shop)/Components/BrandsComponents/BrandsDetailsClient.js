@@ -81,6 +81,7 @@ function BrandsDetailsClient({ brand }) {
                 src={brand?.brandLogo}
                 alt={`${brandName} Logo`}
                 fill
+                sizes="(max-width: 640px) 80px, 128px"
                 imageClassName="object-contain"
               />
             </div>

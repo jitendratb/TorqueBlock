@@ -22,7 +22,6 @@ export async function generateMetadata({ params }) {
   const tyre1 = compare?.tyre1;
   const tyre2 = compare?.tyre2;
 
-  console.log(compare)
 
   const parts = (slug || '').split('-vs-');
   const tyre1Name = tyre1?.productName || parts[0]?.replace(/-/g, ' ') || 'Tyre 1';

@@ -81,7 +81,7 @@ export default async function BrandPage({ params }) {
     const faqs = getBikeFAQs(bikeBrand);
 
     return (
-        <div className="space-y-4 lg:space-y-6 pb-4 overflow-hidden  xl:overflow-visible">
+        <div className="space-y-4  pb-4">
             <Breadcrumb items={breadcrumbItems} />
             <BrandModelsClient data={bikeBrand} />
             <BikeSchema bike={bikeBrand} />

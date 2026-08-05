@@ -57,7 +57,6 @@ export default function TubeCard({ tube, className = '', addToCartStatus = false
         toast.success("Tube added to cart!");
     };
 
-    console.log(tube?.images?.[0]?.url)
 
     return (
         <div

@@ -299,7 +299,6 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
         );
     }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
 
-    console.log('tireData', tyreData)
 
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">

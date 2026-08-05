@@ -25,7 +25,6 @@ const ComparisonCard = ({ comparison, index }) => {
     const t1 = parseTyreName(tyre1Name);
     const t2 = parseTyreName(tyre2Name);
 
-    console.log(comparison)
 
     return (
         <Link

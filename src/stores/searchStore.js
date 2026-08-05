@@ -148,7 +148,6 @@ const useSearchStore = create(
                 // Add all blogs
                 if (searchResults?.results?.blogs?.data) {
                     searchResults.results.blogs.data.forEach(blog => {
-                        console.log(searchResults?.results?.blogs?.data)
                         items.push({
                             type: 'Blogs',
                             label: blog.header,

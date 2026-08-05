@@ -16,7 +16,6 @@ export async function generateMetadata({ params }) {
     const { slug } = await params;
     const tube = await getTube(slug);
 
-    console.log(tube)
 
     if (!tube) return {};
 

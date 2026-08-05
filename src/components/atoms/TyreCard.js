@@ -43,7 +43,7 @@ export default function ProductCard({ product, tyre, className  }) {
         >
             <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 via-orange-500/0 to-orange-500/5 [.light-mode_&]:to-orange-500/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
-            <div className="relative w-full h-45 flex items-center justify-center p-4">
+            <div className="relative w-full h-48 flex items-center justify-center p-4">
                 <Image
                     src={product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || tyre?.productImages?.[0] || '/newLogo.webp'}
                     alt={title}

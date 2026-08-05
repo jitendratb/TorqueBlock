@@ -36,7 +36,6 @@ const useReviewStore = create((set, get) => ({
         set({ fetchLoading: true, error: null });
         try {
             const response = await ReviewService.getReviews(filters);
-            console.log(response)
             if (response.success) {
                 set((state) => ({
                     reviews: append ? [...state.reviews, ...response.data] : response.data,
@@ -59,7 +58,6 @@ const useReviewStore = create((set, get) => ({
         try {
             const response = await ReviewService.addReview(payload);
 
-            console.log(response)
             if (response?.success && response?.data) {
                 const currentReviews = get().reviews || [];
                 set({ submitLoading: false, reviews: [response.data, ...currentReviews] });

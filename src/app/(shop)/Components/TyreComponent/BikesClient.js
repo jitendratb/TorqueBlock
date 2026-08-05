@@ -1,76 +1,111 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import Image from "@/components/molecules/CustomImage";
 import Link from "next/link";
 import { BikeBrandSkeletonGroup } from "./BikeBrandSkeleton";
-import { FiSearch, FiArrowRight } from "react-icons/fi";
+import { FiSearch, FiArrowRight, FiRotateCcw, FiAlertCircle } from "react-icons/fi";
 import vehicleService from "@/services/vehicleService";
 
-import Pagination from "@/components/atoms/Pagination";
 import BikeCard from "../BikeCard";
+import TyresPageBanner from "../TyresPageBanner";
+import CompareSearch from "../../compare/components/CompareSearch";
+import Carousel from "@/components/organisms/Carousel";
 
 function BikesClient({ initialBrands }) {
     const initialData = Array.isArray(initialBrands) ? initialBrands : initialBrands?.vehicleBrandsData || [];
     const initialPage = initialBrands?.pagination?.page || 1;
     const initialTotalPages = initialBrands?.pagination?.totalPages || 1;
-    const initialTotalCount = initialBrands?.pagination?.totalCount || 0;
 
     const [brands, setBrands] = useState(initialData);
     const [loading, setLoading] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [debouncedQuery, setDebouncedQuery] = useState("");
     const [page, setPage] = useState(initialPage);
-    const [totalPages, setTotalPages] = useState(initialTotalPages);
-    const [totalCount, setTotalCount] = useState(initialTotalCount);
+    const [hasMore, setHasMore] = useState(initialPage < initialTotalPages);
 
-    
-    const topRef = useRef(null);
+    const observerTarget = useRef(null);
 
     useEffect(() => {
         const timer = setTimeout(() => {
             setDebouncedQuery(searchQuery);
-        }, 500);
+        }, 400);
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
     useEffect(() => {
         if (debouncedQuery !== "") {
             setPage(1);
-            fetchBrands(1, debouncedQuery);
-        } else if (debouncedQuery === "") {
+            fetchBrands(1, debouncedQuery, false);
+        } else {
             setBrands(initialData);
             setPage(initialPage);
-            setTotalPages(initialTotalPages);
-            setTotalCount(initialTotalCount);
+            setHasMore(initialPage < initialTotalPages);
         }
     }, [debouncedQuery]);
 
     useEffect(() => {
-        if (page !== initialPage || debouncedQuery !== "") {
-            fetchBrands(page, debouncedQuery);
-            if (topRef.current) {
-                topRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+        if (page > 1) {
+            fetchBrands(page, debouncedQuery, true);
         }
     }, [page]);
 
-    async function fetchBrands(pageNum, query) {
+    const handleLoadMore = useCallback(() => {
+        if (hasMore && !loading) {
+            setPage((prev) => prev + 1);
+        }
+    }, [hasMore, loading]);
+
+    useEffect(() => {
+        if (!hasMore || loading) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0].isIntersecting) {
+                    handleLoadMore();
+                }
+            },
+            { threshold: 0.1, rootMargin: "150px" }
+        );
+
+        const currentTarget = observerTarget.current;
+        if (currentTarget) {
+            observer.observe(currentTarget);
+        }
+
+        return () => {
+            if (currentTarget) {
+                observer.unobserve(currentTarget);
+            }
+        };
+    }, [hasMore, loading, handleLoadMore]);
+
+    async function fetchBrands(pageNum, query, isAppend = false) {
         try {
             setLoading(true);
-            const response = await vehicleService.getVehicleBrands({ 
-                page: pageNum, 
-                limit: 24, 
-                query 
+            const response = await vehicleService.getVehicleBrands({
+                page: pageNum,
+                limit: 16,
+                query
             });
-            
+
             const responseData = Array.isArray(response) ? response : response?.vehicleBrandsData || [];
             const pagination = response?.pagination;
-            
-            setBrands(responseData);
+
+            if (isAppend && pageNum > 1) {
+                setBrands((prev) => {
+                    const existingIds = new Set(prev.map((b) => b._id || b.identifier));
+                    const newUnique = responseData.filter((b) => !existingIds.has(b._id || b.identifier));
+                    return [...prev, ...newUnique];
+                });
+            } else {
+                setBrands(responseData);
+            }
+
             if (pagination) {
-                setTotalPages(pagination.totalPages);
-                setTotalCount(pagination.totalCount);
+                setHasMore(pageNum < pagination.totalPages);
+            } else {
+                setHasMore(responseData.length >= 16);
             }
         } catch (error) {
             console.error("Failed to fetch bike brands", error);
@@ -80,67 +115,70 @@ function BikesClient({ initialBrands }) {
     }
 
     return (
-        <div className="space-y-8 md:space-y-12" ref={topRef}>
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8 px-2">
-                <div className="space-y-3 md:space-y-4">
-                   
-                    <h1 className="text-5xl lg:text-7xl font-black text-white uppercase tracking-tighter leading-none">
-                        SELECT YOUR <br />
-                        <span className="text-orange-500 outline-text text-transparent">WEAPON</span>
-                    </h1>
-                </div>
+        <div className="space-y-4">
+            <TyresPageBanner
+                badge="Exclusive Brands"
+                title="Motorcycle Brands"
+                description="Find precision-engineered tyres built specifically for your motorcycle brand and model."
+            />
 
-                <div className="relative w-full md:max-w-md group">
-                    <input
-                        type="text"
-                        placeholder="SEARCH BRAND..."
-                        className="w-full bg-zinc-950 border border-zinc-900 rounded-xl md:rounded-2xl px-5 py-4 md:px-6 md:py-5 text-sm md:text-base text-white font-black placeholder:text-zinc-700 focus:outline-none focus:border-orange-500 transition-all duration-500 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                    <div className="absolute right-5 md:right-6 top-1/2 -translate-y-1/2">
-                        {loading && searchQuery ? (
-                            <div className="animate-spin h-4 w-4 md:h-5 md:w-5 border-2 border-orange-500 border-t-transparent rounded-full" />
-                        ) : (
-                            <FiSearch size={20} className={searchQuery ? "text-orange-500" : "text-zinc-700"} />
-                        )}
-                    </div>
-                </div>
+
+
+            <div className="flex justify-end  gap-4 ">
+
+
+                <CompareSearch
+                    searchQuery={searchQuery}
+                    onSearchChange={(e) => setSearchQuery(e.target.value)}
+                    onClear={() => setSearchQuery("")}
+                    loading={loading && page === 1}
+                    placeholder="SEARCH BRAND..."
+                    className="w-full "
+                />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 px-2">
-                {loading ? (
-                    <BikeBrandSkeletonGroup count={6} />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                {loading && page === 1 ? (
+                    <BikeBrandSkeletonGroup count={8} />
                 ) : brands.length > 0 ? (
-                    brands.map((brand, index) => (
-                       <BikeCard key={brand?._id} brand={brand} index={index} />
-                    ))
+                    <>
+                        {brands.map((brand, index) => (
+                            <BikeCard key={brand?._id || index} brand={brand} index={index} />
+                        ))}
+                        {loading && page > 1 && (
+                            <BikeBrandSkeletonGroup count={4} />
+                        )}
+                    </>
                 ) : (
-                    <div className="col-span-full py-20 md:py-32 text-center border-2 border-dashed border-zinc-900 rounded-[2rem] md:rounded-[3rem] bg-zinc-950 mx-2">
-                        <div className="inline-flex items-center gap-3 px-5 py-2 bg-red-500/10 border border-red-500/20 text-red-500 text-[8px] md:text-[10px] font-black uppercase tracking-[0.5em] rounded-full mb-6 md:mb-8">
-                            <div className="w-2 h-2 bg-red-500 rounded-full animate-ping" />
-                            System Failure
+                    <div className="col-span-full py-16 md:py-24 text-center border border-dashed border-zinc-800/80 rounded-3xl bg-white/10 backdrop-blur-xl mx-2 px-4">
+                        <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-bold uppercase tracking-wider rounded-full mb-6">
+                            <FiAlertCircle size={14} />
+                            <span>No Results Found</span>
                         </div>
-                        <p className="text-zinc-500 text-2xl md:text-4xl font-black uppercase tracking-tighter">No Brands Located</p>
-                        <button
-                            onClick={() => setSearchQuery("")}
-                            className="mt-8 md:mt-12 text-zinc-400 hover:text-white font-black uppercase tracking-[0.3em] text-[10px] transition-colors border-b border-zinc-800 pb-2"
-                        >
-                            REBOOT SEARCH
-                        </button>
+                        <h3 className="text-zinc-200 text-xl md:text-3xl font-black uppercase tracking-tight mb-2">
+                            No Matching Brands Found
+                        </h3>
+                        <p className="text-zinc-400 text-xs md:text-sm max-w-md mx-auto leading-relaxed mb-6">
+                            {searchQuery ? (
+                                <>We couldn't find any motorcycle brands matching <span className="text-orange-400 font-semibold">"{searchQuery}"</span>. Please try refining your query or clear the search.</>
+                            ) : (
+                                <>No motorcycle brands are currently available. Please check back later.</>
+                            )}
+                        </p>
+                        {searchQuery && (
+                            <button
+                                onClick={() => setSearchQuery("")}
+                                className="inline-flex items-center gap-2 px-6 py-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white hover:border-orange-500/40 text-xs font-bold uppercase tracking-wider rounded-full transition-all duration-300 shadow-lg"
+                            >
+                                <FiRotateCcw size={14} className="text-orange-500" />
+                                <span>Reset Search</span>
+                            </button>
+                        )}
                     </div>
                 )}
             </div>
 
-            <div className="">
-                <Pagination 
-                    page={page}
-                    totalPages={totalPages}
-                    totalCount={totalCount}
-                    onPageChange={setPage}
-                    loading={loading}
-                />
-            </div>
+            <div ref={observerTarget} className=" w-full" />
         </div>
     );
 }
