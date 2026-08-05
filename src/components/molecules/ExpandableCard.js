@@ -31,14 +31,14 @@ export default function ExpandableCard({ icon: Icon, title, subtitle, content, c
                 {content ? (
                     <p 
                         className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500 whitespace-pre-wrap"
-                        style={expandable && !isExpanded ? { display: '-webkit-box', WebkitLineClamp: lineClamp, WebkitBoxOrient: 'vertical',  } : {}}
+                        style={expandable && !isExpanded ? { display: '-webkit-box', WebkitLineClamp: lineClamp, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
                     >
                         {content}
                     </p>
                 ) : (
                     <div 
                         className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500"
-                        style={expandable && !isExpanded ? { display: '-webkit-box', WebkitLineClamp: lineClamp, WebkitBoxOrient: 'vertical',  } : {}}
+                        style={expandable && !isExpanded ? { display: '-webkit-box', WebkitLineClamp: lineClamp, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
                     >
                         {children}
                     </div>
