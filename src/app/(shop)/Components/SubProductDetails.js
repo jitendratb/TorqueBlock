@@ -598,7 +598,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                         </section>
                     )}
 
-                    <div className={`grid gap-4 relative z-10 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    <div className={`grid gap-4 relative z-10 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
                         <button
                             onClick={handleAddToCart}
                             className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
@@ -619,7 +619,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                                 onClick={() => handleBuyNow(false)}
                                 className="py-4 px-4 flex gap-2 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                Buy Now {selectedOpposite && <span className="hidden md:inline-block ml-1"> ({formatPrice(totalPrice)})</span>}
+                                Buy Now {selectedOpposite && <span className="inline-block ml-1"> ({formatPrice(totalPrice)})</span>}
                             </button>
                         )}
                     </div>
