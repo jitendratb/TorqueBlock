@@ -1,5 +1,5 @@
 import Breadcrumb from "@/components/atoms/BreadCrumb";
-import tubesService from "@/services/tubesService";
+import TubesService from "@/services/TubesService";
 import dynamic from 'next/dynamic';
 const TubesDetailsClient = dynamic(() => import('../../Components/TubesComponents/TubesDetailsClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import { cache } from "react";
@@ -9,7 +9,8 @@ import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from "@/lib/utils/imageUtils";
 
 const getTube = cache(async (slug) => {
-    return await tubesService.getTubeBySlug(slug);
+    const response = await TubesService.getTubeById(slug);
+    return response?.data?.data || response?.data || response;
 });
 
 export async function generateMetadata({ params }) {
