@@ -5,7 +5,7 @@ import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
 import { FiArrowRight, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
 
-export default function ProductCard({ product, tyre, className  }) {
+export default function ProductCard({ product, tyre, className, opposteProductId  }) {
     const router = useRouter();
 
     const isSingleSize = !!product?.price;
@@ -33,7 +33,23 @@ export default function ProductCard({ product, tyre, className  }) {
 
     const handleCardClick = () => {
         const tyreIdentifier = product?.availableTyres?.identifier || tyre?.identifier || "unknown";
-        router.push(`/tyres/${tyreIdentifier}/${product?.size?.toLowerCase().replace(/[\s/]/g, '-')}`);
+        let url = `/tyres/${tyreIdentifier}/${product?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
+        
+        if (opposteProductId) {
+            let queryValue = opposteProductId;
+            
+            if (Array.isArray(opposteProductId)) {
+                queryValue = opposteProductId.map(item => 
+                    item?.productIds?._id || item?._id || item
+                ).filter(Boolean).join(',');
+            } else if (typeof opposteProductId === 'object') {
+                queryValue = opposteProductId?._id || String(opposteProductId);
+            }
+            
+            url += `?opposteProductId=${encodeURIComponent(queryValue)}`;
+        }
+        
+        router.push(url);
     };
 
     return (

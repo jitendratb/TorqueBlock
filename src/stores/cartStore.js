@@ -3,6 +3,8 @@ import { persist } from 'zustand/middleware';
 import useAuthStore from './authStore';
 import cartService from '@/services/cartService';
 
+const normalizeId = (id) => String(id || '').replace(/_offer_[^ -]+/g, '').replace(/-+/g, '-').replace(/-$/, '');
+
 const reconstructCart = (backendItems) => {
   const cartGrouped = [];
   const itemsMap = {};
@@ -23,30 +25,35 @@ const reconstructCart = (backendItems) => {
       _id: sizeObj?._id || item.productId || item._id,
       size: sizeObj?.size || item.size || 'Standard',
       price: sizeObj?.price || item.unitPrice || 0,
+      discount: item.discountPrice !== undefined && item.discountPrice !== null ? item.discountPrice : (sizeObj?.discount || item.discount || 0),
       position: sizeObj?.position || (item.size?.toLowerCase().includes('front') ? 'Front' : item.size?.toLowerCase().includes('rear') ? 'Rear' : 'Generic'),
       sku: item.sku,
-      type: item.type || sizeObj?.type || 'Tyre'
+      type: item.type || sizeObj?.type || 'Tyre',
+      offerId: item.offerId || sizeObj?.offerId,
+      isOfferItem: item.isOfferItem || sizeObj?.isOfferItem
     };
 
     const position = (sizeItem.position || '').toLowerCase();
-    let itemId = '';
     let selectedFront = null;
     let selectedRear = null;
     let selectedGeneric = null;
 
     if (position.includes('front')) {
-      itemId = `${parentProduct._id}-${sizeItem._id}--`;
       selectedFront = sizeItem;
     } else if (position.includes('rear')) {
-      itemId = `${parentProduct._id}--${sizeItem._id}-`;
       selectedRear = sizeItem;
     } else {
-      itemId = `${parentProduct._id}---${sizeItem._id}`;
       selectedGeneric = sizeItem;
     }
 
+    const itemId = normalizeId(`${parentProduct._id}-${sizeItem._id}`);
+
     if (itemsMap[itemId]) {
       itemsMap[itemId].quantity += item.quantity;
+      if (selectedFront) itemsMap[itemId].selectedFront = sizeItem;
+      if (selectedRear) itemsMap[itemId].selectedRear = sizeItem;
+      if (selectedGeneric) itemsMap[itemId].selectedGeneric = sizeItem;
+      itemsMap[itemId].price = sizeItem.price;
     } else {
       itemsMap[itemId] = {
         id: itemId,
@@ -86,6 +93,7 @@ const useCartStore = create(
             const getImage = () => item.product.productImages?.[0] || (typeof item.product.images?.[0] === 'string' ? item.product.images[0] : item.product.images?.[0]?.url) || '';
 
             if (item.selectedFront) {
+              const frontDisc = item.selectedFront.discount || item.selectedFront.discountAmount || 0;
               promises.push(cartService.addToCart({
                 productId: item.selectedFront._id,
                 productName: item.product.productName || item.product.name,
@@ -94,12 +102,13 @@ const useCartStore = create(
                 size: item.selectedFront.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedFront.price,
-                discountPrice: 0,
-                totalPrice: item.selectedFront.price * item.quantity,
+                discountPrice: frontDisc,
+                totalPrice: Math.max(0, item.selectedFront.price - frontDisc) * item.quantity,
                 type: itemType
               }));
             }
             if (item.selectedRear) {
+              const rearDisc = item.selectedRear.discount || item.selectedRear.discountAmount || 0;
               promises.push(cartService.addToCart({
                 productId: item.selectedRear._id,
                 productName: item.product.productName || item.product.name,
@@ -108,12 +117,13 @@ const useCartStore = create(
                 size: item.selectedRear.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedRear.price,
-                discountPrice: 0,
-                totalPrice: item.selectedRear.price * item.quantity,
+                discountPrice: rearDisc,
+                totalPrice: Math.max(0, item.selectedRear.price - rearDisc) * item.quantity,
                 type: itemType
               }));
             }
             if (item.selectedGeneric) {
+              const genDisc = item.selectedGeneric.discount || item.selectedGeneric.discountAmount || 0;
               promises.push(cartService.addToCart({
                 productId: item.selectedGeneric._id,
                 productName: item.product.productName || item.product.name,
@@ -122,8 +132,8 @@ const useCartStore = create(
                 size: item.selectedGeneric.size,
                 quantity: item.quantity,
                 unitPrice: item.selectedGeneric.price,
-                discountPrice: 0,
-                totalPrice: item.selectedGeneric.price * item.quantity,
+                discountPrice: genDisc,
+                totalPrice: Math.max(0, item.selectedGeneric.price - genDisc) * item.quantity,
                 type: itemType
               }));
             }
@@ -152,9 +162,10 @@ const useCartStore = create(
 
       addToCart: async (product, selectedFront, selectedRear, selectedGeneric, isSliderOpen = true) => {
         const itemsToAdd = [];
+
         if (selectedFront) {
           itemsToAdd.push({
-            id: `${product._id}-${selectedFront._id || selectedFront.size}--`,
+            id: normalizeId(`${product._id}-${selectedFront._id || selectedFront.size}`),
             selectedFront,
             selectedRear: null,
             selectedGeneric: null,
@@ -163,7 +174,7 @@ const useCartStore = create(
         }
         if (selectedRear) {
           itemsToAdd.push({
-            id: `${product._id}--${selectedRear._id || selectedRear.size}-`,
+            id: normalizeId(`${product._id}-${selectedRear._id || selectedRear.size}`),
             selectedFront: null,
             selectedRear,
             selectedGeneric: null,
@@ -172,7 +183,7 @@ const useCartStore = create(
         }
         if (selectedGeneric) {
           itemsToAdd.push({
-            id: `${product._id}---${selectedGeneric._id || selectedGeneric.size}`,
+            id: normalizeId(`${product._id}-${selectedGeneric._id || selectedGeneric.size}`),
             selectedFront: null,
             selectedRear: null,
             selectedGeneric,
@@ -181,24 +192,45 @@ const useCartStore = create(
         }
 
         set((state) => {
-          let newCart = [...state.cart];
+          let currentCart = [...state.cart];
+          const mergedMap = {};
+
+          currentCart.forEach((item) => {
+            const cleanId = normalizeId(item.id);
+            if (mergedMap[cleanId]) {
+              mergedMap[cleanId].quantity += item.quantity;
+            } else {
+              mergedMap[cleanId] = { ...item, id: cleanId };
+            }
+          });
 
           itemsToAdd.forEach((itemToAdd) => {
-            const existingItemIndex = newCart.findIndex((item) => item.id === itemToAdd.id);
-            if (existingItemIndex > -1) {
-              newCart[existingItemIndex].quantity += 1;
+            const cleanId = normalizeId(itemToAdd.id);
+            if (mergedMap[cleanId]) {
+              const existingItem = mergedMap[cleanId];
+              mergedMap[cleanId] = {
+                ...existingItem,
+                product: product || existingItem.product,
+                selectedFront: itemToAdd.selectedFront || existingItem.selectedFront,
+                selectedRear: itemToAdd.selectedRear || existingItem.selectedRear,
+                selectedGeneric: itemToAdd.selectedGeneric || existingItem.selectedGeneric,
+                price: itemToAdd.price,
+                quantity: existingItem.quantity + 1,
+              };
             } else {
-              newCart.push({
-                id: itemToAdd.id,
+              mergedMap[cleanId] = {
+                id: cleanId,
                 product,
                 selectedFront: itemToAdd.selectedFront,
                 selectedRear: itemToAdd.selectedRear,
                 selectedGeneric: itemToAdd.selectedGeneric,
                 price: itemToAdd.price,
                 quantity: 1,
-              });
+              };
             }
           });
+
+          const newCart = Object.values(mergedMap);
 
           return {
             cart: newCart,
@@ -215,6 +247,8 @@ const useCartStore = create(
             const getProductImg = () => product.productImages?.[0] || (typeof product.images?.[0] === 'string' ? product.images[0] : product.images?.[0]?.url) || '';
 
             if (selectedFront) {
+              const frontDisc = selectedFront.discount || selectedFront.discountAmount || 0;
+              const frontNetPrice = selectedFront.price ? Math.max(0, selectedFront.price - frontDisc) : 0;
               promises.push(cartService.addToCart({
                 productId: selectedFront._id,
                 productName: product.productName || product.name,
@@ -223,13 +257,15 @@ const useCartStore = create(
                 size: selectedFront.size,
                 quantity: 1,
                 unitPrice: selectedFront.price,
-                discountPrice: 0,
-                totalPrice: selectedFront.price,
+                discountPrice: frontDisc,
+                totalPrice: frontNetPrice,
                 type: selectedFront.type || product.type || 'Tyre'
               }));
             }
 
             if (selectedRear) {
+              const rearDisc = selectedRear.discount || selectedRear.discountAmount || 0;
+              const rearNetPrice = selectedRear.price ? Math.max(0, selectedRear.price - rearDisc) : 0;
               promises.push(cartService.addToCart({
                 productId: selectedRear._id,
                 productName: product.productName || product.name,
@@ -238,13 +274,15 @@ const useCartStore = create(
                 size: selectedRear.size,
                 quantity: 1,
                 unitPrice: selectedRear.price,
-                discountPrice: 0,
-                totalPrice: selectedRear.price,
+                discountPrice: rearDisc,
+                totalPrice: rearNetPrice,
                 type: selectedRear.type || product.type || 'Tyre'
               }));
             }
 
             if (selectedGeneric) {
+              const genDisc = selectedGeneric.discount || selectedGeneric.discountAmount || 0;
+              const genNetPrice = selectedGeneric.price ? Math.max(0, selectedGeneric.price - genDisc) : 0;
               promises.push(cartService.addToCart({
                 productId: selectedGeneric._id,
                 productName: product.productName || product.name,
@@ -253,8 +291,8 @@ const useCartStore = create(
                 size: selectedGeneric.size,
                 quantity: 1,
                 unitPrice: selectedGeneric.price,
-                discountPrice: 0,
-                totalPrice: selectedGeneric.price,
+                discountPrice: genDisc,
+                totalPrice: genNetPrice,
                 type: selectedGeneric.type || product.type || 'Tyre'
               }));
             }

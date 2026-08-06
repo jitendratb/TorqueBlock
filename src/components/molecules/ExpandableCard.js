@@ -9,7 +9,7 @@ export default function ExpandableCard({ icon: Icon, title, subtitle, content, c
     return (
         <div className={`${boundary && " rounded-2xl  border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl"}`}>
 
-            <div className="relative flex border-b border-white/10 pb-3 items-center gap-2">
+            <div className="relative flex border-b border-white/10 pb-3 items-center gap-4">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
                     {Icon && <Icon className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />}
                 </div>

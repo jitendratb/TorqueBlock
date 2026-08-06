@@ -88,12 +88,12 @@ function BikeModelsClient({ data }) {
                             {data.bikeModel}
                         </h1>
                         {data?.hero?.title && (
-                            <h3 className="text-base md:text-xl font-bold text-zinc-300 tracking-wide pt-2">
+                            <h3 className="text-base md:text-xl font-bold text-zinc-300 tracking-wide ">
                                 {data.hero.title}
                             </h3>
                         )}
 
-                        <p className="text-xs  text-zinc-400 max-w-3xl leading-relaxed ">
+                        <p className="text-xs pt-4  text-zinc-400 max-w-3xl leading-relaxed ">
                             {data?.hero?.description || data.subTitle}
                         </p>
                     </div>
@@ -237,7 +237,7 @@ function BikeModelsClient({ data }) {
                                 items={productGroup?.productIds || []}
                                 itemWidth="w-72 md:w-80"
                                 renderItem={(productItem, pIndex) => (
-                                    <TyreCard key={pIndex} product={productItem} />
+                                    <TyreCard key={pIndex} product={productItem} opposteProductId={productGroup?.productIds?.filter((item)=>item?._id?.toString()!==productItem?._id?.toString())} />
                                 )}
                             />
                         </ExpandableCard>

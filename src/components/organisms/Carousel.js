@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState, useCallback, } from "react";
 import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
-export default function Carousel({ items = [], renderItem, autoPlay = false, interval = 4000, itemWidth = 280, gap = 16, showArrows = true, showDots = false, onReachEnd, endThreshold = 80, className = "", children, arrowSize = 20, leftArrowClassName = "-left-4 p-2", rightArrowClassName = "-right-4 p-2" }) {
+export default function Carousel({ items = [], renderItem, autoPlay = false, interval = 4000, itemWidth = 280, gap = 16, showArrows = true, showDots = false, onReachEnd, endThreshold = 80, className = "", children, arrowSize = 20, leftArrowClassName = "-left-4 p-2", rightArrowClassName = "-right-4 p-2", activeIndex }) {
     const containerRef = useRef(null);
     const trackRef = useRef(null);
     const timerRef = useRef(null);
@@ -129,6 +129,12 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
         scrollToIndex,
     ]);
 
+    useEffect(() => {
+        if (activeIndex !== undefined && activeIndex >= 0 && activeIndex <= maxIndex) {
+            scrollToIndex(activeIndex);
+        }
+    }, [activeIndex, scrollToIndex, maxIndex]);
+
     const hasLeft = current > 0;
     const hasRight = !isEnd && total > itemsPerView;
 
@@ -143,13 +149,13 @@ export default function Carousel({ items = [], renderItem, autoPlay = false, int
                 <div
                     ref={trackRef}
                     onScroll={onScroll}
-                    className="flex overflow-x-auto  scroll-smooth scrollbar-hide"
+                    className="flex overflow-x-auto scroll-smooth scrollbar-hide snap-x snap-mandatory"
                     style={{ gap }}
                 >
                     {items.map((item, i) => (
                         <div
                             key={i}
-                            className={`flex shrink-0 ${typeof itemWidth === 'string' ? itemWidth : ''}`}
+                            className={`flex shrink-0 snap-start ${typeof itemWidth === 'string' ? itemWidth : ''}`}
                             style={typeof itemWidth === 'number' ? { width: itemWidth } : {}}
                         >
                             {renderItem(item, i)}

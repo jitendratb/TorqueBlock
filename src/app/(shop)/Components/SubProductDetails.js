@@ -21,7 +21,7 @@ import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
 
-const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => {
+const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, opposteProductId }) => {
     const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
@@ -106,13 +106,44 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
             });
 
             if (matchingItem) {
+                setSelectedOpposite({
+                    ...matchingItem,
+                    isOfferItem: true,
+                    offerId: tyreData?.offerId || tyreData?.offer?._id || tyreData?.offer?.offerId
+                });
+                return;
+            }
+        }
+
+        if (opposteProductId && tyreData?.oppositeSizes?.length > 0) {
+            const matchingItem = tyreData.oppositeSizes.find(item => {
+                const itemId = String(item._id || item.id || '');
+                let isMatched = false;
+
+                if (typeof opposteProductId === 'string') {
+                    isMatched = opposteProductId.split(',').some(id => id.trim() === itemId);
+                } else if (Array.isArray(opposteProductId)) {
+                    isMatched = opposteProductId.some(id => String(id) === itemId);
+                }
+
+                if (!isMatched) return false;
+
+                const availability = item?.availability;
+                const parentAvailability = tyreData?.availability;
+                const isOrderable = availability !== "out_of_stock" && (parentAvailability ? availability === parentAvailability : true);
+                const isStock = item?.quantity === undefined || item?.quantity > 0;
+
+                return isOrderable && isStock;
+            });
+
+            if (matchingItem) {
                 setSelectedOpposite(matchingItem);
                 return;
             }
         }
 
         setSelectedOpposite(null);
-    }, [tyreData, isOfferActive, hasExclusiveTag]);
+    }, [tyreData, isOfferActive, hasExclusiveTag, opposteProductId]);
 
     useEffect(() => {
         if (typeof setProductIds === 'function' && tyreData?._id) {
@@ -172,7 +203,13 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
         let selectedRear = null;
         let selectedGeneric = null;
 
-        const updatedTyreData = { ...tyreData, selectedTubeType };
+        const offerId = tyreData?.offerId || tyreData?.offer?._id || tyreData?.offer?.offerId;
+        const updatedTyreData = {
+            ...tyreData,
+            selectedTubeType,
+            isOfferItem: Boolean(isOfferActive && hasExclusiveTag),
+            offerId
+        };
 
         if (position?.includes('front')) {
             selectedFront = updatedTyreData;
@@ -189,7 +226,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
         }
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric);
-    }, [parentTyre, tyreData, selectedTubeType, selectedOpposite, addToCart, toast]);
+    }, [parentTyre, tyreData, selectedTubeType, selectedOpposite, isOfferActive, hasExclusiveTag, addToCart, toast]);
 
     const handleBuyNow = useCallback((bypassAuth = false) => {
         if (!tyreData?.availability) {
@@ -593,6 +630,7 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                                 rightArrowClassName={"-right-4 p-1"}
                                 className="w-full"
                                 renderItem={renderCarouselItem}
+                                activeIndex={selectedOpposite ? tyreData.oppositeSizes.findIndex(item => (item._id || item.id) === (selectedOpposite._id || selectedOpposite.id)) : undefined}
                             />
                         </section>
                     )}
@@ -624,24 +662,24 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds }) => 
                     </div>
 
 
-                    <aside className="relative  flex lg:hidden flex-col md:flex-row items-center justify-between gap-2 md:gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
-                        <div className="relative z-10  flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                            <h3 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
-                            <p className="text-[10px] md:text-xs font-medium text-zinc-400 leading-relaxed">
-                                Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
-                            </p>
-                        </div>
-                        <div className="flex items-center shrink-0 w-full md:w-auto  sm:mt-0">
-                            <WhatsAppButton
-                                text="Contact Support"
-                                value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
-                                className="md:!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
-                            />
-                        </div>
-                    </aside>
+
                 </div>
 
-
+                <aside className="relative  flex lg:hidden flex-col md:flex-row items-center justify-between gap-2 md:gap-4 p-4 lg:p-0 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
+                    <div className="relative z-10  flex flex-col items-center sm:items-start text-center sm:text-left w-full">
+                        <h3 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
+                        <p className="text-[10px] md:text-xs font-medium text-zinc-400 leading-relaxed">
+                            Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
+                        </p>
+                    </div>
+                    <div className="flex items-center shrink-0 w-full md:w-auto  sm:mt-0">
+                        <WhatsAppButton
+                            text="Contact Support"
+                            value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
+                            className="md:!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
+                        />
+                    </div>
+                </aside>
             </div>
 
             <Login isOpen={isLogin} onClose={handleCloseLogin} />

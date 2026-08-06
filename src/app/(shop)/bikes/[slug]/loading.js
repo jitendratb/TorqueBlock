@@ -8,45 +8,96 @@ export default function BikeModelsLoading() {
   ];
 
   return (
-    <div className="space-y-6 pb-4 overflow-hidden animate-fade-in">
+    <div className="space-y-4 pb-4">
       <Breadcrumb items={breadcrumbItems} />
-      
-      <div className="relative space-y-8">
-        {/* Large Hero Card Skeleton */}
-        <div className="relative h-[80vh] md:h-[70vh] w-full bg-zinc-900/40 border border-zinc-800/30 rounded-[1.5rem] md:rounded-[3rem] overflow-hidden animate-pulse shadow-2xl flex flex-col justify-end p-8 md:p-16">
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent z-10" />
-          <div className="relative z-20 space-y-4 max-w-xl">
-            <div className="h-6 w-32 bg-zinc-800/50 rounded-full" />
-            <div className="h-4 w-24 bg-zinc-800/30 rounded-full" />
-            <div className="h-10 w-2/3 bg-zinc-800/50 rounded-xl" />
-            <div className="h-16 w-full bg-zinc-800/40 rounded-xl" />
+
+      <div className="relative space-y-4">
+        {/* Hero Section Skeleton */}
+        <div className="relative h-[70vh] md:h-[60vh] 2xl:h-[520px] w-full rounded-2xl md:rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-zinc-900/60 animate-pulse flex flex-col justify-end p-4 md:p-6">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10" />
+          <div className="relative z-20 space-y-3 max-w-3xl">
+            <div className="h-6 w-36 bg-white/10 rounded-full" />
+            <div className="h-5 w-28 bg-white/15 rounded-md" />
+            <div className="h-12 md:h-16 w-3/4 bg-white/20 rounded-2xl" />
+            <div className="h-4 w-1/2 bg-white/10 rounded-md" />
+            <div className="h-3 w-5/6 bg-white/5 rounded-md" />
           </div>
         </div>
 
-        {/* Fitment Specifications Skeletons */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {[1, 2].map((i) => (
-            <div key={i} className="p-6 md:p-8 bg-zinc-900/30 border border-zinc-850 rounded-2xl animate-pulse flex flex-col gap-3">
-              <div className="h-3 w-32 bg-zinc-800/50 rounded-full" />
-              <div className="h-8 w-48 bg-zinc-800/50 rounded-lg" />
+        {/* Overview Card Skeleton */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-white/10" />
+            <div className="space-y-1">
+              <div className="h-4 w-28 bg-white/15 rounded-md" />
+              <div className="h-3 w-44 bg-white/5 rounded-md" />
             </div>
-          ))}
+          </div>
+          <div className="space-y-2 pt-2">
+            <div className="h-3 w-full bg-white/5 rounded-md" />
+            <div className="h-3 w-11/12 bg-white/5 rounded-md" />
+            <div className="h-3 w-4/5 bg-white/5 rounded-md" />
+          </div>
         </div>
 
-        {/* Tyre recommendation roster header */}
-        <div className="space-y-4">
-          <div className="h-8 w-48 bg-zinc-900/50 rounded-lg animate-pulse" />
-          <div className="h-4 w-32 bg-zinc-900/30 rounded-full animate-pulse" />
-          
-          {/* Tyre outline lists */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="relative pb-6 px-6 bg-zinc-950 border border-zinc-900 rounded-[2rem] animate-pulse flex flex-col items-center pt-24 gap-4">
-                <div className="absolute -top-16 w-40 h-40 bg-zinc-900 rounded-full" />
-                <div className="h-3 w-16 bg-zinc-800/50 rounded-full" />
-                <div className="h-6 w-36 bg-zinc-800/50 rounded-lg" />
-                <div className="h-10 w-full bg-zinc-800/40 rounded-lg" />
-                <div className="h-10 w-28 bg-zinc-800/50 rounded-xl mt-4" />
+        {/* Specifications Skeleton */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-white/10" />
+            <div className="space-y-1">
+              <div className="h-4 w-44 bg-white/15 rounded-md" />
+              <div className="h-3 w-56 bg-white/5 rounded-md" />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-7 gap-3 md:gap-4 pt-2">
+            {[1, 2, 3, 4, 5, 6, 7].map((i) => (
+              <div key={i} className="h-16 rounded-xl bg-white/5 border border-white/5 p-3 space-y-2">
+                <div className="h-3 w-12 bg-white/10 rounded-md" />
+                <div className="h-3 w-16 bg-white/15 rounded-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Performance & Maintenance Skeleton */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-white/10" />
+            <div className="space-y-1">
+              <div className="h-4 w-52 bg-white/15 rounded-md" />
+              <div className="h-3 w-60 bg-white/5 rounded-md" />
+            </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 pt-2">
+            {[1, 2].map((i) => (
+              <div key={i} className="h-40 rounded-2xl bg-white/5 border border-white/5 p-4 space-y-3">
+                <div className="h-4 w-36 bg-white/15 rounded-md" />
+                <div className="h-3 w-full bg-white/5 rounded-md" />
+                <div className="h-3 w-4/5 bg-white/5 rounded-md" />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tyre Carousel Product Cards Skeleton */}
+        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-xl bg-white/10" />
+            <div className="space-y-1">
+              <div className="h-4 w-40 bg-white/15 rounded-md" />
+              <div className="h-3 w-52 bg-white/5 rounded-md" />
+            </div>
+          </div>
+          <div className="flex gap-4 overflow-hidden pt-2">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="w-72 md:w-80 h-96 shrink-0 rounded-3xl bg-white/5 border border-white/5 p-4 flex flex-col justify-between">
+                <div className="w-full h-44 rounded-2xl bg-white/5" />
+                <div className="space-y-2">
+                  <div className="h-3 w-20 bg-white/10 rounded-md" />
+                  <div className="h-5 w-48 bg-white/15 rounded-md" />
+                  <div className="h-4 w-24 bg-white/10 rounded-md" />
+                </div>
+                <div className="h-10 w-full rounded-xl bg-white/10" />
               </div>
             ))}
           </div>

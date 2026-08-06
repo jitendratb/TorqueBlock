@@ -9,7 +9,7 @@ import ReviewsCard from '@/components/atoms/reviewCard';
 import TyreSection from '../NewLaunchTyres';
 import TubeSection from './TubeSection';
 
-function TyreSizeClient({ initialData, reviewData }) {
+function TyreSizeClient({ initialData, reviewData , opposteProductId }) {
     const [tyreSize] = useState(initialData);
     const [productIds , setProductIds] = useState([]);
     useEffect(()=>{
@@ -22,7 +22,7 @@ function TyreSizeClient({ initialData, reviewData }) {
 
     return (
         <div className="flex flex-col gap-4 pb-4">
-            <SubProductDetails tyreData={tyreSize} reviewData={reviewData} setProductIds={setProductIds} />
+            <SubProductDetails tyreData={tyreSize} reviewData={reviewData} setProductIds={setProductIds} opposteProductId={opposteProductId} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
             {isTubeType && (

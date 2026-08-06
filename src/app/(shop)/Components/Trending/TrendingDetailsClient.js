@@ -91,7 +91,7 @@ function renderMarkdownContent(text) {
                                     </div>
                                 );
                             }
-                            
+
                             return (
                                 <p key={idx} className="text-zinc-300 text-xs md:text-sm leading-relaxed">
                                     {line}
@@ -272,17 +272,6 @@ export default function TrendingDetailsClient({ item }) {
                         {item?.shortDescription}
                     </p>
                 </div>
-
-                {/* <div className="absolute bottom-0 right-0 p-6 md:p-10 hidden lg:flex flex-col gap-3 max-w-[250px]">
-                    <StatPill icon={FiEye} label="Views" value={views.toLocaleString()} />
-                    <StatPill
-                        icon={FiHeart}
-                        label="Likes"
-                        value={likes.toLocaleString()}
-                        accent={hasLiked}
-                        onClick={handleLike}
-                    />
-                </div> */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -396,10 +385,10 @@ export default function TrendingDetailsClient({ item }) {
                         </div>
                         <div className="relative">
                             <Carousel
-                                items={Array.isArray(product) ? product : (product ? [product] : [])}
+                                items={product}
                                 itemWidth="w-[280px] md:w-[300px] lg:w-[350px]"
                                 renderItem={(tyre) => (
-                                    <TyreCard product={tyre} />
+                                    <TyreCard product={tyre} opposteProductId={product?.filter((item) => item?._id?.toString() !== tyre?._id?.toString())} />
                                 )}
                                 gap={16}
                                 showArrows={true}

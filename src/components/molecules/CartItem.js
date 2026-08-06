@@ -74,9 +74,9 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                                     {brandName}
                                 </span>
                             
-                                    <span className="px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-400 text-[8px] font-black tracking-wider border border-orange-500/30">
-                                         {isTube ? "TUBE" :"TYRE"}
-                                    </span>
+                                <span className="px-1.5 py-0.2 rounded bg-orange-500/20 text-orange-400 text-[8px] font-black tracking-wider border border-orange-500/30">
+                                     {isTube ? "TUBE" :"TYRE"}
+                                </span>
                             </div>
                             <h4 className="text-sm font-bold text-white tracking-tight truncate group-hover:text-orange-400 transition-colors">
                                 {productName}

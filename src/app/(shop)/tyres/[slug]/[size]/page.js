@@ -56,10 +56,14 @@ export async function generateMetadata({ params }) {
     };
 }
 
-async function Page({ params }) {
+async function Page({ params , searchParams }) {
     const { slug, size } = await params;
+    const awaitedSearchParams = await searchParams;
+    const opposteProductId = awaitedSearchParams?.opposteProductId;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
 
+
+    console.log("opposteProductId", opposteProductId);
     if (!tyreBySize) {
         notFound();
     }
@@ -77,7 +81,7 @@ async function Page({ params }) {
             <TyreSizeSchema sizeData={tyreBySize} tyreSlug={slug} sizeSlug={size} />
             <BreadcrumbSchema items={breadcrumbItems} />
             <Breadcrumb items={breadcrumbItems} />
-            <TyresSizeClient initialData={tyreBySize} reviewData={Review} />
+            <TyresSizeClient initialData={tyreBySize} reviewData={Review} opposteProductId={opposteProductId} />
         </div>
     )
 }
