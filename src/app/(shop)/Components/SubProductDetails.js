@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useCallback } from "react";
+import { normalizeImageArray } from "@/lib/utils/imageUtils";
 import PropTypes from 'prop-types';
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import Image from "@/components/molecules/CustomImage";
@@ -43,10 +44,13 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
     }, [tyreData]);
 
     const gallery = useMemo(() => {
-        if (tyreData?.sizeSpecificImages?.length > 0) {
-            return tyreData.sizeSpecificImages;
-        }
-        return parentTyre?.productImages || parentTyre?.gallery || [];
+        const sizeImgs = normalizeImageArray(tyreData?.sizeSpecificImages);
+        if (sizeImgs.length > 0) return sizeImgs;
+        const parentImgs = normalizeImageArray(parentTyre?.productImages);
+        if (parentImgs.length > 0) return parentImgs;
+        const parentGal = normalizeImageArray(parentTyre?.gallery);
+        if (parentGal.length > 0) return parentGal;
+        return normalizeImageArray(parentTyre?.productImage);
     }, [tyreData, parentTyre]);
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);

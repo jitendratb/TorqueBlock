@@ -1,12 +1,14 @@
 "use client";
 
 import Image from "@/components/molecules/CustomImage";
-import { useState } from "react";
+import { useState, useMemo } from "react";
+import { normalizeImageArray } from "@/lib/utils/imageUtils";
 
 import { FaImages } from "react-icons/fa";
 
 function FitmentSection({ tyre, h1tag = "Real-World Fitment", scale = true }) {
     const [activeIndex, setActiveIndex] = useState();
+    const gallery = useMemo(() => normalizeImageArray(tyre?.gallery), [tyre?.gallery]);
 
     return (
         <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
@@ -28,7 +30,7 @@ function FitmentSection({ tyre, h1tag = "Real-World Fitment", scale = true }) {
 
             <div className="relative border-t border-white/10 pt-4 mt-2">
                 <div className="flex h-[320px] md:h-[500px] overflow-hidden rounded-xl bg-gradient-to-b from-white/10 to-transparent p-[1px]">
-                    {tyre?.gallery?.map((image, index) => (
+                    {gallery?.map((image, index) => (
                    
                         <div
                             key={index}

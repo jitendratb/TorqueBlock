@@ -1,31 +1,34 @@
 import Breadcrumb from "@/components/atoms/BreadCrumb";
-import TubesService from "@/services/TubesService";
+import tubesService from "@/services/tubesService";
 import dynamic from 'next/dynamic';
 const TubesDetailsClient = dynamic(() => import('../../Components/TubesComponents/TubesDetailsClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
+import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from "@/lib/utils/imageUtils";
 
 const getTube = cache(async (slug) => {
-    const response = await TubesService.getTubeById(slug);
-    return response?.data?.data || response?.data || response;
+    return await tubesService.getTubeBySlug(slug);
 });
 
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const tube = await getTube(slug);
 
-
     if (!tube) return {};
 
-    const displayName = tube?.name
+    const displayName = tube?.name;
     const brandName = tube?.brand?.name || tube?.brand || "Torque Block";
     const displayDescription = tube?.hero?.subtitle || (displayName ? `Buy ${displayName} premium motorcycle tubes online in India. Check sizes, compatibility, and price.` : "Explore high quality motorcycle inner tubes, sizes, and pricing.");
 
     const displayTitle = displayName ? `${displayName} Price & Details` : "Premium Motorcycle Tubes - Details & Price";
 
-    const mainImage = tube?.images?.[0]?.url || tube?.productImages?.[0] || tube?.hero?.heroImage || "/newLogo.webp";
+    const productImages = normalizeImageArray(tube?.productImages);
+    const images = normalizeImageArray(tube?.images);
+    const heroImage = normalizeImageString(tube?.hero?.heroImage);
+
+    const mainImage = images[0] || productImages[0] || heroImage || "/newLogo.webp";
     const metaTitle = tube?.seo?.metaTitle || tube?.seo?.title || displayTitle;
     const metaDescription = tube?.seo?.metaDescription || tube?.seo?.description || displayDescription;
     const canonical = `https://www.torqueblock.com/tubes/${slug}`;
@@ -73,14 +76,16 @@ async function TubesDetailsPage({ params }) {
         notFound();
     }
     
-    const displayName = tube?.productName || tube?.name || tube?.hero?.title || slug;
+    const formattedTube = normalizeProductImageFields(tube);
+    
+    const displayName = formattedTube?.productName || formattedTube?.name || formattedTube?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tubes", href: "/tubes", }, { label: displayName, isLast: true, },];
 
     return (
         <main className="w-full">
             <Breadcrumb items={breadcrumbItems} />
-            <TubesDetailsClient initialData={tube} />
-            <ProductSchema product={tube} />
+            <TubesDetailsClient initialData={formattedTube} />
+            <ProductSchema product={formattedTube} />
             <BreadcrumbSchema items={breadcrumbItems} />
         </main>
     );

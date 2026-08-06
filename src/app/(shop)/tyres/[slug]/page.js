@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import ReviewService from "@/services/reviewSevice";
+import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from "@/lib/utils/imageUtils";
 
 
 const getTyre = cache(async (slug) => {
@@ -25,7 +26,12 @@ export async function generateMetadata({ params }) {
 
     const displayTitle = displayName ? `${displayName} Price, Sizes & Compatible Motorcycles` : "Performance Motorcycle Tyres - Review, Sizes & Price";
 
-    const mainImage = tyre?.productImages?.[0] || tyre?.hero?.heroImage || "/newLogo.webp";
+    const productImages = normalizeImageArray(tyre?.productImages);
+    const gallery = normalizeImageArray(tyre?.gallery);
+    const productImage = normalizeImageArray(tyre?.productImage);
+    const heroImage = normalizeImageString(tyre?.hero?.heroImage);
+
+    const mainImage = productImages[0] || gallery[0] || productImage[0] || heroImage || "/newLogo.webp";
     const metaTitle = tyre?.seo?.metaTitle || tyre?.seo?.title || displayTitle;
     const metaDescription = tyre?.seo?.metaDescription || tyre?.seo?.description || displayDescription;
     const canonical = `https://www.torqueblock.com/tyres/${slug}`;
@@ -68,21 +74,22 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
-    const Review = await ReviewService.getReviews({ tyreId: tyre?._id })
-
 
     if (!tyre) {
         notFound();
     }
+
+    const Review = await ReviewService.getReviews({ tyreId: tyre?._id });
+    const formattedTyre = normalizeProductImageFields(tyre);
     
-    const displayName = tyre?.productName || tyre?.hero?.title || slug;
+    const displayName = formattedTyre?.productName || formattedTyre?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tyres", href: "/tyres", }, { label: displayName, isLast: true, },];
 
     return (
         <div className="">
             <Breadcrumb items={breadcrumbItems} />
-            <TyresClient initialData={tyre} reviewData={Review} />
-            <ProductSchema product={tyre} />
+            <TyresClient initialData={formattedTyre} reviewData={Review} />
+            <ProductSchema product={formattedTyre} />
             <BreadcrumbSchema items={breadcrumbItems} />
         </div>
     );

@@ -1,4 +1,5 @@
 const SITE_URL = "https://www.torqueblock.com";
+import { normalizeImageArray, normalizeImageString } from "@/lib/utils/imageUtils";
 
 const DEFAULT_IMAGE = "/newLogo.webp";
 
@@ -12,10 +13,13 @@ export function generateProductSchema(product) {
         || product?.seo?.description
         || product?.description;
 
-    const mainImage = product?.productImages?.[0]
-        || product?.hero?.heroImage
-        || product?.image
-        || DEFAULT_IMAGE;
+    const productImages = normalizeImageArray(product?.productImages);
+    const gallery = normalizeImageArray(product?.gallery);
+    const productImage = normalizeImageArray(product?.productImage);
+    const heroImg = normalizeImageString(product?.hero?.heroImage);
+    const singleImg = normalizeImageString(product?.image);
+
+    const mainImage = productImages[0] || gallery[0] || productImage[0] || heroImg || singleImg || DEFAULT_IMAGE;
 
     const brandName = product?.brand?.name || product?.brand || "Torque Block";
     const slug = product?.identifier || product?.slug;
@@ -84,9 +88,8 @@ export function generateProductSchema(product) {
         });
     }
 
-    const imagesList = product?.productImages && Array.isArray(product.productImages) && product.productImages.length > 0
-        ? product.productImages
-        : [mainImage];
+    const allProductImgs = [...productImages, ...gallery, ...productImage];
+    const imagesList = allProductImgs.length > 0 ? allProductImgs : [mainImage];
 
     const seller = {
         "@type": "Organization",
@@ -192,7 +195,8 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
     
     const displayDescription = sizeData?.seo?.metaDescription || sizeData?.hero?.subtitle || sizeData?.description;
 
-    const mainImage = sizeData?.hero?.heroImage || sizeData?.availableTyres?.hero?.heroImage || DEFAULT_IMAGE;
+    const heroImg = normalizeImageString(sizeData?.hero?.heroImage) || normalizeImageString(sizeData?.availableTyres?.hero?.heroImage);
+    const mainImage = heroImg || normalizeImageArray(sizeData?.availableTyres?.productImages)[0] || DEFAULT_IMAGE;
 
     const brandName = sizeData?.availableTyres?.brand?.name || "Torque Block";
     const sku = sizeData?.identifier || `TB-${(tyreSlug || 'SKU')}-${(sizeSlug || 'SIZE')}`;
@@ -248,9 +252,10 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
         seller: seller,
     };
 
-    const imagesList = sizeData?.availableTyres?.productImages?.length > 0
-        ? sizeData.availableTyres.productImages
-        : [mainImage];
+    const availableImgs = normalizeImageArray(sizeData?.availableTyres?.productImages);
+    const sizeImgs = normalizeImageArray(sizeData?.sizeSpecificImages);
+    const allSizeImgs = [...sizeImgs, ...availableImgs];
+    const imagesList = allSizeImgs.length > 0 ? allSizeImgs : [mainImage];
 
     const schema = {
         "@context": "https://schema.org",

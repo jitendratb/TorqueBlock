@@ -7,6 +7,7 @@ import TyreSizeSchema from '@/components/seo/TyreSizeSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import ReviewService from '@/services/reviewSevice';
 import { notFound } from 'next/navigation';
+import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from '@/lib/utils/imageUtils';
 
 export async function generateMetadata({ params }) {
     const { slug, size } = await params;
@@ -22,6 +23,10 @@ export async function generateMetadata({ params }) {
     const title = tyreBySize?.seo?.metaTitle || tyreBySize?.hero?.title || `${tyreBySize?.availableTyres?.brand?.name || ''} ${tyreBySize?.availableTyres?.productName || ''} ${tyreBySize?.size || ''} - Buy Online`.trim();
     const description = tyreBySize?.seo?.metaDescription || tyreBySize?.hero?.subtitle || tyreBySize?.description || `Buy ${title} online at Torque Block. Explore specifications, compatible bikes, and reviews.`;
 
+    const heroImg = normalizeImageString(tyreBySize?.hero?.heroImage) || normalizeImageString(tyreBySize?.availableTyres?.hero?.heroImage);
+    const availableImgs = normalizeImageArray(tyreBySize?.availableTyres?.productImages);
+    const mainImage = heroImg || availableImgs[0] || '/newLogo.webp';
+
     return {
         title,
         description,
@@ -35,7 +40,7 @@ export async function generateMetadata({ params }) {
             siteName: 'Torque Block',
             images: [
                 {
-                    url: tyreBySize?.hero?.heroImage || tyreBySize?.availableTyres?.hero?.heroImage || '/newLogo.webp',
+                    url: mainImage,
                     width: 1200,
                     height: 630,
                     alt: title,
@@ -47,7 +52,7 @@ export async function generateMetadata({ params }) {
             card: 'summary_large_image',
             title,
             description,
-            images: [tyreBySize?.hero?.heroImage || tyreBySize?.availableTyres?.hero?.heroImage || '/newLogo.webp'],
+            images: [mainImage],
         },
         robots: {
             index: tyreBySize?.seo?.robots?.includes('index') ?? true,
@@ -69,19 +74,23 @@ async function Page({ params , searchParams }) {
     }
 
     const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
+    const formattedData = normalizeProductImageFields(tyreBySize);
+    if (formattedData.availableTyres) {
+        formattedData.availableTyres = normalizeProductImageFields(formattedData.availableTyres);
+    }
 
     const breadcrumbItems = [
         { label: 'Tyres', href: '/tyres' },
-        { label: formatTitle(tyreBySize?.availableTyres?.productName ?? slug), href: `/tyres/${slug}` },
-        { label: formatTitle(tyreBySize?.hero?.title ?? size), href: `/tyres/${slug}/${size}` }
+        { label: formatTitle(formattedData?.availableTyres?.productName ?? slug), href: `/tyres/${slug}` },
+        { label: formatTitle(formattedData?.hero?.title ?? size), href: `/tyres/${slug}/${size}` }
     ];
 
     return (
         <div className="space-y-4">
-            <TyreSizeSchema sizeData={tyreBySize} tyreSlug={slug} sizeSlug={size} />
+            <TyreSizeSchema sizeData={formattedData} tyreSlug={slug} sizeSlug={size} />
             <BreadcrumbSchema items={breadcrumbItems} />
             <Breadcrumb items={breadcrumbItems} />
-            <TyresSizeClient initialData={tyreBySize} reviewData={Review} opposteProductId={opposteProductId} />
+            <TyresSizeClient initialData={formattedData} reviewData={Review} opposteProductId={opposteProductId} />
         </div>
     )
 }

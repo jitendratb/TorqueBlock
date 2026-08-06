@@ -10,7 +10,6 @@ export default function RefreshButton() {
     const handleRefresh = () => {
         setIsRefreshing(true);
         router.refresh();
-        // Reset state after a short delay to allow UI to show loading state
         setTimeout(() => setIsRefreshing(false), 500);
     };
 
