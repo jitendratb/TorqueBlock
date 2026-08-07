@@ -59,6 +59,16 @@ class CartService {
             throw error;
         }
     }
+
+    async clearCart() {
+        try {
+            const response = await TorqueBlockApi.delete('/cart/clear');
+            return response;
+        } catch (error) {
+            console.error('Error clearing cart:', error);
+            throw error;
+        }
+    }
 }
 
 const cartServiceInstance = new CartService();

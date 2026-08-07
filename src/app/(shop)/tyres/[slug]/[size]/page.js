@@ -74,8 +74,8 @@ async function Page({ params , searchParams }) {
     }
 
     const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
-    const formattedData = normalizeProductImageFields(tyreBySize);
-    if (formattedData.availableTyres) {
+    const formattedData = normalizeProductImageFields(tyreBySize) || {};
+    if (formattedData?.availableTyres) {
         formattedData.availableTyres = normalizeProductImageFields(formattedData.availableTyres);
     }
 

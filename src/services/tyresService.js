@@ -4,7 +4,7 @@ class TyresService {
     async getTyreBySlug(slug) {
         try {
             const response = await TorqueBlockApi.get(`/intent/${slug}`);
-            return response?.data
+            return response?.data || response;
         } catch (error) {
             console.error("Error fetching tyre by slug:", error?.message || error);
             return null;
@@ -31,7 +31,7 @@ class TyresService {
     async getTyreBySize(size) {
         try {
             const response = await TorqueBlockApi.get(`/size/${size}`);
-            return response?.data
+            return response?.data || response;
         } catch (error) {
             console.error("Error fetching tyre by size:", error?.message || error);
             return null;

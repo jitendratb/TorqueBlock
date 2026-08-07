@@ -23,7 +23,7 @@ export default function CheckoutClient() {
     const { cart, getCartTotal, clearCart } = useCartStore();
     const { isAuthenticated, user } = useAuthStore();
     const { addresses, fetchAddresses, loading: addressLoading } = useAddressStore();
-    const { createOrder, verifyPayment, loading: orderLoading } = useOrderStore();
+    const { createOrder, verifyPayment, paymentFailed, loading: orderLoading } = useOrderStore();
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('razorpay');
     const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -96,6 +96,7 @@ export default function CheckoutClient() {
                         return;
                     }
 
+                    const razorpayOrderId = response.razorpayOrder.id;
                     const selectedAddr = addresses.find(a => a._id === selectedAddressId);
                     const options = {
                         key: response.razorpayKey,
@@ -103,7 +104,7 @@ export default function CheckoutClient() {
                         currency: response.razorpayOrder.currency,
                         name: "TorqueBlock",
                         description: "Purchase of High-Performance Tyres & Tubes",
-                        order_id: response.razorpayOrder.id,
+                        order_id: razorpayOrderId,
                         handler: async (payResponse) => {
                             setVerifyLoading(true);
                             try {
@@ -122,7 +123,7 @@ export default function CheckoutClient() {
                                     toast.error(verifyRes?.message || "Payment verification failed.");
                                 }
                             } catch (err) {
-                                toast.error("Payment verification failed.");
+                                toast.error(err?.response?.data?.message || "Payment verification failed.");
                             } finally {
                                 setVerifyLoading(false);
                             }
@@ -136,14 +137,38 @@ export default function CheckoutClient() {
                             color: "#f97316"
                         },
                         modal: {
-                            ondismiss: () => {
+                            ondismiss: async () => {
                                 setIsOrderPlacing(false);
                                 toast.warning("Payment cancelled by user.");
+                                try {
+                                    await paymentFailed({
+                                        razorpay_order_id: razorpayOrderId,
+                                        reason: "Payment modal closed by user."
+                                    });
+                                } catch (e) {
+                                    console.error("Error updating cancelled order status:", e);
+                                }
                             }
                         }
                     };
 
                     const rzpay = new window.Razorpay(options);
+
+                    rzpay.on('payment.failed', async function (failedResponse) {
+                        console.error("Razorpay Payment Failed:", failedResponse?.error);
+                        const desc = failedResponse?.error?.description || "Payment failed on payment gateway.";
+                        toast.error(desc);
+                        try {
+                            await paymentFailed({
+                                razorpay_order_id: razorpayOrderId,
+                                reason: desc
+                            });
+                        } catch (e) {
+                            console.error("Failed to report payment failure to backend:", e);
+                        }
+                        setIsOrderPlacing(false);
+                    });
+
                     rzpay.open();
                 } else {
                     toast.success("Order placed successfully!");
@@ -159,7 +184,7 @@ export default function CheckoutClient() {
         } finally {
             setIsOrderPlacing(false);
         }
-    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, addresses, user, clearCart, toast]);
+    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, paymentFailed, addresses, user, clearCart, toast]);
 
     if (verifyLoading) {
         return (

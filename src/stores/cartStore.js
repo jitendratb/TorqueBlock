@@ -396,16 +396,9 @@ const useCartStore = create(
         const { isAuthenticated } = useAuthStore.getState();
         const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
 
-        if (isAuthenticated && token && currentCart.length > 0) {
+        if (isAuthenticated && token) {
           try {
-            const promises = [];
-            currentCart.forEach((item) => {
-              if (item.selectedFront?._id) promises.push(cartService.deleteCart(item.selectedFront._id));
-              if (item.selectedRear?._id) promises.push(cartService.deleteCart(item.selectedRear._id));
-              if (item.selectedGeneric?._id) promises.push(cartService.deleteCart(item.selectedGeneric._id));
-              if (item.product?._id) promises.push(cartService.deleteCart(item.product._id));
-            });
-            await Promise.all(promises);
+            await cartService.clearCart();
           } catch (error) {
             console.error('Failed to sync clearCart with backend:', error);
           }

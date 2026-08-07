@@ -23,6 +23,16 @@ class OrderService {
         }
     }
 
+    async paymentFailed(failedData) {
+        try {
+            const response = await TorqueBlockApi.post('/user-orders/payment-failed', failedData);
+            return response;
+        } catch (error) {
+            console.error('Error marking payment as failed:', error);
+            throw error;
+        }
+    }
+
     async getOrderHistory(page = 1, limit = 10) {
         try {
             const response = await TorqueBlockApi.get('/user-orders/history', {

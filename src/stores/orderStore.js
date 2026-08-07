@@ -50,6 +50,18 @@ const useOrderStore = create((set, get) => ({
     }
   },
 
+  paymentFailed: async (failedData) => {
+    set({ loading: true, error: null });
+    try {
+      const response = await orderService.paymentFailed(failedData);
+      set({ loading: false });
+      return response;
+    } catch (err) {
+      set({ error: err.message || 'Failed to report payment failure', loading: false });
+      throw err;
+    }
+  },
+
   cancelOrder: async (orderId, note) => {
     set({ loading: true, error: null });
     try {
