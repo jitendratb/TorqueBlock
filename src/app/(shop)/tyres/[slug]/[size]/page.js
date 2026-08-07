@@ -7,7 +7,6 @@ import TyreSizeSchema from '@/components/seo/TyreSizeSchema';
 import BreadcrumbSchema from '@/components/seo/BreadcrumbSchema';
 import ReviewService from '@/services/reviewSevice';
 import { notFound } from 'next/navigation';
-import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from '@/lib/utils/imageUtils';
 
 export async function generateMetadata({ params }) {
     const { slug, size } = await params;
@@ -23,9 +22,9 @@ export async function generateMetadata({ params }) {
     const title = tyreBySize?.seo?.metaTitle || tyreBySize?.hero?.title || `${tyreBySize?.availableTyres?.brand?.name || ''} ${tyreBySize?.availableTyres?.productName || ''} ${tyreBySize?.size || ''} - Buy Online`.trim();
     const description = tyreBySize?.seo?.metaDescription || tyreBySize?.hero?.subtitle || tyreBySize?.description || `Buy ${title} online at Torque Block. Explore specifications, compatible bikes, and reviews.`;
 
-    const heroImg = normalizeImageString(tyreBySize?.hero?.heroImage) || normalizeImageString(tyreBySize?.availableTyres?.hero?.heroImage);
-    const availableImgs = normalizeImageArray(tyreBySize?.availableTyres?.productImages);
-    const mainImage = heroImg || availableImgs[0] || '/newLogo.webp';
+    const heroImg = tyreBySize?.hero?.heroImage || tyreBySize?.availableTyres?.hero?.heroImage;
+    const availableImgs = tyreBySize?.availableTyres?.productImages || [];
+    const mainImage = heroImg || (typeof availableImgs[0] === 'string' ? availableImgs[0] : availableImgs[0]?.url) || '/newLogo.webp';
 
     return {
         title,
@@ -66,18 +65,12 @@ async function Page({ params , searchParams }) {
     const awaitedSearchParams = await searchParams;
     const opposteProductId = awaitedSearchParams?.opposteProductId;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
-
-
-    console.log("opposteProductId", opposteProductId);
     if (!tyreBySize) {
         notFound();
     }
 
     const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
-    const formattedData = normalizeProductImageFields(tyreBySize) || {};
-    if (formattedData?.availableTyres) {
-        formattedData.availableTyres = normalizeProductImageFields(formattedData.availableTyres);
-    }
+    const formattedData = tyreBySize;
 
     const breadcrumbItems = [
         { label: 'Tyres', href: '/tyres' },

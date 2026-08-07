@@ -1,7 +1,12 @@
 const SITE_URL = "https://www.torqueblock.com";
-import { normalizeImageArray, normalizeImageString } from "@/lib/utils/imageUtils";
-
 const DEFAULT_IMAGE = "/newLogo.webp";
+
+const getImageStr = (img) => typeof img === 'string' ? img : (img?.url || '');
+const getImageArr = (imgs) => {
+    if (!imgs) return [];
+    const arr = Array.isArray(imgs) ? imgs : [imgs];
+    return arr.map(getImageStr).filter(Boolean);
+};
 
 export function generateProductSchema(product) {
     if (!product) return null;
@@ -13,13 +18,13 @@ export function generateProductSchema(product) {
         || product?.seo?.description
         || product?.description;
 
-    const productImages = normalizeImageArray(product?.productImages);
-    const gallery = normalizeImageArray(product?.gallery);
-    const productImage = normalizeImageArray(product?.productImage);
-    const heroImg = normalizeImageString(product?.hero?.heroImage);
-    const singleImg = normalizeImageString(product?.image);
+    const productImages = product?.productImages || [];
+    const gallery = product?.gallery || [];
+    const productImage = product?.productImage || [];
+    const heroImg = product?.hero?.heroImage;
+    const singleImg = product?.image;
 
-    const mainImage = productImages[0] || gallery[0] || productImage[0] || heroImg || singleImg || DEFAULT_IMAGE;
+    const mainImage = getImageStr(productImages[0]) || getImageStr(gallery[0]) || getImageStr(productImage[0]) || getImageStr(heroImg) || getImageStr(singleImg) || DEFAULT_IMAGE;
 
     const brandName = product?.brand?.name || product?.brand || "Torque Block";
     const slug = product?.identifier || product?.slug;
@@ -74,10 +79,10 @@ export function generateProductSchema(product) {
 
     if (product?.compatibleVehicles && Array.isArray(product.compatibleVehicles)) {
         product.compatibleVehicles.forEach(vehicle => {
-            const bikeName = vehicle?.brand && vehicle?.model 
-                ? `${vehicle.brand} ${vehicle.model}` 
+            const bikeName = vehicle?.brand && vehicle?.model
+                ? `${vehicle.brand} ${vehicle.model}`
                 : (vehicle?.brand || vehicle?.model || vehicle);
-            
+
             if (bikeName) {
                 additionalProperty.push({
                     "@type": "PropertyValue",
@@ -89,7 +94,7 @@ export function generateProductSchema(product) {
     }
 
     const allProductImgs = [...productImages, ...gallery, ...productImage];
-    const imagesList = allProductImgs.length > 0 ? allProductImgs : [mainImage];
+    const imagesList = allProductImgs.length > 0 ? getImageArr(allProductImgs) : [mainImage];
 
     const seller = {
         "@type": "Organization",
@@ -105,21 +110,21 @@ export function generateProductSchema(product) {
         ? product.sizesIds.map(s => s.price).filter(p => typeof p === 'number' && p > 0)
         : [];
 
-    const lowPrice = product?.schemaMarkup?.offersPrice 
-        || product?.startingPrice 
+    const lowPrice = product?.schemaMarkup?.offersPrice
+        || product?.startingPrice
         || (prices.length > 0 ? Math.min(...prices) : null)
-        || product?.pricing?.frontTyrePrice 
+        || product?.pricing?.frontTyrePrice
         || product?.pricing?.comboPrice;
 
-    const highPrice = product?.endingPrice 
+    const highPrice = product?.endingPrice
         || (prices.length > 0 ? Math.max(...prices) : null)
-        || product?.pricing?.rearTyrePrice 
+        || product?.pricing?.rearTyrePrice
         || product?.pricing?.comboPrice;
 
     const hasPriceRange = lowPrice && highPrice && lowPrice !== highPrice;
 
-    const isAvailable = product?.availability?.inStock !== undefined 
-        ? product.availability.inStock 
+    const isAvailable = product?.availability?.inStock !== undefined
+        ? product.availability.inStock
         : (product?.inStock !== false);
 
     const offers = hasPriceRange ? {
@@ -192,11 +197,11 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
     if (!sizeData) return null;
 
     const displayName = sizeData?.hero?.title || `${sizeData?.availableTyres?.brand?.name || ''} ${sizeData?.availableTyres?.productName || ''} ${sizeData?.size || ''}`.trim() || 'Motorcycle Tyre';
-    
+
     const displayDescription = sizeData?.seo?.metaDescription || sizeData?.hero?.subtitle || sizeData?.description;
 
-    const heroImg = normalizeImageString(sizeData?.hero?.heroImage) || normalizeImageString(sizeData?.availableTyres?.hero?.heroImage);
-    const mainImage = heroImg || normalizeImageArray(sizeData?.availableTyres?.productImages)[0] || DEFAULT_IMAGE;
+    const heroImg = getImageStr(sizeData?.hero?.heroImage) || getImageStr(sizeData?.availableTyres?.hero?.heroImage);
+    const mainImage = heroImg || getImageArr(sizeData?.availableTyres?.productImages)[0] || DEFAULT_IMAGE;
 
     const brandName = sizeData?.availableTyres?.brand?.name || "Torque Block";
     const sku = sizeData?.identifier || `TB-${(tyreSlug || 'SKU')}-${(sizeSlug || 'SIZE')}`;
@@ -215,7 +220,7 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
     if (sizeData?.position) {
         additionalProperty.push({ "@type": "PropertyValue", name: "Position", value: sizeData.position });
     }
-    
+
     if (sizeData?.aiSearch?.summary) {
         additionalProperty.push({ "@type": "PropertyValue", name: "AI Summary", value: sizeData.aiSearch.summary });
     }
@@ -243,17 +248,17 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
         url: `${SITE_URL}/tyres/${tyreSlug}/${sizeSlug}`,
         priceCurrency: sizeData?.currency || "INR",
         price: sizeData?.price || sizeData?.pricing?.minPrice || 0,
-        availability: sizeData?.availability === "in_stock" ? "https://schema.org/InStock" 
+        availability: sizeData?.availability === "in_stock" ? "https://schema.org/InStock"
             : sizeData?.availability === "backorder" ? "https://schema.org/BackOrder"
-            : sizeData?.availability === "preorder" ? "https://schema.org/PreOrder"
-            : "https://schema.org/OutOfStock",
+                : sizeData?.availability === "preorder" ? "https://schema.org/PreOrder"
+                    : "https://schema.org/OutOfStock",
         itemCondition: "https://schema.org/NewCondition",
         priceValidUntil: priceValidUntil.toISOString().split('T')[0],
         seller: seller,
     };
 
-    const availableImgs = normalizeImageArray(sizeData?.availableTyres?.productImages);
-    const sizeImgs = normalizeImageArray(sizeData?.sizeSpecificImages);
+    const availableImgs = getImageArr(sizeData?.availableTyres?.productImages);
+    const sizeImgs = getImageArr(sizeData?.sizeSpecificImages);
     const allSizeImgs = [...sizeImgs, ...availableImgs];
     const imagesList = allSizeImgs.length > 0 ? allSizeImgs : [mainImage];
 

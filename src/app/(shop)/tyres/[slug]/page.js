@@ -7,8 +7,6 @@ import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
 import ReviewService from "@/services/reviewSevice";
-import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from "@/lib/utils/imageUtils";
-
 
 const getTyre = cache(async (slug) => {
     return await tyresService.getTyreBySlug(slug);
@@ -26,12 +24,12 @@ export async function generateMetadata({ params }) {
 
     const displayTitle = displayName ? `${displayName} Price, Sizes & Compatible Motorcycles` : "Performance Motorcycle Tyres - Review, Sizes & Price";
 
-    const productImages = normalizeImageArray(tyre?.productImages);
-    const gallery = normalizeImageArray(tyre?.gallery);
-    const productImage = normalizeImageArray(tyre?.productImage);
-    const heroImage = normalizeImageString(tyre?.hero?.heroImage);
+    const productImages = tyre?.productImages || [];
+    const gallery = tyre?.gallery || [];
+    const productImage = tyre?.productImage || [];
+    const heroImage = tyre?.hero?.heroImage;
 
-    const mainImage = productImages[0] || gallery[0] || productImage[0] || heroImage || "/newLogo.webp";
+    const mainImage = (typeof productImages[0] === 'string' ? productImages[0] : productImages[0]?.url) || (typeof gallery[0] === 'string' ? gallery[0] : gallery[0]?.url) || (typeof productImage[0] === 'string' ? productImage[0] : productImage[0]?.url) || heroImage || "/newLogo.webp";
     const metaTitle = tyre?.seo?.metaTitle || tyre?.seo?.title || displayTitle;
     const metaDescription = tyre?.seo?.metaDescription || tyre?.seo?.description || displayDescription;
     const canonical = `https://www.torqueblock.com/tyres/${slug}`;
@@ -74,13 +72,14 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
+   console.log(tyre)
 
     if (!tyre) {
         notFound();
     }
 
     const Review = await ReviewService.getReviews({ tyreId: tyre?._id });
-    const formattedTyre = normalizeProductImageFields(tyre);
+    const formattedTyre = tyre;
     
     const displayName = formattedTyre?.productName || formattedTyre?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tyres", href: "/tyres", }, { label: displayName, isLast: true, },];

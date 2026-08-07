@@ -7,6 +7,8 @@ export const metadata = {
 };
 
 export default function MyOrdersPage() {
+
+    
     return (
         <main className="py-4 relative overflow-hidden">
             <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />

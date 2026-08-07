@@ -5,14 +5,31 @@ import Image from '@/components/molecules/CustomImage';
 import OrderStatusBadge from './OrderStatusBadge';
 import { IoChevronDownOutline, IoChevronUpOutline, IoCalendarOutline, IoCardOutline, IoLocationOutline, IoCloseCircleOutline, IoTimeOutline } from 'react-icons/io5';
 
+// Helper to safely parse image strings, subdocuments {url}, or character-indexed objects
+const parseImageUrl = (img) => {
+  if (!img) return '';
+  if (typeof img === 'string') return img;
+  if (typeof img === 'object') {
+    if (img.url && typeof img.url === 'string') return img.url;
+
+    const numericKeys = Object.keys(img)
+      .filter(k => k !== '_id' && !isNaN(k))
+      .sort((a, b) => Number(a) - Number(b));
+    if (numericKeys.length > 0) {
+      return numericKeys.map(k => img[k]).join('');
+    }
+  }
+  return '';
+};
+
 export default function OrderCard({ order, onCancelClick }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const totalAmount = useMemo(() => {
-    return order.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * item.quantity)), 0) || 0;
-  }, [order.items]);
+    return order.totalAmount || order.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * item.quantity)), 0) || 0;
+  }, [order.totalAmount, order.items]);
 
-  const shippingAddress = order.items?.[0]?.address;
+  const shippingAddress = order.items?.[0]?.address || order.shippingAddress || order.address;
 
   const formattedDate = useMemo(() => {
     return order.createdAt
@@ -89,9 +106,11 @@ export default function OrderCard({ order, onCancelClick }) {
             : (typeof tyreObj?.brand === 'object' ? tyreObj.brand?.name : tyreObj?.brand);
           const brandName = rawBrand || (isTube ? 'TorqueBlock' : 'Performance');
 
-          const itemImage = isTube
-            ? (typeof tubeObj?.images?.[0] === 'string' ? tubeObj.images[0] : tubeObj?.images?.[0]?.url || item.image || '')
-            : (tyreObj?.availableTyres?.productImages?.[0] || item.image || '');
+          const rawImg = isTube
+            ? (tubeObj?.images?.[0] || item.image || '')
+            : (tyreObj?.availableTyres?.productImages?.[0] || tyreObj?.productImages?.[0] || tyreObj?.hero?.heroImage || item.image || '');
+
+          const itemImage = parseImageUrl(rawImg);
 
           const displaySize = item.size || (isTube ? tubeObj?.size : tyreObj?.size) || 'Standard';
 
@@ -101,7 +120,7 @@ export default function OrderCard({ order, onCancelClick }) {
               className="flex items-center gap-4 p-3.5 rounded-xl bg-white/10 border border-white/5 hover:border-white/10 transition-all duration-300"
             >
               {/* Product Image */}
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl flex items-center justify-center">
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl flex items-center justify-center bg-black/20">
                 {itemImage ? (
                   <Image
                     src={itemImage}
@@ -167,7 +186,15 @@ export default function OrderCard({ order, onCancelClick }) {
           )}
         </button>
 
-     
+        {isCancellable && onCancelClick && (
+          <button
+            onClick={() => onCancelClick(order._id || order)}
+            className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg transition-all cursor-pointer select-none"
+          >
+            <IoCloseCircleOutline className="text-sm" />
+            Cancel Order
+          </button>
+        )}
       </div>
 
       {isExpanded && (
@@ -288,3 +315,4 @@ export default function OrderCard({ order, onCancelClick }) {
     </div>
   );
 }
+

@@ -9,7 +9,6 @@ import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaCh
 import { HiFire } from "react-icons/hi";
 import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
 import { RiSparkling2Fill } from "react-icons/ri";
-import { normalizeImageArray } from "@/lib/utils/imageUtils";
 
 const tagConfig = {
     Street: { icon: <FaRoad className="text-zinc-300 text-xs" /> },
@@ -23,11 +22,11 @@ const tagConfig = {
 
 export default function ProductDetails({ tyre , reviewData }) {
     const gallery = useMemo(() => {
-        const imgs = normalizeImageArray(tyre?.productImages);
+        const imgs = Array.isArray(tyre?.productImages) ? tyre.productImages : [];
         if (imgs.length > 0) return imgs;
-        const gal = normalizeImageArray(tyre?.gallery);
+        const gal = Array.isArray(tyre?.gallery) ? tyre.gallery : [];
         if (gal.length > 0) return gal;
-        return normalizeImageArray(tyre?.productImage);
+        return Array.isArray(tyre?.productImage) ? tyre.productImage : [];
     }, [tyre]);
 
     const [activeImage, setActiveImage] = useState(gallery[0]);

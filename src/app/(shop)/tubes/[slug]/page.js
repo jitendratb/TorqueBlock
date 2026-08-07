@@ -6,8 +6,6 @@ import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
-import { normalizeImageArray, normalizeImageString, normalizeProductImageFields } from "@/lib/utils/imageUtils";
-
 const getTube = cache(async (slug) => {
     const response = await TubesService.getTubeById(slug);
     return response?.data?.data || response?.data || response;
@@ -25,11 +23,11 @@ export async function generateMetadata({ params }) {
 
     const displayTitle = displayName ? `${displayName} Price & Details` : "Premium Motorcycle Tubes - Details & Price";
 
-    const productImages = normalizeImageArray(tube?.productImages);
-    const images = normalizeImageArray(tube?.images);
-    const heroImage = normalizeImageString(tube?.hero?.heroImage);
+    const productImages = tube?.productImages || [];
+    const images = tube?.images || [];
+    const heroImage = tube?.hero?.heroImage;
 
-    const mainImage = images[0] || productImages[0] || heroImage || "/newLogo.webp";
+    const mainImage = (typeof images[0] === 'string' ? images[0] : images[0]?.url) || (typeof productImages[0] === 'string' ? productImages[0] : productImages[0]?.url) || heroImage || "/newLogo.webp";
     const metaTitle = tube?.seo?.metaTitle || tube?.seo?.title || displayTitle;
     const metaDescription = tube?.seo?.metaDescription || tube?.seo?.description || displayDescription;
     const canonical = `https://www.torqueblock.com/tubes/${slug}`;
@@ -77,7 +75,7 @@ async function TubesDetailsPage({ params }) {
         notFound();
     }
     
-    const formattedTube = normalizeProductImageFields(tube);
+    const formattedTube = tube;
     
     const displayName = formattedTube?.productName || formattedTube?.name || formattedTube?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tubes", href: "/tubes", }, { label: displayName, isLast: true, },];

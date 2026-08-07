@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useCallback } from "react";
-import { normalizeImageArray } from "@/lib/utils/imageUtils";
-import PropTypes from 'prop-types';
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import Image from "@/components/molecules/CustomImage";
 import { FaMotorcycle, FaBolt, FaShieldAlt, FaTag, FaBell } from "react-icons/fa";
@@ -44,23 +42,21 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
     }, [tyreData]);
 
     const gallery = useMemo(() => {
-        const sizeImgs = normalizeImageArray(tyreData?.sizeSpecificImages);
-        if (sizeImgs.length > 0) return sizeImgs;
-        const parentImgs = normalizeImageArray(parentTyre?.productImages);
-        if (parentImgs.length > 0) return parentImgs;
-        const parentGal = normalizeImageArray(parentTyre?.gallery);
-        if (parentGal.length > 0) return parentGal;
-        return normalizeImageArray(parentTyre?.productImage);
+        if (Array.isArray(tyreData?.productImages)) return tyreData.productImages;
+        if (tyreData?.productImages) return [tyreData.productImages];
+        if (Array.isArray(parentTyre?.productImages)) return parentTyre.productImages;
+        if (parentTyre?.productImages) return [parentTyre.productImages];
+        return [];
     }, [tyreData, parentTyre]);
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
 
-    const [activeImage, setActiveImage] = useState(gallery[0]);
+    const [activeImage, setActiveImage] = useState(gallery?.[0] || null);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
     const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
 
     useEffect(() => {
-        if (gallery.length > 0) {
+        if (gallery?.length > 0) {
             setActiveImage(gallery[0]);
         }
     }, [gallery]);
@@ -344,7 +340,6 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
-                {/* Left Column - Gallery and Expert Advice */}
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
                         <div role="tablist" aria-label="Product images" className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">

@@ -2,13 +2,12 @@
 
 import Image from "@/components/molecules/CustomImage";
 import { useState, useMemo } from "react";
-import { normalizeImageArray } from "@/lib/utils/imageUtils";
 
 import { FaImages } from "react-icons/fa";
 
 function FitmentSection({ tyre, h1tag = "Real-World Fitment", scale = true }) {
     const [activeIndex, setActiveIndex] = useState();
-    const gallery = useMemo(() => normalizeImageArray(tyre?.gallery), [tyre?.gallery]);
+    const gallery = useMemo(() => Array.isArray(tyre?.gallery) ? tyre.gallery : [], [tyre?.gallery]);
 
     return (
         <section className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">

@@ -102,7 +102,6 @@ export default function OrdersClient() {
     <div className="space-y-4">
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        {/* Card 1: Total Orders */}
         <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-orange-500/30 rounded-2xl p-4 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(249,115,22,0.08)]">
           <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-orange-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="space-y-1.5 relative z-10">
@@ -116,7 +115,6 @@ export default function OrdersClient() {
           </div>
         </div>
 
-        {/* Card 2: Active Items */}
         <div className="group relative overflow-hidden bg-white/[0.04] hover:bg-white/[0.07] border border-white/5 hover:border-blue-500/30 rounded-2xl p-4 backdrop-blur-xl flex items-center justify-between gap-4 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-[0_8px_30px_rgba(59,130,246,0.08)]">
           <div className="absolute -right-6 -bottom-6 w-20 h-20 bg-blue-500/10 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
           <div className="space-y-1.5 relative z-10">
