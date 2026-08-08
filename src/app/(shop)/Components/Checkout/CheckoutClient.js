@@ -239,6 +239,8 @@ export default function CheckoutClient() {
     }
 
     if (orderPlacedSuccess && placedOrderDetails) {
+        const totalPaidAmount = placedOrderDetails?.paidAmount || placedOrderDetails?.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * (item.quantity || 1))), 0) || 0;
+
         return (
             <div className="flex flex-col items-center justify-center text-center px-4 max-w-2xl mx-auto space-y-6">
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.15)]">
@@ -270,7 +272,7 @@ export default function CheckoutClient() {
                     <div className="flex justify-between text-xs font-semibold text-zinc-400">
                         <span>Total Amount Paid</span>
                         <span className="text-orange-400 text-xs font-black">
-                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(placedOrderDetails?.paidAmount)}
+                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(totalPaidAmount)}
                         </span>
                     </div>
                 </div>
