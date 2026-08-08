@@ -3,10 +3,26 @@ import Image from "next/image";
 import { useState } from "react";
 import clsx from "clsx";
 
+const parseImageUrl = (img) => {
+    if (!img) return '';
+    if (typeof img === 'string') return img;
+    if (typeof img === 'object' && img !== null) {
+        if (img.url && typeof img.url === 'string') return img.url;
+
+        const numericKeys = Object.keys(img)
+            .filter(k => k !== '_id' && !isNaN(k))
+            .sort((a, b) => Number(a) - Number(b));
+        if (numericKeys.length > 0) {
+            return numericKeys.map(k => img[k]).join('');
+        }
+    }
+    return '';
+};
+
 export default function CustomImage({ src, alt = "image", width, height, fill = false, className = "", imageClassName = "", priority = false, sizes, quality = 90, skeletonClassName = "", fallback = "/fallback.webp", ...props }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
-    const actualSrc = typeof src === 'object' && src !== null ? (src.url || '') : src;
+    const actualSrc = parseImageUrl(src);
     const safeSrc = (typeof actualSrc === "string" && actualSrc.trim()) ? actualSrc.trim() : fallback;
     const finalAlt = (alt && alt !== "image") ? alt : (typeof src === 'object' && src?.alt ? src.alt : alt);
 
