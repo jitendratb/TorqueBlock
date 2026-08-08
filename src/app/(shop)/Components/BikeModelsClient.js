@@ -25,6 +25,48 @@ import Carousel from "@/components/organisms/Carousel";
 
 function BikeModelsClient({ data }) {
     const router = useRouter();
+    const [activeFilter, setActiveFilter] = useState("all");
+
+    const filterOptions = React.useMemo(() => {
+        if (!data?.products || !Array.isArray(data.products)) return [];
+        return data.products.map((g, idx) => ({
+            id: g?.familyId?._id || g?.familyId?.productName || idx.toString(),
+            name: g?.familyId?.productName || `Option ${idx + 1}`
+        }));
+    }, [data?.products]);
+
+    const displayedItems = React.useMemo(() => {
+        if (!data?.products || !Array.isArray(data.products)) return [];
+
+        if (activeFilter === "all") {
+            const allItems = [];
+            data.products.forEach((productGroup) => {
+                const groupProductIds = productGroup?.productIds || [];
+                groupProductIds.forEach((productItem) => {
+                    const opposteProductId = groupProductIds.filter(
+                        (item) => item?._id?.toString() !== productItem?._id?.toString()
+                    );
+                    allItems.push({
+                        productItem,
+                        opposteProductId
+                    });
+                });
+            });
+            return allItems;
+        } else {
+            const targetGroup = data.products.find(
+                (g, idx) => (g?.familyId?._id || g?.familyId?.productName || idx.toString()) === activeFilter
+            );
+            if (!targetGroup) return [];
+            const groupProductIds = targetGroup?.productIds || [];
+            return groupProductIds.map((productItem) => ({
+                productItem,
+                opposteProductId: groupProductIds.filter(
+                    (item) => item?._id?.toString() !== productItem?._id?.toString()
+                )
+            }));
+        }
+    }, [data?.products, activeFilter]);
 
     const specsArray = [];
     if (data?.vehicleSpecs) {
@@ -50,7 +92,6 @@ function BikeModelsClient({ data }) {
         return <FiInfo className="text-orange-500/80 text-sm group-hover:text-orange-400 transition-colors duration-300" />;
     };
 
-    console.log(data, "sddgfdhfh")
     const whatsappMessage = encodeURIComponent(`Hi Torque Block! I need a high-performance tyre setup for my ${data.bikeBrand} ${data.bikeModel}. What's the best rubber for maximum grip?`);
 
     return (
@@ -223,26 +264,59 @@ function BikeModelsClient({ data }) {
                         />
                     </div>
                 </ExpandableCard>
-                <div className="space-y-4 w-full ">
-                    {data?.products?.map((productGroup, index) => (
-                        <ExpandableCard 
-                            key={index} 
-                            icon={GiCartwheel}
-                            title={productGroup?.familyId?.productName || 'Premium Tyres'}
-                            subtitle={`Unleash the full potential of your ${data?.bikeModel || 'ride'}`}
-                            expandable={false}
-                            boundary={false}
-                        >
-                            <Carousel 
-                                items={productGroup?.productIds || []}
-                                itemWidth="w-72 md:w-80"
-                                renderItem={(productItem, pIndex) => (
-                                    <TyreCard key={pIndex} product={productItem} opposteProductId={productGroup?.productIds?.filter((item)=>item?._id?.toString()!==productItem?._id?.toString())} />
-                                )}
-                            />
-                        </ExpandableCard>
-                    ))}
-                </div>
+                {data?.products && data.products.length > 0 && (
+                    <ExpandableCard
+                        icon={GiCartwheel}
+                        title={`Recommended Tyres for ${data?.bikeBrand || ''} ${data?.bikeModel || ''}`}
+                        subtitle={`Unleash the full potential of your ${data?.bikeModel || 'ride'}`}
+                        expandable={false}
+                        boundary={false}
+                    >
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-2 overflow-x-auto scrollbar-none py-1 px-0.5">
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveFilter("all")}
+                                    className={`px-4 py-2 rounded-lg text-xs transition-all duration-300 ease-out whitespace-nowrap border cursor-pointer ${
+                                        activeFilter === "all"
+                                            ? "bg-orange-500 text-white border-orange-400 shadow-[0_0_20px_rgba(249,115,22,0.4)] font-black scale-105"
+                                            : "bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 font-black hover:scale-102"
+                                    }`}
+                                >
+                                    All
+                                </button>
+                                {filterOptions.map((opt) => (
+                                    <button
+                                        type="button"
+                                        key={opt.id}
+                                        onClick={() => setActiveFilter(opt.id)}
+                                        className={`px-4 py-2 rounded-lg text-xs transition-all duration-300 ease-out whitespace-nowrap border cursor-pointer ${
+                                            activeFilter === opt.id
+                                                ? "bg-orange-500 text-white border-orange-400 shadow-[0_0_20px_rgba(249,115,22,0.4)] font-black scale-105"
+                                                : "bg-white/5 border-white/10 text-zinc-400 hover:text-white hover:bg-white/10 hover:border-white/20 font-black hover:scale-102"
+                                        }`}
+                                    >
+                                        {opt.name}
+                                    </button>
+                                ))}
+                            </div>
+
+                            <div key={activeFilter} className="animate-fade-in-up">
+                                <Carousel
+                                    items={displayedItems}
+                                    itemWidth="w-72 md:w-80"
+                                    renderItem={(entry, pIndex) => (
+                                        <TyreCard
+                                            key={entry.productItem?._id || pIndex}
+                                            product={entry.productItem}
+                                            opposteProductId={entry.opposteProductId}
+                                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+                    </ExpandableCard>
+                )}
 
 
                 <FitmentSection tyre={data} />
