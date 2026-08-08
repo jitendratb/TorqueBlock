@@ -7,7 +7,6 @@ import useOrderStore from '@/stores/orderStore';
 import useAuthStore from '@/stores/authStore';
 import { useToast } from '@/context/ToastContext';
 import OrderCard from './OrderCard';
-import CancelOrderModal from './CancelOrderModal';
 import OrderSkeleton from './OrderSkeleton';
 import Login from '@/components/organisms/login';
 import { IoLockClosedOutline, IoSearchOutline, IoReceiptOutline, IoPulseOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline, IoBagHandleOutline } from 'react-icons/io5';
@@ -20,7 +19,6 @@ export default function OrdersClient() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('all');
-  const [cancelOrderId, setCancelOrderId] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -209,19 +207,12 @@ export default function OrdersClient() {
             <OrderCard
               key={order._id}
               order={order}
-              onCancelClick={setCancelOrderId}
             />
           ))}
         </div>
       )}
 
-      <CancelOrderModal
-        isOpen={cancelOrderId !== null}
-        orderId={cancelOrderId}
-        onClose={() => setCancelOrderId(null)}
-        onConfirm={handleCancelConfirm}
-      />
-
+ 
     </div>
   );
 }

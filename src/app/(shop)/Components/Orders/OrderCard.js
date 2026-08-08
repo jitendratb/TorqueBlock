@@ -22,7 +22,7 @@ const parseImageUrl = (img) => {
   return '';
 };
 
-export default function OrderCard({ order, onCancelClick }) {
+export default function OrderCard({ order, }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const totalAmount = useMemo(() => {
@@ -186,15 +186,6 @@ export default function OrderCard({ order, onCancelClick }) {
           )}
         </button>
 
-        {isCancellable && onCancelClick && (
-          <button
-            onClick={() => onCancelClick(order._id || order)}
-            className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-rose-400 hover:text-rose-300 bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 px-3 py-1.5 rounded-lg transition-all cursor-pointer select-none"
-          >
-            <IoCloseCircleOutline className="text-sm" />
-            Cancel Order
-          </button>
-        )}
       </div>
 
       {isExpanded && (
