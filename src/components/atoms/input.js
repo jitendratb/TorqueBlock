@@ -35,7 +35,7 @@ export const Input = forwardRef(function Input(
           className={clsx(
             "font-medium transition-colors duration-300",
             variant === "glass"
-              ? "text-xs font-bold uppercase tracking-widest text-gray-200"
+              ? "text-xs font-bold uppercase tracking-widest text-white"
               : "text-sm text-gray-700"
           )}
         >

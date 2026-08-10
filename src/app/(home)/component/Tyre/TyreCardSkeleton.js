@@ -1,12 +1,12 @@
 import React from 'react';
 
-function TyreCardSkeleton({ className = "" }) {
+function TyreCardSkeleton({ className = "w-full" }) {
   return (
-    <div className={`mt-1 relative flex flex-col w-full bg-white/10 [.light-mode_&]:bg-zinc-950/10 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 rounded-3xl overflow-hidden animate-pulse ${className}`}>
+    <div className={`mt-1 relative flex flex-col  bg-white/10 [.light-mode_&]:bg-zinc-950/10 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 rounded-3xl overflow-hidden animate-pulse ${className}`}>
         
         <div className="relative w-full  flex items-center justify-center p-4 bg-zinc-800/20 [.light-mode_&]:bg-zinc-200/20">
         
-            <div className="w-32 h-32 md:w-40 md:h-36 bg-zinc-700/50 [.light-mode_&]:bg-zinc-300/50" />
+            <div className="w-32 h-32 md:w-40 md:h-36" />
           
             <div className="absolute top-4 right-4 h-6 w-16 bg-zinc-700/50 [.light-mode_&]:bg-zinc-300/50 rounded-full" />
         </div>

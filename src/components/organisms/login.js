@@ -231,7 +231,7 @@ function Login({ isOpen, onClose }) {
                                 <FaArrowRight className="text-xs" />
                             )}
                         </button>
-                        <p className="text-[10px] text-zinc-500 text-center font-medium mt-2">
+                        <p className="text-[10px] text-gray-300 text-center font-medium mt-2">
                             Note: Verification code (OTP) will be delivered to your number on WhatsApp.
                         </p>
                     </form>

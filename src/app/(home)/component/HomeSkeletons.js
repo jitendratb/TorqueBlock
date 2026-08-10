@@ -8,9 +8,9 @@ export function FeatureCardSkeleton({ count = 4 }) {
                 <div className="h-3 w-48 bg-orange-500/20 rounded-full" />
                 <div className="h-10 md:h-12 w-64 md:w-96 bg-zinc-900/50 rounded-lg mt-2" />
             </div>
-            <div className='w-full relative flex gap-4'>
+            <div className='w-full relative flex gap-4 overflow-x-auto'>
                     {Array.from({ length: count }).map((_, i) => (
-                            <TyreCardSkeleton key={i} className='w-[280pxx] md:w-[300px]' />
+                            <TyreCardSkeleton key={i} className='w-[280px] md:w-[300px] shrink-0' />
                     ))}
                 </div>
         </div>
