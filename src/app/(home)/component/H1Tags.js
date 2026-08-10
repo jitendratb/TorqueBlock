@@ -28,15 +28,18 @@ function H1Tags() {
 
   return (
     <div className='py-4  md:py-0 flex flex-col justify-start md:block min-h-[300px] md:min-h-[350px]'>
-      <h1 className="sr-only">Premium Performance Motorcycle Tyres in India</h1>
-      <p className='text-2xl lg:text-5xl pb-2 lg:pb-4'>We Are</p>
-      <h2
-        key={currentIndex}
-        className='text-5xl lg:text-6xl font-bold text-orange-500  transition-[background-position] duration-700 ease-out  tracking-tighter leading-none drop-shadow-md animate-slide-down-fade'
-        id="dynamic-title"
-      >
-        {title[currentIndex]}
-      </h2>
+      <h1 className="flex flex-col">
+        <span className='text-2xl lg:text-5xl pb-2 lg:pb-4 font-normal'>We Are</span>
+        <span className="sr-only"> Premium Performance Motorcycle Tyres in India. </span>
+        <span
+          key={currentIndex}
+          className='text-5xl lg:text-6xl font-bold text-orange-500  transition-[background-position] duration-700 ease-out  tracking-tighter leading-none drop-shadow-md animate-slide-down-fade'
+          id="dynamic-title"
+          aria-live="polite"
+        >
+          {title[currentIndex]}
+        </span>
+      </h1>
     </div>
   )
 }

@@ -20,8 +20,10 @@ import Category from './component/Category'
 import ValuePerformanceBrands from './component/ValuePerformanceBrands'
 import ReviewsSection from './component/ReviewSection'
 import B2BEnterpriseSection from './component/B2BEnterpriseSection'
+import FAQSchema from '@/components/seo/FAQSchema'
+import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema'
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 function page() {
   const banners = [
@@ -67,17 +69,34 @@ function page() {
   preload(rest.src, { as: 'image', imageSrcSet: mobileSrcSet, imageSizes: rest.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
 
   return (
-    <div className='overflow-hidden'>
+    <main className='overflow-hidden'>
       <WebPageSchema
         type="WebSite"
         title="Torque Block | Premium Motorcycle Tyres India"
         description="India's premium performance motorcycle tyre platform for superbikes, track riding, sport touring, and ADV motorcycles."
         url="/"
       />
-      <div className='relative w-full h-screen' >
+      <LocalBusinessSchema />
+      <FAQSchema 
+        faqs={[
+          {
+            question: "What is Torque Block?",
+            answer: "Torque Block is India's premium performance motorcycle tyre platform, catering specifically to superbikes, track riding, sport touring, and ADV motorcycles."
+          },
+          {
+            question: "Which tyre brands are available on Torque Block?",
+            answer: "We offer top international premium motorcycle tyre brands including Pirelli, Michelin, Metzeler, Vredestein, Apollo, and CEAT."
+          },
+          {
+            question: "Do you ship motorcycle tyres across India?",
+            answer: "Yes, Torque Block provides fast and secure shipping for all premium motorcycle tyres across India."
+          }
+        ]}
+      />
+      <section className='relative w-full h-screen' aria-label="Hero Section">
         <picture>
           <source media="(min-width: 768px)" srcSet={desktopProps.srcSet} sizes={desktopProps.sizes} />
-          <img {...rest} style={{ ...rest.style, objectFit: 'cover' }} className="object-cover" />
+          <img {...rest} fetchPriority="high" decoding="async" style={{ ...rest.style, objectFit: 'cover' }} className="object-cover" />
         </picture>
         <span className='absolute bg-gradient-to-r from-black/60 to-black/40 inset-0 z-0' />
         <div className='w-full h-full flex flex-col items-start md:items-center justify-center absolute top-0 left-0 z-10'>
@@ -92,40 +111,62 @@ function page() {
             </HeroSearchObserver>
           </div>
         </div>
-      </div>
+      </section>
       <ScrollBackgroundWrapper>
         <PageShell>
           <div className='space-y-10 pb-10 mt-10'>
-            <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
-              <BrandsSection />
-            </Suspense>
+            <section aria-label="Motorcycle Tyre Brands">
+              <Suspense fallback={<BrandCardSkeletonGroup count={3} />}>
+                <BrandsSection />
+              </Suspense>
+            </section>
 
-            <Suspense fallback={<TrendCardSkelton count={4} />} >
-              <TrendingSection />
-            </Suspense>
-            <Suspense fallback={<FeatureCardSkeleton count={4} />} >
-              <FeatureCard />
-            </Suspense>
-            <Suspense fallback={<FeatureCardSkeleton count={4} />} >
-              <ProductFamilyFeatureCard />
-            </Suspense>
-            <Suspense fallback={<CategorySkeleton />}>
-              <Category />
-            </Suspense>
-            <Suspense fallback={<ValuePerformanceBrandsSkeleton />}>
-              <ValuePerformanceBrands />
-            </Suspense>
-            <Suspense fallback={<ReviewsSectionSkeleton />}>
-              <ReviewsSection />
-            </Suspense>
-            <Suspense fallback={<B2BEnterpriseSkeleton />}>
-              <B2BEnterpriseSection />
-            </Suspense>
+            <section aria-label="Trending Motorcycle Tyres">
+              <Suspense fallback={<TrendCardSkelton count={4} />} >
+                <TrendingSection />
+              </Suspense>
+            </section>
+
+            <section aria-label="Featured Products">
+              <Suspense fallback={<FeatureCardSkeleton count={4} />} >
+                <FeatureCard />
+              </Suspense>
+            </section>
+
+            <section aria-label="Product Families">
+              <Suspense fallback={<FeatureCardSkeleton count={4} />} >
+                <ProductFamilyFeatureCard />
+              </Suspense>
+            </section>
+
+            <section aria-label="Tyre Categories">
+              <Suspense fallback={<CategorySkeleton />}>
+                <Category />
+              </Suspense>
+            </section>
+
+            <section aria-label="Value & Performance Brands">
+              <Suspense fallback={<ValuePerformanceBrandsSkeleton />}>
+                <ValuePerformanceBrands />
+              </Suspense>
+            </section>
+
+            <section aria-label="Customer Reviews">
+              <Suspense fallback={<ReviewsSectionSkeleton />}>
+                <ReviewsSection />
+              </Suspense>
+            </section>
+
+            <section aria-label="B2B Enterprise Tyre Distribution">
+              <Suspense fallback={<B2BEnterpriseSkeleton />}>
+                <B2BEnterpriseSection />
+              </Suspense>
+            </section>
             
           </div>
         </PageShell>
       </ScrollBackgroundWrapper>
-    </div>
+    </main>
   )
 }
 
