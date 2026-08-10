@@ -238,7 +238,7 @@ function Header() {
     const [mobileExpanded, setMobileExpanded] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(false);
+    const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(pathname !== '/');
 
     const cart = useCartStore((state) => state.cart || []);
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
@@ -265,7 +265,7 @@ function Header() {
     }, []);
 
 
-    const shouldRenderSearchBar = pathname !== '/' ? isMounted : (heroObserverReady && !isHeroSearchVisible);
+    const shouldRenderSearchBar = pathname !== '/' ? true : (isMounted && heroObserverReady && !isHeroSearchVisible);
 
     useEffect(() => {
         if (shouldRenderSearchBar) {
@@ -370,7 +370,7 @@ function Header() {
                         })}
                     </ul>
 
-                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
+                    <div className='flex items-center justify-end gap-2 md:gap-4 flex-1 lg:max-w-sm xl:max-w-xl'>
                         {shouldRenderSearchBar && (
                             <div
                                 className={`transition-all duration-500 ease-in-out ${searchBarAnimatedIn

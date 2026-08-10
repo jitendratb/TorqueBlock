@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaArrowUp } from "react-icons/fa6";
 import { FiUpload, FiCamera } from "react-icons/fi";
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
 import TyreCard from '@/components/atoms/TyreCard';
@@ -15,7 +15,6 @@ const PLACEHOLDERS = [
   "Search by Motorcycle, Tyre, Size or Brand...",
   "Find tyres for your motorcycle...",
   'Search "Royal Enfield Hunter 350"...',
-  'Search "TVS Apache RTR 310"...',
   'Search tyre size "110/70-17"...',
   'Search "140/70 R17 Rear"...',
   'Search "Pirelli Diablo Rosso IV"...',
@@ -63,6 +62,12 @@ function SearchBar({ onSearch, searchItems = [] }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+      setShowSuggestions(false);
+  }, [pathname, setShowSuggestions]);
 
   useEffect(() => {
     if (isFocused || searchInput.length > 0) return;

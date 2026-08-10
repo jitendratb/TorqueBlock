@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { IoSearchSharp, IoClose } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
@@ -56,6 +56,12 @@ function SearchBar({
         getSuggestions,
         clearSearch
     } = useSearchStore();
+
+    const pathname = usePathname();
+
+    useEffect(() => {
+        setShowSuggestions(false);
+    }, [pathname, setShowSuggestions]);
 
     useEffect(() => {
         if (isFocused || searchInput.length > 0) return;
