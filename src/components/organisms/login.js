@@ -215,7 +215,7 @@ function Login({ isOpen, onClose }) {
                                     <span>+91</span>
                                 </div>
                             }
-                            autoFocus
+                            autoFocus={isOpen}
                         />
 
                         <button
@@ -276,7 +276,7 @@ function Login({ isOpen, onClose }) {
                                         size="sm"
                                         wrapperClassName="aspect-square !p-0 flex items-center justify-center"
                                         className="text-center text-lg font-bold "
-                                        autoFocus={idx === 0}
+                                        autoFocus={isOpen && idx === 0}
                                     />
                                 ))}
                             </div>
