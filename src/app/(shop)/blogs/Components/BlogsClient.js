@@ -115,7 +115,7 @@ export default function BlogsClient({ blogs = [], pagination = {} }) {
                     onLoadMore={handleLoadMore}
                     endMessage="You've explored all articles."
                 >
-                    <div id="blog-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <div id="blog-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                         {filteredBlogs.map((blog, i) => (
                             <BlogCard
                                 key={blog._id || blog.slug || blog.blogid || i}
