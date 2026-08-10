@@ -1,141 +1,131 @@
 'use client';
 
-import { useState, useMemo, useRef, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { HiArrowTrendingUp, HiClock } from 'react-icons/hi2';
+import { useState, useMemo, useRef, useCallback } from 'react';
+import { FaBookOpen, FaFilter } from 'react-icons/fa';
+import { HiSparkles, HiFire } from 'react-icons/hi2';
 import HeroCarousel from './Carousel';
 import BlogCard from './BlogCard';
-import Pagination from '@/components/atoms/Pagination';
-
+import InfiniteScroll from '@/components/atoms/InfiniteScroll';
+import blogService from '@/services/blogService';
 
 export default function BlogsClient({ blogs = [], pagination = {} }) {
-    const router = useRouter();
-    const categories = useMemo(() => {
-        const seen = new Set();
-        return blogs.reduce((acc, b) => {
-            const name = b.category?.category;
-            if (name && !seen.has(name)) { seen.add(name); acc.push(name); }
-            return acc;
-        }, []);
-    }, [blogs]);
+    const [allBlogs, setAllBlogs] = useState(blogs);
+    const [activeCategory, setActiveCategory] = useState('All');
+    const [page, setPage] = useState(pagination?.currentPage || 1);
+    const [totalPages, setTotalPages] = useState(pagination?.totalPages || 1);
+    const [loadingMore, setLoadingMore] = useState(false);
 
-    const tabs = useMemo(() => ['Trending', 'Recent', ...categories], [categories]);
-    const [activeTab, setActiveTab] = useState('Trending');
-    const tabBarRef = useRef(null);
-    const indicatorRef = useRef(null);
     const sectionRef = useRef(null);
 
-    const handlePageChange = (newPage) => {
-        router.push(`/blogs?page=${newPage}`, { scroll: false });
-        if (sectionRef.current) {
-            sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    };
+    const categories = useMemo(() => {
+        const seen = new Set();
+        const cats = ['All', 'Trending'];
+        allBlogs.forEach(b => {
+            const name = b.category?.category;
+            if (name && !seen.has(name)) {
+                seen.add(name);
+                cats.push(name);
+            }
+        });
+        return cats;
+    }, [allBlogs]);
 
-    useEffect(() => {
-        const bar = tabBarRef.current;
-        const ind = indicatorRef.current;
-        if (!bar || !ind) return;
-        const active = bar.querySelector('[data-active="true"]');
-        if (!active) return;
-        const barRect = bar.getBoundingClientRect();
-        const activeRect = active.getBoundingClientRect();
-        ind.style.left = `${activeRect.left - barRect.left}px`;
-        ind.style.width = `${activeRect.width}px`;
-    }, [activeTab]);
-
-    const heroSlides = useMemo(() => blogs.slice(0, 6), [blogs]);
+    const heroSlides = useMemo(() => allBlogs.slice(0, 6), [allBlogs]);
 
     const filteredBlogs = useMemo(() => {
-        if (activeTab === 'Trending') return blogs.slice(0, 11);
-        if (activeTab === 'Recent') return blogs.slice(0, 18);
-        return blogs.filter(b => b.category?.category === activeTab);
-    }, [activeTab, blogs]);
+        if (activeCategory === 'All') return allBlogs;
+        if (activeCategory === 'Trending') return allBlogs.slice(0, 10);
+        return allBlogs.filter(b => b.category?.category === activeCategory);
+    }, [activeCategory, allBlogs]);
 
-    const sectionTitle =
-        activeTab === 'Trending' ? 'Trending Now' :
-            activeTab === 'Recent' ? 'Latest Articles' :
-                activeTab;
-    const countFor = (tab) => {
-        if (tab === 'Trending') return Math.min(blogs.length, 11);
-        if (tab === 'Recent') return Math.min(blogs.length, 18);
-        return blogs.filter(b => b.category?.category === tab).length;
-    };
+    const hasMore = page < totalPages && activeCategory === 'All';
 
-    if (blogs.length === 0) {
+    const handleLoadMore = useCallback(async () => {
+        if (loadingMore || !hasMore) return;
+        setLoadingMore(true);
+
+        try {
+            const nextPage = page + 1;
+            const res = await blogService.getAllBlogs({ page: nextPage, limit: 20 });
+            const newBlogs = res?.blogs || [];
+
+            if (newBlogs.length > 0) {
+                setAllBlogs((prev) => {
+                    const existingSlugs = new Set(prev.map(b => b.slug || b.blogid || b._id));
+                    const filteredNew = newBlogs.filter(b => !existingSlugs.has(b.slug || b.blogid || b._id));
+                    return [...prev, ...filteredNew];
+                });
+                setPage(nextPage);
+                if (res.pagination?.totalPages) {
+                    setTotalPages(res.pagination.totalPages);
+                }
+            } else {
+                setTotalPages(page);
+            }
+        } catch (err) {
+            console.error('[BlogsClient] Failed to load more blogs:', err);
+        } finally {
+            setLoadingMore(false);
+        }
+    }, [page, totalPages, hasMore, loadingMore]);
+
+    if (allBlogs.length === 0) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 py-10 text-center">
-                <span className="text-5xl">📝</span>
-                <h2 className="text-[1.6rem] font-extrabold text-gray-100 m-0">No blogs yet</h2>
-                <p className="text-[0.95rem] text-gray-500 m-0">Great content is on its way — check back soon.</p>
+            <div className="flex flex-col items-center justify-center min-h-[50vh] gap-4 py-16 text-center">
+                <span className="text-6xl animate-bounce">📝</span>
+                <h2 className="text-2xl font-black text-white uppercase tracking-wider">No blogs found</h2>
+                <p className="text-sm text-zinc-400 max-w-md">
+                    Great motorcycle tyre guides and news are coming soon. Stay tuned!
+                </p>
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="relative w-full space-y-10 py-4">
+         
             <section aria-label="Featured blog posts">
                 <HeroCarousel slides={heroSlides} />
             </section>
 
-            <section ref={sectionRef} className="flex flex-col gap-4">
-                <div className="flex items-end justify-between gap-4 md:gap-6 flex-wrap">
-                    <div className="flex flex-col gap-1">
-                        <span className="text-[0.72rem] font-bold uppercase tracking-[0.14em] text-orange-500"> Explore</span>
-                        <h2 className="text-[clamp(1.6rem,3vw,2.2rem)] font-extrabold text-gray-100 m-0 leading-tight"> {sectionTitle} </h2>
+            <section ref={sectionRef} className="space-y-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/10 pb-6">
+                    <div className="flex items-center gap-3.5">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_20px_rgba(249,115,22,0.2)]">
+                            <FaBookOpen className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+                        </div>
+                        <div>
+                            <div className="flex items-center gap-3">
+                                <h2 className="text-base md:text-lg font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
+                                    All Articles & Guides
+                                </h2>
+                            </div>
+                            <p className="text-zinc-400 text-xs font-medium tracking-wide mt-0.5">
+                                Explore Tyre Reviews, Riding Tips & Superbike Recommendations
+                            </p>
+                        </div>
                     </div>
 
-                    <nav ref={tabBarRef} role="tablist" aria-label="Blog categories" className="relative flex items-center gap-1 bg-gray-900/70 border border-white/[0.08] rounded-full px-1.5 py-1.5 backdrop-blur-md overflow-x-auto scrollbar-hide max-md:self-stretch max-md:w-full" >
-                        <div ref={indicatorRef} aria-hidden="true" className="absolute top-1.5 h-[calc(100%-12px)] bg-orange-500/15 border border-orange-500/35 rounded-full transition-all duration-350 ease-[cubic-bezier(0.4,0,0.2,1)] pointer-events-none z-0" />
-
-                        {tabs.map((tab) => {
-                            const isActive = activeTab === tab;
-                            return (
-                                <button
-                                    key={tab}
-                                    role="tab"
-                                    id={`tab-${tab}`}
-                                    aria-selected={isActive}
-                                    aria-controls="blog-grid"
-                                    data-active={isActive}
-                                    onClick={() => setActiveTab(tab)}
-                                    className={`
-                                        relative z-10 inline-flex items-center gap-1.5 px-4 py-2 rounded-full border-none cursor-pointer
-                                        whitespace-nowrap text-[0.82rem] font-semibold font-[Inter,sans-serif]
-                                        transition-colors duration-250
-                                        ${isActive ? 'text-orange-500' : 'text-gray-400 hover:text-gray-100'}
-                                        bg-transparent
-                                    `}
-                                >
-                                    {tab === 'Trending' && (
-                                        <HiArrowTrendingUp size={14} aria-hidden="true" />
-                                    )}
-                                    {tab === 'Recent' && (
-                                        <HiClock size={14} aria-hidden="true" />
-                                    )}
-                                    {tab}
-                                    <span className="inline-flex items-center justify-center min-w-[20px] h-[18px] px-1.5 rounded-full text-[0.68rem] font-bold bg-orange-500/15 text-orange-500">
-                                        {countFor(tab)}
-                                    </span>
-                                </button>
-                            );
-                        })}
-                    </nav>
+                 
                 </div>
 
-                <div id="blog-grid" role="tabpanel" aria-labelledby={`tab-${activeTab}`} key={activeTab} className="grid grid-cols-3 gap-6 animate-[fadeIn_0.4s_ease_both] max-lg:grid-cols-2 max-md:grid-cols-1"   >
-                    {filteredBlogs.map((blog, i) => (
-                        <BlogCard key={`${activeTab}-${i}`} blog={blog} size={i === 0 && activeTab === 'Trending' ? 'featured' : 'standard'} index={i} />
-                    ))}
-                </div>
-
-                {pagination?.totalPages > 1 && (
-                    <Pagination 
-                        page={pagination?.currentPage} 
-                        totalPages={pagination?.totalPages} 
-                        onPageChange={handlePageChange} 
-                    />
-                )}
+                <InfiniteScroll
+                    hasMore={hasMore}
+                    loading={loadingMore}
+                    onLoadMore={handleLoadMore}
+                    endMessage="You've explored all articles."
+                >
+                    <div id="blog-grid" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {filteredBlogs.map((blog, i) => (
+                            <BlogCard
+                                key={blog._id || blog.slug || blog.blogid || i}
+                                blog={blog}
+                                size={i === 0 && activeCategory === 'Trending' ? 'featured' : 'standard'}
+                                index={i}
+                            />
+                        ))}
+                    </div>
+                </InfiniteScroll>
             </section>
         </div>
     );
