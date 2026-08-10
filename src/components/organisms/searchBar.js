@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { IoSearchSharp, IoClose } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
@@ -38,9 +38,9 @@ function SearchBar({
     const suggestionsContainerRef = useRef(null);
     const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
     
-    const [placeholderText, setPlaceholderText] = useState("");
+    const [placeholderText, setPlaceholderText] = useState(PLACEHOLDERS[0]);
     const [placeholderIndex, setPlaceholderIndex] = useState(0);
-    const [charIndex, setCharIndex] = useState(0);
+    const [charIndex, setCharIndex] = useState(PLACEHOLDERS[0].length);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
 
@@ -56,12 +56,6 @@ function SearchBar({
         getSuggestions,
         clearSearch
     } = useSearchStore();
-
-    const pathname = usePathname();
-
-    useEffect(() => {
-        setShowSuggestions(false);
-    }, [pathname, setShowSuggestions]);
 
     useEffect(() => {
         if (isFocused || searchInput.length > 0) return;
@@ -205,11 +199,11 @@ function SearchBar({
     return (
         <div ref={searchBarRef} className={`relative w-full search-container-ignore-outside ${className}`} style={{ maxWidth }} {...props}>
             <div
-                className="relative flex items-center w-full bg-white/10 border border-white/30 rounded-full px-2 lg:px-4 py-2 transition-all duration-300 hover:bg-white/20 hover:border-gray-300 hover:shadow-sm focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"
+                className="relative flex items-center w-full bg-white/10 border border-white/30 rounded-full px-2 lg:px-4 py-2 transition-all duration-300 hover:bg-white/20 hover:border-gray-300 hover:shadow-sm focus-within:bg-white/20 focus-within:border-oragnge-500 focus-within:ring-2 focus-within:ring-orange-500/20 focus-within:shadow-md cursor-text"
                 onClick={() => inputRef.current?.focus()}
             >
                 <IoSearchSharp className="text-white text-lg md:text-xl mr-1 md:mr-3 flex-shrink-0" />
-                <div className="relative flex-1 min-h-[1.6rem] flex items-center min-w-0">
+                <div className="relative flex-1 min-h-[1rem] md:min-h-[1.6rem] flex items-center min-w-0">
                     <input
                         ref={inputRef}
                         type="text"
@@ -222,7 +216,7 @@ function SearchBar({
                             searchInput.trim() && showSuggestions && setShowSuggestions(true);
                         }}
                         onBlur={() => setIsFocused(false)}
-                        className="w-full bg-transparent text-white text-base md:text-sm outline-none z-10 pl-0 truncate"
+                        className="w-full bg-transparent text-white text-xs md:text-sm outline-none z-10 pl-0 truncate"
                         aria-label="Search"
                     />
                 </div>

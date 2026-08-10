@@ -238,7 +238,7 @@ function Header() {
     const [mobileExpanded, setMobileExpanded] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
     const [isLoginOpen, setIsLoginOpen] = useState(false);
-    const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(pathname !== '/');
+    const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(false);
 
     const cart = useCartStore((state) => state.cart || []);
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
@@ -265,7 +265,7 @@ function Header() {
     }, []);
 
 
-    const shouldRenderSearchBar = pathname !== '/' ? true : (isMounted && heroObserverReady && !isHeroSearchVisible);
+    const shouldRenderSearchBar = pathname !== '/' ? isMounted : (heroObserverReady && !isHeroSearchVisible);
 
     useEffect(() => {
         if (shouldRenderSearchBar) {
@@ -309,7 +309,7 @@ function Header() {
     return (
         <div>
             <header className={`header-root fixed left-0 right-0 w-full z-50 transition-all duration-300 ease-in-out ${scrolled ? "bg-transparent" : "bg-white/20 backdrop-blur-sm"}`} data-scrolled={scrolled}>
-                <nav className={`header-nav flex text-white justify-between items-center gap-4 max-w-7xl mx-auto transition-all duration-300 ease-in-out ${scrolled ? "bg-white/20 backdrop-blur-sm border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
+                <nav className={`header-nav flex text-white justify-between items-center gap-2 md:gap-4 max-w-7xl transition-all duration-300 ease-in-out ${scrolled ? "bg-white/20 backdrop-blur-sm border border-white/30 shadow-[0_8px_30px_rgb(0,0,0,0.04)]" : ""}`}>
                     <Link href="/" className="text-2xl font-bold flex-shrink-0" aria-label="Torque Block Home">
                         <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block w-[100px] md:h-auto md:w-[130px]" style={{ objectFit: 'contain' }} />
                     </Link>
@@ -370,10 +370,10 @@ function Header() {
                         })}
                     </ul>
 
-                    <div className='flex items-center justify-end gap-2 md:gap-4 flex-1 lg:max-w-sm xl:max-w-xl'>
+                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
                         {shouldRenderSearchBar && (
                             <div
-                                className={`hidden md:block transition-all duration-500 ease-in-out ${searchBarAnimatedIn
+                                className={`transition-all duration-500 ease-in-out ${searchBarAnimatedIn
                                     ? 'opacity-100 max-w-[500px] translate-x-0 visible'
                                     : 'opacity-0 max-w-0 translate-x-4 invisible'
                                     }`}

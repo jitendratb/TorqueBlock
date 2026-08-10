@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 import { AiOutlinePlus } from "react-icons/ai";
 import { FaArrowUp } from "react-icons/fa6";
 import { FiUpload, FiCamera } from "react-icons/fi";
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
 import TyreCard from '@/components/atoms/TyreCard';
@@ -62,12 +62,6 @@ function SearchBar({ onSearch, searchItems = [] }) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
-
-  const pathname = usePathname();
-
-  useEffect(() => {
-      setShowSuggestions(false);
-  }, [pathname, setShowSuggestions]);
 
   useEffect(() => {
     if (isFocused || searchInput.length > 0) return;
@@ -304,7 +298,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
         </button>
       </div>
 
-      <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/20 focus-within:shadow-md cursor-text"'>
+      <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500/20 focus-within:shadow-md cursor-text"'>
         <div>
           <button onClick={() => setShowSearch(!showSearch)} className={`p-2 bg-white/30 rounded-full transition-transform duration-300 ${showSearch ? "rotate-45" : "rotate-0"}`} >
             <AiOutlinePlus className='text-lg md:text-xl' />
