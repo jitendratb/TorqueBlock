@@ -19,14 +19,14 @@ const parseImageUrl = (img) => {
     return '';
 };
 
-export default function CustomImage({ src, alt = "image", width, height, fill = false, className = "", imageClassName = "", priority = false, sizes, quality = 90, skeletonClassName = "", fallback = "/fallback.webp", ...props }) {
+export default function CustomImage({ src, alt = "image", width, height, fill = false, className = "", imageClassName = "", priority = false, sizes, quality = 100, skeletonClassName = "", fallback = "/fallback.webp", ...props }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const actualSrc = parseImageUrl(src);
     const safeSrc = (typeof actualSrc === "string" && actualSrc.trim()) ? actualSrc.trim() : fallback;
     const finalAlt = (alt && alt !== "image") ? alt : (typeof src === 'object' && src?.alt ? src.alt : alt);
 
-    const defaultSizes = fill ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : undefined;
+    const defaultSizes = fill ? "100vw" : undefined;
     const finalSizes = sizes !== undefined ? sizes : defaultSizes;
 
     return (
