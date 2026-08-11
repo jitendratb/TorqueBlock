@@ -3,9 +3,9 @@
 import React from 'react';
 import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
-import { FiArrowRight, FiCheckCircle, FiClock, FiXCircle } from "react-icons/fi";
+import { FiArrowRight, FiCheckCircle, FiClock, FiXCircle, FiTag, FiMaximize2 } from "react-icons/fi";
 
-export default function ProductCard({ product, tyre, className, opposteProductId  }) {
+export default function ProductCard({ product, tyre, className, opposteProductId }) {
     const router = useRouter();
 
     const isSingleSize = !!product?.price;
@@ -34,21 +34,21 @@ export default function ProductCard({ product, tyre, className, opposteProductId
     const handleCardClick = () => {
         const tyreIdentifier = product?.availableTyres?.identifier || tyre?.identifier || "unknown";
         let url = `/tyres/${tyreIdentifier}/${product?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
-        
+
         if (opposteProductId) {
             let queryValue = opposteProductId;
-            
+
             if (Array.isArray(opposteProductId)) {
-                queryValue = opposteProductId.map(item => 
+                queryValue = opposteProductId.map(item =>
                     item?.productIds?._id || item?._id || item
                 ).filter(Boolean).join(',');
             } else if (typeof opposteProductId === 'object') {
                 queryValue = opposteProductId?._id || String(opposteProductId);
             }
-            
+
             url += `?opposteProductId=${encodeURIComponent(queryValue)}`;
         }
-        
+
         router.push(url);
     };
 
@@ -88,11 +88,17 @@ export default function ProductCard({ product, tyre, className, opposteProductId
 
             <div className="flex flex-col p-4 gap-3 flex-1 justify-between">
                 <div className="space-y-2">
-                    <div className="flex items-center gap-2 text-[10px] font-black text-zinc-400 [.light-mode_&]:text-black/60 uppercase tracking-wider transition-colors duration-500">
-                        <span className="bg-white/5 [.light-mode_&]:bg-white/10  border border-white/10  px-2 py-0.5 rounded-md transition-colors duration-500">
-                            {categoryName}
+                    <div className="flex flex-wrap items-center gap-2 text-[10px] font-extrabold uppercase tracking-wider transition-colors duration-500">
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 border border-white/10 [.light-mode_&]:border-zinc-200 text-zinc-300 [.light-mode_&]:text-zinc-700 backdrop-blur-md shadow-sm transition-all duration-300 group-hover:border-orange-500/30">
+                            <FiTag className="text-[10px] text-orange-400 shrink-0" />
+                            <span>{categoryName}</span>
                         </span>
-
+                        {product?.size && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-500/10 [.light-mode_&]:bg-orange-50 border border-orange-500/30 [.light-mode_&]:border-orange-200 text-orange-400 [.light-mode_&]:text-orange-600 backdrop-blur-md shadow-[0_0_12px_rgba(249,115,22,0.15)] transition-all duration-300 group-hover:bg-orange-500/20 group-hover:border-orange-500/50">
+                                <FiMaximize2 className="text-[10px] shrink-0" />
+                                <span>{product?.size}</span>
+                            </span>
+                        )}
                     </div>
 
                     <h3 className="text-base md:text-lg font-black text-zinc-100 [.light-mode_&]:text-zinc-800 group-hover:text-white [.light-mode_&]:group-hover:text-zinc-950 uppercase tracking-tight line-clamp-2 transition-colors duration-500">
