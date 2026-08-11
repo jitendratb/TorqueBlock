@@ -42,7 +42,7 @@ export default function CategoryCard({ category, featured = false, index = 0 }) 
 
             <div className="absolute bottom-0 inset-x-0 p-4 md:px-4 md:py-8 lg:p-8 z-20 flex flex-col justify-end space-y-2">
                 <div className="transform md:translate-y-6 translate-y-6 group-hover:translate-y-0 transition-all duration-500 delay-75">
-                    <span className="inline-flex items-center gap-2 text-orange-400 text-[10px] bg-orange-500/10 backdrop-blur-md px-3 py-1.5 border border-orange-500/30 rounded-full font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(249,115,22,0.15)] group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-colors duration-300">
+                    <span className="inline-flex items-center gap-2 text-orange-400 text-[9px] bg-orange-500/10 backdrop-blur-md px-1.5 py-1.5 border border-orange-500/30 rounded-full font-black uppercase tracking-[0.3em] shadow-[0_0_15px_rgba(249,115,22,0.15)] group-hover:bg-orange-500/20 group-hover:border-orange-500/50 transition-colors duration-300">
                       <FiCompass size={14} className="" />
                           {subtitle}
                     </span>
