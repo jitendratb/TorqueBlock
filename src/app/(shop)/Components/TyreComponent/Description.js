@@ -1,49 +1,44 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { FaMotorcycle, FaCheckCircle, FaTimesCircle, FaFileAlt, FaChevronDown, FaTools } from 'react-icons/fa';
-import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill, RiCheckboxCircleFill, RiCloseCircleFill } from 'react-icons/ri';
+import { memo, useMemo, useState, useCallback } from 'react';
+import { FaMotorcycle, FaFileAlt, FaChevronDown, FaTools } from 'react-icons/fa';
+import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill } from 'react-icons/ri';
 import { TbCheck, TbX } from 'react-icons/tb';
-import { useRouter } from 'next/navigation';
-import { FiArrowUpRight, FiMousePointer } from 'react-icons/fi';
-import { GiCarWheel, GiTyre } from 'react-icons/gi';
 import TyreCard from "@/components/atoms/TyreCard";
 import Carousel from '@/components/organisms/Carousel';
-import VehicleService from '@/services/vehicleService';
 
-function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
+const Description = memo(function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [vehicale, setVehicale] = useState([])
-    const router = useRouter();
 
-    const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front').map(item => ({ ...item, productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []), categoryId: tyre?.categoryId || tyre?.category || null, })) || [];
-    const Front = sizesIdsFront.length > 0 ? sizesIdsFront : (tyre?.frontSizes || []);
+    const Front = useMemo(() => {
+        const sizesIdsFront = tyre?.sizesIds?.filter(item => item.position === 'Front').map(item => ({
+            ...item,
+            productImages: tyre?.productImages?.[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []),
+            categoryId: tyre?.categoryId || tyre?.category || null,
+        })) || [];
+        return sizesIdsFront.length > 0 ? sizesIdsFront : (tyre?.frontSizes || []);
+    }, [tyre]);
 
-    const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear').map(item => ({ ...item, productImages: tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.productImages && tyre.productImages[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : [])), categoryId: tyre?.categoryId || tyre?.category || null, })) || [];
-    const Rear = sizesIdsRear.length > 0 ? sizesIdsRear : (tyre?.rearSizes || []);
+    const Rear = useMemo(() => {
+        const sizesIdsRear = tyre?.sizesIds?.filter(item => item.position === 'Rear').map(item => ({
+            ...item,
+            productImages: tyre?.productImages?.[0] ? [tyre.productImages[0]] : (tyre?.image ? [tyre.image] : []),
+            categoryId: tyre?.categoryId || tyre?.category || null,
+        })) || [];
+        return sizesIdsRear.length > 0 ? sizesIdsRear : (tyre?.rearSizes || []);
+    }, [tyre]);
 
-    const isFrontObjects = Front.length > 0 && typeof Front[0] === 'object';
-    const isRearObjects = Rear.length > 0 && typeof Rear[0] === 'object';
+    const isFrontObjects = useMemo(() => Front.length > 0 && typeof Front[0] === 'object', [Front]);
+    const isRearObjects = useMemo(() => Rear.length > 0 && typeof Rear[0] === 'object', [Rear]);
 
-    const handleWhatsapp = (item) => {
-        let message = `Hi Torque Block, I am interested in buying ${tyre?.productName} in size ${item}`;
+    const handleWhatsapp = useCallback((item) => {
+        const message = `Hi Torque Block, I am interested in buying ${tyre?.productName} in size ${item}`;
         const phoneNumber = "916366625625";
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(typeof navigator !== 'undefined' ? navigator.userAgent : '');
-        const url = isMobile ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}` : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator?.userAgent ?? '');
+        const url = isMobile
+            ? `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
+            : `https://web.whatsapp.com/send?phone=${phoneNumber}&text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
-    }
-
-    useEffect(() => {
-        const vehicale = async () => {
-            try {
-                const vehicale = await VehicleService.getVehicleByProductId(tyre?._id)
-                setVehicale(vehicale)
-            } catch (error) {
-                console.log(error || "failed to fetch vehicle")
-            }
-        }
-
-        vehicale()
-    }, [tyre])
+    }, [tyre?.productName]);
 
     return (
         <div className="space-y-4">
@@ -85,7 +80,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                 </div>
             </div>
             <section className={`space-y-4 my-4 ${sizesClassName}`} id="fitment-section">
-                <div  className="relative  space-y-4">
+                <div className="relative space-y-4">
                     {Front.length > 0 && (
                         <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl flex flex-col gap-4">
                             <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -102,7 +97,6 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                             Available Fitments For This Model
                                         </p>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -150,7 +144,6 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                             Available Fitments For This Model
                                         </p>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -295,7 +288,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                         </header>
 
                                         <ul className="space-y-2" aria-label="Advantages">
-                                            {tyre.pros?.slice(0, 6).map((pro, index) => (
+                                            {tyre.pros.slice(0, 6).map((pro, index) => (
                                                 <li key={index} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                                                     <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full border transition-colors mt-0.5 bg-emerald-500/10 border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/20 group-hover:text-emerald-300">
                                                         <TbCheck size={14} className="stroke-[2.5px]" aria-hidden="true" />
@@ -308,7 +301,6 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                 </article>
                             )}
 
-                            {/* CONS */}
                             {tyre?.cons?.length > 0 && (
                                 <article className="relative overflow-hidden rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md p-5 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 hover:border-red-500/30 hover:bg-red-500/10 hover:shadow-[0_12px_24px_-10px_rgba(239,68,68,0.15)]">
                                     <div className="relative z-10 space-y-2">
@@ -327,7 +319,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
                                         </header>
 
                                         <ul className="space-y-2" aria-label="Limitations">
-                                            {tyre.cons?.slice(0, 6)?.map((con, index) => (
+                                            {tyre.cons.slice(0, 6).map((con, index) => (
                                                 <li key={index} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                                                     <span className="flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full border transition-colors mt-0.5 bg-red-500/10 border-red-500/20 text-red-400 group-hover:bg-red-500/20 group-hover:text-red-300">
                                                         <TbX size={14} className="stroke-[2.5px]" aria-hidden="true" />
@@ -347,6 +339,6 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
 
         </div>
     )
-}
+});
 
-export default Description
+export default Description;

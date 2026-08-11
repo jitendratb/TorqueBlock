@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useCallback } from "react";
 import Image from "@/components/molecules/CustomImage";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
-import useReviewStore from "@/stores/reviewStore";
+
 import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaChevronDown, } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
@@ -20,7 +20,7 @@ const tagConfig = {
     "Naked Sport": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
 };
 
-export default function ProductDetails({ tyre , reviewData }) {
+const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
     const gallery = useMemo(() => {
         const imgs = Array.isArray(tyre?.productImages) ? tyre.productImages : [];
         if (imgs.length > 0) return imgs;
@@ -29,16 +29,8 @@ export default function ProductDetails({ tyre , reviewData }) {
         return Array.isArray(tyre?.productImage) ? tyre.productImage : [];
     }, [tyre]);
 
+
     const [activeImage, setActiveImage] = useState(gallery[0]);
-
-    useEffect(() => {
-        if (gallery.length > 0) {
-            setActiveImage(gallery[0]);
-        }
-    }, [gallery]);
-
-    const { totalReviews, avgRating, fetchLoading } = useReviewStore();
-
     const allTags = useMemo(() => {
         const eyebrow = tyre?.hero?.eyebrowText || "";
         const subtitle = tyre?.hero?.subtitle || "";
@@ -55,13 +47,17 @@ export default function ProductDetails({ tyre , reviewData }) {
     }, [tyre]);
 
 
+    const scrollToSizes = useCallback(() => {
+        document.getElementById("allSizesLink")?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, []);
+
     return (
         <section className="w-full relative">
             <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
                         <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1">
-                            {gallery?.map((item, idx) => {
+                            {gallery.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
                                     <button
@@ -171,13 +167,8 @@ export default function ProductDetails({ tyre , reviewData }) {
 
                     <div className="w-full">
                         <button
-                            onClick={() => {
-                                const el = document.getElementById("allSizesLink");
-                                if (el) {
-                                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                                }
-                            }}
-                            className="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4 transition-all duration-300 hover:scale-[1.02]  active:scale-[0.98]"
+                            onClick={scrollToSizes}
+                            className="group relative w-full flex items-center justify-center gap-3 overflow-hidden rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-4 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
                         >
                             <span className="relative z-10 text-xs md:text-sm font-black uppercase tracking-[0.25em] text-white drop-shadow-md">
                                 View All Sizes
@@ -226,4 +217,6 @@ export default function ProductDetails({ tyre , reviewData }) {
             </div>
         </section>
     );
-}
+});
+
+export default ProductDetails;
