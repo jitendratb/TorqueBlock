@@ -163,7 +163,7 @@ export default function AddressSection({ selectedAddressId, onSelectAddress, set
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="pl-7 space-y-1">
+                                    <div className="space-y-1">
                                         <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed font-medium">
                                             {address.addressLine1}{address.addressLine2 ? `, ${address.addressLine2}` : ''}, {address.city}, {address.state}{pincodeVal ? ` - ${pincodeVal}` : ''}
                                         </p>
