@@ -94,7 +94,7 @@ export default function ProductCard({ product, tyre, className, opposteProductId
                             <span>{categoryName}</span>
                         </span>
                         {product?.size && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-500/10 [.light-mode_&]:bg-orange-50 border border-orange-500/30 [.light-mode_&]:border-orange-200 text-orange-400 [.light-mode_&]:text-orange-600 backdrop-blur-md shadow-[0_0_12px_rgba(249,115,22,0.15)] transition-all duration-300 group-hover:bg-orange-500/20 group-hover:border-orange-500/50">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-500/20 [.light-mode_&]:bg-orange-50 border border-orange-500/50 [.light-mode_&]:border-orange-200 text-orange-400 [.light-mode_&]:text-orange-600 backdrop-blur-md shadow-[0_0_12px_rgba(249,115,22,0.15)] transition-all duration-300 group-hover:bg-orange-500/20 group-hover:border-orange-500/50">
                                 <FiMaximize2 className="text-[10px] shrink-0" />
                                 <span>{product?.size}</span>
                             </span>
