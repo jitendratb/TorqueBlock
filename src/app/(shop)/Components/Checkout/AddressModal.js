@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Model from '@/components/organisms/CustomModel';
 import { Input } from '@/components/atoms/input';
 import CustomDropdown from '@/components/atoms/CustomDropdown';
+import Autocomplete from '@/components/atoms/AutoComplete';
 import Checkbox from '@/components/atoms/Checkbox';
 import useAddressStore from '@/stores/addressStore';
 import { useToast } from '@/context/ToastContext';
 import { CgSpinner } from 'react-icons/cg';
+import LocationService from '@/services/locationService';
 
 export default function AddressModal({ isOpen, address, onClose }) {
     const { addAddress, updateAddress } = useAddressStore();
     const toast = useToast();
     const [isLoading, setIsLoading] = useState(false);
+    const [isPincodeLookup, setIsPincodeLookup] = useState(false);
+    const [citySearch, setCitySearch] = useState('');
+    const pincodeLookupTimer = useRef(null);
 
     const [formData, setFormData] = useState({ fullName: '', phone: '', email: '', addressType: 'home', addressLine1: '', addressLine2: '', landmark: '', city: '', state: '', country: 'India', pincode: '', isDefault: false });
 
@@ -50,6 +55,31 @@ export default function AddressModal({ isOpen, address, onClose }) {
         }
     }, [address, isOpen]);
 
+    const handlePincodeChange = useCallback((e) => {
+        const { value } = e.target;
+        // Only allow digits
+        const digits = value.replace(/\D/g, '').slice(0, 6);
+        setFormData(prev => ({ ...prev, pincode: digits }));
+
+        if (pincodeLookupTimer.current) clearTimeout(pincodeLookupTimer.current);
+
+        if (digits.length === 6) {
+            pincodeLookupTimer.current = setTimeout(async () => {
+                setIsPincodeLookup(true);
+                const result = await LocationService.fetchByPincode(digits);
+                setIsPincodeLookup(false);
+                if (result) {
+                    setFormData(prev => ({
+                        ...prev,
+                        city: result.city || prev.city,
+                        state: result.state || prev.state,
+                    }));
+                    toast.success(`Auto-filled: ${result.city}, ${result.state}`);
+                }
+            }, 600);
+        }
+    }, [toast]);
+
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -57,6 +87,26 @@ export default function AddressModal({ isOpen, address, onClose }) {
             [name]: type === 'checkbox' ? checked : value
         }));
     };
+
+    const handleCityChange = useCallback(async (e) => {
+        const city = e.target.value;
+        setFormData(prev => ({ ...prev, city }));
+
+        if (!formData.pincode && city && city.length > 2) {
+            const result = await LocationService.fetchPincodeByCity(city);
+            if (result?.pincode) {
+                setFormData(prev => ({ ...prev, pincode: result.pincode }));
+            }
+        }
+    }, [formData.pincode]);
+
+    const handleStateChange = useCallback((e) => {
+        setFormData(prev => ({ ...prev, state: e.target.value, city: '' }));
+        setCitySearch('');
+    }, []);
+
+    const cityOptions = LocationService.getCities(formData.state || null, citySearch);
+    const stateOptions = LocationService.getStates();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -109,7 +159,7 @@ export default function AddressModal({ isOpen, address, onClose }) {
             closeOnBackdropClick={!isLoading}
             showCloseButton={!isLoading}
         >
-            <form onSubmit={handleSubmit} className="max-h-[300px] lg:max-h-[400px] space-y-4 overflow-y-auto px-2">
+            <form onSubmit={handleSubmit} className="max-h-[360px] lg:max-h-[420px] space-y-4 overflow-y-auto px-2">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <Input
                         type="text"
@@ -148,7 +198,7 @@ export default function AddressModal({ isOpen, address, onClose }) {
                         variant="glass"
                     />
                     <div className="flex flex-col gap-1.5">
-                        <label className="text-xs font-bold uppercase tracking-widest text-gray-200">
+                        <label className="text-[11px] md:text-xs font-bold uppercase tracking-widest text-gray-200">
                             Address Type *
                         </label>
                         <CustomDropdown
@@ -160,7 +210,6 @@ export default function AddressModal({ isOpen, address, onClose }) {
                             onChange={(item) => setFormData(prev => ({ ...prev, addressType: item.value }))}
                             searchable={false}
                             disabled={isLoading}
-                            variant="glass"
                             buttonClassName="h-11"
                         />
                     </div>
@@ -200,42 +249,51 @@ export default function AddressModal({ isOpen, address, onClose }) {
                         disabled={isLoading}
                         variant="glass"
                     />
-                    <Input
-                        type="text"
-                        name="pincode"
-                        label="Pincode *"
-                        placeholder="6-digit PIN"
-                        value={formData.pincode}
-                        onChange={handleChange}
-                        disabled={isLoading}
-                        required
-                        pattern="[0-9]{6}"
-                        variant="glass"
-                    />
+
+                    {/* Pincode — auto-fills city & state on 6-digit entry */}
+                    <div className="flex flex-col gap-1.5">
+                        <Input
+                            type="text"
+                            name="pincode"
+                            label={`Pincode *${isPincodeLookup ? ' (Looking up...)' : ''}`}
+                            placeholder="6-digit PIN"
+                            value={formData.pincode}
+                            onChange={handlePincodeChange}
+                            disabled={isLoading}
+                            required
+                            pattern="[0-9]{6}"
+                            variant="glass"
+                        />
+                        {isPincodeLookup && (
+                            <span className="flex items-center gap-1 text-[10px] text-orange-400 font-medium">
+                                <CgSpinner className="animate-spin" />
+                                Auto-filling city & state…
+                            </span>
+                        )}
+                    </div>
                 </div>
 
+                {/* City & State — smart Autocomplete powered by LocationService */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <Input
-                        type="text"
-                        name="city"
+                    <Autocomplete
+                        id="city"
                         label="City *"
-                        placeholder="Enter city"
+                        placeholder="Search city..."
+                        options={cityOptions}
                         value={formData.city}
-                        onChange={handleChange}
+                        onChange={handleCityChange}
+                        onSearchChange={setCitySearch}
+                        allowCustom
                         disabled={isLoading}
-                        required
-                        variant="glass"
                     />
-                    <Input
-                        type="text"
-                        name="state"
+                    <Autocomplete
+                        id="state"
                         label="State *"
-                        placeholder="Enter state"
+                        placeholder="Search state..."
+                        options={stateOptions}
                         value={formData.state}
-                        onChange={handleChange}
+                        onChange={handleStateChange}
                         disabled={isLoading}
-                        required
-                        variant="glass"
                     />
                 </div>
 
@@ -257,14 +315,14 @@ export default function AddressModal({ isOpen, address, onClose }) {
                         type="button"
                         onClick={onClose}
                         disabled={isLoading}
-                        className="px-6 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition cursor-pointer"
+                        className="md:px-6 px-4 md:py-3.5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white border border-white/10 transition cursor-pointer"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         disabled={isLoading}
-                        className="md:px-8 px-4 py-3.5 rounded-xl text-xs font-black md:uppercase md:tracking-widest bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.2)] disabled:opacity-50 transition cursor-pointer flex items-center justify-center gap-2"
+                        className="md:px-8 px-4 md:py-3.5 py-2.5 rounded-xl text-xs font-black md:uppercase md:tracking-widest bg-orange-500 text-white shadow-[0_0_20px_rgba(249,115,22,0.2)] disabled:opacity-50 transition cursor-pointer flex items-center justify-center gap-2"
                     >
                         {isLoading ? (
                             <>
@@ -280,3 +338,4 @@ export default function AddressModal({ isOpen, address, onClose }) {
         </Model>
     );
 }
+

@@ -35,8 +35,8 @@ export const Input = forwardRef(function Input(
           className={clsx(
             "font-medium transition-colors duration-300",
             variant === "glass"
-              ? "text-xs font-bold uppercase tracking-widest text-white"
-              : "text-sm text-gray-700"
+              ? "text-[11px] md:text-xs font-bold uppercase tracking-widest text-white"
+              : "text-xs text-gray-700"
           )}
         >
           {label}
@@ -54,12 +54,12 @@ export const Input = forwardRef(function Input(
             "border-red-500 rounded-lg": error && variant !== "glass",
             
             // Glass variant
-            "bg-white/[0.02] border-white/10 hover:border-white/20 focus-within:border-orange-500/50 focus-within:ring-1 focus-within:ring-orange-500/50 rounded-xl": variant === "glass" && !error,
+            "bg-white/[0.02] border-white/10 hover:border-orange-500 rounded-lg": variant === "glass" && !error,
             "bg-white/[0.02] border-red-500/30 focus-within:border-red-500/50 focus-within:ring-1 focus-within:ring-red-500/50 rounded-xl": variant === "glass" && error,
 
             // Sizing
             "px-2.5 py-1.5 text-xs": size === "sm",
-            "px-3.5 py-3 text-sm": size === "md",
+            "px-2.5 md:px-3.5 py-2 md:py-3 text-sm": size === "md",
             "px-4 py-3.5 text-sm": size === "lg",
           },
           wrapperClassName

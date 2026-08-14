@@ -118,21 +118,27 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
 
                     <div>
                         <h1 className="text-3xl md:text-5xl lg:text-3xl font-black leading-[1.05] tracking-tighter text-white">
-                            Is {" "}
-                            <span className="text-transparent lg:text-[3rem] bg-clip-text bg-gradient-to-br from-white via-orange-300 to-orange-600 drop-shadow-lg">
-                                {tyre?.productName}
+                            <span className="sr-only">
+                                {tyre?.brand?.name ? `${tyre.brand.name} ${tyre?.productName}` : tyre?.productName} Motorcycle Tyre
                             </span>
-                            <span className="block text-zinc-400 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight">
-                                right for your motorcycle?
+                            <span aria-hidden="true">
+                                Is {" "}
+                                <span className="text-transparent lg:text-[3rem] bg-clip-text bg-gradient-to-br from-white via-orange-300 to-orange-600 drop-shadow-lg">
+                                    {tyre?.productName}
+                                </span>
+                                <span className="block text-zinc-400 text-xl md:text-2xl lg:text-3xl font-medium tracking-tight">
+                                    right for your motorcycle?
+                                </span>
                             </span>
                         </h1>
-                        <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-                            <StarRating
-                                rating={reviewData?.avgRating?.overall}
-                                count={reviewData?.pagination?.total}
-                                isLoading={reviewData?.data?.length > 0}
-                            />
-                        </div>
+                        {reviewData?.avgRating?.overall > 0 && (
+                            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                                <StarRating
+                                    rating={reviewData?.avgRating?.overall}
+                                    count={reviewData?.pagination?.total || reviewData?.reviewsCount || 0}
+                                />
+                            </div>
+                        )}
                     </div>
 
                     {tyre?.hero?.highlights?.length > 0 && (

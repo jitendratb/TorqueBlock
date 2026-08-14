@@ -22,7 +22,7 @@ function TyreSizeClient({ initialData, reviewData , opposteProductId }) {
 
     return (
         <div className="flex flex-col gap-4 pb-4">
-            <SubProductDetails tyreData={tyreSize} reviewData={reviewData} setProductIds={setProductIds} opposteProductId={opposteProductId} />
+            <SubProductDetails tyreData={tyreSize}  setProductIds={setProductIds} opposteProductId={opposteProductId} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
             {isTubeType && (

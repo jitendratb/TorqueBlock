@@ -6,6 +6,9 @@ import Image from "@/components/molecules/CustomImage";
 import { FaMotorcycle, FaBolt, FaShieldAlt, FaTag, FaBell } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { RiSparkling2Fill } from "react-icons/ri";
+import { MdStraighten, MdLocalShipping } from "react-icons/md";
+import { TbDimensions } from "react-icons/tb";
+import { GiTyre } from "react-icons/gi";
 import useCartStore from "@/stores/cartStore";
 import { useToast } from "@/context/ToastContext";
 import Carousel from "@/components/organisms/Carousel";
@@ -16,11 +19,12 @@ import { notifyService } from "@/services/notifyService";
 import StarRating from "@/components/atoms/StarRating";
 import MatchingTyreItem from "./MatchingTyreItem";
 import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
+import { FiMaximize2 } from "react-icons/fi";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
 
-const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, opposteProductId }) => {
+const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId }) => {
     const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
@@ -397,7 +401,6 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
                     </aside>
                 </div>
 
-                {/* Right Column - Product Details */}
                 <div className="space-y-4">
                     <header className="space-y-4 mt-2 md:mt-0">
                         <div className="flex items-center gap-4">
@@ -409,10 +412,10 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
                                 </span>
                             </div>
 
-                            <div className="absolute top-0 right-0 md:relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-gradient-to-r from-green-500/15 via-green-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group overflow-hidden">
+                            <div className="absolute top-0 right-0 md:relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2.5s_infinite]" />
-                                <FaShieldAlt className="text-xs text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" aria-hidden="true" />
-                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-green-100 z-10">
+                                <FaShieldAlt className="text-xs text-orange-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" aria-hidden="true" />
+                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-orange-100 z-10">
                                     Trusted by 50,000+ riders
                                 </span>
                             </div>
@@ -422,26 +425,32 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
                             <h1 id="product-details-heading" className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
                                 {title}
                             </h1>
-                            <div className="flex flex-wrap items-center gap-1">
-                                <StarRating rating={reviewData?.avgRating?.overall}
-                                    count={reviewData?.pagination?.total}
-                                    isLoading={reviewData?.data?.length > 0} />
-                            </div>
                         </div>
                     </header>
 
                     <div className="space-y-5">
                         <div className="flex flex-wrap items-center gap-2" aria-label="Product features">
-                            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                <HiFire className="text-orange-500 text-sm" aria-hidden="true" />
-                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
-                                    High Performance
-                                </span>
-                            </div>
+                            {tyreData?.size && (
+                                <div className="flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-orange-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-orange-500/60 hover:shadow-[0_0_12px_rgba(59,130,246,0.2)]">
+                                    <FiMaximize2 className="text-orange-400 text-sm" aria-hidden="true" />
+                                    <span className="text-[9px] md:text-[11px] font-bold text-orange-200 uppercase tracking-widest">
+                                        {tyreData.size}
+                                    </span>
+                                </div>
+                            )}
+                            {tyreData?.tyretype && (
+                                <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 to-emerald-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-emerald-500/60 hover:shadow-[0_0_12px_rgba(16,185,129,0.2)]">
+                                    <GiTyre className="text-emerald-400 text-sm" aria-hidden="true" />
+                                    <span className="text-[9px] md:text-[11px] font-bold text-emerald-200 uppercase tracking-widest">
+                                        {tyreData.tyretype}
+                                    </span>
+                                </div>
+                            )}
+
 
                             {categoryName && (
                                 <div className="flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                    <FaTag className="text-orange-400 text-[10px]" aria-hidden="true" />
+                                    <FaTag className="text-orange-400 text-sm" aria-hidden="true" />
                                     <span className="text-[9px] md:text-[11px] font-black text-orange-400 uppercase tracking-widest">
                                         {categoryName}
                                     </span>
@@ -575,22 +584,22 @@ const TyreDataDetails = React.memo(({ tyreData, reviewData, setProductIds, oppos
                     )} */}
 
                     {tyreData?.availability !== "backorder" && (
-                        <div className={`p-4 rounded-2xl border backdrop-blur-md flex items-center gap-3.5 transition-all duration-300 ${isExpressEligible
-                            ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.05)]"
-                            : "bg-white/10 border-white/5 text-zinc-400"
-                            }`}>
-                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${isExpressEligible ? "bg-emerald-500/15 text-emerald-400" : "bg-zinc-800 text-zinc-500"}`}>
-                                <FaBolt className="text-sm" aria-hidden="true" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-black uppercase tracking-wider">
-                                    {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
-                                </span>
-                                <span className="text-[10px] font-medium text-zinc-400">
-                                    {isExpressEligible
-                                        ? "Order dispatched within 24 hours*"
-                                        : "Pre-ordered items are delivered in 5-7 business days"}
-                                </span>
+                        <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
+                            <div className="relative flex items-center gap-3">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/15 ring-1 ring-orange-500/30 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                                    <MdLocalShipping className="text-orange-400 text-lg drop-shadow-[0_0_6px_rgba(249,115,22,0.6)]" aria-hidden="true" />
+                                </div>
+                                <div className="flex flex-col gap-0.5 flex-1">
+                                    <span className="text-xs font-black uppercase tracking-wider text-orange-400">
+                                        {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
+                                    </span>
+                                    <span className="text-[10px] font-medium text-zinc-400">
+                                        {isExpressEligible
+                                            ? "Order dispatched within 24 hours*"
+                                            : "Delivered in 5–7 business days"}
+                                    </span>
+                                </div>
+                               
                             </div>
                         </div>
                     )}

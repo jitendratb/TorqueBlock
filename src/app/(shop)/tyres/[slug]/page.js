@@ -1,7 +1,6 @@
 import Breadcrumb from "@/components/atoms/BreadCrumb";
 import tyresService from "@/services/tyresService";
-import dynamic from 'next/dynamic';
-const TyresClient = dynamic(() => import('../../Components/TyresClient'), { ssr: true, loading: () => <div className="min-h-[500px] w-full animate-pulse bg-zinc-900 rounded-xl mt-4" /> });
+import TyresClient from '../../Components/TyresClient';
 import { cache } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
@@ -126,13 +125,12 @@ async function Page({ params }) {
 
     return (
         <div className="">
-            <ProductSchema product={formattedTyre} />
+            <ProductSchema product={formattedTyre}  reviewData={Review}/>
             <BreadcrumbSchema items={breadcrumbItems} />
             <LocalBusinessSchema />
             {formattedTyre?.faqs?.length > 0 && (
                 <FAQSchema faqs={formattedTyre.faqs} />
             )}
-
             <Breadcrumb items={breadcrumbItems} />
             <TyresClient initialData={formattedTyre} reviewData={Review} />
         </div>

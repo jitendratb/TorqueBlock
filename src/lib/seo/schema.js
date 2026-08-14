@@ -8,7 +8,7 @@ const getImageArr = (imgs) => {
     return arr.map(getImageStr).filter(Boolean);
 };
 
-export function generateProductSchema(product) {
+export function generateProductSchema(product, reviewData) {
     if (!product) return null;
 
     const displayName = product?.productName || product?.hero?.title || product?.name;
@@ -147,8 +147,15 @@ export function generateProductSchema(product) {
         seller: seller,
     };
 
-    const ratingValue = product?.schemaMarkup?.aggregateRating || product?.rating || 4.8;
-    const reviewCount = product?.schemaMarkup?.reviewCount || product?.ratingCount || 459;
+    const ratingValue = reviewData?.avgRating?.overall
+        || product?.schemaMarkup?.aggregateRating
+        || product?.rating
+        || product?.avgRating;
+
+    const reviewCount = reviewData?.pagination?.total
+        || product?.schemaMarkup?.reviewCount
+        || product?.ratingCount
+        || product?.reviewsCount;
 
     const schema = {
         "@context": "https://schema.org",
@@ -162,29 +169,35 @@ export function generateProductSchema(product) {
         url: `${SITE_URL}/tyres/${slug}`,
         brand: { "@type": "Brand", name: brandName },
         offers: offers,
-
-        aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: ratingValue,
-            reviewCount: reviewCount,
-        },
-
-        review: [
-            {
-                "@type": "Review",
-                reviewRating: {
-                    "@type": "Rating",
-                    ratingValue: ratingValue,
-                    bestRating: "5",
-                },
-                author: {
-                    "@type": "Person",
-                    name: "Verified Rider",
-                },
-                reviewBody: `Excellent grip and performance. Perfect fit for premium motorcycles.`,
-            }
-        ],
     };
+
+    if (ratingValue && reviewCount && Number(reviewCount) > 0) {
+        schema.aggregateRating = {
+            "@type": "AggregateRating",
+            ratingValue: Number(ratingValue),
+            bestRating: "5",
+            worstRating: "1",
+            reviewCount: Number(reviewCount),
+        };
+    }
+
+    const reviewItems = (reviewData?.data?.length > 0 ? reviewData.data : product?.reviews) || [];
+    if (reviewItems.length > 0) {
+        schema.review = reviewItems.slice(0, 5).map(r => ({
+            "@type": "Review",
+            reviewRating: {
+                "@type": "Rating",
+                ratingValue: r?.rating || r?.overallRating || 5,
+                bestRating: "5",
+            },
+            author: {
+                "@type": "Person",
+                name: r?.user?.name || r?.userName || r?.author || "Verified Rider",
+            },
+            reviewBody: r?.comment || r?.review || r?.text || `Excellent grip and performance on ${displayName}.`,
+            datePublished: r?.createdAt ? new Date(r.createdAt).toISOString().split('T')[0] : undefined,
+        }));
+    }
 
     if (additionalProperty.length > 0) {
         schema.additionalProperty = additionalProperty;
@@ -262,6 +275,9 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
     const allSizeImgs = [...sizeImgs, ...availableImgs];
     const imagesList = allSizeImgs.length > 0 ? allSizeImgs : [mainImage];
 
+    const sizeRating = sizeData?.schemaMarkup?.aggregateRating || sizeData?.rating;
+    const sizeReviewCount = sizeData?.schemaMarkup?.reviewCount || sizeData?.reviewCount;
+
     const schema = {
         "@context": "https://schema.org",
         "@type": "Product",
@@ -274,12 +290,15 @@ export function generateTyreSizeSchema(sizeData, tyreSlug, sizeSlug) {
         url: `${SITE_URL}/tyres/${tyreSlug}/${sizeSlug}`,
         brand: { "@type": "Brand", name: brandName },
         offers: offers,
-        aggregateRating: {
-            "@type": "AggregateRating",
-            ratingValue: sizeData?.schemaMarkup?.aggregateRating || 4.8,
-            reviewCount: sizeData?.schemaMarkup?.reviewCount || 190,
-        },
     };
+
+    if (sizeRating && sizeReviewCount && Number(sizeReviewCount) > 0) {
+        schema.aggregateRating = {
+            "@type": "AggregateRating",
+            ratingValue: Number(sizeRating),
+            reviewCount: Number(sizeReviewCount),
+        };
+    }
 
     if (additionalProperty.length > 0) {
         schema.additionalProperty = additionalProperty;

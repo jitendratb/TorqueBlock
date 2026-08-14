@@ -80,7 +80,7 @@ const ReviewSummary = React.memo(({ overallRating, displayTotalReviews, highligh
 
         <button
             onClick={onWriteReview}
-            className="group flex w-full items-center justify-center gap-2 rounded-xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-orange-600/10 px-4 py-2.5 text-sm font-bold text-orange-400 transition-all duration-300 hover:border-orange-500/60 hover:from-orange-500/20 hover:to-orange-600/20 hover:shadow-[0_0_18px_rgba(249,115,22,0.2)] active:scale-95 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-zinc-900"
+            className="group flex w-full items-center justify-center gap-2 rounded-xl border border-orange-500/30 bg-gradient-to-r from-orange-500/10 to-orange-600/10 px-4 py-2.5 text-sm font-bold text-orange-400 transition-all duration-300 hover:border-orange-500/60 hover:from-orange-500/20 hover:to-orange-600/20 hover:shadow-[0_0_18px_rgba(249,115,22,0.2)] active:scale-95 focus:outline-none"
             aria-label="Write a Review"
         >
             <FaPen className="text-xs transition-transform duration-300 group-hover:-rotate-12" aria-hidden="true" />
@@ -235,7 +235,7 @@ const ReviewsCard = React.memo(({ tyreId = null, productId = null, reviewData = 
                 submitLoading={submitLoading}
             />
 
-            <Login isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
+            <Login isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
         </section>
     );
 });

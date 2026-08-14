@@ -41,9 +41,9 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
     const discountPercentage = (unitOriginalPrice > 0 && unitDiscount > 0) ? Math.round((unitDiscount / unitOriginalPrice) * 100) : 0;
 
     return (
-        <div className={`flex relative items-center gap-4 p-4 rounded-2xl transition-all duration-300 group ${isItemOutOfStock
+        <div className={`flex relative items-center gap-4 p-4 rounded-xl transition-all duration-300 group ${isItemOutOfStock
                 ? "bg-red-950/10 border border-red-500/15 hover:border-red-500/30 shadow-[0_0_15px_rgba(239,68,68,0.05)]"
-                : "bg-zinc-900/40 border border-white/5 hover:border-white/10 hover:bg-zinc-900/60"
+                : "bg-white/5 border border-white/15 hover:border-white/10 hover:bg-white/15"
             }`}>
             <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-xl border border-zinc-800 bg-black/40 flex items-center justify-center">
                 {itemImage ? (
@@ -84,7 +84,7 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                         </div>
                         <button
                             onClick={() => removeFromCart(item.id)}
-                            className="text-zinc-500 hover:text-red-400 p-1 rounded-lg transition-colors cursor-pointer"
+                            className="text-zinc-500 hover:text-orange-400 p-1 rounded-lg transition-colors cursor-pointer"
                             aria-label="Remove item"
                         >
                             <FaTrash className="text-xs" />

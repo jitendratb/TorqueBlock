@@ -8,19 +8,43 @@ import useAuthStore from '@/stores/authStore';
 import useAddressStore from '@/stores/addressStore';
 import useOrderStore from '@/stores/orderStore';
 import { useToast } from '@/context/ToastContext';
-import AddressSection from './AddressSection';
-import CartSummary from './CartSummary';
-import PaymentSection from './PaymentSection';
+import dynamic from 'next/dynamic';
+import AddressSkeleton from './AddressSkeleton';
+import PaymentSkeleton from './PaymentSkeleton';
+import CartSummarySkeleton from './CartSummarySkeleton';
+import HeaderSkeleton from './HeaderSkeleton';
+import PaymentVerifyingState from './PaymentVerifyingState';
+import OrderSuccessView from './OrderSuccessView';
+import EmptyCartView from './EmptyCartView';
 import Login from '@/components/organisms/login';
-import AddressModal from './AddressModal';
-import { IoCartOutline, IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline } from 'react-icons/io5';
+import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
+
+const AddressSection = dynamic(() => import('./AddressSection'), {
+    loading: () => <AddressSkeleton />,
+    ssr: false
+});
+
+const PaymentSection = dynamic(() => import('./PaymentSection'), {
+    loading: () => <PaymentSkeleton />,
+    ssr: false
+});
+
+const CartSummary = dynamic(() => import('./CartSummary'), {
+    loading: () => <CartSummarySkeleton />,
+    ssr: false
+});
+
+const AddressModal = dynamic(() => import('./AddressModal'), {
+    ssr: false
+});
 
 export default function CheckoutClient() {
     const toast = useToast();
+    const [isMounted, setIsMounted] = useState(false);
     const [addressModalOpen, setAddressModalOpen] = useState(false);
     const [editingAddress, setEditingAddress] = useState(null);
-    const { cart, getCartTotal, clearCart } = useCartStore();
+    const { cart, getCartTotal, clearCart, fetchCart } = useCartStore();
     const { isAuthenticated, user } = useAuthStore();
     const { addresses, fetchAddresses, loading: addressLoading } = useAddressStore();
     const { createOrder, verifyPayment, paymentFailed, loading: orderLoading } = useOrderStore();
@@ -32,6 +56,10 @@ export default function CheckoutClient() {
     const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
     const [verifyLoading, setVerifyLoading] = useState(false);
 
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     const handleCloseAddressModal = useCallback(() => {
         setAddressModalOpen(false);
         setEditingAddress(null);
@@ -40,8 +68,9 @@ export default function CheckoutClient() {
     useEffect(() => {
         if (isAuthenticated) {
             fetchAddresses();
+            fetchCart();
         }
-    }, [isAuthenticated, fetchAddresses]);
+    }, [isAuthenticated, fetchAddresses, fetchCart]);
 
     useEffect(() => {
         if (addresses.length > 0 && !selectedAddressId) {
@@ -126,6 +155,7 @@ export default function CheckoutClient() {
                                 toast.error(err?.response?.data?.message || "Payment verification failed.");
                             } finally {
                                 setVerifyLoading(false);
+                                setIsOrderPlacing(false);
                             }
                         },
                         prefill: {
@@ -158,6 +188,7 @@ export default function CheckoutClient() {
                         console.error("Razorpay Payment Failed:", failedResponse?.error);
                         const desc = failedResponse?.error?.description || "Payment failed on payment gateway.";
                         toast.error(desc);
+                        setIsOrderPlacing(false);
                         try {
                             await paymentFailed({
                                 razorpay_order_id: razorpayOrderId,
@@ -166,10 +197,16 @@ export default function CheckoutClient() {
                         } catch (e) {
                             console.error("Failed to report payment failure to backend:", e);
                         }
-                        setIsOrderPlacing(false);
                     });
 
-                    rzpay.open();
+                    try {
+                        rzpay.open();
+                    } catch (sdkErr) {
+                        console.error("Razorpay SDK open() failed:", sdkErr);
+                        toast.error("Failed to open payment gateway. Please try again.");
+                        setIsOrderPlacing(false);
+                    }
+                    return;
                 } else {
                     toast.success("Order placed successfully!");
                     setPlacedOrderDetails(response.data);
@@ -186,195 +223,148 @@ export default function CheckoutClient() {
         }
     }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, paymentFailed, addresses, user, clearCart, toast]);
 
-    if (verifyLoading) {
+    if (!isMounted) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[60vh] text-center py-16 px-4 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-2xl mx-auto space-y-8 relative overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.3)]" role="status" aria-label="Verifying Payment">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none animate-pulse"></div>
-
-                <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
-                    <div className="w-full h-[3px] bg-gradient-to-r from-transparent via-orange-500/40 to-transparent absolute top-0 left-0 animate-scan-line"></div>
-                </div>
-
-                <div className="relative w-32 h-32 flex items-center justify-center">
-                    <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 opacity-20 blur-xl animate-pulse"></div>
-                    <div className="absolute inset-0 rounded-full border-4 border-dashed border-orange-500/20 animate-[spin_20s_linear_infinite]"></div>
-                    <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-orange-500 border-r-amber-500 animate-spin"></div>
-
-                    <div className="relative z-10 w-20 h-20 rounded-full bg-zinc-950 border border-white/10 flex items-center justify-center text-orange-500 shadow-[inset_0_0_20px_rgba(249,115,22,0.15)]">
-                        <IoShieldCheckmarkOutline className="w-10 h-10 animate-pulse" />
+            <>
+                <HeaderSkeleton />
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
+                    <div className="space-y-4">
+                        <AddressSkeleton />
+                        <PaymentSkeleton />
+                    </div>
+                    <div className="space-y-4">
+                        <CartSummarySkeleton />
                     </div>
                 </div>
-
-                <div className="space-y-3 z-10 max-w-md">
-                    <h3 className="text-xl font-black uppercase tracking-widest text-white">
-                        Verifying Payment
-                    </h3>
-                    <p className="text-zinc-400 text-xs font-semibold leading-relaxed">
-                        Please do not close this window, refresh the page, or click the back button. We are securely validating your transaction with the payment gateway.
-                    </p>
-                </div>
-
-                <div className="flex flex-col items-center gap-2 z-10">
-                    <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-wider animate-pulse">
-                        Securing transaction details...
-                    </span>
-                    <div className="w-28 h-1 bg-zinc-800 rounded-full overflow-hidden relative">
-                        <div className="h-full bg-orange-500 rounded-full w-1/2 absolute top-0 left-0 animate-progress-slide"></div>
-                    </div>
-                </div>
-
-                <div className="flex gap-4 items-center justify-center pt-4 border-t border-white/5 w-full max-w-xs z-10">
-                    <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold tracking-wider">
-                        <IoLockClosedOutline className="text-orange-500 text-xs" />
-                        <span>SSL Encrypted</span>
-                    </div>
-                    <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
-                    <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold tracking-wider">
-                        <IoShieldCheckmarkOutline className="text-emerald-500 text-xs" />
-                        <span>Razorpay Secure</span>
-                    </div>
-                </div>
-            </div>
+            </>
         );
+    }
+
+    if (verifyLoading) {
+        return <PaymentVerifyingState />;
     }
 
     if (orderPlacedSuccess && placedOrderDetails) {
-        const totalPaidAmount = placedOrderDetails?.paidAmount || placedOrderDetails?.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * (item.quantity || 1))), 0) || 0;
-
-        return (
-            <div className="flex flex-col items-center justify-center text-center px-4 max-w-2xl mx-auto space-y-6">
-                <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 animate-bounce shadow-[0_0_30px_rgba(16,185,129,0.15)]">
-                    <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                </div>
-
-                <div className="space-y-2">
-                    <h2 className="text-2xl font-black uppercase tracking-wider text-white">Order Confirmed!</h2>
-                    <p className="text-zinc-400 text-sm max-w-md mx-auto font-medium">
-                        Thank you for your purchase! Your order has been placed and is currently being processed.
-                    </p>
-                </div>
-
-                <div className="p-5 rounded-2xl bg-black/40 border border-white/5 w-full text-left space-y-3">
-                    <div className="flex justify-between border-b border-white/5 pb-2.5 text-xs font-bold text-zinc-400 uppercase tracking-wider">
-                        <span className="min-w-[70px]">Order ID</span>
-                        <span className="text-white text-xs normal-case font-black break-all text-right ml-4">{placedOrderDetails._id || placedOrderDetails.transactionId}</span>
-                    </div>
-                    <div className="flex justify-between text-xs font-semibold text-zinc-400">
-                        <span>Payment Method</span>
-                        <span className="text-white text-xs uppercase font-bold">{placedOrderDetails?.paymentMethod}</span>
-                    </div>
-                    <div className="flex justify-between text-xs font-semibold text-zinc-400">
-                        <span>Payment Status</span>
-                        <span className="text-emerald-400 text-xs uppercase font-bold">{placedOrderDetails?.paymentStatus}</span>
-                    </div>
-                    <div className="flex justify-between text-xs font-semibold text-zinc-400">
-                        <span>Total Amount Paid</span>
-                        <span className="text-orange-400 text-xs font-black">
-                            {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(totalPaidAmount)}
-                        </span>
-                    </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
-                    <Link
-                        href="/orders"
-                        className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white transition-all text-center"
-                    >
-                        View My Orders
-                    </Link>
-                    <Link
-                        href="/tyres"
-                        className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-orange-500 hover:bg-orange-600 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-all text-center"
-                    >
-                        Continue Shopping
-                    </Link>
-                </div>
-            </div>
-        );
+        return <OrderSuccessView orderDetails={placedOrderDetails} />;
     }
 
     if (cart.length === 0) {
-        return (
-            <div className="flex flex-col items-center justify-center text-center py-20 px-6 bg-zinc-900/40 border border-white/5 rounded-3xl backdrop-blur-xl max-w-lg mx-auto gap-6">
-                <div className="w-16 h-16 rounded-2xl bg-zinc-950 border border-white/5 flex items-center justify-center text-zinc-500 shadow-[inset_0_0_15px_rgba(255,255,255,0.02)]">
-                    <IoCartOutline className="text-2xl" />
-                </div>
-                <div className="space-y-2">
-                    <h3 className="text-xs font-black text-white uppercase tracking-widest">Your Cart is Empty</h3>
-                    <p className="text-xs text-gray-400 max-w-[260px] leading-relaxed font-medium">
-                        Add high-performance tyres or tubes to your cart before proceeding to checkout.
-                    </p>
-                </div>
-                <Link
-                    href="/tyres"
-                    className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-orange-500 hover:bg-orange-600 text-white transition-all shadow-[0_0_20px_rgba(249,115,22,0.3)]"
-                >
-                    Explore Products
-                </Link>
-            </div>
-        );
+        return <EmptyCartView />;
     }
 
     return (
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
-            <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+        <>
+            <div className="relative z-10 space-y-4 py-4">
+                <div className="p-4 rounded-xl bg-white/10 border border-white/10 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] relative overflow-hidden">
 
-            <div className="space-y-4">
-                <AddressSection
-                    selectedAddressId={selectedAddressId}
-                    onSelectAddress={setSelectedAddressId}
-                    setAddressModalOpen={setAddressModalOpen}
-                    setEditingAddress={setEditingAddress}
-                />
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div className="space-y-2">
 
-                <PaymentSection
-                    paymentMethod={paymentMethod}
-                    onSelectMethod={setPaymentMethod}
-                />
-            </div>
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 shrink-0">
+                                    <IoLockClosedOutline className="text-xl md:text-2xl" />
+                                </div>
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
+                                            Secure Transaction
+                                        </span>
+                                    </div>
+                                    <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
+                                        Checkout
+                                    </h1>
+                                </div>
+                            </div>
+                        </div>
 
-            <div className="lg:sticky lg:top-24 space-y-4">
-                <CartSummary
-                    subtotal={subtotal}
-                    deliveryCharge={deliveryCharge}
-                    finalTotal={finalTotal}
-                />
+                        <div className="flex items-center gap-2 md:gap-3 p-2.5 px-4 rounded-xl bg-white/[0.02] border border-white/5 self-start lg:self-auto">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-orange-500 text-white font-black text-[11px] flex items-center justify-center shadow-[0_0_12px_rgba(249,115,22,0.4)]">
+                                    1
+                                </div>
+                                <span className="text-xs font-bold text-white uppercase tracking-wider">Address</span>
+                            </div>
 
-                <button
-                    onClick={handlePlaceOrder}
-                    disabled={isOrderPlacing || orderLoading || !selectedAddressId}
-                    aria-busy={isOrderPlacing}
-                    className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
-                >
-                    {isOrderPlacing ? (
-                        <>
-                            <CgSpinner className="animate-spin text-lg" />
-                            Processing...
-                        </>
-                    ) : (
-                        <>
-                            <IoLockClosedOutline className="text-sm" />
-                            {paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
-                        </>
-                    )}
-                </button>
+                            <div className="w-5 md:w-8 h-[2px] bg-gradient-to-r from-orange-500 to-zinc-700 rounded-full" />
 
-                <div className="grid grid-cols-2 gap-3 pt-2">
-                    <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
-                        <IoShieldCheckmarkOutline className="text-emerald-400 text-xl" />
-                        <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">Secure Payment</span>
-                    </div>
-                    <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
-                        <IoRibbonOutline className="text-blue-400 text-xl" />
-                        <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine</span>
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 text-zinc-400 font-bold text-[11px] flex items-center justify-center">
+                                    2
+                                </div>
+                                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Payment</span>
+                            </div>
+
+                            <div className="w-5 md:w-8 h-[2px] bg-zinc-800 rounded-full" />
+
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 text-zinc-400 font-bold text-[11px] flex items-center justify-center">
+                                    3
+                                </div>
+                                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Order</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+           
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
-            <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
-            <AddressModal isOpen={addressModalOpen} address={editingAddress} onClose={handleCloseAddressModal} />
-        </div>
+                <div className="space-y-4">
+                    <AddressSection
+                        selectedAddressId={selectedAddressId}
+                        onSelectAddress={setSelectedAddressId}
+                        setAddressModalOpen={setAddressModalOpen}
+                        setEditingAddress={setEditingAddress}
+                    />
+
+                    <PaymentSection
+                        paymentMethod={paymentMethod}
+                        onSelectMethod={setPaymentMethod}
+                    />
+                </div>
+
+                <div className="lg:sticky lg:top-24 space-y-4">
+                    <CartSummary
+                        subtotal={subtotal}
+                        deliveryCharge={deliveryCharge}
+                        finalTotal={finalTotal}
+                    />
+
+                    <button
+                        onClick={handlePlaceOrder}
+                        disabled={isOrderPlacing || orderLoading || !selectedAddressId}
+                        aria-busy={isOrderPlacing}
+                        className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+                    >
+                        {isOrderPlacing ? (
+                            <>
+                                <CgSpinner className="animate-spin text-lg" />
+                                Processing...
+                            </>
+                        ) : (
+                            <>
+                                <IoLockClosedOutline className="text-sm" />
+                                {paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
+                            </>
+                        )}
+                    </button>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                            <IoShieldCheckmarkOutline className="text-orange-400 text-xl" />
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">Secure Payment</span>
+                        </div>
+                        <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                            <IoRibbonOutline className="text-orange-400 text-xl" />
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine</span>
+                        </div>
+                    </div>
+                </div>
+
+                <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+                <AddressModal isOpen={addressModalOpen} address={editingAddress} onClose={handleCloseAddressModal} />
+            </div>
+        </>
     );
 }

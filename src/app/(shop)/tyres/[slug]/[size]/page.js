@@ -60,7 +60,7 @@ export async function generateMetadata({ params }) {
     };
 }
 
-async function Page({ params , searchParams }) {
+async function Page({ params, searchParams }) {
     const { slug, size } = await params;
     const awaitedSearchParams = await searchParams;
     const opposteProductId = awaitedSearchParams?.opposteProductId;
