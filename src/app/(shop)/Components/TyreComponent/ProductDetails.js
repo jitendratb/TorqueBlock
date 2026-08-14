@@ -15,7 +15,7 @@ const tagConfig = {
     "Weekend Rides": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
     "High Performance": { icon: <HiFire className="text-orange-500 text-xs" /> },
     "Extreme Grip": { icon: <FaBolt className="text-yellow-400 text-xs" /> },
-    "Bi-Compound": { icon: <FaFlagCheckered className="text-green-400 text-xs" /> },
+    "Bi-Compound": { icon: <FaFlagCheckered className="text-orange-400 text-xs" /> },
     Supersport: { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
     "Naked Sport": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
 };
@@ -105,10 +105,10 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                                 </span>
                             </div>
 
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-green-500/30 bg-gradient-to-r from-green-500/15 via-green-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group relative overflow-hidden">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2.5s_infinite]" />
-                                <FaShieldAlt className="text-xs text-green-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" />
-                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-green-100 z-10">
+                                <FaShieldAlt className="text-xs text-orange-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" />
+                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-orange-100 z-10">
                                     100% Fitment Guarantee
                                 </span>
                             </div>
