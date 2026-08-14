@@ -163,9 +163,9 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                             </div>
                         ))}
                         {tyre?.categoryId?.name && (
-                            <div className="flex items-center gap-1.5 rounded-full border border-blue-500/20 bg-blue-500/8 px-3 py-1">
-                                <FaTag className="text-blue-400 text-xs" />
-                                <span className="text-[11px] font-semibold text-blue-300">{tyre.categoryId.name}</span>
+                            <div className="flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/8 px-3 py-1">
+                                <FaTag className="text-orange-400 text-xs" />
+                                <span className="text-[11px] font-semibold text-orange-300">{tyre.categoryId.name}</span>
                             </div>
                         )}
                     </div>
@@ -207,9 +207,9 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                                 </div>
                             </div>
 
-                            <div className="group relative flex justify-center items-center gap-3 rounded-xl border border-blue-500/20 bg-gradient-to-b from-blue-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:from-blue-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 ring-1 ring-blue-500/30 transition-all duration-300 group-hover:ring-blue-500/60 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                                    <MdSupportAgent className="text-blue-400 text-lg" />
+                            <div className="group relative flex justify-center items-center gap-3 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
+                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30 transition-all duration-300 group-hover:ring-orange-500/60 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.3)]">
+                                    <MdSupportAgent className="text-orange-400 text-lg" />
                                 </div>
                                 <div className="text-center">
                                     <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Expert Help</p>
