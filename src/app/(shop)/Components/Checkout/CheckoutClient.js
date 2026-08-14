@@ -277,7 +277,7 @@ export default function CheckoutClient() {
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 md:gap-3 p-2.5 px-4 rounded-xl bg-white/[0.02] border border-white/5 self-start lg:self-auto">
+                        <div className="hidden md:flex items-center gap-2 md:gap-3 p-2.5 px-4 rounded-xl bg-white/[0.02] border border-white/5 self-start lg:self-auto">
                             <div className="flex items-center gap-2">
                                 <div className="w-6 h-6 rounded-full bg-orange-500 text-white font-black text-[11px] flex items-center justify-center shadow-[0_0_12px_rgba(249,115,22,0.4)]">
                                     1
