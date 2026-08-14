@@ -101,7 +101,7 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                     <div className="flex items-center bg-white/10 border border-white/10 rounded-lg md:rounded-xl md:p-0.5">
                         <button
                             onClick={() => updateQuantity(item.id, -1)}
-                            className="w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            className="w-6 h-5 md:h-6 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
                             aria-label="Decrease quantity"
                         >
                             <FaMinus className="text-[8px]" />
@@ -111,7 +111,7 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                         </span>
                         <button
                             onClick={() => updateQuantity(item.id, 1)}
-                            className="w-6 h-6 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
+                            className="w-6 h-5 md:h-6 flex items-center justify-center text-zinc-400 hover:text-white transition-colors cursor-pointer"
                             aria-label="Increase quantity"
                         >
                             <FaPlus className="text-[8px]" />
