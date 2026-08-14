@@ -59,7 +59,7 @@ const CartItem = memo(({ item, formatPrice, updateQuantity, removeFromCart }) =>
                 )}
             </div>
 
-            {!isItemOutOfStock && (
+            {isItemOutOfStock && (
                 <span className="absolute top-4 left-4 px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20 text-[6px] md:text-[8px] font-black text-red-400 uppercase tracking-wider">
                     Out of Stock
                 </span>
