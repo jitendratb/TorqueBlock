@@ -1,16 +1,13 @@
 "use client";
 
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import Image from "@/components/molecules/CustomImage";
-import Link from "next/link";
 import { BikeBrandSkeletonGroup } from "./BikeBrandSkeleton";
-import { FiSearch, FiArrowRight, FiRotateCcw, FiAlertCircle } from "react-icons/fi";
+import { FiRotateCcw, FiAlertCircle } from "react-icons/fi";
 import vehicleService from "@/services/vehicleService";
 
 import BikeCard from "../BikeCard";
 import TyresPageBanner from "../TyresPageBanner";
 import CompareSearch from "../../compare/components/CompareSearch";
-import Carousel from "@/components/organisms/Carousel";
 
 function BikesClient({ initialBrands }) {
     const initialData = Array.isArray(initialBrands) ? initialBrands : initialBrands?.vehicleBrandsData || [];
@@ -89,15 +86,11 @@ function BikesClient({ initialBrands }) {
                 query
             });
 
-            const responseData = Array.isArray(response) ? response : response?.vehicleBrandsData || [];
+            const responseData = response?.vehicleBrandsData;
             const pagination = response?.pagination;
 
             if (isAppend && pageNum > 1) {
-                setBrands((prev) => {
-                    const existingIds = new Set(prev.map((b) => b._id || b.identifier));
-                    const newUnique = responseData.filter((b) => !existingIds.has(b._id || b.identifier));
-                    return [...prev, ...newUnique];
-                });
+                setBrands(prev => [...prev, ...responseData]);
             } else {
                 setBrands(responseData);
             }
