@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { BikeBrandSkeletonGroup } from "./BikeBrandSkeleton";
 import { FiRotateCcw, FiAlertCircle } from "react-icons/fi";
+import { CgSpinner } from "react-icons/cg";
 import vehicleService from "@/services/vehicleService";
 
 import BikeCard from "../BikeCard";
@@ -138,8 +139,13 @@ function BikesClient({ initialBrands }) {
                         {brands.map((brand, index) => (
                             <BikeCard key={brand?._id || index} brand={brand} index={index} />
                         ))}
-                        {loading && page > 1 && (
-                            <BikeBrandSkeletonGroup count={4} />
+                        {loading && page > 1 &&  (
+                            <div className="col-span-full py-2 flex items-center justify-center">
+                                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-zinc-900/90 border border-zinc-800 text-orange-400 text-xs font-bold uppercase tracking-wider shadow-xl backdrop-blur-xl">
+                                    <CgSpinner className="animate-spin text-lg text-orange-500" />
+                                    <span>Loading More Brands...</span>
+                                </div>
+                            </div>
                         )}
                     </>
                 ) : (
