@@ -18,12 +18,12 @@ export async function generateMetadata() {
       'KTM tyres'
     ],
     alternates: {
-      canonical: 'https://www.torqueblock.com/bikes',
+      canonical: 'https://www.torqueblock.com/motorcycles',
     },
     openGraph: {
       title: 'Motorcycles | Torque Block',
       description: 'Find the best performance tyres for your motorcycle brand and model. Premium tyre selection for superbikes and track riding.',
-      url: 'https://www.torqueblock.com/bikes',
+      url: 'https://www.torqueblock.com/motorcycles',
       siteName: 'Torque Block',
       images: [{ url: '/favicon.ico', width: 1200, height: 630 }],
       type: 'website',
@@ -40,13 +40,13 @@ export default async function BikesPage() {
   }
 
   const breadcrumbItems = [
-    { label: 'Bikes', isLast: true },
+    { label: 'Motorcycles', isLast: true },
   ];
 
   const brandsArray = Array.isArray(initialBrands) ? initialBrands : initialBrands?.vehicleBrandsData || [];
   const schemaItems = brandsArray.map((brand) => ({
     name: brand.bikeModel ? `${brand.bikeBrand} ${brand.bikeModel}` : brand.name || "Bike Brand",
-    url: `/bikes/${brand.identifier || brand.slug || brand.name?.toLowerCase().replace(/ /g, '-') || ''}`
+    url: `/motorcycles/${brand.identifier || brand.slug || brand.name?.toLowerCase().replace(/ /g, '-') || ''}`
   }));
 
   return (
@@ -55,7 +55,7 @@ export default async function BikesPage() {
         type="CollectionPage"
         title="Motorcycles"
         description="Find the best performance tyres for your motorcycle brand and model."
-        url="/bikes"
+        url="/motorcycles"
         items={schemaItems}
       />
       <div className="space-y-4">

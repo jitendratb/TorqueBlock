@@ -10,7 +10,7 @@ export default async function sitemap() {
   
   const staticRoutes = [
     '',
-    '/bikes',
+    '/motorcycles',
     '/tyres',
     '/compare',
     '/blogs',
@@ -41,12 +41,12 @@ export default async function sitemap() {
       bikeRoutes = bikes.map((bike) => {
         const slug = bike?.identifier || bike?.slug || bike?.brandName?.toLowerCase().replace(/\s+/g, '-') || bike?.name?.toLowerCase().replace(/\s+/g, '') || '';
         return {
-            url: `${baseUrl}/bikes/${slug}`,
+            url: `${baseUrl}/motorcycles/${slug}`,
             lastModified: new Date().toISOString(),
             changeFrequency: 'monthly',
             priority: 0.7,
         };
-      }).filter(r => r.url !== `${baseUrl}/bikes/`);
+      }).filter(r => r.url !== `${baseUrl}/motorcycles/`);
     }
   } catch (err) {
     console.error("Error fetching bikes for sitemap", err);

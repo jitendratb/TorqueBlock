@@ -42,11 +42,11 @@ export async function generateMetadata({ params }) {
         title: bikeBrand?.seo?.title || displayTitle,
         description: bikeBrand?.seo?.description || displayDescription,
         keywords,
-        alternates: { canonical: `https://www.torqueblock.com/bikes/${slug}`, },
+        alternates: { canonical: `https://www.torqueblock.com/motorcycles/${slug}`, },
         robots: { index: true, follow: true, },
         openGraph: {
             type: "website",
-            url: `https://www.torqueblock.com/bikes/${slug}`,
+            url: `https://www.torqueblock.com/motorcycles/${slug}`,
             title: ogTitle,
             description: bikeBrand?.seo?.description || displayDescription,
             images: [
@@ -77,7 +77,7 @@ export default async function BrandPage({ params }) {
     }
 
     const brandName = bikeBrand?.bikeBrand ? `${bikeBrand.bikeBrand} ${bikeBrand.bikeModel}` : slug;
-    const breadcrumbItems = [{ label: 'Bikes', href: '/bikes' }, { label: brandName, isLast: true },];
+    const breadcrumbItems = [{ label: 'Motorcycles', href: '/motorcycles' }, { label: brandName, isLast: true },];
     const faqs = getBikeFAQs(bikeBrand);
 
     return (

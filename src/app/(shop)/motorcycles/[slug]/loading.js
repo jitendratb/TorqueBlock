@@ -3,7 +3,7 @@ import Breadcrumb from '@/components/atoms/BreadCrumb';
 
 export default function BikeModelsLoading() {
   const breadcrumbItems = [
-    { label: 'Bikes', href: '/bikes' },
+    { label: 'Motorcycles', href: '/motorcycles' },
     { label: 'Loading...', isLast: true },
   ];
 

@@ -345,7 +345,7 @@ const Card = ({ item }) => {
         }
         case 'Bike': {
             return (
-                <article onClick={() => router.push(`/bikes/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
+                <article onClick={() => router.push(`/motorcycles/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
                     <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
                         <Image
                             src={item.image || '/newlogo.webp'}

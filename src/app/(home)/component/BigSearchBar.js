@@ -170,7 +170,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
       case 'tyre':
         return `/tyres/${id}`;
       case 'bike':
-        return `/bikes/${id}`;
+        return `/motorcycles/${id}`;
       case 'trending':
         return `/trending/${id}`;
       case 'comparison':

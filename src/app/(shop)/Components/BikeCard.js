@@ -6,7 +6,7 @@ import CustomImage from '@/components/molecules/CustomImage';
 function BikeCard({ brand, index, className = "" }) {
     if (!brand) return null;
 
-    const href = `/bikes/${brand.identifier || brand.slug || brand.bikeBrand?.toLowerCase().replace(/\s+/g, '-')}`;
+    const href = `/motorcycles/${brand.identifier}`;
     const imageSrc = brand?.heroImage || brand?.mobileHeroImage || brand?.image || '/placeholder.jpg';
     const brandName = brand?.bikeBrand || brand?.name || 'Motorcycle Brand';
     const modelName = brand?.bikeModel || '';

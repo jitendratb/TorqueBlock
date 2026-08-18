@@ -184,9 +184,9 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             </Link>
 
             <Link
-              href="/bikes"
+              href="/motorcycles"
               onClick={onClose}
-              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/bikes'
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/motorcycles'
                 ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
                 : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                 }`}

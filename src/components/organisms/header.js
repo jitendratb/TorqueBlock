@@ -24,12 +24,12 @@ const NAVIGATION_CONFIG = {
         contactMessage: "Hi Torque Block! I found your website and I'd like to get in touch. Can you assist me?",
     },
     navItems: [
-        { name: "Tyres", href: "/tyres" },
-        { name: "Shop by Motorcycle", href: "/bikes" },
+        { name: "Shop Tyres", href: "/tyres" },
+        { name: "Shop by Motorcycle", href: "/motorcycles" },
         { name: "Compare Tyres", href: "/compare" },
     ],
     mobileSubMenus: {
-        Tyres: [
+        "Shop Tyres": [
             { label: "Pirelli Scorpion Rally STR", href: "/tyres/pirelli-scorpion-rally-str" },
             { label: "Pirelli Scorpion Trail III", href: "/tyres/pirelli-scorpion-trail-iii" },
             { label: "Michelin Road 6", href: "/tyres/michelin-road-6" },
@@ -43,16 +43,15 @@ const NAVIGATION_CONFIG = {
             { label: "Michelin Power 6", href: "/tyres/michelin-power-6" },
         ],
         "Shop by Motorcycle": [
-            { label: "Royal Enfield Himalayan 450", href: "/bikes/royal-enfield-himalayan-450-tyres" },
-            { label: "KTM 390 Adventure", href: "/bikes/ktm-390-adventure-tyres" },
-            { label: "BMW G 310 GS", href: "/bikes/bmw-g-310-gs-tyres" },
-            { label: "Honda NX500", href: "/bikes/honda-nx500-tyres" },
-            { label: "KTM Duke 390", href: "/bikes/ktm-duke-390-tyres" },
-            // { label: "Yamaha R15 V4", href: "/bikes/yamaha-r15-v4-tyres" },
-            { label: "Kawasaki Ninja 300", href: "/bikes/kawasaki-ninja-300-tyres" },
-            { label: "Triumph Speed 400", href: "/bikes/triumph-speed-400-tyres" },
-            { label: "Royal Enfield Interceptor 650", href: "/bikes/royal-enfield-interceptor-650-tyres" },
-            { label: "Royal Enfield Continental GT 650", href: "/bikes/royal-enfield-continental-gt-650-tyres" }
+            { label: "Royal Enfield Himalayan 450", href: "/motorcycles/royal-enfield-himalayan-450-tyres" },
+            { label: "KTM 390 Adventure", href: "/motorcycles/ktm-390-adventure-tyres" },
+            { label: "BMW G 310 GS", href: "/motorcycles/bmw-g-310-gs-tyres" },
+            { label: "Honda NX500", href: "/motorcycles/honda-nx500-tyres" },
+            { label: "KTM Duke 390", href: "/motorcycles/ktm-duke-390-tyres" },
+            { label: "Kawasaki Ninja 300", href: "/motorcycles/kawasaki-ninja-300-tyres" },
+            { label: "Triumph Speed 400", href: "/motorcycles/triumph-speed-400-tyres" },
+            { label: "Royal Enfield Interceptor 650", href: "/motorcycles/royal-enfield-interceptor-650-tyres" },
+            { label: "Royal Enfield Continental GT 650", href: "/motorcycles/royal-enfield-continental-gt-650-tyres" }
 
         ],
         "Compare Tyres": [
@@ -74,7 +73,7 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
             <div>
                 <h3 className="text-sm font-bold text-gray-900 tracking-wider mb-2 border-b border-gray-100 pb-2">Most Popular Tyres</h3>
                 <div className="flex flex-col gap-2">
-                    {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(0, 5).map((item) => (
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(0, 5).map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
@@ -94,7 +93,7 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
             <div>
                 <h3 className="text-sm font-bold text-gray-900 tracking-wider mb-2 border-b border-gray-100 pb-2">Sport & Performance</h3>
                 <div className="flex flex-col gap-2">
-                    {NAVIGATION_CONFIG.mobileSubMenus.Tyres.slice(5).map((item) => (
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(5).map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
@@ -159,7 +158,7 @@ const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
         </div>
         <div>
             <Link
-                href="/bikes"
+                href="/motorcycles"
                 tabIndex={tabIndex}
                 className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
             >
@@ -417,7 +416,7 @@ function Header() {
                         onMouseLeave={handleMouseLeave}
                         data-scrolled={scrolled}
                     >
-                        {activeHover === "Tyres" && (
+                        {activeHover === "Shop Tyres" && (
                             <TyresMegaMenu />
                         )}
                         {activeHover === "Shop by Motorcycle" && (

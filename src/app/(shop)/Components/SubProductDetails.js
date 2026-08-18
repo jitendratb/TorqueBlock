@@ -388,7 +388,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                             <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
                             <p className="text-xs font-medium text-zinc-400 leading-relaxed">
-                                Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
+                               We're here if you need help with fitment or your order
                             </p>
                         </div>
                         <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
@@ -599,7 +599,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                             : "Delivered in 5–7 business days"}
                                     </span>
                                 </div>
-                               
+
                             </div>
                         </div>
                     )}
@@ -656,7 +656,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                 onClick={() => handleNotify(false)}
                                 className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                CHECK AVAILABILITY
+                                NOTIFY ME
                                 <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} aria-hidden="true" />
                             </button>
                         ) : (
