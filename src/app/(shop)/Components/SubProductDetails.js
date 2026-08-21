@@ -159,25 +159,16 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         }
     }, [tyreData?._id, selectedOpposite?._id, setProductIds]);
 
-    const {
-        basePrice,
-        oppositePrice,
-        totalPrice,
-        baseOriginalPrice,
-        baseDiscountAmount,
-        baseDiscountPercentage
-    } = useMemo(() => {
+    const { basePrice, oppositePrice, totalPrice, baseOriginalPrice, baseDiscountAmount, baseDiscountPercentage } = useMemo(() => {
         const bp = tyreData?.price || 0;
         const bd = tyreData?.discount || 0;
         const baseSalePrice = Math.max(0, bp - bd);
         const basePerc = bp > 0 ? Math.round((bd / bp) * 100) : 0;
-
         const op = selectedOpposite?.price || 0;
         const od = selectedOpposite?.discount || 0;
         const oppositeSalePrice = op > 0 ? Math.max(0, op - od) : 0;
-
         const sale = baseSalePrice + oppositeSalePrice;
-
+        
         return {
             basePrice: baseSalePrice,
             oppositePrice: oppositeSalePrice,
@@ -388,7 +379,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
                             <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
                             <p className="text-xs font-medium text-zinc-400 leading-relaxed">
-                               We're here if you need help with fitment or your order
+                                We're here if you need help with fitment or your order
                             </p>
                         </div>
                         <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">

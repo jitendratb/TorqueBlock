@@ -9,7 +9,7 @@ export const metadata = {
 
 export default function CheckoutPage() {
     return (
-        <main className="relative overflow-hidden">
+        <main className="relative overflow-hidden pb-4">
             <Breadcrumb items={[{ label: 'Checkout', href: '/checkout' }]} />
             <CheckoutClient />
         </main>

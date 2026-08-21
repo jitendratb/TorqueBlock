@@ -5,10 +5,12 @@ import Link from 'next/link';
 import Script from 'next/script';
 import useCartStore from '@/stores/cartStore';
 import useAuthStore from '@/stores/authStore';
+import useUiStore from '@/stores/uiStore';
 import useAddressStore from '@/stores/addressStore';
 import useOrderStore from '@/stores/orderStore';
 import { useToast } from '@/context/ToastContext';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import AddressSkeleton from './AddressSkeleton';
 import PaymentSkeleton from './PaymentSkeleton';
 import CartSummarySkeleton from './CartSummarySkeleton';
@@ -50,15 +52,24 @@ export default function CheckoutClient() {
     const { createOrder, verifyPayment, paymentFailed, loading: orderLoading } = useOrderStore();
     const [selectedAddressId, setSelectedAddressId] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState('razorpay');
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const isLoginOpen = useUiStore((state) => state.isLoginOpen);
+    const setLoginOpen = useUiStore((state) => state.setLoginOpen);
     const [isOrderPlacing, setIsOrderPlacing] = useState(false);
     const [orderPlacedSuccess, setOrderPlacedSuccess] = useState(false);
     const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
     const [verifyLoading, setVerifyLoading] = useState(false);
+    const router = useRouter();
 
     useEffect(() => {
         setIsMounted(true);
     }, []);
+
+    useEffect(() => {
+        if (isMounted && !isAuthenticated) {
+            router.back();
+            setTimeout(() => setLoginOpen(true), 300);
+        }
+    }, [isMounted, isAuthenticated, router, setLoginOpen]);
 
     const handleCloseAddressModal = useCallback(() => {
         setAddressModalOpen(false);
@@ -362,7 +373,7 @@ export default function CheckoutClient() {
                     </div>
                 </div>
 
-                <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+                <Login isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
                 <AddressModal isOpen={addressModalOpen} address={editingAddress} onClose={handleCloseAddressModal} />
             </div>
         </>

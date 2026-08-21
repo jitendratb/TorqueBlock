@@ -236,7 +236,8 @@ function Header({ InputLink = true }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [mobileExpanded, setMobileExpanded] = useState(null);
     const [isMounted, setIsMounted] = useState(false);
-    const [isLoginOpen, setIsLoginOpen] = useState(false);
+    const isLoginOpen = useUiStore((state) => state.isLoginOpen);
+    const setLoginOpen = useUiStore((state) => state.setLoginOpen);
     const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(false);
 
     const cart = useCartStore((state) => state.cart || []);
@@ -435,12 +436,12 @@ function Header({ InputLink = true }) {
             <ManuSlider
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
-                setIsLoginOpen={setIsLoginOpen}
+                setIsLoginOpen={setLoginOpen}
                 whatsappNumber={WHATSAPP_NUMBER}
                 whatsappMessage={NAVIGATION_CONFIG.whatsapp.contactMessage}
             />
             <CartSlider />
-            <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+            <Login isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
         </div>
     )
 }
