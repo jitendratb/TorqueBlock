@@ -109,11 +109,6 @@ export async function generateMetadata({ params }) {
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
-
-    if (!tyre) {
-        notFound();
-    }
-
     const Review = await ReviewService.getReviews({ tyreId: tyre?._id });
     const formattedTyre = tyre;
 

@@ -65,10 +65,6 @@ async function Page({ params, searchParams }) {
     const awaitedSearchParams = await searchParams;
     const opposteProductId = awaitedSearchParams?.opposteProductId;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
-    if (!tyreBySize) {
-        notFound();
-    }
-
     const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
     const formattedData = tyreBySize;
 
