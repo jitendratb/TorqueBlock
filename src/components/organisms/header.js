@@ -226,7 +226,7 @@ const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
 ));
 
 
-function Header() {
+function Header({ InputLink = true }) {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
     const isHeroSearchVisible = useUiStore((state) => state.isHeroSearchVisible);
@@ -312,101 +312,104 @@ function Header() {
                     <Link href="/" className="text-2xl font-bold flex-shrink-0" aria-label="Torque Block Home">
                         <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block h-auto w-[100px] md:w-[130px]" style={{ objectFit: 'contain', height: 'auto' }} />
                     </Link>
+                    {InputLink === true && (
+                        <><ul className='flex items-center gap-6 hidden lg:flex' role="menubar">
+                            {NAVIGATION_CONFIG.navItems.map((item) => {
+                                const isActive = pathname === item.href;
+                                const isDropdown = item.name !== "Home";
+                                return (
+                                    <li
+                                        key={item.name}
+                                        role="none"
+                                        className="relative cursor-pointer"
+                                        onMouseEnter={() => handleMouseEnter(item.name)}
+                                        onMouseLeave={handleMouseLeave}
+                                    >
+                                        {item.href ? (
+                                            <Link
+                                                href={item.href}
+                                                role="menuitem"
+                                                aria-haspopup={isDropdown ? "true" : undefined}
+                                                aria-expanded={isDropdown ? activeHover === item.name : undefined}
+                                                onFocus={() => { if (isDropdown) handleMouseEnter(item.name); }}
+                                                onBlur={(e) => {
+                                                    if (!e.relatedTarget?.closest('.Hover-Modal')) {
+                                                        handleMouseLeave();
+                                                    }
+                                                }}
+                                                className={`nav-link text-sm font-bold ${isActive ? "active" : ""}`}
+                                            >
+                                                {item.name}
+                                            </Link>
+                                        ) : (
+                                            <span
+                                                role="menuitem"
+                                                tabIndex={0}
+                                                aria-haspopup="true"
+                                                aria-expanded={activeHover === item.name}
+                                                onFocus={() => handleMouseEnter(item.name)}
+                                                onBlur={(e) => {
+                                                    if (!e.relatedTarget?.closest('.Hover-Modal')) {
+                                                        handleMouseLeave();
+                                                    }
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter' || e.key === ' ') {
+                                                        e.preventDefault();
+                                                        handleMouseEnter(item.name);
+                                                    }
+                                                }}
+                                                className={`nav-link text-xs uppercase tracking-wider font-bold ${isActive ? "active" : ""}`}
+                                            >
+                                                {item.name}
+                                            </span>
+                                        )}
+                                    </li>
+                                );
+                            })}
+                        </ul>
 
-                    <ul className='flex items-center gap-6 hidden lg:flex' role="menubar">
-                        {NAVIGATION_CONFIG.navItems.map((item) => {
-                            const isActive = pathname === item.href;
-                            const isDropdown = item.name !== "Home";
-                            return (
-                                <li
-                                    key={item.name}
-                                    role="none"
-                                    className="relative cursor-pointer"
-                                    onMouseEnter={() => handleMouseEnter(item.name)}
-                                    onMouseLeave={handleMouseLeave}
-                                >
-                                    {item.href ? (
-                                        <Link
-                                            href={item.href}
-                                            role="menuitem"
-                                            aria-haspopup={isDropdown ? "true" : undefined}
-                                            aria-expanded={isDropdown ? activeHover === item.name : undefined}
-                                            onFocus={() => { if (isDropdown) handleMouseEnter(item.name); }}
-                                            onBlur={(e) => {
-                                                if (!e.relatedTarget?.closest('.Hover-Modal')) {
-                                                    handleMouseLeave();
-                                                }
-                                            }}
-                                            className={`nav-link text-sm font-bold ${isActive ? "active" : ""}`}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    ) : (
-                                        <span
-                                            role="menuitem"
-                                            tabIndex={0}
-                                            aria-haspopup="true"
-                                            aria-expanded={activeHover === item.name}
-                                            onFocus={() => handleMouseEnter(item.name)}
-                                            onBlur={(e) => {
-                                                if (!e.relatedTarget?.closest('.Hover-Modal')) {
-                                                    handleMouseLeave();
-                                                }
-                                            }}
-                                            onKeyDown={(e) => {
-                                                if (e.key === 'Enter' || e.key === ' ') {
-                                                    e.preventDefault();
-                                                    handleMouseEnter(item.name);
-                                                }
-                                            }}
-                                            className={`nav-link text-xs uppercase tracking-wider font-bold ${isActive ? "active" : ""}`}
-                                        >
-                                            {item.name}
-                                        </span>
-                                    )}
-                                </li>
-                            );
-                        })}
-                    </ul>
-
-                    <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
-                        {shouldRenderSearchBar && (
-                            <div
-                                className={`transition-all duration-500 ease-in-out ${searchBarAnimatedIn
-                                    ? 'opacity-100 max-w-[500px] translate-x-0 visible'
-                                    : 'opacity-0 max-w-0 translate-x-4 invisible'
-                                    }`}
-                            >
-                                <SearchBar className='xl:min-w-[360px]' />
-                            </div>
-                        )}
-                        <div>
-                            <button
-                                onClick={() => setCartSliderOpen(true)}
-                                className="relative hidden md:flex border border-gray-400  items-center justify-center h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20  transition-all duration-200 cursor-pointer text-white gap-2"
-                                aria-label="Open cart"
-                            >
-                                <IoCartOutline className='text-xl' />
-                                <span className="text-sm font-bold   hidden sm:block">Cart</span>
-                                {totalItems > 0 && (
-                                    <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
-                                        {totalItems}
-                                    </span>
+                            <div className='flex items-center justify-end gap-2 md:gap-4 w-full lg:max-w-sm xl:max-w-xl'>
+                                {shouldRenderSearchBar && (
+                                    <div
+                                        className={`transition-all duration-500 ease-in-out ${searchBarAnimatedIn
+                                            ? 'opacity-100 max-w-[500px] translate-x-0 visible'
+                                            : 'opacity-0 max-w-0 translate-x-4 invisible'
+                                            }`}
+                                    >
+                                        <SearchBar className='xl:min-w-[360px]' />
+                                    </div>
                                 )}
-                            </button>
-                        </div>
+                                <div>
+                                    <button
+                                        onClick={() => setCartSliderOpen(true)}
+                                        className="relative hidden md:flex border border-gray-400  items-center justify-center h-10 px-4 rounded-xl bg-white/10 hover:bg-white/20  transition-all duration-200 cursor-pointer text-white gap-2"
+                                        aria-label="Open cart"
+                                    >
+                                        <IoCartOutline className='text-xl' />
+                                        <span className="text-sm font-bold   hidden sm:block">Cart</span>
+                                        {totalItems > 0 && (
+                                            <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-orange-500 text-white text-[10px] font-bold rounded-full shadow-lg">
+                                                {totalItems}
+                                            </span>
+                                        )}
+                                    </button>
+                                </div>
 
-                        <div className=''>
-                            <button
-                                aria-label="Open navigation menu"
-                                aria-expanded={sidebarOpen}
-                                onClick={() => setSidebarOpen(true)}
-                                className="flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] bg-white/10 hover:bg-white/20 transition-all duration-200 border border-gray-400 cursor-pointer text-white"
-                            >
-                                <IoMdMenu className='text-2xl' />
-                            </button>
-                        </div>
-                    </div>
+                                <div className=''>
+                                    <button
+                                        aria-label="Open navigation menu"
+                                        aria-expanded={sidebarOpen}
+                                        onClick={() => setSidebarOpen(true)}
+                                        className="flex flex-col justify-center items-center w-10 h-10 rounded-xl gap-[5px] bg-white/10 hover:bg-white/20 transition-all duration-200 border border-gray-400 cursor-pointer text-white"
+                                    >
+                                        <IoMdMenu className='text-2xl' />
+                                    </button>
+                                </div>
+                            </div>
+                        </>
+                    )}
+
                 </nav>
 
                 {activeHover && activeHover !== "Home" && (
