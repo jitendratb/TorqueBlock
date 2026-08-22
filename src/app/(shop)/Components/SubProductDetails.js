@@ -582,7 +582,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                 </div>
                                 <div className="flex flex-col gap-0.5 flex-1">
                                     <span className="text-xs font-black uppercase tracking-wider text-orange-400">
-                                        {isExpressEligible ? "Ships Within 24 Hours" : "Standard Delivery"}
+                                        {isExpressEligible ? "READY TO SHIP" : "Standard Delivery"}
                                     </span>
                                     <span className="text-[10px] font-medium text-zinc-400">
                                         {isExpressEligible
