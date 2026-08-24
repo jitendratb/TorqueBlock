@@ -38,13 +38,13 @@ const footerSections = [
   {
     title: "Value Performance",
     links: [
+      { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
       { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
       { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
       { label: 'Reise Tyres', href: '/brands/6638c9b85085dcdf58c8a775' },
       { label: 'Maxxis Tyres', href: '/brands/6638c885d83cd3e79e927275' },
       { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
       { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
-      { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
       { label: 'Ralco Tyres', href: '/brands/66cd75e46e659f1d44dff814' },
 
     ]

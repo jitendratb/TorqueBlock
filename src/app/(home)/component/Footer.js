@@ -7,19 +7,17 @@ const brandLinks = [
     { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
     { label: "Michelin Tyres", href: "/brands/6638c9c65085dcdf58c8a789" },
     { label: "Metzeler Tyres", href: "brands/6638c9ba5085dcdf58c8a77b" },
-]
-
-const valuePerformance = [
+    { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
     { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
     { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
     { label: 'Reise Tyres', href: '/brands/6638c9b85085dcdf58c8a775' },
     { label: 'Maxxis Tyres', href: '/brands/6638c885d83cd3e79e927275' },
     { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
     { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
-    { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
     { label: 'Ralco Tyres', href: '/brands/66cd75e46e659f1d44dff814' },
-
 ]
+
+
 
 const helpLinks = [
     { label: 'Trending', href: '/trending' },
@@ -138,7 +136,7 @@ function Footer() {
                     <div className='flex flex-col gap-4'>
                         <div>
                             <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
-                                Ultimate Performance
+                                Shop by Brand
                             </h3>
 
                             <ul className="space-y-3 lg:space-y-4">
@@ -152,25 +150,6 @@ function Footer() {
                                 ))}
                             </ul>
                         </div>
-
-
-                        <div>
-                            <h3 className="text-white font-semibold text-lg mb-3 lg:mb-4">
-                                Value Performance
-                            </h3>
-
-                            <ul className="space-y-3 lg:space-y-4">
-                                {valuePerformance.map((item, index) => (
-                                    <li key={index}>
-                                        <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
-                                            <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
-                                            {item.label}
-                                        </Link>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-
                     </div>
 
                     {/* SUPPORT */}
