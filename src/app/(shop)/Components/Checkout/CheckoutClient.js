@@ -64,6 +64,15 @@ export default function CheckoutClient() {
         setIsMounted(true);
     }, []);
 
+
+    const formatPrice = useCallback((price) => {
+            return new Intl.NumberFormat('en-IN', {
+                style: 'currency',
+                currency: 'INR',
+                maximumFractionDigits: 0
+            }).format(price);
+        }, []);
+
     useEffect(() => {
         if (isMounted && !isAuthenticated) {
             router.back();
@@ -276,14 +285,15 @@ export default function CheckoutClient() {
                                     <IoLockClosedOutline className="text-xl md:text-2xl" />
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-2">
-                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
-                                            Secure Transaction
-                                        </span>
+                                    <div className="flex flex-col items-start gap-1">
+                                        <h1 className="text-xl md:text-xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
+                                            SECURE CHECKOUT
+                                        </h1>
+                                           <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
+                                        Complete your order securely
+                                    </span>
                                     </div>
-                                    <h1 className="text-xl md:text-2xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
-                                        Checkout
-                                    </h1>
+                                 
                                 </div>
                             </div>
                         </div>
@@ -317,7 +327,7 @@ export default function CheckoutClient() {
                     </div>
                 </div>
             </div>
-           
+
             <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
                 <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
 
@@ -342,6 +352,7 @@ export default function CheckoutClient() {
                         finalTotal={finalTotal}
                     />
 
+
                     <button
                         onClick={handlePlaceOrder}
                         disabled={isOrderPlacing || orderLoading || !selectedAddressId}
@@ -356,7 +367,7 @@ export default function CheckoutClient() {
                         ) : (
                             <>
                                 <IoLockClosedOutline className="text-sm" />
-                                {paymentMethod === 'cod' ? 'Place Order' : 'Pay Now'}
+                                {paymentMethod === 'cod' ? 'Place Order' : `Pay ${formatPrice(finalTotal)}`} 
                             </>
                         )}
                     </button>
@@ -368,7 +379,7 @@ export default function CheckoutClient() {
                         </div>
                         <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
                             <IoRibbonOutline className="text-orange-400 text-xl" />
-                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine</span>
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine Products</span>
                         </div>
                     </div>
                 </div>

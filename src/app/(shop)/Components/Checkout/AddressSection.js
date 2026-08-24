@@ -88,7 +88,7 @@ export default function AddressSection({ selectedAddressId, onSelectAddress, set
                         }}
                         className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-orange-400 border border-orange-500 hover:border-orange-500/50  hover:text-orange-300 transition-colors bg-orange-500/15 hover:bg-orange-500/10 px-3 py-1.5 rounded-lg cursor-pointer"
                     >
-                        <IoAddOutline className="text-sm" /> Add New
+                        <IoAddOutline className="text-sm" /> Add New Address
                     </button>
                 </div>
 

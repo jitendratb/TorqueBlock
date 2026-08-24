@@ -15,26 +15,6 @@ export default function PaymentSection({ paymentMethod, onSelectMethod }) {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div
-                    className="relative p-4 rounded-2xl border text-left transition-all duration-300 flex items-start gap-4 bg-white/[0.02] border-white/5 opacity-40 cursor-not-allowed select-none"
-                >
-                    <div className="p-3 rounded-xl flex items-center justify-center shrink-0 bg-zinc-800 text-zinc-500">
-                        <IoCashOutline className="text-xl" />
-                    </div>
-
-                    <div className="space-y-1">
-                        <h4 className="text-xs md:text-sm font-black text-white flex items-center gap-2">
-                            Cash on Delivery
-                            <span className="text-[9px] font-extrabold uppercase bg-red-500/15 text-red-400 px-2 py-0.5 rounded border border-red-500/20">
-                                Unavailable
-                            </span>
-                        </h4>
-                        <p className="text-[9px] text-zinc-400 leading-relaxed font-medium">
-                            Currently not available. Please use online payment options.
-                        </p>
-                    </div>
-                </div>
-
-                <div
                     onClick={() => onSelectMethod('razorpay')}
                     className={`group relative p-4 rounded-2xl border text-left cursor-pointer transition-all duration-300 flex items-start gap-4 ${
                         paymentMethod === 'razorpay'
