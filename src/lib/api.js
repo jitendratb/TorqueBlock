@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 const TorqueBlockApi = axios.create({
-    baseURL: 'https://api.torqueblock.com/api/v1',
+    // baseURL: 'https://api.torqueblock.com/api/v1',
     // baseURL: 'http://localhost:4000/api/v1',
-    timeout: 30000, 
+    baseURL: 'https://test.torqueblock.com/api/v1',
+    timeout: 30000,
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ const processQueue = (error, token = null) => {
 
 TorqueBlockApi.interceptors.response.use(
     (response) => {
-        return response.data; 
+        return response.data;
     },
     async (error) => {
         const originalRequest = error.config;
@@ -62,7 +63,7 @@ TorqueBlockApi.interceptors.response.use(
             } else {
                 console.error('API Error Response:', error.response.status, error.response.data);
             }
-            
+
             if (error.response.status === 401 && !originalRequest._retry && !originalRequest.url?.includes('/auth/refresh-token')) {
                 originalRequest._retry = true;
 
@@ -70,13 +71,13 @@ TorqueBlockApi.interceptors.response.use(
                     return new Promise((resolve, reject) => {
                         failedQueue.push({ resolve, reject });
                     })
-                    .then((token) => {
-                        originalRequest.headers.Authorization = `Bearer ${token}`;
-                        return TorqueBlockApi(originalRequest);
-                    })
-                    .catch((err) => {
-                        return Promise.reject(err);
-                    });
+                        .then((token) => {
+                            originalRequest.headers.Authorization = `Bearer ${token}`;
+                            return TorqueBlockApi(originalRequest);
+                        })
+                        .catch((err) => {
+                            return Promise.reject(err);
+                        });
                 }
 
                 isRefreshing = true;
@@ -95,10 +96,10 @@ TorqueBlockApi.interceptors.response.use(
                             const authStoreModule = await import('@/stores/authStore');
                             authStoreModule.default.setState({ token: newToken, isAuthenticated: true });
                         }
-                        
+
                         processQueue(null, newToken);
                         isRefreshing = false;
-                        
+
                         originalRequest.headers.Authorization = `Bearer ${newToken}`;
                         return TorqueBlockApi(originalRequest);
                     } else {
@@ -129,7 +130,7 @@ TorqueBlockApi.interceptors.response.use(
                     authStoreModule.default.getState().logout();
                 }
             }
-            
+
             if (error.response.status === 500) {
                 console.warn('Server Error - Please try again later.');
             }
@@ -138,7 +139,7 @@ TorqueBlockApi.interceptors.response.use(
         } else {
             console.error('API Setup Error:', error.message);
         }
-        
+
         return Promise.reject(error);
     }
 );
