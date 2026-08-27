@@ -92,6 +92,7 @@ export default function ProductDetails({ tube }) {
         if (!tube) return;
         const selectedGeneric = {
             _id: tube._id,
+            tubeId: tube._id,
             size: tube.size || (tube.wheelSize ? `Rim ${tube.wheelSize}` : 'Standard'),
             price: tube.startingPrice || tube.endingPrice || tube.pricing?.sellingPrice || tube.pricing?.mrp || 0,
             sku: tube.sku || '',
@@ -128,7 +129,7 @@ export default function ProductDetails({ tube }) {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
-                        <div 
+                        <div
                             className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1 hide-scrollbar"
                             role="tablist"
                             aria-label="Product images gallery"
@@ -146,11 +147,10 @@ export default function ProductDetails({ tube }) {
                                         onClick={() => setActiveImage(item)}
                                         onMouseEnter={() => setActiveImage(item)}
                                         onKeyDown={(e) => handleThumbnailKeyDown(e, item)}
-                                        className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ${
-                                            isActive
+                                        className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ${isActive
                                                 ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)] scale-95"
                                                 : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"
-                                        }`}
+                                            }`}
                                     >
                                         <Image
                                             src={imgSrc}
@@ -164,7 +164,7 @@ export default function ProductDetails({ tube }) {
                             })}
                         </div>
 
-                        <div 
+                        <div
                             className="relative group h-[320px] md:h-[460px] w-full flex items-center justify-center overflow-hidden rounded-2xl bg-black/20"
                             role="tabpanel"
                             aria-label="Active product image preview"
@@ -285,27 +285,24 @@ export default function ProductDetails({ tube }) {
                                     )}
                                 </div>
 
-                                <div className={`flex min-w-[90px] items-center gap-1.5 rounded-xl border px-2.5 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${
-                                    tube.availability === "in_stock" || !tube.availability
+                                <div className={`flex min-w-[90px] items-center gap-1.5 rounded-xl border px-2.5 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${tube.availability === "in_stock" || !tube.availability
                                         ? 'border-green-500/20 bg-green-500/10'
                                         : tube.availability === "backorder"
                                             ? 'border-yellow-500/20 bg-yellow-500/10'
                                             : tube.availability === "preorder"
                                                 ? 'border-blue-500/20 bg-blue-500/10'
                                                 : 'border-red-500/20 bg-red-500/10'
-                                }`}>
-                                    <FaShieldAlt className={`text-[9px] ${
-                                        tube.availability === "in_stock" || !tube.availability ? 'text-green-400'
+                                    }`}>
+                                    <FaShieldAlt className={`text-[9px] ${tube.availability === "in_stock" || !tube.availability ? 'text-green-400'
                                             : tube.availability === "backorder" ? 'text-yellow-400'
                                                 : tube.availability === "preorder" ? 'text-blue-400'
                                                     : 'text-red-400'
-                                    }`} aria-hidden="true" />
-                                    <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${
-                                        tube.availability === "in_stock" || !tube.availability ? 'text-green-100'
+                                        }`} aria-hidden="true" />
+                                    <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${tube.availability === "in_stock" || !tube.availability ? 'text-green-100'
                                             : tube.availability === "backorder" ? 'text-yellow-100'
                                                 : tube.availability === "preorder" ? 'text-blue-100'
                                                     : 'text-red-100'
-                                    }`}>
+                                        }`}>
                                         {tube.availability === "in_stock" || !tube.availability ? 'In Stock'
                                             : tube.availability === "backorder" ? 'Available To Order'
                                                 : tube.availability === "preorder" ? 'Pre Order'

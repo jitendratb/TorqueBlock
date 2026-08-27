@@ -66,12 +66,12 @@ export default function CheckoutClient() {
 
 
     const formatPrice = useCallback((price) => {
-            return new Intl.NumberFormat('en-IN', {
-                style: 'currency',
-                currency: 'INR',
-                maximumFractionDigits: 0
-            }).format(price);
-        }, []);
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(price);
+    }, []);
 
     useEffect(() => {
         if (isMounted && !isAuthenticated) {
@@ -289,11 +289,11 @@ export default function CheckoutClient() {
                                         <h1 className="text-xl md:text-xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
                                             SECURE CHECKOUT
                                         </h1>
-                                           <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
-                                        Complete your order securely
-                                    </span>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
+                                            Complete your order securely
+                                        </span>
                                     </div>
-                                 
+
                                 </div>
                             </div>
                         </div>
@@ -367,7 +367,7 @@ export default function CheckoutClient() {
                         ) : (
                             <>
                                 <IoLockClosedOutline className="text-sm" />
-                                {paymentMethod === 'cod' ? 'Place Order' : `Pay ${formatPrice(finalTotal)}`} 
+                                {paymentMethod === 'cod' ? 'Place Order' : `Pay ${formatPrice(finalTotal)}`}
                             </>
                         )}
                     </button>
