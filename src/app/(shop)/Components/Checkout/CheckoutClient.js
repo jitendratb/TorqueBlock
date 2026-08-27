@@ -113,12 +113,31 @@ export default function CheckoutClient() {
         try {
             const items = cart.map((item) => {
                 const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
-                const isTube = item.selectedGeneric?.type?.toLowerCase() === 'tube' || item.type?.toLowerCase() === 'tube' || item.product?.type?.toLowerCase() === 'tube';
-                const targetId = item.product?._id || sizeObj._id;
+                const isTube = Boolean(
+                    item.selectedGeneric?.tubeId ||
+                    item.product?.tubeId ||
+                    sizeObj?.tubeId ||
+                    item.selectedGeneric?.type?.toLowerCase() === 'tube' ||
+                    item.type?.toLowerCase() === 'tube' ||
+                    item.product?.type?.toLowerCase() === 'tube' ||
+                    sizeObj?.type?.toLowerCase() === 'tube' ||
+                    item.product?.valveType ||
+                    sizeObj?.valveType ||
+                    (typeof (item.product?.tubeType || sizeObj?.tubeType) === 'string') ||
+                    item.product?.productName?.toLowerCase().includes('tube') ||
+                    item.product?.name?.toLowerCase().includes('tube') ||
+                    sizeObj?.productName?.toLowerCase().includes('tube') ||
+                    sizeObj?.name?.toLowerCase().includes('tube') ||
+                    item.sku?.toLowerCase().includes('tube') ||
+                    sizeObj?.sku?.toLowerCase().includes('tube')
+                );
+                const targetId = isTube
+                    ? (sizeObj.tubeId || sizeObj._id || item.product?.tubeId || item.product?._id)
+                    : (sizeObj._id || item.product?._id);
                 const unitDiscount = sizeObj.discount || sizeObj.discountAmount || item.discount || item.product?.discount || 0;
 
                 return {
-                    ...(isTube ? { tubeId: targetId } : { productId: sizeObj._id || targetId }),
+                    ...(isTube ? { tubeId: targetId } : { productId: targetId }),
                     quantity: item.quantity,
                     deliveryMode: 'standard',
                     installation: false,

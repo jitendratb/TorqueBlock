@@ -10,25 +10,47 @@ const reconstructCart = (backendItems) => {
   const itemsMap = {};
 
   backendItems.forEach((item) => {
-    const sizeObj = item.productId;
+    const sizeObj = item.tubeId || item.productId;
+
+    const isTube = Boolean(
+      item.tubeId ||
+      sizeObj?.tubeId ||
+      item.type?.toLowerCase() === 'tube' ||
+      sizeObj?.type?.toLowerCase() === 'tube' ||
+      item.productName?.toLowerCase().includes('tube') ||
+      item.name?.toLowerCase().includes('tube') ||
+      sizeObj?.name?.toLowerCase().includes('tube') ||
+      sizeObj?.valveType ||
+      (sizeObj?.tubeType && typeof sizeObj.tubeType === 'string') ||
+      (sizeObj?.wheelSize && !sizeObj?.rimDiameter) ||
+      item.sku?.toLowerCase().includes('tube') ||
+      sizeObj?.sku?.toLowerCase().includes('tube')
+    );
+
+    const itemType = isTube ? 'Tube' : (item.type || sizeObj?.type || 'Tyre');
+    const resolvedId = item.tubeId 
+      ? (typeof item.tubeId === 'string' ? item.tubeId : (item.tubeId._id || item.tubeId.tubeId || item._id))
+      : (item.productId ? (typeof item.productId === 'string' ? item.productId : item.productId._id) : item._id);
 
     const parentProduct = sizeObj?.availableTyres || {
-      _id: item.productId ? (typeof item.productId === 'string' ? item.productId : item.productId._id) : item._id,
-      productName: item.productName || item.name,
-      sku: item.sku,
-      productImages: item.image ? [item.image] : [],
-      brand: { name: 'Performance' },
-      type: item.type || sizeObj?.type || 'Tyre'
+      _id: resolvedId,
+      tubeId: isTube ? resolvedId : undefined,
+      productName: item.productName || item.name || sizeObj?.name,
+      sku: item.sku || sizeObj?.sku,
+      productImages: item.image ? [item.image] : (sizeObj?.images?.map(i => typeof i === 'string' ? i : i.url) || []),
+      brand: { name: sizeObj?.brand || 'Performance' },
+      type: itemType
     };
 
     const sizeItem = {
-      _id: sizeObj?._id || item.productId || item._id,
-      size: sizeObj?.size || item.size || 'Standard',
-      price: sizeObj?.price || item.unitPrice || 0,
+      _id: sizeObj?._id || resolvedId,
+      tubeId: isTube ? (sizeObj?._id || resolvedId) : undefined,
+      size: sizeObj?.size || (sizeObj?.wheelSize ? `Rim ${sizeObj.wheelSize}` : item.size || 'Standard'),
+      price: sizeObj?.price || sizeObj?.pricing?.sellingPrice || item.unitPrice || 0,
       discount: item.discountPrice !== undefined && item.discountPrice !== null ? item.discountPrice : (sizeObj?.discount || item.discount || 0),
-      position: sizeObj?.position || (item.size?.toLowerCase().includes('front') ? 'Front' : item.size?.toLowerCase().includes('rear') ? 'Rear' : 'Generic'),
-      sku: item.sku,
-      type: item.type || sizeObj?.type || 'Tyre',
+      position: isTube ? 'Generic' : (sizeObj?.position || (item.size?.toLowerCase().includes('front') ? 'Front' : item.size?.toLowerCase().includes('rear') ? 'Rear' : 'Generic')),
+      sku: item.sku || sizeObj?.sku,
+      type: itemType,
       offerId: item.offerId || sizeObj?.offerId,
       isOfferItem: item.isOfferItem || sizeObj?.isOfferItem
     };

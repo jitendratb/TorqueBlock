@@ -78,27 +78,42 @@ export default function ProductDetails({ tube }) {
 
     const handleAddToCart = useCallback(() => {
         if (!tube) return;
+        const tubeProduct = {
+            ...tube,
+            type: "Tube",
+            tubeId: tube._id,
+            productName: tube.name || tube.productName || tube.hero?.title || "Motorcycle Tube"
+        };
         const selectedGeneric = {
             _id: tube._id,
+            tubeId: tube._id,
             size: tube.size || (tube.wheelSize ? `Rim ${tube.wheelSize}` : 'Standard'),
             price: tube.startingPrice || tube.pricing?.sellingPrice || tube.pricing?.mrp || 0,
             sku: tube.sku || '',
-            type: "Tube"
+            type: "Tube",
+            productName: tubeProduct.productName
         };
-        addToCart(tube, null, null, selectedGeneric, true);
+        addToCart(tubeProduct, null, null, selectedGeneric, true);
     }, [tube, addToCart]);
 
     const handleBuyNow = useCallback(() => {
         if (!tube) return;
+        const tubeProduct = {
+            ...tube,
+            type: "Tube",
+            tubeId: tube._id,
+            productName: tube.name || tube.productName || tube.hero?.title || "Motorcycle Tube"
+        };
         const selectedGeneric = {
             _id: tube._id,
             tubeId: tube._id,
             size: tube.size || (tube.wheelSize ? `Rim ${tube.wheelSize}` : 'Standard'),
             price: tube.startingPrice || tube.endingPrice || tube.pricing?.sellingPrice || tube.pricing?.mrp || 0,
             sku: tube.sku || '',
-            type: "Tube"
+            type: "Tube",
+            productName: tubeProduct.productName
         };
-        addToCart(tube, null, null, selectedGeneric, false);
+        addToCart(tubeProduct, null, null, selectedGeneric, false);
         router.push('/checkout');
     }, [tube, addToCart, router]);
 
