@@ -18,7 +18,7 @@ function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
         if (!item) return;
         const sizeValue = typeof item === 'object' ? item?.size : item;
         if (!sizeValue) return;
-        router.push(`/products/${tyre?.identifier}/${sizeValue.toLowerCase().replace(/[\s/]/g, '-')}`);
+        router.push(`/tyres/${tyre?.identifier}/${sizeValue.toLowerCase().replace(/[\s/]/g, '-')}`);
     };
 
     return (
