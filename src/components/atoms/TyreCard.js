@@ -89,12 +89,12 @@ export default function ProductCard({ product, tyre, className, opposteProductId
             <div className="flex flex-col p-4 gap-3 flex-1 justify-between">
                 <div className="space-y-2">
                     <div className="flex flex-wrap items-center gap-2 text-[10px] font-extrabold uppercase tracking-wider transition-colors duration-500">
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 border border-white/10 [.light-mode_&]:border-zinc-200 text-zinc-300 [.light-mode_&]:text-zinc-700 backdrop-blur-md shadow-sm transition-all duration-300 group-hover:border-orange-500/30">
+                        <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 border border-white/10 [.light-mode_&]:border-zinc-200 text-zinc-300 [.light-mode_&]:text-zinc-700 backdrop-blur-md shadow-sm transition-all duration-300 group-hover:border-orange-500/30">
                             <FiTag className="text-[10px] text-orange-400 shrink-0" />
                             <span>{categoryName}</span>
                         </span>
                         {product?.size && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-orange-500/20 [.light-mode_&]:bg-orange-50 border border-orange-500/50 [.light-mode_&]:border-orange-200 text-orange-400 [.light-mode_&]:text-orange-600 backdrop-blur-md shadow-[0_0_12px_rgba(249,115,22,0.15)] transition-all duration-300 group-hover:bg-orange-500/20 group-hover:border-orange-500/50">
+                            <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-orange-500/20 [.light-mode_&]:bg-orange-50 border border-orange-500/50 [.light-mode_&]:border-orange-200 text-orange-400 [.light-mode_&]:text-orange-600 backdrop-blur-md shadow-[0_0_12px_rgba(249,115,22,0.15)] transition-all duration-300 group-hover:bg-orange-500/20 group-hover:border-orange-500/50">
                                 <FiMaximize2 className="text-[10px] shrink-0" />
                                 <span>{product?.size}</span>
                             </span>
