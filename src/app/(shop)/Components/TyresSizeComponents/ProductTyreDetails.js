@@ -2,25 +2,33 @@
 
 import CustomImage from '@/components/molecules/CustomImage';
 import WhatsAppButton from '@/components/atoms/WhatsAppButton';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FaShieldAlt, FaTag, FaTools, FaTruck, FaUserTie, FaMotorcycle, FaCheckCircle, FaCircle } from 'react-icons/fa';
 import { HiFire } from 'react-icons/hi';
 import { FiInfo } from 'react-icons/fi';
 
 function ProductTyreDetails({ tyreData }) {
-    const images = [
+    const images = useMemo(() => [
         ...(Array.isArray(tyreData?.sizeSpecificImages) ? tyreData.sizeSpecificImages : []),
         ...(Array.isArray(tyreData?.availableTyres?.productImages)
             ? tyreData.availableTyres.productImages.slice(0, 3)
             : []),
-    ];
-    const initialImage = images[0] || tyreData?.hero?.heroImage || '/newLogo.webp';
-    const [activeImage, setActiveImage] = useState(initialImage);
+    ], [tyreData]);
 
     const getImageSrc = (image) => {
         if (!image) return '';
         return typeof image === 'string' ? image : image?.imageUrl || image?.src || '';
     };
+
+    const initialImage = getImageSrc(images[0]) || getImageSrc(tyreData?.hero?.heroImage) || '/newLogo.webp';
+    const [activeImage, setActiveImage] = useState(initialImage);
+
+    useEffect(() => {
+        const firstImg = getImageSrc(images[0]) || getImageSrc(tyreData?.hero?.heroImage) || '/newLogo.webp';
+        setActiveImage(firstImg);
+    }, [images, tyreData?.hero?.heroImage]);
+
+    const currentImage = activeImage || getImageSrc(images[0]) || getImageSrc(tyreData?.hero?.heroImage) || '/newLogo.webp';
 
     const getImageAlt = (image) => {
         return (
@@ -93,16 +101,14 @@ function ProductTyreDetails({ tyreData }) {
                     </div>
 
                     <div className="relative flex h-[350px] md:h-[450px] w-auto items-center justify-center overflow-hidden">
-                        {activeImage && (
-                            <CustomImage
-                                src={activeImage}
-                                alt={productName}
-                                fill
-                                priority
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                imageClassName="object-contain transition-transform w-full duration-300 hover:scale-105"
-                            />
-                        )}
+                        <CustomImage
+                            src={currentImage}
+                            alt={productName}
+                            fill
+                            priority
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            imageClassName="object-contain transition-transform w-full duration-300 hover:scale-105"
+                        />
                     </div>
                 </div>
 

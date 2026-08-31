@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useState, useCallback } from "react";
+import { memo, useMemo, useState, useCallback, useEffect } from "react";
 import Image from "@/components/molecules/CustomImage";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
@@ -29,8 +29,17 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
         return Array.isArray(tyre?.productImage) ? tyre.productImage : [];
     }, [tyre]);
 
+    const [activeImage, setActiveImage] = useState(() => gallery[0] || tyre?.hero?.heroImage || null);
 
-    const [activeImage, setActiveImage] = useState(gallery[0]);
+    useEffect(() => {
+        if (gallery.length > 0) {
+            setActiveImage(gallery[0]);
+        } else if (tyre?.hero?.heroImage) {
+            setActiveImage(tyre.hero.heroImage);
+        }
+    }, [gallery, tyre?.hero?.heroImage]);
+
+    const currentDisplayImage = activeImage || gallery[0] || tyre?.hero?.heroImage || '/newlogo.webp';
     const allTags = useMemo(() => {
         const eyebrow = tyre?.hero?.eyebrowText || "";
         const subtitle = tyre?.hero?.subtitle || "";
@@ -80,16 +89,14 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                         </div>
 
                         <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
-                            {activeImage && (
-                                <Image
-                                    src={activeImage || '/newlogo.webp'}
-                                    alt={tyre?.productName || "Tyre"}
-                                    fill
-                                    priority
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
-                                />
-                            )}
+                            <Image
+                                src={currentDisplayImage}
+                                alt={tyre?.productName || "Tyre"}
+                                fill
+                                priority
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
+                            />
                         </div>
                     </div>
                 </div>
