@@ -14,6 +14,23 @@ const getCompareDetails = cache(async (slug) => {
   return res?.comparisonConnectorModelData?.[0]
 });
 
+const parseImageUrl = (img) => {
+  if (!img) return '';
+  if (typeof img === 'string') return img.trim();
+  if (typeof img === 'object' && img !== null) {
+    if (typeof img.url === 'string') return img.url.trim();
+    if (typeof img.src === 'string') return img.src.trim();
+
+    const numericKeys = Object.keys(img)
+      .filter((k) => k !== '_id' && !isNaN(k))
+      .sort((a, b) => Number(a) - Number(b));
+    if (numericKeys.length > 0) {
+      return numericKeys.map((k) => img[k]).join('').trim();
+    }
+  }
+  return '';
+};
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const compare = await getCompareDetails(slug);
@@ -22,14 +39,28 @@ export async function generateMetadata({ params }) {
   const tyre1 = compare?.tyre1;
   const tyre2 = compare?.tyre2;
 
-
   const parts = (slug || '').split('-vs-');
   const tyre1Name = tyre1?.productName || parts[0]?.replace(/-/g, ' ') || 'Tyre 1';
   const tyre2Name = tyre2?.productName || parts[1]?.replace(/-/g, ' ') || 'Tyre 2';
 
   const displayTitle = `${tyre1Name} vs ${tyre2Name} - Tyre Comparison | Torque Block`;
   const displayDescription = `Full head-to-head comparison: ${tyre1Name} vs ${tyre2Name}. Compare dry grip, wet grip, mileage, sport handling and comfort.`;
-  const mainImage = tyre1?.productImages?.[0] || "/newLogo.webp";
+  
+  const rawImage =
+    parseImageUrl(tyre1?.productImages?.[0]) ||
+    parseImageUrl(tyre1?.gallery?.[0]) ||
+    parseImageUrl(tyre1?.image) ||
+    parseImageUrl(tyre1?.hero?.heroImage) ||
+    parseImageUrl(tyre2?.productImages?.[0]) ||
+    parseImageUrl(tyre2?.gallery?.[0]) ||
+    parseImageUrl(tyre2?.image) ||
+    parseImageUrl(tyre2?.hero?.heroImage) ||
+    '/newLogo.webp';
+
+  const mainImage = rawImage.startsWith('http')
+    ? rawImage
+    : `https://www.torqueblock.com${rawImage.startsWith('/') ? rawImage : `/${rawImage}`}`;
+
   const keywords = [
     `${tyre1Name} vs ${tyre2Name}`,
     `compare ${tyre1Name} and ${tyre2Name}`,

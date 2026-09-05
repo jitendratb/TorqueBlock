@@ -11,7 +11,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobileOrTablet(window.innerWidth < 1024); 
+      setIsMobileOrTablet(window.innerWidth < 1024);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -34,7 +34,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
               <FiCamera size={18} className={theme.iconColor} />
             </div>
             <div className="flex flex-col min-w-0">
-              <span 
+              <span
                 className={`text-[12px] md:text-base font-black uppercase bg-gradient-to-r ${theme.titleGradient} bg-clip-text text-transparent truncate drop-shadow-sm`}
                 title={name}
               >
@@ -83,7 +83,7 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
                     border-r ${theme.itemBorder} last:border-r-0`}
                 >
                   <Image
-                    src={img}
+                    src={img?.url || img}
                     alt={`${name} real world fitment ${i + 1}`}
                     fill
                     className="object-cover transition-transform duration-700 hover:scale-105"
@@ -105,8 +105,8 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
     <div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {renderGallery(
-          tyre1Gallery, 
-          tyre1Name, 
+          tyre1Gallery,
+          tyre1Name,
           {
             border: "border-orange-500/15 hover:border-orange-500/30",
             iconBg: "bg-orange-500/10 border-orange-500/25",
@@ -114,13 +114,13 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
             titleGradient: "from-orange-400 to-orange-600",
             itemBorder: "border-orange-500/20",
             badge: "bg-orange-500/20 text-orange-300 border border-orange-500/30"
-          }, 
-          active1, 
+          },
+          active1,
           setActive1
         )}
         {renderGallery(
-          tyre2Gallery, 
-          tyre2Name, 
+          tyre2Gallery,
+          tyre2Name,
           {
             border: "border-white/15 hover:border-white/30",
             iconBg: "bg-white/10 border-white/25",
@@ -128,8 +128,8 @@ export default function FitmentGalleryClient({ tyre1Gallery, tyre2Gallery, tyre1
             titleGradient: "from-white to-white",
             itemBorder: "border-white/20",
             badge: "bg-white/20 text-white border border-white/30"
-          }, 
-          active2, 
+          },
+          active2,
           setActive2
         )}
       </div>

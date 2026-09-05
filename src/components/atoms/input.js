@@ -27,7 +27,7 @@ export const Input = forwardRef(function Input(
 
   return (
     <div className={clsx("flex flex-col gap-1.5", fullWidth && "w-full")}>
-      
+
       {/* Label */}
       {label && (
         <label
@@ -35,7 +35,7 @@ export const Input = forwardRef(function Input(
           className={clsx(
             "font-medium transition-colors duration-300",
             variant === "glass"
-              ? "text-[11px] md:text-xs font-bold uppercase tracking-widest text-white"
+              ? "text-[11px] md:text-xs !font-bold tracking-widest text-white"
               : "text-xs text-gray-700"
           )}
         >
@@ -52,7 +52,7 @@ export const Input = forwardRef(function Input(
             "border-gray-300 focus-within:border-gray-500 rounded-lg": variant === "outlined" && !error,
             "bg-gray-100 border-transparent focus-within:border-gray-500 rounded-lg": variant === "filled" && !error,
             "border-red-500 rounded-lg": error && variant !== "glass",
-            
+
             // Glass variant
             "bg-white/[0.02] border-white/10 hover:border-orange-500 rounded-lg": variant === "glass" && !error,
             "bg-white/[0.02] border-red-500/30 focus-within:border-red-500/50 focus-within:ring-1 focus-within:ring-red-500/50 rounded-xl": variant === "glass" && error,

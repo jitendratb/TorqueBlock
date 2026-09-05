@@ -83,7 +83,7 @@ export default function CompareClient({ data, slug }) {
                 tyre2Name={tyre2Name}
             />
 
-        
+
             {(tyre1Gallery.length > 0 || tyre2Gallery.length > 0) && (
                 <FitmentGalleryClient
                     tyre1Gallery={tyre1Gallery}
@@ -119,7 +119,7 @@ export default function CompareClient({ data, slug }) {
                 </div>
             )}
 
-     
+
         </div>
     );
 }

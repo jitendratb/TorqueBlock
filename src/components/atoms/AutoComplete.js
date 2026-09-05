@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { FiChevronDown, FiCheck } from "react-icons/fi";
 
 const Autocomplete = ({
-    id, label, options = [], value, onChange,
+    id, label, options = [], value, onChange, error,
     placeholder = "Search or enter...",
     disabled = false, allowCustom = false, onSearchChange,
     isLoading = false, isFetchingMore = false, hasMore = false, onLoadMore
@@ -153,14 +153,14 @@ const Autocomplete = ({
     return (
         <div className="flex flex-col gap-1.5 w-full">
             {label && (
-                <label className="text-xs font-bold uppercase tracking-widest text-gray-200">
+                <label className="text-xs font-bold tracking-widest text-gray-200">
                     {label}
                 </label>
             )}
             <div className="relative w-full" ref={dropdownRef}>
                 <div
                     onClick={() => { if (!disabled) { setIsOpen(true); inputRef.current?.focus(); } }}
-                    className={`cursor-pointer flex items-center justify-between w-full px-2.5 md:px-3.5 py-2 md:py-3 rounded-xl border text-sm shadow-sm transition-all duration-300 ${disabled ? 'opacity-50 cursor-not-allowed border-white/10 bg-white/[0.02]' : isOpen ? 'border-orange-500 bg-white/[0.02] ring-1 ring-orange-500/50' : 'border-white/10 bg-white/[0.02] hover:border-white/20'}`}
+                    className={`cursor-pointer flex items-center justify-between w-full px-2.5 md:px-3.5 py-2 md:py-3 rounded-xl border text-sm shadow-sm transition-all duration-300 ${disabled ? 'opacity-50 cursor-not-allowed border-white/10 bg-white/[0.02]' : isOpen ? 'border-orange-500 bg-white/[0.02] ring-1 ring-orange-500/50' : error ? 'border-red-500/30 bg-white/[0.02]' : 'border-white/10 bg-white/[0.02] hover:border-white/20'}`}
                 >
                     <input
                         ref={inputRef}
@@ -191,12 +191,12 @@ const Autocomplete = ({
                             {filteredOptions.map((opt, index) => {
                                 const active = value === opt.value;
                                 return (
-                                    <li key={opt.value}>
+                                    <li key={opt.value ? `${opt.value}-${index}` : `opt-${index}`}>
                                         <button type="button" onClick={() => handleSelect(opt.value, opt.label)}
                                             className={`flex w-full cursor-pointer items-center justify-between px-4 py-3 text-left text-sm transition-all 
-                                                ${active ? 'bg-orange-500 text-white font-semibold' 
-                                                : 
-                                                 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}>
+                                                ${active ? 'bg-orange-500 text-white font-semibold'
+                                                    :
+                                                    'text-gray-700 hover:bg-gray-50 hover:text-gray-900'}`}>
                                             <span>{opt.label}</span>
                                             {active && <FiCheck className="text-white shrink-0" />}
                                         </button>
@@ -216,6 +216,11 @@ const Autocomplete = ({
                     </div>
                 )}
             </div>
+            {error && (
+                <p className="text-xs font-semibold mt-0.5 text-red-400">
+                    {error}
+                </p>
+            )}
         </div>
     );
 };

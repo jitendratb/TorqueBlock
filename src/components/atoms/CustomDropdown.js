@@ -178,7 +178,7 @@ export default function CustomDropdown({
                                     value === item.value;
 
                                 return (
-                                    <li key={item.value}>
+                                    <li key={item.value ? `${item.value}-${index}` : `item-${index}`}>
                                         <button
                                             type="button"
                                             onClick={() => {
