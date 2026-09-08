@@ -2,22 +2,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaChevronRight } from 'react-icons/fa'
-
-const brandLinks = [
-    { label: "Pirelli Tyres", href: "brands/6638c9c05085dcdf58c8a783" },
-    { label: "Michelin Tyres", href: "/brands/6638c9c65085dcdf58c8a789" },
-    { label: "Metzeler Tyres", href: "brands/6638c9ba5085dcdf58c8a77b" },
-    { label: 'Eurogrip Tyres', href: '/brands/6a0eb930ecab7f46337aadbc' },
-    { label: 'MRF Tyres', href: '/brands/6a142fd08099d040cd948c1a' },
-    { label: 'Apollo Tyres', href: '/brands/6638c9b95085dcdf58c8a777' },
-    { label: 'Reise Tyres', href: '/brands/6638c9b85085dcdf58c8a775' },
-    { label: 'Maxxis Tyres', href: '/brands/6638c885d83cd3e79e927275' },
-    { label: 'Ceat Tyres', href: '/brands/6a143105bb2657ce6fd147ba' },
-    { label: 'Vredestein Tyres', href: '/brands/6a0daceaf569a00d2be4eb4c' },
-    { label: 'Ralco Tyres', href: '/brands/66cd75e46e659f1d44dff814' },
-]
-
-
+import brandServiceInstance from "@/services/brandService";
 
 const helpLinks = [
     { label: 'Trending', href: '/trending' },
@@ -29,7 +14,46 @@ const helpLinks = [
 ]
 const operatingLinks = ['Bengaluru', 'Delhi', 'Pan-India Delivery & Fitment']
 
-function Footer() {
+const formatBrandLabel = (name = "") => {
+    if (!name) return "";
+    const trimmed = name.trim();
+    if (trimmed.toLowerCase().endsWith("tyres")) {
+        return trimmed;
+    }
+    const upper = trimmed.toUpperCase();
+    if (upper === "MRF" || upper === "CEAT") {
+        return `${upper} Tyres`;
+    }
+    return `${trimmed.charAt(0).toUpperCase()}${trimmed.slice(1).toLowerCase()} Tyres`;
+};
+
+const getBrandPriority = (name = "") => {
+    const lower = name?.toLowerCase() || "";
+    if (lower === 'pirelli') return 1;
+    if (lower === 'michelin') return 2;
+    if (lower === 'metzeler') return 3;
+    if (lower.includes('eurogrip')) return 4;
+    if (lower.includes('vredestein')) return 5;
+    return 6;
+};
+
+async function Footer() {
+    let brandLinks = [];
+
+    try {
+        const data = await brandServiceInstance.getBrands({ isActive: true });
+        const sortedBrands = (data || []).sort(
+            (a, b) => getBrandPriority(a?.name) - getBrandPriority(b?.name)
+        );
+
+        brandLinks = sortedBrands.map((brand) => ({
+            label: formatBrandLabel(brand?.name),
+            href: `/brands/${brand?.slug || brand?._id}`,
+            id: brand?._id,
+        }));
+    } catch (error) {
+        console.error("Error fetching brands in Footer:", error);
+    }
     return (
         <footer className="bg-black border-t border-zinc-800">
             <div className="max-w-7xl mx-auto px-4 py-16">
@@ -141,7 +165,7 @@ function Footer() {
 
                             <ul className="space-y-3 lg:space-y-4">
                                 {brandLinks.map((item, index) => (
-                                    <li key={index}>
+                                    <li key={item.id || index}>
                                         <Link href={item.href} className="group flex items-center text-zinc-400 hover:text-orange-500 transition text-sm " >
                                             <FaChevronRight className="mr-2 text-xs group-hover:translate-x-1 transition" />
                                             {item.label}

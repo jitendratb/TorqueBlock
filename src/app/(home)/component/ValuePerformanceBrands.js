@@ -7,11 +7,19 @@ async function ValuePerformanceBrands() {
 
     try {
         let data = await brandServiceInstance.getBrands({ isActive: true });
-        brands = data?.filter((brand) =>
-            brand.name.toLowerCase() !== 'pirelli' &&
-            brand.name.toLowerCase() !== 'michelin' &&
-            brand.name.toLowerCase() !== 'metzeler'
-        );
+        console.log(data)
+        const getBrandPriority = (name = "") => {
+            const lower = name?.toLowerCase() || "";
+            if (lower.includes('eurogrip')) return 1;
+            if (lower.includes('vredestein')) return 2;
+            return 3;
+        };
+
+        brands = (data?.filter((brand) =>
+            brand?.name?.toLowerCase() !== 'pirelli' &&
+            brand?.name?.toLowerCase() !== 'michelin' &&
+            brand?.name?.toLowerCase() !== 'metzeler'
+        ) || []).sort((a, b) => getBrandPriority(a?.name) - getBrandPriority(b?.name));
     } catch (error) {
         console.error("Error fetching brands:", error);
     }
