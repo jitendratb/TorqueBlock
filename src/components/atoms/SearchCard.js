@@ -9,6 +9,8 @@ export default function SearchCard({ product, tyre, className, onClick }) {
     const router = useRouter();
 
     const isSingleSize = !!product?.price;
+    const minPrice = product?.pricing?.minPrice || product?.minPrice || tyre?.pricing?.minPrice || tyre?.minPrice || 0;
+    const maxPrice = product?.pricing?.maxPrice || product?.maxPrice || tyre?.pricing?.maxPrice || tyre?.maxPrice || 0;
     const title = product?.hero?.title || product?.productName || product?.name || product?.size || "Tyre";
     const categoryName = tyre?.category || "Premium Tyre";
 
@@ -23,7 +25,7 @@ export default function SearchCard({ product, tyre, className, onClick }) {
     const displayPrice = isSingleSize
         ? formatPrice(product.price)
         : minPrice > 0
-            ? minPrice === maxPrice
+            ? minPrice === maxPrice || !maxPrice
                 ? formatPrice(minPrice)
                 : `${formatPrice(minPrice)} - ${formatPrice(maxPrice)}`
             : "Request Price";
@@ -36,7 +38,11 @@ export default function SearchCard({ product, tyre, className, onClick }) {
 
 
     const handleCardClick = (e) => {
-        router.push(`/tyres/${tyre?.identifier}/${product?.size.toLowerCase().replace(/[\s/]/g, '-')}`);
+        const sizeSlug = product?.size ? product.size.toLowerCase().replace(/[\s/]/g, '-') : '';
+        const targetUrl = sizeSlug
+            ? `/tyres/${tyre?.identifier}/${sizeSlug}`
+            : `/tyres/${tyre?.identifier || ''}`;
+        router.push(targetUrl);
         if (onClick) onClick(e);
     };
 
@@ -49,7 +55,7 @@ export default function SearchCard({ product, tyre, className, onClick }) {
 
             <div className="relative w-full h-30  flex items-center justify-center p-4">
                 <Image
-                    src={product?.productImages?.[0] || product?.image || tyre?.productImages[0]}
+                    src={product?.productImages?.[0] || product?.image || tyre?.productImages?.[0] || "/newLogo.webp"}
                     alt={title}
                     fill
                     imageClassName="object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-lg"

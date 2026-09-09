@@ -30,25 +30,25 @@ function page() {
     {
       id: 2,
       image: "https://cdn.torqueblock.com/GT-650-tyre-18ebf1ae-fdd0-47d0-ac66-c6d13131e4d8.webp",
-      mobileImage: "https://cdn.torqueblock.com/brand-tyre-9b20e872-77b7-4d23-83e1-cc965efa947f.webp",
+      mobileImage: "https://cdn.torqueblock.com/street-triple1-5.webp",
       alt: "Premium Motorcycle Tyres India || Royal Enfield Continental GT 650 Tyres || Torque Block",
     },
     {
       id: 3,
       image: "https://cdn.torqueblock.com/brand-tyre-7b173d58-a7a2-4ba4-a0a0-96531ffc6f63.webp",
-      mobileImage: "https://cdn.torqueblock.com/brand-tyre-9b20e872-77b7-4d23-83e1-cc965efa947f.webp",
+      mobileImage: "https://cdn.torqueblock.com/cbr-2.webp",
       alt: "Premium Motorcycle Tyres India || Royal Enfield Himalayan 450 Tyres || Torque Block",
     },
     {
       id: 5,
       image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
-      mobileImage: "https://cdn.torqueblock.com/brand-tyre-9b20e872-77b7-4d23-83e1-cc965efa947f.webp",
+      mobileImage: "https://cdn.torqueblock.com/d790-3.webp",
       alt: "Premium Motorcycle Tyres India || KTM Duke 250 Tyres || Torque Block",
     },
     {
       id: 6,
       image: "https://cdn.torqueblock.com/brand-tyre-c4dcba85-4aa9-48f2-8b77-d77623f336e1.webp",
-      mobileImage: "https://cdn.torqueblock.com/brand-tyre-9b20e872-77b7-4d23-83e1-cc965efa947f.webp",
+      mobileImage: "https://cdn.torqueblock.com/panigale-4.webp",
       alt: "Premium Motorcycle Tyres India || KTM Duke 390 Tyres || Torque Block",
     },
     {
@@ -61,10 +61,10 @@ function page() {
 
   const selectedBanner = banners[Math.floor(Math.random() * banners.length)];
   const commonProps = { alt: selectedBanner.alt, fill: true, priority: true, sizes: '100vw', quality: 75 };
-  
+
   const { props: desktopProps } = getImageProps({ ...commonProps, src: selectedBanner.image });
   const { props: { srcSet: mobileSrcSet, ...rest } } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
-  
+
   preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
   preload(rest.src, { as: 'image', imageSrcSet: mobileSrcSet, imageSizes: rest.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
 
@@ -77,7 +77,7 @@ function page() {
         url="/"
       />
       <LocalBusinessSchema />
-      <FAQSchema 
+      <FAQSchema
         faqs={[
           {
             question: "What is Torque Block?",
@@ -162,7 +162,7 @@ function page() {
                 <B2BEnterpriseSection />
               </Suspense>
             </section>
-            
+
           </div>
         </PageShell>
       </ScrollBackgroundWrapper>
