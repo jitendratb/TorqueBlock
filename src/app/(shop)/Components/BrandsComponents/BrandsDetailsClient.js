@@ -8,6 +8,7 @@ import { RiShieldCheckFill, RiThumbUpFill, RiCheckboxCircleFill, RiThumbDownFill
 import CustomImage from '@/components/molecules/CustomImage';
 import RecommendedTyres from './RecommendedTyres';
 import TyreSection from '../NewLaunchTyres';
+import FAQSection from '@/components/atoms/FAQSection';
 
 const ExpandableText = ({ text, color }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -45,6 +46,8 @@ function BrandsDetailsClient({ brand }) {
       </div>
     );
   }
+
+  console.log(brand, "asdfjdxfhv")
 
   const brandName = brand?.name || brand?.brandName || "Premium Partner";
   const primaryColor = brand?.featuredData?.primaryColor || '#f97316';
@@ -293,6 +296,7 @@ function BrandsDetailsClient({ brand }) {
       <div className="">
         <TyreSection brandId={brand?._id} primaryColor={primaryColor} />
       </div>
+      {brand?.faq?.length > 0 && <FAQSection faqs={brand?.faq} />}
     </div>
   );
 }
