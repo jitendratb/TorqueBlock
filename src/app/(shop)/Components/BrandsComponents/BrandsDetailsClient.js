@@ -47,7 +47,6 @@ function BrandsDetailsClient({ brand }) {
     );
   }
 
-  console.log(brand, "asdfjdxfhv")
 
   const brandName = brand?.name || brand?.brandName || "Premium Partner";
   const primaryColor = brand?.featuredData?.primaryColor || '#f97316';

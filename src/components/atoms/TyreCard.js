@@ -61,7 +61,7 @@ export default function ProductCard({ product, tyre, className, opposteProductId
 
             <div className="relative w-full h-48 flex items-center justify-center p-4">
                 <Image
-                    src={product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || tyre?.productImages?.[0] || '/newLogo.webp'}
+                    src={product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || product?.availableTyres?.productImages?.[0]?.url || '/newLogo.webp'}
                     alt={title}
                     fill
                     imageClassName="object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-lg"

@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { FaArrowRightLong, FaChevronDown, FaChevronUp } from "react-icons/fa6";
+import { FaArrowRightLong, FaChevronDown, FaChevronUp, FaMotorcycle } from "react-icons/fa6";
+import { FiChevronRight, FiTrendingUp, FiZap, FiAward } from "react-icons/fi";
 import { MdCompareArrows } from "react-icons/md";
 import { usePathname } from "next/navigation";
 import SearchBar from './searchBar';
@@ -35,75 +36,143 @@ const NAVIGATION_CONFIG = {
             { label: "Michelin Road 6", href: "/tyres/michelin-road-6" },
             { label: "Michelin Anakee Adventure", href: "/tyres/michelin-anakee-adventure" },
             { label: "Metzeler Tourance Next 2", href: "/tyres/metzeler-tourance-next-2" },
+            { label: "Pirelli Angel GT", href: "/tyres/pirelli-angel-gt" },
+            { label: "Pirelli Diablo Rosso IV", href: "/tyres/pirelli-diablo-rosso-iv" },
 
             { label: "Metzeler Cruisetec", href: "/tyres/metzeler-cruisetec" },
             { label: "Pirelli Diablo Rosso IV Corsa", href: "/tyres/pirelli-diablo-powercruiser" },
             { label: "Metzeler Racetec TD Slick", href: "/tyres/pirelli-night-dragon" },
-            { label: "Metzeler Sportec M9 RR", href: "/tyres/pirelli-scorpion-trail-iii" },
+            { label: "Metzeler Sportec M9 RR", href: "/tyres/metzeler-sportec-m9-rr" },
             { label: "Michelin Power 6", href: "/tyres/michelin-power-6" },
+            { label: "Metzeler Roadtec 02", href: "/tyres/metzeler-roadtec-02" },
+            { label: "Metzeler Karoo 4", href: "/tyres/metzeler-karoo-4" },
+
+            { label: "Eurogrip Trailhound STR", href: "/tyres/eurogrip-trailhound-str" },
+            { label: "Eurogrip Roadhound", href: "/tyres/eurogrip-roadhound" },
+            { label: "Eurogrip Protorq Extreme", href: "/tyres/eurogrip-protorq-extreme" },
+            { label: "Eurogrip Trailhound SCR", href: "/tyres/eurogrip-trailhound-scr" },
+            { label: "Eurogrip Explorer", href: "/tyres/eurogrip-explorer" },
+            { label: "Vredestein Centauro ST", href: "/tyres/vredestein-centauro-st" },
+            { label: "Vredestein Centauro XR", href: "/tyres/vredestein-centauro-xr" },
+
         ],
         "Shop by Motorcycle": [
             { label: "Royal Enfield Himalayan 450", href: "/motorcycles/royal-enfield-himalayan-450-tyres" },
             { label: "KTM 390 Adventure", href: "/motorcycles/ktm-390-adventure-tyres" },
             { label: "BMW G 310 GS", href: "/motorcycles/bmw-g-310-gs-tyres" },
             { label: "Honda NX500", href: "/motorcycles/honda-nx500-tyres" },
+            { label: "BMW R1300 GS", href: "/motorcycles/bmw-r-1300-gs-tyres" },
+            { label: "Triumph Scrambler 400X", href: "/motorcycles/triumph-scrambler-400-x-tyres" },
+
             { label: "KTM Duke 390", href: "/motorcycles/ktm-duke-390-tyres" },
             { label: "Kawasaki Ninja 300", href: "/motorcycles/kawasaki-ninja-300-tyres" },
             { label: "Triumph Speed 400", href: "/motorcycles/triumph-speed-400-tyres" },
-            { label: "Royal Enfield Interceptor 650", href: "/motorcycles/royal-enfield-interceptor-650-tyres" },
-            { label: "Royal Enfield Continental GT 650", href: "/motorcycles/royal-enfield-continental-gt-650-tyres" }
+            { label: "Kawasaki Ninja ZX-10R", href: "/motorcycles/kawasaki-ninja-zx10r-tyres" },
+            { label: "Ducati Panigale V4", href: "/motorcycles/ducati-panigale-v4-tyres" },
+            { label: "Suzuki Hayabusa", href: "/motorcycles/suzuki-hayabusa-tyres" },
 
+            { label: "Royal Enfield Interceptor 650", href: "/motorcycles/royal-enfield-interceptor-650-tyres" },
+            { label: "Royal Enfield Continental GT 650", href: "/motorcycles/royal-enfield-continental-gt-650-tyres" },
+            { label: "Harley-Davidson Fat Boy 114", href: "/motorcycles/harley-davidson-fat-boy-114-tyres" }
         ],
         "Compare Tyres": [
+            // Sport Touring
             { label: "Michelin Road 6 vs Pirelli Angel GT II", href: "/compare/michelin-road-6-vs-pirelli-angel-gt-ii" },
-            { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
             { label: "Michelin Road 6 vs Metzeler Roadtec 02", href: "/compare/michelin-road-6-vs-metzeler-roadtec-02" },
-            { label: "Pirelli Diablo Rosso IV vs Metzeler Sportec M9 RR", href: "/compare/pirelli-diablo-rosso-iv-vs-metzeler-sportec-m9-rr" },
+            { label: "Pirelli Angel GT II vs Metzeler Sportec M9 RR", href: "/compare/pirelli-angel-gt-ii-vs-metzeler-sportec-m9-rr" },
+
+            // Track & Supersport
             { label: "Pirelli Diablo Rosso IV vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-vs-michelin-power-6" },
             { label: "Michelin Power 6 vs Metzeler Sportec M9 RR", href: "/compare/michelin-power-6-vs-metzeler-sportec-m9-rr" },
             { label: "Pirelli Diablo Rosso IV Corsa vs Michelin Power 6", href: "/compare/pirelli-diablo-rosso-iv-corsa-vs-michelin-power-6" },
+
             { label: "Pirelli Scorpion Trail II vs Michelin Anakee Road", href: "/compare/pirelli-scorpion-trail-ii-vs-michelin-anakee-road" },
+            { label: "Pirelli Scorpion Trail II vs Metzeler Tourance Next 2", href: "/compare/pirelli-scorpion-trail-ii-vs-metzeler-tourance-next-2" },
+            { label: "Pirelli Scorpion Rally STR vs Michelin Anakee Adventure", href: "/compare/pirelli-scorpion-rally-str-vs-michelin-anakee-adventure" }
         ],
     }
 };
 
 const TyresMegaMenu = React.memo(({ tabIndex }) => (
-    <div className="flex justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div className="flex-1 grid grid-cols-2 gap-8">
+    <div className="flex justify-between gap-6 lg:gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300 items-stretch">
+        <div className="flex-1 grid grid-cols-3 gap-6">
             <div>
-                <h3 className="text-sm font-bold text-gray-900 tracking-wider mb-2 border-b border-gray-100 pb-2">Most Popular Tyres</h3>
-                <div className="flex flex-col gap-2">
-                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(0, 5).map((item) => (
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiTrendingUp className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Most Popular Tyres
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(0, 7).map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
                             tabIndex={tabIndex}
-                            className="group flex items-center gap-3 p-2 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-300 focus:outline-none"
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600  transition-all duration-200"
                         >
-                            <div className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-gray-300/50 text-black group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors duration-300">
-                                <span className="text-xs font-bold">{item.label.substring(0, 1)}</span>
-                            </div>
-                            <span className="text-[13px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
                                 {item.label}
                             </span>
                         </Link>
                     ))}
                 </div>
             </div>
+
             <div>
-                <h3 className="text-sm font-bold text-gray-900 tracking-wider mb-2 border-b border-gray-100 pb-2">Sport & Performance</h3>
-                <div className="flex flex-col gap-2">
-                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(5).map((item) => (
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiZap className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Sport & Performance
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(7, 14).map((item) => (
                         <Link
                             key={item.label}
                             href={item.href}
                             tabIndex={tabIndex}
-                            className="group flex items-center gap-3 p-2 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-300 focus:outline-none"
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
                         >
-                            <div className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-gray-300/50 text-black group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors duration-300">
-                                <span className="text-xs font-bold">{item.label.substring(0, 1)}</span>
-                            </div>
-                            <span className="text-[13px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiAward className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Value & Performance
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop Tyres"]?.slice(14, 21).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
                                 {item.label}
                             </span>
                         </Link>
@@ -112,119 +181,247 @@ const TyresMegaMenu = React.memo(({ tabIndex }) => (
             </div>
         </div>
         <div>
-            <Link
-                href="/tyres"
-                tabIndex={tabIndex}
-                className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
-            >
-                <div className="relative flex-1 bg-gradient-to-br from-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full">
-                    <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
+            <div className="w-[300px] shrink-0">
+                <Link
+                    href="/tyres"
+                    tabIndex={tabIndex}
+                    className="flex h-full text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
+                >
+                    <div className="relative flex-1 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.2)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full rounded-2xl">
+                        <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
 
-                    <div className="relative z-10 flex flex-col h-full">
-                        <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">Smart Tool</span>
-                        <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">Find the Perfect Tyre</h4>
-                        <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">Find the perfect motorcycle tyre with our intelligent recommendation engine.</p>
-                        <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                            Find My Tyre <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+                        <div className="relative z-10 flex flex-col h-full">
+                            <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">
+                                Smart Tool
+                            </span>
+                            <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">
+                                Find the Perfect Tyre
+                            </h4>
+                            <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">
+                                Find the perfect motorcycle tyre with our intelligent recommendation engine.
+                            </p>
+                            <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto pt-4 border-t border-white/5">
+                                Find My Tyre <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Link>
+                </Link>
+            </div>
         </div>
+
     </div>
 ));
 
 const BikeBrandsMegaMenu = React.memo(({ tabIndex }) => (
-    <div className="flex justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div className="flex-1">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-2 border-b border-gray-100 pb-2">Shop by Motorcycle</h3>
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
-                {NAVIGATION_CONFIG.mobileSubMenus["Shop by Motorcycle"].map((bike) => (
-                    <Link
-                        key={bike.label}
-                        href={bike.href}
-                        tabIndex={tabIndex}
-                        className="group flex items-center gap-3 p-2 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-300 focus:outline-none"
-                    >
-                        <div className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-gray-300/50 text-black group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors duration-300">
-                            <span className="text-xs font-bold">{bike.label.substring(0, 1)}</span>
-                        </div>
-                        <span className="text-[13px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">
-                            {bike.label}
-                        </span>
-                    </Link>
-                ))}
+    <div className="flex justify-between gap-6 lg:gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300 items-stretch">
+        <div className="flex-1 grid grid-cols-3 gap-6">
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FaMotorcycle className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Adventure & Touring
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop by Motorcycle"]?.slice(0, 6).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiZap className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Sport & Performance
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop by Motorcycle"]?.slice(6, 12).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiAward className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Classics & Cruisers
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Shop by Motorcycle"]?.slice(12, 18).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
-        <div>
-            <Link
-                href="/motorcycles"
-                tabIndex={tabIndex}
-                className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
-            >
-                <div className="relative flex-1 bg-gradient-to-br from-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full">
-                    <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
 
-                    <div className="relative z-10 flex flex-col h-full">
-                        <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">Featured Collection</span>
-                        <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">Superbikes & Tourers</h4>
-                        <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">Explore premium motorcycle tyres for superbikes and touring.</p>
-                        <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                            View Premium Collection <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+        <div>
+            <div className="w-[300px] shrink-0">
+                <Link
+                    href="/motorcycles"
+                    tabIndex={tabIndex}
+                    className="flex h-full text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
+                >
+                    <div className="relative flex-1 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.2)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full rounded-2xl">
+                        <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
+
+                        <div className="relative z-10 flex flex-col h-full">
+                            <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">
+                                Featured Collection
+                            </span>
+                            <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">
+                                Superbikes & Tourers
+                            </h4>
+                            <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">
+                                Explore premium motorcycle tyres for superbikes and touring.
+                            </p>
+                            <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto pt-4 border-t border-white/5">
+                                View Premium Collection <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Link>
+                </Link>
+            </div>
         </div>
     </div>
-
 ));
 
 const TyreComparisonMegaMenu = React.memo(({ tabIndex }) => (
-    <div className="flex  justify-between gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-        <div className="flex-1">
-            <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wider mb-4 border-b border-gray-100 pb-2">Compare Popular Tyres</h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                {NAVIGATION_CONFIG.mobileSubMenus["Compare Tyres"].map((comp) => (
-                    <Link
-                        key={comp.label}
-                        href={comp.href}
-                        tabIndex={tabIndex}
-                        className="group flex items-center gap-3 p-2 rounded-xl border border-gray-100 hover:border-orange-200 hover:bg-orange-50/50 transition-all duration-300 focus:outline-none"
-                    >
-                        <div className="flex shrink-0 items-center justify-center w-8 h-8 rounded-full bg-gray-300/50 text-black group-hover:bg-orange-100 group-hover:text-orange-500 transition-colors duration-300">
-                            <MdCompareArrows className="text-sm" />
-                        </div>
-                        <span className="text-[13px] font-medium text-gray-600 group-hover:text-gray-900 transition-colors leading-relaxed">
-                            {comp.label}
-                        </span>
-                    </Link>
-                ))}
+    <div className="flex justify-between gap-6 lg:gap-8 animate-in fade-in slide-in-from-bottom-2 duration-300 items-stretch">
+        <div className="flex-1 grid grid-cols-2 gap-2">
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <MdCompareArrows className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Sport Touring
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Compare Tyres"]?.slice(0, 6).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
+            </div>
+
+            <div>
+                <div className="flex items-center gap-2 pb-2.5 mb-2 border-b border-gray-100">
+                    <FiZap className="text-orange-500 text-sm shrink-0" />
+                    <h3 className="text-xs font-black uppercase tracking-[0.14em] text-gray-900">
+                        Track & Supersport
+                    </h3>
+                </div>
+                <div className="flex flex-col gap-0.5">
+                    {NAVIGATION_CONFIG.mobileSubMenus["Compare Tyres"]?.slice(3).map((item) => (
+                        <Link
+                            key={item.label}
+                            href={item.href}
+                            tabIndex={tabIndex}
+                            className="group flex items-center px-2 py-1.5 -mx-2 rounded-lg text-zinc-600 hover:text-orange-600 transition-all duration-200"
+                        >
+                            <FiChevronRight
+                                strokeWidth={3}
+                                size={13}
+                                className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-500 group-hover:translate-x-1 transition-all duration-200"
+                            />
+                            <span className="text-[13px] font-semibold tracking-tight leading-snug">
+                                {item.label}
+                            </span>
+                        </Link>
+                    ))}
+                </div>
             </div>
         </div>
-        <div>
-            <Link
-                href="/compare"
-                tabIndex={tabIndex}
-                className="flex w-[320px] text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
-            >
-                <div className="relative flex-1 bg-gradient-to-br from-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.15)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full">
-                    <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
 
-                    <div className="relative z-10 flex flex-col h-full">
-                        <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">Expert Picks</span>
-                        <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">Find Your Perfect Tyre</h4>
-                        <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">Learn how to choose the right motorcycle tyre based on your riding style, performance needs, and motorcycle.</p>
-                        <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto">
-                            Unlock Tyre Guide with Compare Tyres <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+        <div>
+            <div className="w-[350px] shrink-0">
+                <Link
+                    href="/compare"
+                    tabIndex={tabIndex}
+                    className="flex h-full text-left focus:outline-none focus:ring-2 focus:ring-orange-500 rounded-2xl overflow-hidden"
+                >
+                    <div className="relative flex-1 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black p-6 text-white hover:shadow-[0_20px_50px_rgba(249,115,22,0.2)] transition-all duration-500 group border border-zinc-800 hover:border-orange-500/50 shadow-xl flex flex-col justify-between h-full w-full rounded-2xl">
+                        <div className="absolute -right-8 -bottom-8 opacity-20 w-36 h-36 bg-orange-500 blur-3xl rounded-full group-hover:scale-125 group-hover:opacity-40 transition-all duration-700 pointer-events-none" />
+
+                        <div className="relative z-10 flex flex-col h-full">
+                            <span className="inline-block px-3 py-1 bg-white/10 text-white text-[9px] font-extrabold rounded mb-3 w-max uppercase tracking-[0.2em] border border-white/20 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-orange-500/10 group-hover:text-orange-400 transition-all duration-300">
+                                Expert Picks
+                            </span>
+                            <h4 className="text-lg font-extrabold text-white mb-2 group-hover:text-orange-400 transition-colors tracking-tight leading-snug">
+                                Find Your Perfect Tyre
+                            </h4>
+                            <p className="text-xs text-zinc-400 mb-6 leading-relaxed group-hover:text-zinc-300 transition-colors">
+                                Learn how to choose the right motorcycle tyre based on your riding style, performance needs, and motorcycle.
+                            </p>
+                            <div className="text-xs font-bold text-white group-hover:text-orange-400 flex items-center gap-2 group-hover:gap-3 transition-all mt-auto pt-4 border-t border-white/5">
+                                Unlock Tyre Guide with Compare Tyres <FaArrowRightLong className="text-white group-hover:text-orange-500 transition-colors" />
+                            </div>
                         </div>
                     </div>
-                </div>
-            </Link>
+                </Link>
+            </div>
         </div>
+
     </div>
 ));
-
 
 function Header({ InputLink = true }) {
     const pathname = usePathname();
@@ -239,13 +436,9 @@ function Header({ InputLink = true }) {
     const isLoginOpen = useUiStore((state) => state.isLoginOpen);
     const setLoginOpen = useUiStore((state) => state.setLoginOpen);
     const [searchBarAnimatedIn, setSearchBarAnimatedIn] = useState(false);
-
     const cart = useCartStore((state) => state.cart || []);
     const setCartSliderOpen = useCartStore((state) => state.setSliderOpen);
     const totalItems = isMounted ? cart.reduce((sum, item) => sum + item.quantity, 0) : 0;
-
-
-
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -286,6 +479,7 @@ function Header({ InputLink = true }) {
         window.addEventListener("keydown", handleGlobalKeys);
         return () => window.removeEventListener("keydown", handleGlobalKeys);
     }, []);
+
 
     useEffect(() => {
         if (sidebarOpen) {
