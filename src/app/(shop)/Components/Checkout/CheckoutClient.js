@@ -11,6 +11,9 @@ import useOrderStore from '@/stores/orderStore';
 import { useToast } from '@/context/ToastContext';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
+import TorqueBlockApi from '@/lib/api';
+import couponService from '@/services/couponService';
+import { Input } from '@/components/atoms/input';
 import AddressSkeleton from './AddressSkeleton';
 import PaymentSkeleton from './PaymentSkeleton';
 import CartSummarySkeleton from './CartSummarySkeleton';
@@ -19,7 +22,7 @@ import PaymentVerifyingState from './PaymentVerifyingState';
 import OrderSuccessView from './OrderSuccessView';
 import EmptyCartView from './EmptyCartView';
 import Login from '@/components/organisms/login';
-import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline } from 'react-icons/io5';
+import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
 
 const AddressSection = dynamic(() => import('./AddressSection'), {
@@ -58,6 +61,10 @@ export default function CheckoutClient() {
     const [orderPlacedSuccess, setOrderPlacedSuccess] = useState(false);
     const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
     const [verifyLoading, setVerifyLoading] = useState(false);
+    const [couponCode, setCouponCode] = useState('');
+    const [couponData, setCouponData] = useState(null);
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+    const [couponError, setCouponError] = useState('');
     const router = useRouter();
 
     useEffect(() => {
@@ -101,7 +108,94 @@ export default function CheckoutClient() {
 
     const subtotal = useMemo(() => getCartTotal(), [getCartTotal, cart]);
     const deliveryCharge = useMemo(() => (subtotal > 0 ? 0 : 0), [subtotal]);
-    const finalTotal = useMemo(() => subtotal + deliveryCharge, [subtotal, deliveryCharge]);
+
+    const discountAmount = useMemo(() => {
+        if (!couponData) return 0;
+
+        if (couponData.affiliate && typeof couponData.affiliate.discountPercentage === 'number') {
+            return (subtotal * couponData.affiliate.discountPercentage) / 100;
+        }
+
+        if (!couponData.affiliate && couponData.productIds && couponData.productIds.length > 0) {
+            let matched = false;
+            cart.forEach((item) => {
+                const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+                const isTube = Boolean(
+                    item.selectedGeneric?.tubeId ||
+                    item.product?.tubeId ||
+                    sizeObj?.tubeId ||
+                    item.selectedGeneric?.type?.toLowerCase() === 'tube' ||
+                    item.type?.toLowerCase() === 'tube' ||
+                    item.product?.type?.toLowerCase() === 'tube' ||
+                    sizeObj?.type?.toLowerCase() === 'tube' ||
+                    item.product?.valveType ||
+                    sizeObj?.valveType ||
+                    (typeof (item.product?.tubeType || sizeObj?.tubeType) === 'string') ||
+                    item.product?.productName?.toLowerCase().includes('tube') ||
+                    item.product?.name?.toLowerCase().includes('tube') ||
+                    sizeObj?.productName?.toLowerCase().includes('tube') ||
+                    sizeObj?.name?.toLowerCase().includes('tube') ||
+                    item.sku?.toLowerCase().includes('tube') ||
+                    sizeObj?.sku?.toLowerCase().includes('tube')
+                );
+                const targetId = isTube
+                    ? (sizeObj.tubeId || sizeObj._id || item.product?.tubeId || item.product?._id)
+                    : (sizeObj._id || item.product?._id);
+
+                if (couponData.productIds.includes(targetId)) {
+                    matched = true;
+                }
+            });
+
+            if (matched) {
+                if (couponData.discountCategory === 'percentage') {
+                    return (subtotal * (couponData.discountValue || 0)) / 100;
+                }
+                return couponData.discountValue || 0;
+            }
+        }
+
+        if (!couponData.affiliate && (!couponData.productIds || couponData.productIds.length === 0)) {
+            if (couponData.discountCategory === 'percentage') {
+                return (subtotal * (couponData.discountValue || 0)) / 100;
+            }
+            return couponData.discountValue || 0;
+        }
+
+        return 0;
+    }, [couponData, subtotal, cart]);
+
+    const finalTotal = useMemo(() => Math.max(0, subtotal + deliveryCharge - discountAmount), [subtotal, deliveryCharge, discountAmount]);
+
+    const handleApplyCoupon = useCallback(async () => {
+        if (!couponCode) {
+            setCouponError("Please enter a coupon code");
+            return;
+        }
+        setCouponError("");
+        setIsApplyingCoupon(true);
+        try {
+            const response = await couponService.applyCoupon(couponCode);
+            if (response?.success) {
+                setCouponData(response.data);
+                toast.success("Coupon applied successfully");
+            } else {
+                setCouponError(response?.message || "Invalid coupon");
+                setCouponData(null);
+            }
+        } catch (error) {
+            setCouponError(error?.response?.data?.message || "Failed to apply coupon");
+            setCouponData(null);
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    }, [couponCode, toast]);
+
+    const handleRemoveCoupon = useCallback(() => {
+        setCouponCode('');
+        setCouponData(null);
+        setCouponError('');
+    }, []);
 
     const handlePlaceOrder = useCallback(async () => {
         if (!selectedAddressId) {
@@ -149,9 +243,13 @@ export default function CheckoutClient() {
                 };
             });
 
+
             const orderData = {
                 paymentMethod,
-                items
+                items,
+                ...(couponData && { couponId: couponData._id }),
+                ...(discountAmount > 0 && { couponDiscount: discountAmount }),
+                ...(couponData?.affiliate?._id && { affiliateId: couponData?.affiliate?._id })
             };
 
             const response = await createOrder(orderData);
@@ -260,7 +358,7 @@ export default function CheckoutClient() {
         } finally {
             setIsOrderPlacing(false);
         }
-    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, paymentFailed, addresses, user, clearCart, toast]);
+    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, paymentFailed, addresses, user, clearCart, toast, couponData, discountAmount]);
 
     if (!isMounted) {
         return (
@@ -369,8 +467,60 @@ export default function CheckoutClient() {
                         subtotal={subtotal}
                         deliveryCharge={deliveryCharge}
                         finalTotal={finalTotal}
+                        couponDiscount={discountAmount}
                     />
 
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
+                        <label className="flex items-center gap-2 text-sm font-medium text-zinc-300 mb-3">
+                            <IoRibbonOutline className="text-lg text-orange-400" />
+                            Have a promotional code?
+                        </label>
+                        <div className="flex gap-2 items-start">
+                            <Input
+                                value={couponCode}
+                                onChange={(e) => {
+                                    setCouponCode(e.target.value.toUpperCase());
+                                    if (couponError) setCouponError('');
+                                }}
+                                placeholder="Enter code here"
+                                variant="glass"
+                                disabled={isApplyingCoupon || !!couponData}
+                                error={couponError}
+                                wrapperClassName="flex-1"
+                                size="md"
+                            />
+                            <div>
+                                {!couponData ? (
+                                    <button
+                                        onClick={handleApplyCoupon}
+                                        disabled={isApplyingCoupon || !couponCode}
+                                        className="px-5 py-2 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 h-[38px] md:h-[46px]"
+                                    >
+                                        {isApplyingCoupon ? 'Applying...' : 'Apply'}
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={handleRemoveCoupon}
+                                        className="px-4 py-2 md:py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 h-[38px] md:h-[46px]"
+                                    >
+                                        <IoCloseCircleOutline className="text-lg" />
+                                        Remove
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                        {couponData && discountAmount > 0 && (
+                            <div className="mt-2 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                <IoCheckmarkCircleOutline className="text-lg" />
+                                Coupon applied! You save {formatPrice(discountAmount)}
+                            </div>
+                        )}
+                        {couponData && discountAmount === 0 && (
+                            <div className="mt-2 text-xs font-bold text-orange-400 flex items-center gap-1.5">
+                                Coupon applied, but not applicable on your items.
+                            </div>
+                        )}
+                    </div>
 
                     <button
                         onClick={handlePlaceOrder}

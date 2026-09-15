@@ -5,7 +5,12 @@ import useCartStore from '@/stores/cartStore';
 import CartItem from '@/components/molecules/CartItem';
 import { IoReceiptOutline } from 'react-icons/io5';
 
-export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
+export default function CartSummary({
+    subtotal,
+    deliveryCharge,
+    finalTotal,
+    couponDiscount = 0
+}) {
     const { cart, removeFromCart, updateQuantity } = useCartStore();
 
     const formatPrice = useCallback((price) => {
@@ -47,7 +52,7 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                 ))}
             </div>
 
-            <div className="p-4 rounded-2xl bg-white/10 border border-white/5 space-y-3 text-xs font-semibold text-zinc-400">
+            <div className="p-4 rounded-xl bg-white/10 border border-white/5 space-y-3 text-xs font-semibold text-zinc-400">
                 {totalDiscount > 0 ? (
                     <>
                         <div className="flex justify-between">
@@ -60,16 +65,31 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                             <span className="font-black">- {formatPrice(totalDiscount)}</span>
                         </div>
 
+                        {couponDiscount > 0 && (
+                            <div className="flex justify-between items-center text-orange-400 font-bold">
+                                <span>Coupon Discount</span>
+                                <span className="font-black">- {formatPrice(couponDiscount)}</span>
+                            </div>
+                        )}
+
                         <div className="flex justify-between">
                             <span>Subtotal</span>
                             <span className="text-zinc-200 font-bold">{formatPrice(subtotal)}</span>
                         </div>
                     </>
                 ) : (
-                    <div className="flex justify-between">
-                        <span>Subtotal</span>
-                        <span className="text-zinc-200">{formatPrice(subtotal)}</span>
-                    </div>
+                    <>
+                        <div className="flex justify-between">
+                            <span>Subtotal</span>
+                            <span className="text-zinc-200">{formatPrice(subtotal)}</span>
+                        </div>
+                        {couponDiscount > 0 && (
+                            <div className="flex justify-between items-center text-orange-400 font-bold">
+                                <span>Coupon Discount</span>
+                                <span className="font-black">- {formatPrice(couponDiscount)}</span>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 <div className="flex justify-between items-center">
@@ -84,9 +104,9 @@ export default function CartSummary({ subtotal, deliveryCharge, finalTotal }) {
                 <div className="flex justify-between items-baseline border-t border-white/5 pt-3 mt-1.5">
                     <div className="flex flex-col">
                         <span className="text-xs font-black uppercase tracking-widest text-white">Total Amount</span>
-                        {totalDiscount > 0 && (
+                        {(totalDiscount > 0 || couponDiscount > 0) && (
                             <span className="text-[10px] text-emerald-400 font-bold mt-0.5">
-                                You saved {formatPrice(totalDiscount)}
+                                You saved {formatPrice(totalDiscount + couponDiscount)}
                             </span>
                         )}
                     </div>
