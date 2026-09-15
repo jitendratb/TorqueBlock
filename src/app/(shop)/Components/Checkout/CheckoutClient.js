@@ -552,7 +552,7 @@ export default function CheckoutClient() {
                         )}
                         {couponData && discountAmount === 0 && (
                             <div className="mt-2 text-xs font-bold text-orange-400 flex items-center gap-1.5">
-                                Coupon applied, but not applicable on your items.
+                                Coupon applied, but not applicable to your items.
                             </div>
                         )}
                     </div>
