@@ -112,14 +112,54 @@ export default function CheckoutClient() {
     const discountAmount = useMemo(() => {
         if (!couponData) return 0;
 
-        if (couponData.affiliate && typeof couponData.affiliate.discountPercentage === 'number') {
-            return (subtotal * couponData.affiliate.discountPercentage) / 100;
+        let totalDiscount = 0;
+        let isGlobalDiscount = (!couponData.productIds || couponData.productIds.length === 0) && (!couponData.brand || couponData.brand.length === 0);
+
+        if (isGlobalDiscount) {
+            if (couponData.discountCategory === 'percentage') {
+                return (subtotal * (couponData.discountValue || 0)) / 100;
+            }
+            return couponData.discountValue || 0;
         }
 
-        if (!couponData.affiliate && couponData.productIds && couponData.productIds.length > 0) {
-            let matched = false;
-            cart.forEach((item) => {
-                const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+        cart.forEach((item) => {
+            const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+            const disc = sizeObj.discount || sizeObj.discountAmount || item.discount || item.product?.discount || 0;
+            const unitOriginal = item.price || sizeObj.price || 0;
+            const unitSale = disc > 0 ? Math.max(0, unitOriginal - disc) : unitOriginal;
+            const itemTotalPrice = unitSale * (item.quantity || 1);
+
+            let itemDiscount = 0;
+            let brandMatched = false;
+
+            if (couponData.brand && couponData.brand.length > 0) {
+                const itemBrandId =
+                    item.product?.brand?._id ||
+                    item.product?.brandId ||
+                    (typeof item.product?.brand === 'string' ? item.product?.brand : null) ||
+                    sizeObj?.brand?._id ||
+                    sizeObj?.brandId ||
+                    (typeof sizeObj?.brand === 'string' ? sizeObj?.brand : null) ||
+                    item.brand?._id ||
+                    item.brandId ||
+                    (typeof item.brand === 'string' ? item.brand : null);
+
+                const matchedBrand = couponData.brand.find(b =>
+                    b.brandId === itemBrandId ||
+                    (itemBrandId && b.brandId === itemBrandId.toString())
+                );
+
+                if (matchedBrand) {
+                    brandMatched = true;
+                    if (matchedBrand.discountCategory === 'percentage') {
+                        itemDiscount = (itemTotalPrice * (matchedBrand.discountValue || 0)) / 100;
+                    } else {
+                        itemDiscount = (matchedBrand.discountValue || 0) * (item.quantity || 1);
+                    }
+                }
+            }
+
+            if (!brandMatched && couponData.productIds && couponData.productIds.length > 0) {
                 const isTube = Boolean(
                     item.selectedGeneric?.tubeId ||
                     item.product?.tubeId ||
@@ -138,32 +178,27 @@ export default function CheckoutClient() {
                     item.sku?.toLowerCase().includes('tube') ||
                     sizeObj?.sku?.toLowerCase().includes('tube')
                 );
+
                 const targetId = isTube
                     ? (sizeObj.tubeId || sizeObj._id || item.product?.tubeId || item.product?._id)
                     : (sizeObj._id || item.product?._id);
 
                 if (couponData.productIds.includes(targetId)) {
-                    matched = true;
+                    if (couponData.discountCategory === 'percentage') {
+                        itemDiscount = (itemTotalPrice * (couponData.discountValue || 0)) / 100;
+                    } else {
+                        itemDiscount = (couponData.discountValue || 0) * (item.quantity || 1);
+                    }
                 }
-            });
-
-            if (matched) {
-                if (couponData.discountCategory === 'percentage') {
-                    return (subtotal * (couponData.discountValue || 0)) / 100;
-                }
-                return couponData.discountValue || 0;
             }
-        }
 
-        if (!couponData.affiliate && (!couponData.productIds || couponData.productIds.length === 0)) {
-            if (couponData.discountCategory === 'percentage') {
-                return (subtotal * (couponData.discountValue || 0)) / 100;
-            }
-            return couponData.discountValue || 0;
-        }
+            totalDiscount += itemDiscount;
+        });
 
-        return 0;
+        return totalDiscount;
     }, [couponData, subtotal, cart]);
+
+    console.log(couponData, "sdfghjkl");
 
     const finalTotal = useMemo(() => Math.max(0, subtotal + deliveryCharge - discountAmount), [subtotal, deliveryCharge, discountAmount]);
 
@@ -391,7 +426,7 @@ export default function CheckoutClient() {
 
     return (
         <>
-            <div className="relative z-10 space-y-4 pb-4">
+            <div className="relative z-10 space-y-4 py-4">
                 <div className="p-4 rounded-xl bg-white/10 border border-white/10 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] relative overflow-hidden">
 
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
@@ -487,21 +522,21 @@ export default function CheckoutClient() {
                                 disabled={isApplyingCoupon || !!couponData}
                                 error={couponError}
                                 wrapperClassName="flex-1"
-                                size="md"
+                                size="sm"
                             />
                             <div>
                                 {!couponData ? (
                                     <button
                                         onClick={handleApplyCoupon}
                                         disabled={isApplyingCoupon || !couponCode}
-                                        className="px-5 py-2 md:py-3 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50 h-[38px] md:h-[46px]"
+                                        className="px-5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
                                     >
                                         {isApplyingCoupon ? 'Applying...' : 'Apply'}
                                     </button>
                                 ) : (
                                     <button
                                         onClick={handleRemoveCoupon}
-                                        className="px-4 py-2 md:py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5 h-[38px] md:h-[46px]"
+                                        className="px-4 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                                     >
                                         <IoCloseCircleOutline className="text-lg" />
                                         Remove
