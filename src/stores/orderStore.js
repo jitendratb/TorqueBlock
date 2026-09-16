@@ -8,16 +8,19 @@ const useOrderStore = create((set, get) => ({
   loading: false,
   error: null,
 
-  fetchOrderHistory: async (page = 1, limit = 10) => {
+  fetchOrderHistory: async (page = 1, limit = 10, search, status) => {
     const { isAuthenticated } = useAuthStore.getState();
     const token = typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
     if (!isAuthenticated || !token) return;
 
     set({ loading: true, error: null });
     try {
-      const response = await orderService.getOrderHistory(page, limit);
+      const response = await orderService.getOrderHistory(page, limit, search, status);
       if (response?.success) {
-        set({ orders: response.data || [], loading: false });
+        const orderList = Array.isArray(response?.data) 
+          ? response.data 
+          : (response?.orders || response?.data?.orders || []);
+        set({ orders: orderList, loading: false });
       } else {
         set({ error: response?.message || 'Failed to fetch order history', loading: false });
       }
@@ -31,7 +34,7 @@ const useOrderStore = create((set, get) => ({
     try {
       const response = await orderService.createOrder(orderData);
       set({ loading: false });
-      return response; // contains success, message, data (order), razorpayKey, razorpayOrder
+      return response;
     } catch (err) {
       set({ error: err.message || 'Failed to create order', loading: false });
       throw err;

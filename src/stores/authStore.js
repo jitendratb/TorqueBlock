@@ -18,6 +18,10 @@ const getInitialState = () => {
         const userJson = localStorage.getItem('authUser');
         const user = userJson ? JSON.parse(userJson) : null;
 
+        if (token && typeof document !== 'undefined') {
+            document.cookie = `authToken=${token}; path=/; max-age=2592000; SameSite=Lax`;
+        }
+
         return {
             user,
             token,
@@ -74,6 +78,7 @@ const useAuthStore = create((set, get) => ({
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('authToken', data.token);
                     localStorage.setItem('authUser', JSON.stringify(data.user));
+                    document.cookie = `authToken=${data.token}; path=/; max-age=2592000; SameSite=Lax`;
                 }
                 set({
                     user: data.user,
@@ -125,6 +130,7 @@ const useAuthStore = create((set, get) => ({
             if (data?.success && data?.token) {
                 if (typeof window !== 'undefined') {
                     localStorage.setItem('authToken', data.token);
+                    document.cookie = `authToken=${data.token}; path=/; max-age=2592000; SameSite=Lax`;
                 }
                 set({ token: data.token, isAuthenticated: true });
                 return data.token;
@@ -143,6 +149,7 @@ const useAuthStore = create((set, get) => ({
         if (typeof window !== 'undefined') {
             localStorage.removeItem('authToken');
             localStorage.removeItem('authUser');
+            document.cookie = 'authToken=; path=/; max-age=0; SameSite=Lax';
         }
         set({
             user: null,

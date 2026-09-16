@@ -6,7 +6,7 @@ class OrderService {
     async createOrder(orderData) {
         try {
             const response = await TorqueBlockApi.post('/user-orders/create', orderData);
-            return response; // contains success, message, data (order details), razorpayKey, razorpayOrder
+            return response;
         } catch (error) {
             console.error('Error creating order:', error);
             throw error;
@@ -16,7 +16,7 @@ class OrderService {
     async verifyPayment(paymentData) {
         try {
             const response = await TorqueBlockApi.post('/user-orders/verify-payment', paymentData);
-            return response; // contains success, message, data
+            return response;
         } catch (error) {
             console.error('Error verifying payment:', error);
             throw error;
@@ -33,16 +33,33 @@ class OrderService {
         }
     }
 
-    async getOrderHistory(page = 1, limit = 10) {
+    async getOrderHistory(page = 1, limit = 10, search, status, options = {}) {
         try {
-            const response = await TorqueBlockApi.get('/user-orders/history', {
-                params: { page, limit }
-            });
+            const params = { page, limit };
+            if (search) params.search = search;
+            if (status) params.status = status;
+
+            const headers = { ...(options.headers) };
+            if (options.token) {
+                headers.Authorization = `Bearer ${options.token}`;
+            }
+
+            const config = {
+                params,
+                ...options,
+                headers
+            };
+
+            const response = await TorqueBlockApi.get('/user-orders/history', config);
             return response;
         } catch (error) {
             console.error('Error fetching order history:', error);
             throw error;
         }
+    }
+
+    async getAllOrders(page = 1, limit = 10, search, status, options = {}) {
+        return this.getOrderHistory(page, limit, search, status, options);
     }
 
     async getOrderById(orderId) {

@@ -3,7 +3,18 @@
 import React, { useState, useMemo } from 'react';
 import Image from '@/components/molecules/CustomImage';
 import OrderStatusBadge from './OrderStatusBadge';
-import { IoChevronDownOutline, IoChevronUpOutline, IoCalendarOutline, IoCardOutline, IoLocationOutline, IoCloseCircleOutline, IoTimeOutline } from 'react-icons/io5';
+import {
+  IoChevronDownOutline,
+  IoChevronUpOutline,
+  IoCalendarOutline,
+  IoCardOutline,
+  IoLocationOutline,
+  IoCloseCircleOutline,
+  IoTimeOutline,
+  IoRocketOutline,
+  IoOpenOutline,
+  IoPricetagOutline
+} from 'react-icons/io5';
 
 // Helper to safely parse image strings, subdocuments {url}, or character-indexed objects
 const parseImageUrl = (img) => {
@@ -22,12 +33,21 @@ const parseImageUrl = (img) => {
   return '';
 };
 
-export default function OrderCard({ order, }) {
+export default function OrderCard({ order }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const totalAmount = useMemo(() => {
-    return order.totalAmount || order.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * item.quantity)), 0) || 0;
-  }, [order.totalAmount, order.items]);
+    return (
+      order.paidAmount ??
+      order.totalAmount ??
+      order.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * item.quantity)), 0) ??
+      0
+    );
+  }, [order.paidAmount, order.totalAmount, order.items]);
+
+  const deliveryStatus = order.delivery?.status;
+  const isDeliveryProgressed = deliveryStatus && ['shipped', 'out_for_delivery', 'delivered', 'in_transit'].includes(deliveryStatus.toLowerCase().replace(/\s+/g, '_'));
+  const effectiveStatus = isDeliveryProgressed ? deliveryStatus : 'pending';
 
   const shippingAddress = order.items?.[0]?.address || order.shippingAddress || order.address;
 
@@ -45,8 +65,31 @@ export default function OrderCard({ order, }) {
     }).format(price);
   };
 
+  const timelineHistory = useMemo(() => {
+    const list = [...(order.statusHistory || [])];
+    const hasShippedInHistory = list.some(h => (h.status || '').toLowerCase() === 'shipped');
+    if (order.delivery?.status && order.delivery.status.toLowerCase() === 'shipped' && !hasShippedInHistory) {
+      list.push({
+        _id: 'delivery-shipped',
+        status: 'shipped',
+        note: `Dispatched via ${order.delivery.courierPartner || 'Delhivery'}${order.delivery.trackingNumber ? ` (Tracking #${order.delivery.trackingNumber})` : ''}.`,
+        createdAt: order.delivery.updatedAt || order.updatedAt,
+      });
+    }
+    const hasDeliveredInHistory = list.some(h => (h.status || '').toLowerCase() === 'delivered');
+    if (order.delivery?.status && order.delivery.status.toLowerCase() === 'delivered' && !hasDeliveredInHistory) {
+      list.push({
+        _id: 'delivery-delivered',
+        status: 'delivered',
+        note: 'Package delivered to recipient successfully.',
+        createdAt: order.delivery.updatedAt || order.updatedAt,
+      });
+    }
+    return list;
+  }, [order.statusHistory, order.delivery, order.updatedAt]);
+
   const nonCancellableStates = ['shipped', 'out_for_delivery', 'delivered', 'cancelled', 'returned'];
-  const isCancellable = order.orderStatus && !nonCancellableStates.includes(order.orderStatus.toLowerCase());
+  const isCancellable = order.orderStatus && !nonCancellableStates.includes(effectiveStatus.toLowerCase());
 
   return (
     <div className="w-full bg-white/10 border border-white/5 hover:border-white/10 rounded-2xl p-5 md:p-6 backdrop-blur-xl transition-all duration-300 space-y-5 shadow-[0_4px_30px_rgba(0,0,0,0.1)]">
@@ -56,7 +99,7 @@ export default function OrderCard({ order, }) {
           <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500">Order Reference</span>
           <div className="flex items-center gap-2">
             <span className="text-xs md:text-sm font-black text-white uppercase tracking-tight font-mono">
-              #{order._id?.substring(order._id.length - 8) || 'N/A'}
+              #{order._id}
             </span>
             <span className="text-[10px] text-zinc-600 font-bold hidden sm:inline">|</span>
             <span className="text-[10px] text-zinc-400 font-bold hidden sm:flex items-center gap-1">
@@ -67,7 +110,7 @@ export default function OrderCard({ order, }) {
         </div>
 
         <div className="flex items-center gap-3">
-          <OrderStatusBadge status={order.orderStatus} />
+          <OrderStatusBadge status={effectiveStatus} />
 
           <div className="text-right">
             <span className="text-[9px] font-black uppercase tracking-widest text-zinc-500 block">Total Paid</span>
@@ -78,7 +121,7 @@ export default function OrderCard({ order, }) {
         </div>
       </div>
 
-      {/* Date visible for mobile */}
+
       <div className="flex sm:hidden items-center justify-between text-[10px] text-zinc-400 font-bold bg-black/20 p-2.5 rounded-xl border border-white/5">
         <span className="flex items-center gap-1">
           <IoCalendarOutline className="text-orange-500 shrink-0" />
@@ -104,7 +147,9 @@ export default function OrderCard({ order, }) {
           const rawBrand = isTube
             ? (typeof tubeObj?.brand === 'object' ? tubeObj.brand?.name : tubeObj?.brand)
             : (typeof tyreObj?.brand === 'object' ? tyreObj.brand?.name : tyreObj?.brand);
-          const brandName = rawBrand || (isTube ? 'TorqueBlock' : 'Performance');
+          const brandName = rawBrand ||
+            (item.productName ? item.productName.split(' ')[0] : null) ||
+            (isTube ? 'TorqueBlock' : 'Performance');
 
           const rawImg = isTube
             ? (tubeObj?.images?.[0] || item.image || '')
@@ -167,8 +212,8 @@ export default function OrderCard({ order, }) {
         })}
       </div>
 
-      {/* Action Buttons & Expand Toggle */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/5">
+
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-all cursor-pointer select-none"
@@ -186,18 +231,76 @@ export default function OrderCard({ order, }) {
           )}
         </button>
 
+        {order.delivery?.trackingUrl && (
+          <a
+            href={order.delivery.trackingUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-orange-400 hover:text-white bg-orange-500/10 hover:bg-orange-500/25 border border-orange-500/30 px-3.5 py-1.5 rounded-lg transition-all duration-200 cursor-pointer shadow-[0_0_15px_rgba(249,115,22,0.15)]"
+          >
+            <IoRocketOutline className="text-xs" />
+            Track Package
+            <IoOpenOutline className="text-xs ml-0.5" />
+          </a>
+        )}
       </div>
 
       {isExpanded && (
-        <div className="pt-4 border-t border-white/5 grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 animate-fadeIn">
 
-          <div className="space-y-4">
+          <div className="space-y-2">
+            {order.delivery && (
+              <div className="p-4 rounded-xl bg-white/10 border border-white/5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[9px] font-black uppercase tracking-widest text-orange-500 flex items-center gap-1">
+                    <IoRocketOutline className="text-xs" />
+                    Courier & Delivery
+                  </h4>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">
+                  <div>
+                    <span className="text-zinc-500 block mb-0.5">Delivery Partner</span>
+                    <span className="text-white font-black">{order.delivery.courierPartner || order.delivery.deliveryMethod || 'Delhivery'}</span>
+                  </div>
+                  {order.delivery.trackingNumber && (
+                    <div className="col-span-2 border-t border-white/5 pt-2 flex items-center justify-between">
+                      <div>
+                        <span className="text-zinc-500 block mb-0.5">Tracking Number (AWB)</span>
+                        <span className="text-white font-mono font-black tracking-wider text-xs">
+                          {order.delivery.trackingNumber}
+                        </span>
+                      </div>
+                      {order.delivery.trackingUrl && (
+                        <a
+                          href={order.delivery.trackingUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-orange-400 hover:text-orange-300 bg-orange-500/15 hover:bg-orange-500/30 border border-orange-500/30 px-2.5 py-1 rounded-lg transition-all"
+                        >
+                          Track Live
+                          <IoOpenOutline className="text-xs" />
+                        </a>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
             {shippingAddress ? (
               <div className="p-4 rounded-xl bg-white/10 border border-white/5 space-y-2">
-                <h4 className="text-[9px] font-black uppercase tracking-widest text-orange-500 flex items-center gap-1">
-                  <IoLocationOutline className="text-xs" />
-                  Delivery Address
-                </h4>
+                <div className="flex items-center justify-between">
+                  <h4 className="text-[9px] font-black uppercase tracking-widest text-orange-500 flex items-center gap-1">
+                    <IoLocationOutline className="text-xs" />
+                    Delivery Address
+                  </h4>
+                  {shippingAddress.addressType && (
+                    <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/10 text-zinc-400 border border-white/10">
+                      {shippingAddress.addressType}
+                    </span>
+                  )}
+                </div>
                 <div className="text-xs font-bold text-white">{shippingAddress.fullName}</div>
                 <p className="text-xs text-zinc-300 leading-relaxed font-medium">
                   {shippingAddress.addressLine1}
@@ -209,6 +312,11 @@ export default function OrderCard({ order, }) {
                 <div className="text-[10px] text-zinc-400 font-semibold mt-1">
                   Phone: <span className="text-zinc-200 font-bold">{shippingAddress.phone}</span>
                 </div>
+                {shippingAddress.gst && (
+                  <div className="text-[9px] text-zinc-500 font-mono mt-1">
+                    GSTIN: <span className="text-zinc-300 font-bold uppercase">{shippingAddress.gst}</span>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="p-4 rounded-xl bg-white/10 border border-white/5 text-xs text-zinc-500 italic">
@@ -224,20 +332,39 @@ export default function OrderCard({ order, }) {
               <div className="grid grid-cols-2 gap-3 text-[10px] font-semibold text-zinc-400 uppercase tracking-wider">
                 <div>
                   <span className="text-zinc-500 block mb-0.5">Method</span>
-                  <span className="text-white font-black">{order.paymentMethod || 'Razorpay'}</span>
+                  <span className="text-white font-black capitalize">{order.paymentMethod || 'Razorpay'}</span>
                 </div>
                 <div>
                   <span className="text-zinc-500 block mb-0.5">Payment Status</span>
-                  <span className={`font-black ${order.paymentStatus === 'paid' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  <span className={`font-black uppercase ${(order.paymentStatus || '').toLowerCase() === 'paid' ? 'text-emerald-400' : 'text-amber-400'}`}>
                     {order.paymentStatus || 'Pending'}
                   </span>
                 </div>
+                {order.couponDiscount > 0 && (
+                  <div className="col-span-2 border-t border-white/5 pt-2 flex items-center justify-between text-xs">
+                    <span className="text-zinc-400 flex items-center gap-1 font-bold">
+                      <IoPricetagOutline className="text-emerald-400" />
+                      Coupon Discount
+                    </span>
+                    <span className="text-emerald-400 font-black">
+                      -{formatPrice(order.couponDiscount)}
+                    </span>
+                  </div>
+                )}
                 <div className="col-span-2 border-t border-white/5 pt-2">
                   <span className="text-zinc-500 block mb-0.5">Transaction Reference</span>
-                  <span className="text-white font-black font-mono tracking-tight normal-case text-xs">
+                  <span className="text-white font-black font-mono tracking-tight normal-case text-xs block truncate">
                     {order.transactionId || 'N/A'}
                   </span>
                 </div>
+                {order.paymentId && (
+                  <div className="col-span-2 border-t border-white/5 pt-2">
+                    <span className="text-zinc-500 block mb-0.5">Razorpay Payment ID</span>
+                    <span className="text-white font-black font-mono tracking-tight normal-case text-xs block truncate">
+                      {order.paymentId}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -250,9 +377,9 @@ export default function OrderCard({ order, }) {
               </h4>
 
               <div className="relative pl-6 space-y-4 before:absolute before:left-[7px] before:top-1.5 before:bottom-1.5 before:w-0.5 before:bg-gray-600">
-                {order.statusHistory && order.statusHistory.length > 0 ? (
-                  order.statusHistory.map((history, hIdx) => {
-                    const isLast = hIdx === order.statusHistory.length - 1;
+                {timelineHistory && timelineHistory.length > 0 ? (
+                  timelineHistory.map((history, hIdx) => {
+                    const isLast = hIdx === timelineHistory.length - 1;
                     let dotColor = 'bg-gray-300';
                     let textClass = 'text-zinc-400';
 
@@ -263,6 +390,9 @@ export default function OrderCard({ order, }) {
                     } else if (histStatus === 'delivered') {
                       dotColor = 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]';
                       textClass = 'text-emerald-400';
+                    } else if (histStatus === 'shipped') {
+                      dotColor = 'bg-violet-500 shadow-[0_0_10px_rgba(139,92,246,0.3)]';
+                      textClass = 'text-violet-400 font-bold';
                     } else if (isLast) {
                       dotColor = 'bg-orange-500 shadow-[0_0_10px_rgba(249,115,22,0.3)]';
                       textClass = 'text-orange-400 font-bold';

@@ -1,31 +1,34 @@
-import React from 'react';
-import OrdersClient from '../Components/Orders/OrdersClient';
+import React from "react";
+import OrdersClient from "../Components/Orders/OrdersClient";
+import Breadcrumb from "@/components/atoms/BreadCrumb";
+import orderService from "@/services/orderService";
+import { cookies } from "next/headers";
 
 export const metadata = {
-    title: 'My Orders',
-    description: 'Track your high-performance motorcycle tyre orders, view delivery history, and manage cancellation details on TorqueBlock.',
+    title: "My Orders",
+    description: "Track and manage your tyre orders, check shipping status, and view past invoices.",
 };
 
-export default function MyOrdersPage() {
+export default async function MyOrdersPage() {
+    let initialOrders = [];
 
-    
+    try {
+        const cookieStore = await cookies();
+        const token = cookieStore.get("authToken")?.value;
+
+        if (token) {
+            initialOrders = await orderService.getOrderHistory(1, 10, undefined, undefined, { token });
+        }
+    } catch (error) {
+        console.error("Error loading orders on server:", error);
+    }
+
+    console.log(initialOrders)
+
     return (
-        <main className="py-4 relative overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none" />
-
-            <div className="relative z-10">
-                <div className="flex flex-col gap-2 mb-8 border-l-2 border-orange-500 pl-4">
-                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-orange-500">
-                        User Dashboard
-                    </span>
-                    <h1 className="text-3xl md:text-4xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
-                        My Orders
-                    </h1>
-                </div>
-
-                <OrdersClient />
-            </div>
+        <main className="">
+            <Breadcrumb items={[{ label: "My Orders", href: "/orders" }]} />
+            <OrdersClient initialOrders={initialOrders} />
         </main>
     );
 }
