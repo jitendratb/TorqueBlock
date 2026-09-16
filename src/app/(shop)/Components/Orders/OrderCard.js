@@ -45,9 +45,13 @@ export default function OrderCard({ order }) {
     );
   }, [order.paidAmount, order.totalAmount, order.items]);
 
+  const isPaymentFailed = (order.paymentStatus || '').toLowerCase() === 'failed';
+  const isOrderCancelled = (order.orderStatus || '').toLowerCase() === 'cancelled';
   const deliveryStatus = order.delivery?.status;
   const isDeliveryProgressed = deliveryStatus && ['shipped', 'out_for_delivery', 'delivered', 'in_transit'].includes(deliveryStatus.toLowerCase().replace(/\s+/g, '_'));
-  const effectiveStatus = isDeliveryProgressed ? deliveryStatus : 'pending';
+  const effectiveStatus = (isPaymentFailed || isOrderCancelled)
+    ? 'cancelled'
+    : (isDeliveryProgressed ? deliveryStatus : (order.orderStatus || 'pending'));
 
   const shippingAddress = order.items?.[0]?.address || order.shippingAddress || order.address;
 
@@ -336,7 +340,7 @@ export default function OrderCard({ order }) {
                 </div>
                 <div>
                   <span className="text-zinc-500 block mb-0.5">Payment Status</span>
-                  <span className={`font-black uppercase ${(order.paymentStatus || '').toLowerCase() === 'paid' ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  <span className={`font-black uppercase ${(order.paymentStatus || '').toLowerCase() === 'paid' ? 'text-emerald-400' : (order.paymentStatus || '').toLowerCase() === 'failed' ? 'text-rose-400' : 'text-amber-400'}`}>
                     {order.paymentStatus || 'Pending'}
                   </span>
                 </div>
