@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function ScrollBackgroundWrapper({ children }) {
-  const [isDark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
   const sentinelRef = useRef(null);
 
   useEffect(() => {
