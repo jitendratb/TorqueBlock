@@ -9,17 +9,18 @@ import ScrollBackgroundWrapper from './component/ScrollBackgroundWrapper'
 import WebPageSchema from '@/components/seo/WebPageSchema'
 import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
-
+import dynamic from 'next/dynamic'
 import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
 import AiSearchBar from './component/BigSearchBar'
 import HeroSearchObserver from './component/HeroSearchObserver'
 import ProductFamilyFeatureCard from './component/ProductFamilyFeatureCard'
 
-import FeatureCard from './component/FeatureCard'
-import Category from './component/Category'
-import ValuePerformanceBrands from './component/ValuePerformanceBrands'
-import ReviewsSection from './component/ReviewSection'
-import B2BEnterpriseSection from './component/B2BEnterpriseSection'
+
+const FeatureCard = dynamic(() => import('./component/FeatureCard'))
+const Category = dynamic(() => import('./component/Category'))
+const ValuePerformanceBrands = dynamic(() => import('./component/ValuePerformanceBrands'))
+const ReviewsSection = dynamic(() => import('./component/ReviewSection'))
+const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'))
 import FAQSchema from '@/components/seo/FAQSchema'
 import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema'
 
@@ -63,10 +64,10 @@ function page() {
   const commonProps = { alt: selectedBanner.alt, fill: true, priority: true, sizes: '100vw', quality: 75 };
 
   const { props: desktopProps } = getImageProps({ ...commonProps, src: selectedBanner.image });
-  const { props: { srcSet: mobileSrcSet, ...rest } } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
+  const { props: mobileProps } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
 
   preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
-  preload(rest.src, { as: 'image', imageSrcSet: mobileSrcSet, imageSizes: rest.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
+  preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
 
   return (
     <main className='overflow-hidden'>
@@ -96,7 +97,8 @@ function page() {
       <section className='relative w-full h-screen' aria-label="Hero Section">
         <picture>
           <source media="(min-width: 768px)" srcSet={desktopProps.srcSet} sizes={desktopProps.sizes} />
-          <img {...rest} fetchPriority="high" decoding="async" style={{ ...rest.style, objectFit: 'cover' }} className="object-cover" />
+          <source media="(max-width: 767px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
+          <img {...mobileProps} fetchPriority="high" decoding="async" style={{ ...mobileProps.style, objectFit: 'cover' }} className="object-cover" />
         </picture>
         <span className='absolute bg-gradient-to-r from-black/60 to-black/40 inset-0 z-0' />
         <div className='w-full h-full flex flex-col items-start md:items-center justify-center absolute top-0 left-0 z-10'>
@@ -104,8 +106,8 @@ function page() {
             <H1Tags />
           </div>
         </div>
-        <div className='w-full h-full flex flex-col items-center justify-end absolute bottom-20 md:bottom-10 z-10 '>
-          <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center '>
+        <div className='w-full h-full flex flex-col items-center justify-end absolute inset-0 pb-20 md:pb-10 z-10 pointer-events-none'>
+          <div className='max-w-xl lg:max-w-4xl px-4 w-full mx-auto text-white text-2xl font-bold items-center pointer-events-auto'>
             <HeroSearchObserver>
               <AiSearchBar />
             </HeroSearchObserver>

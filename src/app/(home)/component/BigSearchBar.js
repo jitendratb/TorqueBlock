@@ -298,13 +298,13 @@ function SearchBar({ onSearch, searchItems = [] }) {
         </button>
       </div>
 
-      <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500/20 focus-within:shadow-md cursor-text"'>
-        <div>
+      <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500/20 focus-within:shadow-md cursor-text'>
+        <div className='shrink-0'>
           <button onClick={() => setShowSearch(!showSearch)} className={`p-2 bg-white/30 rounded-full transition-transform duration-300 ${showSearch ? "rotate-45" : "rotate-0"}`} >
             <AiOutlinePlus className='text-lg md:text-xl' />
           </button>
         </div>
-        <div className='w-full'>
+        <div className='flex-1 min-w-0'>
           <input
             ref={inputRef}
             type='text'
@@ -321,7 +321,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
           />
         </div>
 
-        <div>
+        <div className='shrink-0'>
           <button
             onClick={() => handleSearchSubmit(searchInput)}
             disabled={!searchInput.trim()}
