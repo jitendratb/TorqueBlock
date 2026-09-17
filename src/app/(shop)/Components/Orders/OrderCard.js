@@ -16,7 +16,7 @@ import {
   IoPricetagOutline
 } from 'react-icons/io5';
 
-// Helper to safely parse image strings, subdocuments {url}, or character-indexed objects
+
 const parseImageUrl = (img) => {
   if (!img) return '';
   if (typeof img === 'string') return img;

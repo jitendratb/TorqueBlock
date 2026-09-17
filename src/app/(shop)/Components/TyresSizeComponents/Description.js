@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { FaMotorcycle, FaFileAlt, FaChevronDown, FaCalendarAlt } from 'react-icons/fa';
 import { TbResize, TbAspectRatio, TbCircleDot, TbWeight, TbGauge, TbLayersLinked, TbLayersDifference, TbArrowLeftRight, TbFlask, TbCircle } from 'react-icons/tb';
 import { AiOutlineColumnWidth } from "react-icons/ai";
@@ -31,6 +31,9 @@ function Description({ tyreData }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const text = tyreData?.description || tyreData?.availableTyres?.description || tyreData?.hero?.subtitle || tyreData?.availableTyres?.hero?.subtitle;
+    const isHtmlDescription = useMemo(() => {
+        return typeof text === 'string' && /<[a-z][\s\S]*>/i.test(text);
+    }, [text]);
 
     const specs = [
         { label: 'Manufacturer', value: tyreData?.brand?.name || tyreData?.availableTyres?.brand?.name, icon: TbLayersLinked },
@@ -40,8 +43,8 @@ function Description({ tyreData }) {
         { label: 'Load Index', value: tyreData?.loadIndex, icon: TbWeight },
         { label: 'Speed Rating', value: tyreData?.speedIndex, icon: TbGauge },
         // { label: 'Tube Type', value: Array.isArray(tyreData?.tubeType) ? tyreData.tubeType.join(', ') : tyreData?.tubeType, icon: TbCircleDot },
-     /   // { label: 'Manufacture Year', value: tyreData?.manuFactureYear, icon: FaCalendarAlt },
-   ];
+        // { label: 'Manufacture Year', value: tyreData?.manuFactureYear, icon: FaCalendarAlt },
+    ];
 
     const activeSpecs = specs.filter(s => s.value !== null && s.value !== undefined && s.value !== '');
 
@@ -71,9 +74,20 @@ function Description({ tyreData }) {
                     </div>
 
                     <div className='relative pt-4'>
-                        <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}} >
-                            {text}
-                        </p>
+                        {isHtmlDescription ? (
+                            <div
+                                className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500 [&>p]:mb-2.5 [&>p:last-child]:mb-0 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-2.5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-2.5 [&>strong]:text-white [&>b]:text-white [&>strong]:font-semibold [&>b]:font-semibold"
+                                style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+                                dangerouslySetInnerHTML={{ __html: text }}
+                            />
+                        ) : (
+                            <p
+                                className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500 whitespace-pre-line"
+                                style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+                            >
+                                {text}
+                            </p>
+                        )}
 
                         <div className="mt-4 flex justify-start">
                             <button
@@ -92,7 +106,7 @@ function Description({ tyreData }) {
             {/* {activeSpecs.length > 0 && (
                 <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl`}>
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-                    
+
                     <div className="relative flex border-b border-white/10 pb-4 mb-4 items-center gap-3.5">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
                             <TbGauge className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
@@ -118,7 +132,7 @@ function Description({ tyreData }) {
             {tyreData?.quickFacts?.popularBikes?.length > 0 && (
                 <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
                     <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-                    
+
                     <div className="relative flex border-b border-white/10 pb-4 mb-4 items-center gap-3">
                         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
                             <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />

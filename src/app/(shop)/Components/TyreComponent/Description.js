@@ -40,6 +40,11 @@ const Description = memo(function Description({ tyre, desClassName = "space-y-2"
         window.open(url, "_blank");
     }, [tyre?.productName]);
 
+    const rawDescription = tyre?.description || tyre?.hero?.subtitle;
+    const isHtmlDescription = useMemo(() => {
+        return typeof rawDescription === 'string' && /<[a-z][\s\S]*>/i.test(rawDescription);
+    }, [rawDescription]);
+
     return (
         <div className="space-y-4">
             <div className={`relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl ${desClassName}`}>
@@ -62,11 +67,22 @@ const Description = memo(function Description({ tyre, desClassName = "space-y-2"
                 </div>
 
                 <div id='allSizesLink' className='relative pt-4 '>
-                    <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500" style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}} >
-                        {tyre?.description || tyre?.hero?.subtitle}
-                    </p>
+                    {isHtmlDescription ? (
+                        <div
+                            className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500 [&>p]:mb-2.5 [&>p:last-child]:mb-0 [&>ul]:list-disc [&>ul]:pl-5 [&>ul]:mb-2.5 [&>ol]:list-decimal [&>ol]:pl-5 [&>ol]:mb-2.5 [&>strong]:text-white [&>b]:text-white [&>strong]:font-semibold [&>b]:font-semibold"
+                            style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+                            dangerouslySetInnerHTML={{ __html: rawDescription }}
+                        />
+                    ) : (
+                        <p
+                            className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide transition-all duration-500 whitespace-pre-line"
+                            style={!isExpanded ? { display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' } : {}}
+                        >
+                            {rawDescription}
+                        </p>
+                    )}
 
-                    {(tyre?.description || tyre?.hero?.subtitle) && (
+                    {rawDescription && (
                         <div className="mt-4 flex justify-start">
                             <button
                                 onClick={() => setIsExpanded(!isExpanded)}
