@@ -252,15 +252,15 @@ export default function AddressModal({ isOpen, address, onClose }) {
                         error={formErrors.fullName}
                     />
                     <Input
-                        type="tel"
+                        type="text"
+                        inputMode="numeric"
                         name="phone"
                         label="Mobile Number *"
                         placeholder="10-digit number"
                         value={formData.phone}
                         onChange={handleChange}
                         disabled={isLoading}
-
-                        pattern="[0-9]{10}"
+                        maxLength={10}
                         variant="glass"
                         error={formErrors.phone}
                     />
@@ -414,14 +414,14 @@ export default function AddressModal({ isOpen, address, onClose }) {
                             />
                             <Input
                                 type="text"
+                                inputMode="numeric"
                                 name="billingPhone"
                                 label="Billing Phone *"
                                 placeholder="Enter 10-digit number"
                                 value={formData.billingPhone}
                                 onChange={handleChange}
                                 disabled={isLoading}
-
-                                pattern="[0-9]{10}"
+                                maxLength={10}
                                 variant="glass"
                                 error={formErrors.billingPhone}
                             />
