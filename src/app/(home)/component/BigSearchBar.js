@@ -101,8 +101,10 @@ function SearchBar({ onSearch, searchItems = [] }) {
       }
     }
     document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside, { passive: true });
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
     };
   }, [setShowSuggestions]);
 
@@ -257,9 +259,9 @@ function SearchBar({ onSearch, searchItems = [] }) {
                       leftArrowClassName="!-left-2 !p-1.5"
                       rightArrowClassName="!-right-2 !p-1.5"
                       renderItem={(sizeItem) => (
-                        <SearchCard 
-                          product={sizeItem} 
-                          tyre={item} 
+                        <SearchCard
+                          product={sizeItem}
+                          tyre={item}
                           onClick={() => {
                             setShowSuggestions(false);
                             setSearchInput("");
@@ -275,7 +277,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
         </div>
       </div>
 
-      <div className={`absolute text-base p-3 z-50 bg-white/20  backdrop-blur-sm rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 left-0 w-92 flex flex-col gap-1 overflow-hidden transform transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-3 origin-bottom-left' : 'top-full mt-3 origin-top-left'} ${showSearch ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
+      <div className={`absolute text-base p-3 z-50 bg-white/20  backdrop-blur-3xl rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-white/20 left-0 w-92 flex flex-col gap-1 overflow-hidden transform transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-3 origin-bottom-left' : 'top-full mt-3 origin-top-left'} ${showSearch ? "opacity-100 scale-100 visible" : "opacity-0 scale-95 invisible"}`}>
         <button className='flex rounded-xl items-center gap-4 p-2 hover:bg-white/20 transition-all duration-300 text-left group'>
           <div className='p-2.5 bg-white/20 text-orange-500 rounded-full group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm'>
             <FiUpload size={20} />
@@ -308,12 +310,21 @@ function SearchBar({ onSearch, searchItems = [] }) {
           <input
             ref={inputRef}
             type='text'
+            inputMode='search'
+            enterKeyHint='search'
+            autoComplete='off'
+            autoCorrect='off'
+            autoCapitalize='off'
+            spellCheck={false}
             value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
+            onChange={(e) => {
+              setSearchInput(e.target.value);
+              if (e.target.value.trim()) setShowSuggestions(true);
+            }}
             onKeyDown={handleKeyDown}
             onFocus={() => {
               setIsFocused(true);
-              searchInput.trim() && setShowSuggestions(true);
+              if (searchInput.trim()) setShowSuggestions(true);
             }}
             onBlur={() => setIsFocused(false)}
             className='w-full flex items-center font-normal placeholder:font-normal truncate line-clamp-1 bg-transparent outline-none text-base lg:text-lg py-2'
