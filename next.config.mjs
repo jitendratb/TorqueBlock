@@ -44,6 +44,11 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/tyres/ceat-gripp-rad-steel/140-80-r17',
+        destination: '/tyres/ceat-gripp-xl-rad-steel/140-80-r17',
+        permanent: true,
+      },
+      {
         source: '/:path*',
         has: [
           {
