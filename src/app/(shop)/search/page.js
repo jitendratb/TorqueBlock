@@ -43,13 +43,14 @@ const Card = ({ item }) => {
             const sizeSlug = item.size ? item.size.toLowerCase().replace(/[\s/]/g, '-') : '';
             const parentSlug = item.availableTyres?.identifier || item.identifier.replace(`-${sizeSlug}`, '');
             const route = `/tyres/${parentSlug}/${sizeSlug}`;
+
             return (
                 <article onClick={() => router.push(route)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/30 transition-all duration-300 overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-orange-500/5">
                     <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center">
                         <div className="relative w-full h-full min-h-[140px] md:min-h-0">
                             <Image
-                                src={item.availableTyres?.productImages?.[0] || '/newlogo.webp'}
-                                alt={item.hero?.title || item.size}
+                                src={item.availableTyres?.productImages?.[0]?.url || item.availableTyres?.productImages?.[0]}
+                                alt={item.hero?.title}
                                 fill
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                 className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
@@ -107,17 +108,19 @@ const Card = ({ item }) => {
         case 'Tyre': {
             const rating = getDeterministicRating(item._id || item.identifier);
             const quickFacts = item.quickFacts || item.aiSearch?.quickFacts || {};
+
             return (
                 <article onClick={() => router.push(`/tyres/${item.identifier}`)} className="group relative cursor-pointer grid grid-cols-1 md:grid-cols-[35%_65%] md:h-auto rounded-2xl border border-gray-300/40 bg-white/10 hover:bg-orange-500/10 hover:border-orange-500/40 transition-all duration-300 overflow-hidden shadow-md hover:shadow-xl hover:shadow-orange-500/5">
-                    <div className="relative h-[180px] md:h-full w-full overflow-hidden bg-zinc-950 aspect-[16/9] md:aspect-auto">
+                 <div className="relative aspect-[16/9] md:aspect-auto md:h-full w-full border-r border-zinc-800/30 overflow-hidden flex items-center justify-center">
+                        <div className="relative w-full h-full min-h-[140px] md:min-h-0">
                         <Image
-                            src={item.hero?.heroImage || '/newlogo.webp'}
+                            src={item.hero?.heroImage || item.productImages?.[0]?.url || item.productImages?.[0] || '/newlogo.webp'}
                             alt={item.productName || item.hero?.title || "Motorcycle Tyre"}
                             fill
-                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                            priority
-                            className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                className="object-contain transition-transform duration-700 ease-out group-hover:scale-105"
                         />
+                        </div>
                         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent opacity-60" />
                         <div className="absolute bottom-4 left-4 rounded-full border border-orange-500/30 bg-orange-500/20 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-orange-400 backdrop-blur-md">
                             Tyre
@@ -635,6 +638,8 @@ function SearchPageContent() {
         },
     ];
 
+
+    
     return (
         <div className="flex flex-col flex-1 min-h-0 space-y-4 pb-4">
             <Breadcrumb items={breadcrumbItems} />

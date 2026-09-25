@@ -66,6 +66,7 @@ export default function Slider({ isOpen = false, onClose, title, children, size 
     return (
         <div className={`fixed inset-0 z-[100] flex ${placementConfig.container} transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
             aria-hidden={!isOpen}
+            inert={!isOpen}
         >
             <div
                 onClick={handleBackdropClick}

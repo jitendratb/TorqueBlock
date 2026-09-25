@@ -1,7 +1,7 @@
 import Breadcrumb from "@/components/atoms/BreadCrumb";
 import tyresService from "@/services/tyresService";
 import TyresClient from '../../Components/TyresClient';
-import { cache } from "react";
+import { cache, Suspense } from "react";
 import { notFound } from "next/navigation";
 import ProductSchema from "@/components/seo/ProductSchema";
 import BreadcrumbSchema from "@/components/seo/BreadcrumbSchema";
@@ -16,10 +16,7 @@ const getTyre = cache(async (slug) => {
 export async function generateMetadata({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
-
-
     if (!tyre) return {};
-
     const displayName = tyre?.productName || tyre?.hero?.title;
     const brandName = tyre?.brand?.name || tyre?.brand || "Torque Block";
 
@@ -106,10 +103,15 @@ export async function generateMetadata({ params }) {
     };
 }
 
+async function ProductSchemaWithReviews({ product, reviewsPromise }) {
+    const reviewData = await reviewsPromise;
+    return <ProductSchema product={product} reviewData={reviewData} />;
+}
+
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
-    const Review = await ReviewService.getReviews({ tyreId: tyre?._id });
+    const reviewsPromise = ReviewService.getReviews({ tyreId: tyre?._id });
     const formattedTyre = tyre;
 
     const displayName = formattedTyre?.productName || formattedTyre?.hero?.title || slug;
@@ -120,14 +122,16 @@ async function Page({ params }) {
 
     return (
         <div className="">
-            <ProductSchema product={formattedTyre}  reviewData={Review}/>
+            <Suspense fallback={null}>
+                <ProductSchemaWithReviews product={formattedTyre} reviewsPromise={reviewsPromise} />
+            </Suspense>
             <BreadcrumbSchema items={breadcrumbItems} />
             <LocalBusinessSchema />
             {formattedTyre?.faqs?.length > 0 && (
                 <FAQSchema faqs={formattedTyre.faqs} />
             )}
             <Breadcrumb items={breadcrumbItems} />
-            <TyresClient initialData={formattedTyre} reviewData={Review} />
+            <TyresClient initialData={formattedTyre} reviewsPromise={reviewsPromise} />
         </div>
     );
 }

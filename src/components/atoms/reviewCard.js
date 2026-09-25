@@ -36,7 +36,7 @@ const ReviewSummary = React.memo(({ overallRating, displayTotalReviews, highligh
                     {Number(overallRating).toFixed(1)}
                 </span>
                 <div className="flex flex-col gap-0.5">
-                    <div className="flex gap-0.5" aria-label={`Rating: ${Number(overallRating).toFixed(1)} out of 5`}>
+                    <div className="flex gap-0.5" role="img" aria-label={`Rating: ${Number(overallRating).toFixed(1)} out of 5`}>
                         {[1, 2, 3, 4, 5].map((i) => (
                             <FaStar
                                 key={i}
@@ -51,7 +51,7 @@ const ReviewSummary = React.memo(({ overallRating, displayTotalReviews, highligh
                 </div>
             </div>
             {overallRating >= 4.0 && displayTotalReviews > 0 && (
-                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/5" aria-label="Top Rated" title="Highly rated by customers">
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/5" title="Highly rated by customers">
                     <FaAward className="text-orange-400 text-[10px]" aria-hidden="true" />
                     <span className="text-orange-400 text-[10px] font-bold">Top Rated</span>
                 </div>

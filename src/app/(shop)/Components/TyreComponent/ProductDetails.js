@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useMemo, useState, useCallback, useEffect } from "react";
+import { memo, useMemo, useState, useCallback, useEffect, Suspense, use } from "react";
 import Image from "@/components/molecules/CustomImage";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
@@ -20,7 +20,20 @@ const tagConfig = {
     "Naked Sport": { icon: <FaMotorcycle className="text-zinc-300 text-xs" /> },
 };
 
-const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
+function HeroRating({ reviewsPromise }) {
+    const reviewData = use(reviewsPromise);
+    if (!(reviewData?.avgRating?.overall > 0)) return null;
+    return (
+        <div className="mt-2.5 min-h-[20px] flex flex-wrap items-center gap-1.5">
+            <StarRating
+                rating={reviewData?.avgRating?.overall}
+                count={reviewData?.pagination?.total || reviewData?.reviewsCount || 0}
+            />
+        </div>
+    );
+}
+
+const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
     const gallery = useMemo(() => {
         const imgs = Array.isArray(tyre?.productImages) ? tyre.productImages : [];
         if (imgs.length > 0) return imgs;
@@ -94,6 +107,7 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                                 alt={tyre?.productName || "Tyre"}
                                 fill
                                 priority
+                                quality={75}
                                 sizes="(max-width: 768px) 100vw, 50vw"
                                 imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
                             />
@@ -138,14 +152,9 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewData }) {
                                 </span>
                             </span>
                         </h1>
-                        {reviewData?.avgRating?.overall > 0 && (
-                            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
-                                <StarRating
-                                    rating={reviewData?.avgRating?.overall}
-                                    count={reviewData?.pagination?.total || reviewData?.reviewsCount || 0}
-                                />
-                            </div>
-                        )}
+                        <Suspense fallback={<div className="mt-2.5 min-h-[20px]" />}>
+                            <HeroRating reviewsPromise={reviewsPromise} />
+                        </Suspense>
                     </div>
 
                     {tyre?.hero?.highlights?.length > 0 && (

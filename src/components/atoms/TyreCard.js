@@ -64,6 +64,7 @@ export default function ProductCard({ product, tyre, className, opposteProductId
                     src={product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || product?.availableTyres?.productImages?.[0]?.url || '/newLogo.webp'}
                     alt={title}
                     fill
+                    sizes="(max-width: 768px) 280px, 300px"
                     imageClassName="object-contain group-hover:scale-105 transition-transform duration-500 ease-out drop-shadow-lg"
                 />
 

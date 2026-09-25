@@ -30,9 +30,10 @@ export default function CustomImage({
     priority = false, 
     sizes, 
     quality = 85, 
-    skeletonClassName = "", 
-    fallback = "/fallback.webp", 
-    ...props 
+    skeletonClassName = "",
+    fallback = "/fallback.webp",
+    fetchPriority,
+    ...props
 }) {
     const [loading, setLoading] = useState(!priority);
     const [error, setError] = useState(false);
@@ -44,6 +45,14 @@ export default function CustomImage({
 
     const defaultSizes = fill ? "100vw" : undefined;
     const finalSizes = sizes !== undefined ? sizes : defaultSizes;
+
+    // In Next 16 `priority` is deprecated: `preload` inserts the <link rel="preload">,
+    // but the preload link's fetchpriority is driven ONLY by the fetchPriority prop
+    // (see get-img-props.js -> ImagePreload). Without it the LCP preload ships at
+    // default priority, which Lighthouse flags ("fetchpriority=high should be applied
+    // to the image preload request"). So high-priority images get fetchPriority="high"
+    // on both the <img> and its preload link. An explicit prop still wins.
+    const finalFetchPriority = fetchPriority ?? (priority ? "high" : undefined);
 
     // Check if the image is already cached/complete on mount or when safeSrc changes (crucial for iOS Safari / priority images)
     useEffect(() => {
@@ -64,11 +73,12 @@ export default function CustomImage({
                 ref={imgRef}
                 src={error ? fallback : safeSrc} 
                 alt={finalAlt} 
-                fill={fill} 
-                width={!fill ? width : undefined} 
-                height={!fill ? height : undefined} 
-                priority={priority} 
-                quality={quality} 
+                fill={fill}
+                width={!fill ? width : undefined}
+                height={!fill ? height : undefined}
+                preload={priority}
+                fetchPriority={finalFetchPriority}
+                quality={quality}
                 sizes={finalSizes} 
                 className={clsx(
                     "transition-opacity duration-300", 

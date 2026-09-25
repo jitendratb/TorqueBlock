@@ -198,7 +198,6 @@ export default function CheckoutClient() {
         return totalDiscount;
     }, [couponData, subtotal, cart]);
 
-    console.log(couponData, "sdfghjkl");
 
     const finalTotal = useMemo(() => Math.max(0, subtotal + deliveryCharge - discountAmount), [subtotal, deliveryCharge, discountAmount]);
 

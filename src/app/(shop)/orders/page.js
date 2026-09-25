@@ -23,7 +23,6 @@ export default async function MyOrdersPage() {
         console.error("Error loading orders on server:", error);
     }
 
-    console.log(initialOrders)
 
     return (
         <main className="">

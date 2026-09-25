@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, Suspense, use } from "react";
 import dynamic from "next/dynamic";
 import ProductDetails from "./TyreComponent/ProductDetails";
 
@@ -28,14 +28,21 @@ const FAQSection = dynamic(() => import("@/components/atoms/FAQSection"), {
     ssr: true,
 });
 
-const TyresClient = memo(function TyresClient({ initialData, reviewData }) {
+function ReviewsCardResolver({ reviewsPromise, tyreId }) {
+    const reviewData = use(reviewsPromise);
+    return <ReviewsCard reviewData={reviewData} tyreId={tyreId} />;
+}
+
+const TyresClient = memo(function TyresClient({ initialData, reviewsPromise }) {
     const tyre = initialData;
 
     return (
         <div className="py-4 space-y-4">
-            <ProductDetails tyre={tyre} reviewData={reviewData} />
+            <ProductDetails tyre={tyre} reviewsPromise={reviewsPromise} />
             <Description tyre={tyre} />
-            <ReviewsCard reviewData={reviewData} tyreId={tyre?._id} />
+            <Suspense fallback={<div className="min-h-[250px] w-full animate-pulse bg-zinc-900/50 rounded-2xl" />}>
+                <ReviewsCardResolver reviewsPromise={reviewsPromise} tyreId={tyre?._id} />
+            </Suspense>
             <FitmentSection tyre={tyre} scale={false} />
             <Similar tyre={tyre} />
             {tyre?.faqs?.length > 0 && <FAQSection faqs={tyre.faqs} />}

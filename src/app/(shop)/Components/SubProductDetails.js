@@ -377,7 +377,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                     </div>
                     <aside className="relative hidden lg:flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
                         <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                            <h3 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
+                            <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h2>
                             <p className="text-xs font-medium text-zinc-400 leading-relaxed">
                                 We're here if you need help with fitment or your order
                             </p>
@@ -529,7 +529,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
                             {selectedOpposite && (
                                 <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5 relative">
-                                    <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Order Summary</h4>
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Order Summary</p>
                                     <div className="flex flex-col gap-2 rounded-xl bg-white/10 border border-white/5 p-3.5 shadow-inner">
                                         <div className="flex justify-between items-center">
                                             <div className="flex items-center gap-1">
@@ -603,9 +603,9 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                 </div>
                                 <div className="flex flex-col md:flex-row md:items-center gap-2 justify-between flex-1">
                                     <div className="flex flex-col">
-                                        <h3 id="matching-tyres-heading" className="text-xs md:text-sm font-black uppercase tracking-[0.25em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+                                        <h2 id="matching-tyres-heading" className="text-xs md:text-sm font-black uppercase tracking-[0.25em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
                                             Complete Your Tyre Set
-                                        </h3>
+                                        </h2>
                                         <p className="text-zinc-400 text-[10px] md:text-[11px] font-semibold tracking-wide">
                                             Recommended matching <span className="text-zinc-200 font-bold capitalize">{tyreData?.position?.toLowerCase() === 'front' ? 'Rear' : 'Front'}</span> tyre.
                                         </p>
@@ -666,7 +666,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
                 <aside className="relative  flex lg:hidden flex-col md:flex-row items-center justify-between gap-2 md:gap-4 p-4 lg:p-0 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
                     <div className="relative z-10  flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                        <h3 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h3>
+                        <h2 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h2>
                         <p className="text-[10px] md:text-xs font-medium text-zinc-400 leading-relaxed">
                             Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
                         </p>

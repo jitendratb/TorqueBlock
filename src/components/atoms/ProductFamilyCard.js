@@ -59,7 +59,7 @@ const ProductCard = ({ tyre, className = "" }) => {
     }, [images.length]);
 
     return (
-        <article
+        <div
             onClick={handleCardClick}
             onKeyDown={handleKeyDown}
             role="button"
@@ -80,7 +80,7 @@ const ProductCard = ({ tyre, className = "" }) => {
                                 src={img}
                                 alt={`${title} - Image ${index + 1}`}
                                 fill
-                                priority={index === 0}
+                                sizes="(max-width: 768px) 280px, 300px"
                                 imageClassName="object-contain group-hover:scale-110 transition-transform duration-700"
                             />
                         </div>
@@ -150,7 +150,7 @@ const ProductCard = ({ tyre, className = "" }) => {
                     </div>
                 </div>
             </div>
-        </article>
+        </div>
     );
 };
 

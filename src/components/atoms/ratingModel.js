@@ -28,12 +28,13 @@ function StarRating({ label, value, onChange, icon: Icon }) {
                             type="button"
                             onClick={() => onChange(star)}
                             onMouseEnter={() => setHoverValue(star)}
+                            aria-label={`${label}: rate ${star} out of 5`}
                             className={`transition-all duration-300 ease-out ${isActive
                                 ? 'text-orange-500 scale-125 drop-shadow-[0_0_8px_rgba(249,115,22,0.6)]'
                                 : 'text-white/10 hover:text-white/30'
                                 }`}
                         >
-                            <FaStar className="text-[17px]" />
+                            <FaStar className="text-[17px]" aria-hidden="true" />
                         </button>
                     );
                 })}
@@ -136,12 +137,13 @@ function RatingModel({ isOpen, onClose, onSubmit, rating, setRating, submitLoadi
                                     type="button"
                                     onClick={() => handleChange('rating', star)}
                                     onMouseEnter={() => setRatingHover(star)}
+                                    aria-label={`Rate ${star} out of 5`}
                                     className={`transition-all duration-300 ease-out ${isActive
                                         ? 'text-orange-500 scale-125 drop-shadow-[0_0_15px_rgba(249,115,22,0.8)]'
                                         : 'text-white/10 hover:text-white/30 hover:scale-110'
                                         }`}
                                 >
-                                    <FaStar className="text-[32px]" />
+                                    <FaStar className="text-[32px]" aria-hidden="true" />
                                 </button>
                             );
                         })}
