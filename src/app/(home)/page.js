@@ -178,7 +178,7 @@ async function page() {
         <div className='absolute inset-0 z-10 flex flex-col items-center justify-end pb-4 lg:pb-12 pointer-events-none'>
           <div className='w-full max-w-xl lg:max-w-4xl mx-auto px-4 pointer-events-auto text-white'>
             <div className='mb-3 flex items-center justify-between px-1'>
-              <span className='inline-flex items-center gap-2 text-orange-400 text-[11px] font-bold uppercase tracking-[0.25em]'>
+              <span className='inline-flex items-center gap-2 text-orange-400 text-[11px] font-bold uppercase tracking-[0.25em] [text-shadow:0_0_10px_rgba(249,115,22,0.9)]'>
                 <MdTwoWheeler aria-hidden="true" className='text-orange-500 text-sm drop-shadow-[0_0_10px_rgba(249,115,22,0.9)]' />
                 Find Your Tyres
               </span>

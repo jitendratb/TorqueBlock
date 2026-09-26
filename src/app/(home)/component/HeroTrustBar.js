@@ -1,18 +1,19 @@
 import { GiCheckedShield } from 'react-icons/gi'
 import { MdSupportAgent } from 'react-icons/md'
 import { FaTruck, FaMapMarkedAlt } from 'react-icons/fa'
+import { RiCustomerService2Line } from 'react-icons/ri'
 
 const ITEMS = [
   { icon: GiCheckedShield, label: '100% Genuine Products' },
-  { icon: MdSupportAgent, label: 'Online Customer Support ' },
-  { icon: FaTruck, label: 'Fast Delivery' },
+  { icon: RiCustomerService2Line, label: 'Online Customer Support ' },
+
   { icon: FaMapMarkedAlt, label: 'Pan India Delivery', desktopOnly: true },
 ]
 
 function HeroTrustBar() {
   return (
     <div className='pt-4 w-full max-w-xl lg:max-w-4xl px-4 mx-auto'>
-      <ul className='flex items-stretch justify-between gap-1 text-white'>
+      <ul className='flex items-stretch justify-evenly gap-1 text-white'>
         {ITEMS.map(({ icon: Icon, label, desktopOnly }, i) => (
           <li
             key={label}

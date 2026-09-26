@@ -6,7 +6,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { AVATARS, RATING, REVIEWS } from './socialProof'
 
 const HEADINGS = [
-  ['Find the Right', 'Performance Tyre', 'for Your Motorcycle'],
+  ['Find the Right', 'Tyre for Your', 'Motorcycle'],
   // ["India's Best", 'Performance Tyres', 'for Every Ride'],
   // ['Premium Grip', 'Built for', 'Performance Riders'],
   // ['Engineered for Grip', 'Built for', 'Performance'],
@@ -43,7 +43,7 @@ function H1Tags({ rating = RATING, reviews = REVIEWS }) {
     <div className='flex flex-col justify-start md:justify-center space-y-4 md:space-y-3 lg:space-y-5'>
       <div className='flex items-center gap-3 animate-slide-down-fade'>
         <BsSpeedometer2 aria-hidden="true" className='shrink-0 text-orange-500 text-lg sm:text-xl' />
-        <span className='text-orange-500  text-[12px] sm:text-xs font-bold md:font-semibold md:tracking-[0.25em]'>
+        <span className='text-orange-500  text-[12px] sm:text-xs font-bold md:font-semibold md:tracking-[0.25em] [text-shadow:0_0_10px_rgba(249,115,22,0.9)]'>
          Performance Motorcycle Tyres For Every Ride
         </span>
       </div>
