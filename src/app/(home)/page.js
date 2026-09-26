@@ -129,7 +129,7 @@ async function page() {
   preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
 
   return (
-    <main className='overflow-hidden'>
+    <main className=''>
       <WebPageSchema
         type="WebSite"
         title="Torque Block | Premium Motorcycle Tyres India"
@@ -153,7 +153,7 @@ async function page() {
           }
         ]}
       />
-      <section className='relative w-full min-h-svh overflow-hidden' aria-label="Hero Section">
+      <section className='relative w-full min-h-svh ' aria-label="Hero Section">
         <picture>
           <source media="(min-width: 768px)" srcSet={desktopProps.srcSet} sizes={desktopProps.sizes} />
           <source media="(max-width: 767px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />

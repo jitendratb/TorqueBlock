@@ -12,7 +12,7 @@ const ITEMS = [
 function HeroTrustBar() {
   return (
     <div className='pt-4 w-full max-w-xl lg:max-w-4xl px-4 mx-auto'>
-      <ul className='flex items-stretch justify-between gap-1.5 text-white'>
+      <ul className='flex items-stretch justify-between gap-1 text-white'>
         {ITEMS.map(({ icon: Icon, label, desktopOnly }, i) => (
           <li
             key={label}
