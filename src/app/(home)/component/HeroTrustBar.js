@@ -7,7 +7,7 @@ const ITEMS = [
   { icon: GiCheckedShield, label: '100% Genuine Products' },
   { icon: RiCustomerService2Line, label: 'Online Customer Support ' },
 
-  { icon: FaMapMarkedAlt, label: 'Pan India Delivery', desktopOnly: true },
+  { icon: FaMapMarkedAlt, label: 'Pan India Delivery'},
 ]
 
 function HeroTrustBar() {
