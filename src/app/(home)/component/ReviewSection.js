@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { loadTrustindexWidget } from "@/services/trustindexService";
 
 export default function ReviewsSection() {
   const widgetRef = useRef(null);
@@ -8,45 +9,10 @@ export default function ReviewsSection() {
   const [isExpired, setIsExpired] = useState(false);
 
   useEffect(() => {
-    const container = widgetRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const entry = entries[0];
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        if (container.querySelector("#trustindex-script")) return;
-        const script = document.createElement("script");
-        script.id = "trustindex-script";
-        script.src = "https://cdn.trustindex.io/loader.js?1ced8246880d851ac056a341c19";
-        script.async = true;
-
-        script.onload = () => {
-          setTimeout(() => {
-            const currentContainer = widgetRef.current;
-            if (!currentContainer) return;
-
-            const expired = currentContainer.innerHTML.includes("7-day trial period has expired");
-
-            if (expired) {
-              setIsExpired(true);
-            } else {
-              setLoaded(true);
-            }
-          }, 800);
-        };
-
-        container.appendChild(script);
-      },
-      {
-        rootMargin: "200px",
-      }
-    );
-
-    observer.observe(container);
-
-    return () => observer.disconnect();
+    return loadTrustindexWidget(widgetRef.current, {
+      onLoaded: () => setLoaded(true),
+      onExpired: () => setIsExpired(true),
+    });
   }, []);
 
   if (isExpired) return null;
@@ -105,11 +71,6 @@ export default function ReviewsSection() {
 
           <div
             ref={widgetRef}
-            // className="trustindex-widget w-full overflow-hidden lg:bg-black pt-4 rounded-lg"
-            // style={{
-            //   opacity: loaded ? 1 : 0,
-            //   transition: "opacity 0.4s ease",
-            // }}
           />
         </div>
       </div>

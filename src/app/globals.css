@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-display: var(--font-space-grotesk), sans-serif;
+}
+
+
 :root {
   --color-primary: #f97316;
   --color-primary-dark: #2563EB;
@@ -527,4 +532,65 @@ button {
   max-width: 100%;
   height: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.hero-scrim {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.28) 22%,
+    rgba(0, 0, 0, 0.08) 42%,
+    rgba(0, 0, 0, 0.46) 66%,
+    rgba(0, 0, 0, 0.90) 100%
+  );
+}
+
+.hero-vignette {
+  background: radial-gradient(130% 90% at 50% 115%, transparent 38%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.hero-apex-line {
+  background: linear-gradient(to right, transparent, rgba(249, 115, 22, 0.35), transparent);
+}
+
+@keyframes hero-kenburns {
+  from { transform: scale(1); }
+  to { transform: scale(1.06); }
+}
+
+.hero-kenburns {
+  animation: hero-kenburns 24s ease-in-out infinite alternate;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes hero-scroll-cue {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(6px); opacity: 0.9; }
+}
+
+.hero-scroll-cue {
+  animation: hero-scroll-cue 2.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-kenburns,
+  .hero-scroll-cue,
+  .animate-telemetry-glow,
+  .animate-scanline,
+  .animate-marquee,
+  .animate-shimmer,
+  .animate-spin-slow,
+  .animate-bounce-slow,
+  .radar-wave,
+  .radar-wave-delayed {
+    animation: none !important;
+  }
+
+  .animate-slide-down-fade,
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }

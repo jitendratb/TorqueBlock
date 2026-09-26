@@ -1,4 +1,4 @@
-import { Inter } from "next/font/google";
+import { Inter, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
 import FloatingWhatsApp from "@/components/atoms/FloatingWhatsApp";
@@ -6,6 +6,12 @@ import FloatingWhatsApp from "@/components/atoms/FloatingWhatsApp";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+});
+
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
+  subsets: ["latin"],
+  display: "swap",
 });
 
 export async function generateMetadata() {
@@ -80,7 +86,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <ScrollToTop />
