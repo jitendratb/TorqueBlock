@@ -125,8 +125,12 @@ async function page() {
   const { props: desktopProps } = getImageProps({ ...commonProps, src: selectedBanner.image });
   const { props: mobileProps } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
 
-  preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
-  preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
+  if (desktopProps.src) {
+    preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
+  }
+  if (mobileProps.src) {
+    preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
+  }
 
   return (
     <main className=''>
