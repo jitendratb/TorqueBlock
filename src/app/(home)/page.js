@@ -1,6 +1,6 @@
 import Image, { getImageProps } from 'next/image'
 import React, { Suspense } from 'react'
-import { preload } from 'react-dom'
+import { preload, preconnect } from 'react-dom'
 import { FiChevronDown } from 'react-icons/fi'
 import { MdTwoWheeler } from 'react-icons/md'
 import H1Tags from './component/H1Tags'
@@ -127,7 +127,9 @@ async function page() {
 
     preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
     preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
- 
+
+  preconnect('https://cdn.trustindex.io');
+
 
   return (
     <main className=''>
