@@ -6,7 +6,7 @@ import { FcGoogle } from 'react-icons/fc'
 import { AVATARS, RATING, REVIEWS } from './socialProof'
 
 const HEADINGS = [
-  ['Find the Right', 'Tyre for Your', 'Motorcycle'],
+  ['Find the Right', 'Tyres for Your', 'Motorcycle'],
   // ["India's Best", 'Performance Tyres', 'for Every Ride'],
   // ['Premium Grip', 'Built for', 'Performance Riders'],
   // ['Engineered for Grip', 'Built for', 'Performance'],
