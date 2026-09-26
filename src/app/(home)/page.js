@@ -30,7 +30,7 @@ import FAQSchema from '@/components/seo/FAQSchema'
 import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema'
 import { getTrustindexStats } from '@/services/trustindexStats'
 
-export const revalidate = 0;
+export const revalidate = 3600;
 
 
 const POPULAR_SEARCHES = [
