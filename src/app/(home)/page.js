@@ -89,7 +89,7 @@ async function page() {
     },
      {
       id: 8,
-      image: "",
+      image: "https://cdn.torqueblock.com/torqueblock1-1.webp",
       mobileImage: "https://cdn.torqueblock.com/torqueblock-1.webp",
       alt: "Premium Motorcycle Tyres India || Royal Enfield Continental GT 650 Tyres || Torque Block",
     },
