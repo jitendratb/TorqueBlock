@@ -132,7 +132,7 @@ async function page() {
 
 
   return (
-    <main className=''>
+    <main className='overflow-hidden relative'>
       <WebPageSchema
         type="WebSite"
         title="Torque Block | Premium Motorcycle Tyres India"

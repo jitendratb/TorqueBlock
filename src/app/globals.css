@@ -594,3 +594,10 @@ button {
     transform: none !important;
   }
 }
+.trustindex-embed img,
+.trustindex-embed svg {
+  display: revert;
+  vertical-align: revert;
+  max-width: revert;
+  height: revert;
+}

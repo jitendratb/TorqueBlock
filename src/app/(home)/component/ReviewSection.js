@@ -27,7 +27,7 @@ export default function ReviewsSection() {
           </div>
         </div>
 
-        <div className="relative min-h-[350px] overflow-hidden">
+        <div className="relative w-full min-h-[350px] overflow-hidden">
           {!loaded && (
             <div className="absolute inset-0 z-10 animate-pulse flex flex-col w-full bg-black/90 pt-6 rounded-lg">
               <div className="w-full px-4 mb-6">
@@ -71,6 +71,7 @@ export default function ReviewsSection() {
 
           <div
             ref={widgetRef}
+            className="trustindex-embed"
           />
         </div>
       </div>
