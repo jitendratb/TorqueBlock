@@ -8,8 +8,13 @@ export default function HeroSearchObserver({ children }) {
     const setHeroSearchVisible = useUiStore((state) => state.setHeroSearchVisible);
 
     useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+
         const observer = new IntersectionObserver(
             ([entry]) => {
+
+                if (!entry.isIntersecting && el.contains(document.activeElement)) return;
                 setHeroSearchVisible(entry.isIntersecting);
             },
             {
@@ -19,15 +24,9 @@ export default function HeroSearchObserver({ children }) {
             }
         );
 
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
+        observer.observe(el);
 
-        return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current);
-            }
-        };
+        return () => observer.disconnect();
     }, [setHeroSearchVisible]);
 
     return (
