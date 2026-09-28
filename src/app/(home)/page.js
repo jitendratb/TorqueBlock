@@ -156,7 +156,7 @@ async function page() {
           }
         ]}
       />
-      <section className='relative w-full min-h-screen' aria-label="Hero Section">
+      <section className='relative w-full min-h-svh' aria-label="Hero Section">
         <picture>
           <source media="(min-width: 768px)" srcSet={desktopProps.srcSet} sizes={desktopProps.sizes} />
           <source media="(max-width: 767px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
