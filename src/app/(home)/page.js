@@ -1,6 +1,5 @@
-import Image, { getImageProps } from 'next/image'
 import React, { Suspense } from 'react'
-import { preload, preconnect } from 'react-dom'
+import { preconnect } from 'react-dom'
 import { FiChevronDown } from 'react-icons/fi'
 import { MdTwoWheeler } from 'react-icons/md'
 import H1Tags from './component/H1Tags'
@@ -19,6 +18,7 @@ import AiSearchBar from './component/BigSearchBar'
 import HeroSearchObserver from './component/HeroSearchObserver'
 import HeroSearchChips from './component/HeroSearchChips'
 import ProductFamilyFeatureCard from './component/ProductFamilyFeatureCard'
+import HeroBanner from './component/HeroBanner'
 
 
 const FeatureCard = dynamic(() => import('./component/FeatureCard'))
@@ -47,11 +47,11 @@ const POPULAR_SEARCHES = [
 async function page() {
 
   const stats = await getTrustindexStats()
-  const liveRating = stats.rating 
+  const liveRating = stats.rating
   const liveReviews = stats.reviews ? `${stats.reviews}+` : undefined
 
   const banners = [
-  {
+    {
       id: 1,
       image: "https://cdn.torqueblock.com/torqueblock1-1.webp",
       mobileImage: "https://cdn.torqueblock.com/torqueblock-1.webp",
@@ -87,46 +87,37 @@ async function page() {
       mobileImage: "https://cdn.torqueblock.com/torqueblock12-2.webp",
       alt: "Premium Motorcycle Tyres India || Royal Enfield Interceptor 650 Tyres || Torque Block",
     },
-     {
+    {
       id: 8,
       image: "https://cdn.torqueblock.com/torqueblock1-1.webp",
       mobileImage: "https://cdn.torqueblock.com/torqueblock-1.webp",
       alt: "Premium Motorcycle Tyres India || Royal Enfield Continental GT 650 Tyres || Torque Block",
     },
-  {
-    id: 9,
-    image: "https://cdn.torqueblock.com/torqueblock4.webp",
-    mobileImage: "https://cdn.torqueblock.com/torqueblock11-1.webp",
-    alt: "Premium Motorcycle Tyres India || Torque Block",
-  },
-  {
-    id: 10,
-    image: "https://cdn.torqueblock.com/torqueblock5.webp",
-    mobileImage: "https://cdn.torqueblock.com/torqueblock11-1.webp",
-    alt: "Premium Motorcycle Tyres India || Torque Block",
-  },
-  {
-    id: 11,
-    image: "https://cdn.torqueblock.com/torqueblock6-1.webp",
-    mobileImage: "https://cdn.torqueblock.com/torqueblock9-8.webp",
-    alt: "Premium Motorcycle Tyres India || Torque Block",
-  },
-  {
-    id: 12,
-    image: "https://cdn.torqueblock.com/torqueblock7-2.webp",
-    mobileImage: "https://cdn.torqueblock.com/torqueblock8-7.webp",
-    alt: "Premium Motorcycle Tyres India || Torque Block",
-  },
+    {
+      id: 9,
+      image: "https://cdn.torqueblock.com/torqueblock4.webp",
+      mobileImage: "https://cdn.torqueblock.com/torqueblock11-1.webp",
+      alt: "Premium Motorcycle Tyres India || Torque Block",
+    },
+    {
+      id: 10,
+      image: "https://cdn.torqueblock.com/torqueblock5.webp",
+      mobileImage: "https://cdn.torqueblock.com/torqueblock11-1.webp",
+      alt: "Premium Motorcycle Tyres India || Torque Block",
+    },
+    {
+      id: 11,
+      image: "https://cdn.torqueblock.com/torqueblock6-1.webp",
+      mobileImage: "https://cdn.torqueblock.com/torqueblock9-8.webp",
+      alt: "Premium Motorcycle Tyres India || Torque Block",
+    },
+    {
+      id: 12,
+      image: "https://cdn.torqueblock.com/torqueblock7-2.webp",
+      mobileImage: "https://cdn.torqueblock.com/torqueblock8-7.webp",
+      alt: "Premium Motorcycle Tyres India || Torque Block",
+    },
   ];
-
-  const selectedBanner = banners[Math.floor(Math.random() * banners.length)];
-  const commonProps = { alt: selectedBanner.alt, fill: true, loading: 'eager', sizes: '100vw', quality: 75 };
-
-  const { props: desktopProps } = getImageProps({ ...commonProps, src: selectedBanner.image });
-  const { props: mobileProps } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
-
-    preload(desktopProps.src, { as: 'image', imageSrcSet: desktopProps.srcSet, imageSizes: desktopProps.sizes, fetchPriority: 'high', media: "(min-width: 768px)" });
-    preload(mobileProps.src, { as: 'image', imageSrcSet: mobileProps.srcSet, imageSizes: mobileProps.sizes, fetchPriority: 'high', media: "(max-width: 767px)" });
 
   preconnect('https://cdn.trustindex.io');
 
@@ -156,48 +147,41 @@ async function page() {
           }
         ]}
       />
-      <section className='relative w-full min-h-svh' aria-label="Hero Section">
-        <picture>
-          <source media="(min-width: 768px)" srcSet={desktopProps.srcSet} sizes={desktopProps.sizes} />
-          <source media="(max-width: 767px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
-          <img {...mobileProps} fetchPriority="high" decoding="async" style={{ ...mobileProps.style, objectFit: 'cover' }} className="object-cover" />
-        </picture>
-
-        <span aria-hidden="true" className='pointer-events-none absolute inset-0 z-0 hero-scrim' />
-        <span aria-hidden="true" className='pointer-events-none absolute inset-0 z-0 hero-vignette' />
-
-        <div className='absolute inset-0 z-10 flex flex-col justify-start top-[120px] md:top-[150px] lg:top-0 lg:justify-center'>
-          <div className='max-w-7xl lg:pb-18 w-full mx-auto grid grid-cols-1 lg:grid-cols-[55%_45%] items-center px-4 text-white'>
+      <HeroBanner
+        banners={banners}
+        topContent={(
+          <>
             <H1Tags rating={liveRating} reviews={liveReviews} />
             <div className='hidden lg:flex h-full items-end justify-end self-stretch'>
               <HeroBadges rating={liveRating} reviews={liveReviews} />
             </div>
-          </div>
-        </div>
+          </>
+        )}
+        bottomContent={(
+          <>
+            <div className='w-full max-w-xl lg:max-w-4xl mx-auto px-4 pointer-events-auto text-white'>
+              <div className='mb-3 flex items-center justify-between px-1'>
+                <span className='inline-flex items-center gap-2 text-orange-400 text-[11px] font-bold uppercase tracking-[0.25em] [text-shadow:0_0_10px_rgba(249,115,22,0.9)]'>
+                  <MdTwoWheeler aria-hidden="true" className='text-orange-500 text-sm drop-shadow-[0_0_10px_rgba(249,115,22,0.9)]' />
+                  Find Your Tyres
+                </span>
+              </div>
 
-        <div className='absolute inset-0 z-10 flex flex-col items-center justify-end pb-4 lg:pb-12 pointer-events-none'>
-          <div className='w-full max-w-xl lg:max-w-4xl mx-auto px-4 pointer-events-auto text-white'>
-            <div className='mb-3 flex items-center justify-between px-1'>
-              <span className='inline-flex items-center gap-2 text-orange-400 text-[11px] font-bold uppercase tracking-[0.25em] [text-shadow:0_0_10px_rgba(249,115,22,0.9)]'>
-                <MdTwoWheeler aria-hidden="true" className='text-orange-500 text-sm drop-shadow-[0_0_10px_rgba(249,115,22,0.9)]' />
-                Find Your Tyres
-              </span>
+              <HeroSearchObserver>
+                <AiSearchBar />
+              </HeroSearchObserver>
+
+              <HeroSearchChips popular={POPULAR_SEARCHES} />
             </div>
 
-            <HeroSearchObserver>
-              <AiSearchBar />
-            </HeroSearchObserver>
+            <HeroTrustBar />
 
-            <HeroSearchChips popular={POPULAR_SEARCHES} />
-          </div>
-
-          <HeroTrustBar />
-
-          <div aria-hidden="true" className='pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 hidden md:block'>
-            <FiChevronDown className='hero-scroll-cue text-white/60 text-2xl' />
-          </div>
-        </div>
-      </section>
+            <div aria-hidden="true" className='pointer-events-none absolute bottom-3 left-1/2 -translate-x-1/2 hidden md:block'>
+              <FiChevronDown className='hero-scroll-cue text-white/60 text-2xl' />
+            </div>
+          </>
+        )}
+      />
       <ScrollBackgroundWrapper>
         <PageShell>
           <div className='space-y-10 pb-10 mt-10'>
