@@ -45,7 +45,7 @@ function ProductFamilyFeatureCardClient({ recommendedTyre }) {
                                 <ProductFamilyCard tyre={tyre} />
                             </div>
                         )}
-                        itemWidth="w-[280px] md:w-[300px]"
+                        itemWidth="w-full md:w-[300px]"
                         gap={4}
                         onReachEnd={handleReachEnd}
                         showArrows={true}
