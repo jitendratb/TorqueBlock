@@ -13,7 +13,7 @@ import WebPageSchema from '@/components/seo/WebPageSchema'
 import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 import dynamic from 'next/dynamic'
-import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton } from './component/HomeSkeletons'
+import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton, FeaturedProductBannerSkeleton } from './component/HomeSkeletons'
 import AiSearchBar from './component/BigSearchBar'
 import HeroSearchObserver from './component/HeroSearchObserver'
 import HeroSearchChips from './component/HeroSearchChips'
@@ -191,15 +191,11 @@ async function page() {
               </Suspense>
             </section>
 
+
+
             <section aria-label="Trending Motorcycle Tyres">
               <Suspense fallback={<TrendCardSkelton count={4} />} >
                 <TrendingSection />
-              </Suspense>
-            </section>
-
-            <section aria-label="Featured Products">
-              <Suspense fallback={<FeatureCardSkeleton count={4} />} >
-                <FeatureCard />
               </Suspense>
             </section>
 
@@ -216,7 +212,7 @@ async function page() {
             </section>
 
             <section aria-label="Value & Performance Brands">
-              <Suspense fallback={<ValuePerformanceBrandsSkeleton />}>
+              <Suspense fallback={<ValuePerformanceBrandsSkeleton count={4} />}>
                 <ValuePerformanceBrands />
               </Suspense>
             </section>
@@ -227,11 +223,11 @@ async function page() {
               </Suspense>
             </section>
 
-            <section aria-label="B2B Enterprise Tyre Distribution">
+            {/* <section aria-label="B2B Enterprise Tyre Distribution">
               <Suspense fallback={<B2BEnterpriseSkeleton />}>
                 <B2BEnterpriseSection />
               </Suspense>
-            </section>
+            </section> */}
 
           </div>
         </PageShell>

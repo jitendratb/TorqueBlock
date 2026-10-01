@@ -20,11 +20,16 @@ export default function ReviewsSection() {
   return (
     <section className="w-full" id="reviews">
       <div>
-        <div className=" flex flex-col justify-start">
-          <div className="w-auto">
-            <h2 className="text-xl md:text-4xl font-extrabold text-white">Trusted By Riders Across India</h2>
-            <hr className="border-b-4 mt-2 lg:mt-3 mb-4 border-orange-500 w-[150px] md:w-[250px] rounded-full" />
-          </div>
+        <div className="mb-6">
+          <p className="text-orange-500 text-xs md:text-sm font-semibold tracking-[0.5em] transition-colors uppercase">
+            Trusted By
+          </p>
+          <h2 className="text-3xl md:text-4xl font-extrabold uppercase leading-none tracking-tight text-white">
+            Riders <span className="text-orange-500">Across India</span>
+          </h2>
+          <p className="text-xs md:text-sm text-gray-400 max-w-3xl">
+            Real riders. Real experiences. See what our customers say about Torque Block.
+          </p>
         </div>
 
         <div className="relative w-full min-h-[350px] overflow-hidden">

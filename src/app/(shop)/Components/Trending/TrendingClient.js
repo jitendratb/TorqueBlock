@@ -6,7 +6,7 @@ import TrendingFirstCardSkeleton from './TrendingFirstCardSkeleton';
 import TrendCard from '@/components/atoms/TrendCard';
 import Pagination from '@/components/atoms/Pagination';
 import { FiAlertCircle, FiTrendingUp } from 'react-icons/fi';
-import TrendCardSkelton from '@/components/atoms/TrendCardSkelton';
+import { TrendCardSkeletonCard } from '@/components/atoms/TrendCardSkelton';
 
 function TrendingClient({ trendAll, trendingFirst, loading, error }) {
 
@@ -43,7 +43,9 @@ function TrendingClient({ trendAll, trendingFirst, loading, error }) {
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4  w-full mb-4'>
           {trendAll?.length > 0 ? ( trendAll?.map((item) => (
             <TrendCard item={item} key={item._id} className="w-full md:w-full lg:w-full" />
-          ))) : <TrendCardSkelton count={8} />}
+          ))) : Array.from({ length: 8 }).map((_, i) => (
+            <TrendCardSkeletonCard key={i} className="w-full animate-pulse" />
+          ))}
         </div>
       </section>
     </div>

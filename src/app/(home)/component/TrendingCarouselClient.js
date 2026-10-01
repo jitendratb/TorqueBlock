@@ -10,7 +10,7 @@ export default function TrendingCarouselClient({ trendingProducts }) {
     return (
         <Carousel
             items={trendingProducts}
-            itemWidth={`w-[280px] lg:w-[320px]`}
+            itemWidth={`w-full md:w-[380px]`}
             gap={16}
             showArrows={true}
             showDots={false}

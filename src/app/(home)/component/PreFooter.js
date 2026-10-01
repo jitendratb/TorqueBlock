@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { FiChevronRight } from "react-icons/fi";
+import { FiChevronRight, FiArrowRight } from "react-icons/fi";
+import { PiMotorcycleFill, PiTrophyFill, PiCoinsFill, PiScalesFill } from "react-icons/pi";
 import brandServiceInstance from "@/services/brandService";
 
 const motorcycleLinks = [
@@ -73,66 +74,92 @@ export default async function EnterprisePreFooter() {
   const footerSections = [
     {
       title: "Shop by Motorcycle",
+      subtitle: "Find the right tyres for your motorcycle.",
+      icon: PiMotorcycleFill,
       links: motorcycleLinks,
+      cta: { label: "View All Motorcycles", href: "/motorcycles" },
     },
     {
-      title: "Ultimate Performance",
-      links: premiumBrands.map((brand) => ({
+      title: "Shop By Brands",
+      subtitle: "World-leading performance brands.",
+      icon: PiTrophyFill,
+      links: [...premiumBrands , ...valuePerformanceBrands].slice(0,9).map((brand) => ({
         label: formatBrandLabel(brand?.name),
         href: `/brands/${brand?._id}`,
       })),
-    },
-    {
-      title: "Value Performance",
-      links: valuePerformanceBrands.map((brand) => ({
-        label: formatBrandLabel(brand?.name),
-        href: `/brands/${brand?._id}`,
-      })),
+      cta: { label: "View All Brands", href: "/brands" },
     },
     {
       title: "Compare Tyres",
+      subtitle: "Make the right choice with expert comparisons.",
+      icon: PiScalesFill,
       links: compareLinks,
+      cta: { label: "View All Comparisons", href: "/compare" },
     },
   ];
 
   return (
     <section className="border-t border-gray-600 bg-[#2e3340]">
-      <div className="mt-6 max-w-7xl mx-auto px-4 py-16">
-        <div className="text-center mb-16">
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="text-center mb-8">
           <h2 className="text-2xl lg:text-5xl font-bold text-white leading-tight">
-            Explore Premium Motorcycle Tyres
+            Explore Premium <span className="text-orange-500">Motorcycle Tyres</span>
           </h2>
 
-          <div className="w-28 h-1 bg-orange-500 rounded-full mx-auto mt-2" />
+          <div className="w-28 h-1 bg-orange-500 rounded-full mx-auto mt-3" />
 
-          <p className="text-gray-400 text-sm lg:text-sm mt-6 max-w-4xl mx-auto leading-relaxed">
-            Discover motorcycle tyre recommendations, Motorcycle-specific fitments,
-            touring setups, track-focused tyres, and expert tyre comparisons
-            built for Indian roads and performance riders.
+          <p className="text-gray-400 text-sm lg:text-base mt-6 max-w-4xl mx-auto leading-relaxed">
+            Explore motorcycle tyres by motorcycle, performance category, brand and comparison.
           </p>
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {footerSections.map((section, index) => (
-            <div key={index}>
-              <h3 className="text-sm font-bold text-orange-400 mb-4">
-                {section.title}
-              </h3>
-              <ul className="space-y-1">
-                {section.links.map((link, i) => (
-                  <li key={i}>
-                    <Link href={link.href} className="group flex items-center text-gray-300 hover:text-orange-400 transition-all duration-300">
-                      <FiChevronRight strokeWidth={3} size={16} className="text-orange-500/70 mr-2 flex-shrink-0 group-hover:text-orange-400 group-hover:translate-x-1 transition-all duration-300" />
-                      <span className="text-sm">
-                        {link.label}
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          {footerSections.map((section, index) => {
+            const Icon = section.icon;
+            return (
+              <div
+                key={index}
+                className="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-4 transition-colors duration-300"
+              >
+                <div className="flex items-start gap-3">
+                  <Icon className="text-orange-500 flex-shrink-0 mt-0.5" size={30} />
+                  <div>
+                    <h3 className="text-base font-bold text-white leading-tight">
+                      {section.title}
+                    </h3>
+                    <p className="text-xs text-gray-400 mt-1 leading-snug">
+                      {section.subtitle}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="h-px bg-white/10 my-5" />
+
+                <ul className="space-y-2.5 flex-1">
+                  {section.links.map((link, i) => (
+                    <li key={i}>
+                      <Link href={link.href} className="group flex items-start text-gray-300 hover:text-orange-400 transition-all duration-300">
+                        <FiChevronRight strokeWidth={3} size={16} className="text-orange-500/70 mr-2 mt-0.5 flex-shrink-0 group-hover:text-orange-400 group-hover:translate-x-1 transition-all duration-300" />
+                        <span className="text-sm leading-snug">
+                          {link.label}
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={section.cta.href}
+                  className="group mt-4 inline-flex items-center gap-2 text-sm font-bold text-orange-500 hover:text-orange-400 transition-colors duration-300"
+                >
+                  {section.cta.label}
+                  <FiArrowRight size={16} className="group-hover:translate-x-1 transition-transform duration-300" />
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

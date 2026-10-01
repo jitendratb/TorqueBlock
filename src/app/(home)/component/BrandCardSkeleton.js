@@ -1,31 +1,53 @@
 import React from 'react';
+import SectionHeadingSkeleton from '@/components/atoms/SectionHeadingSkeleton';
 
-function BrandCardSkeleton() {
+/** Mirrors PerformanceBrandCard: banner image, logo, headline, chips, CTA. */
+function BrandCardSkeleton({ className = 'w-full' }) {
   return (
-    <div className="relative flex justify-center bg-zinc-900 rounded-[1.5rem] md:rounded-[2rem] h-[250px] md:h-[220px] lg:h-[240px] w-[280px] md:w-[320px] overflow-hidden animate-pulse border border-zinc-800/50">
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-zinc-800/10 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 flex items-center justify-between">
-        <div className="w-full">
-          <div className="h-2.5 w-20 bg-zinc-800/70 rounded-full mb-2" />
-          <div className="flex justify-between items-end w-full gap-4">
-            <div className="h-7 w-36 bg-zinc-800 rounded-md" />
-            <div className="w-10 h-10 rounded-full bg-zinc-800/80 flex-shrink-0 border border-zinc-700/30" />
-          </div>
+    <div
+      className={`relative flex h-[420px] flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#07090d] [.light-mode_&]:border-black/10 ${className}`}
+    >
+      <div aria-hidden='true' className='absolute inset-0 z-0 bg-zinc-900/70' />
+      <span
+        aria-hidden='true'
+        className='pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(0deg,rgba(6,8,12,0.97)_0%,rgba(6,8,12,0.84)_28%,rgba(6,8,12,0.3)_60%,transparent_100%)]'
+      />
+
+      <div className='relative z-30 flex h-full flex-col justify-end gap-4 p-4'>
+        {/* Brand logo */}
+        <div className='h-10 w-36 rounded-md bg-zinc-800/80 sm:h-11 sm:w-40' />
+
+        {/* Focus keyword headline (second line renders orange) */}
+        <div className='space-y-2'>
+          <div className='h-6 w-11/12 rounded-md bg-zinc-800 sm:h-7' />
+          <div className='h-6 w-2/3 rounded-md bg-orange-500/25 sm:h-7' />
+        </div>
+
+        {/* Category chips: icon stacked over label */}
+        <div className='flex flex-wrap items-center gap-1.5'>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className='flex flex-col items-center gap-1.5 px-2.5 py-1'>
+              <div className='h-[22px] w-[22px] rounded-md bg-orange-500/25' />
+              <div className='h-2.5 w-14 rounded-full bg-white/20' />
+            </div>
+          ))}
+        </div>
+
+        {/* Shop CTA */}
+        <div className='flex h-11 w-full items-center justify-center rounded-xl border border-orange-500/40 bg-orange-500/10'>
+          <div className='h-2.5 w-28 rounded-full bg-orange-500/30' />
         </div>
       </div>
     </div>
   );
 }
 
-
 export function BrandCardSkeletonGroup({ count = 3 }) {
   return (
-    <div className="w-full mx-auto flex flex-col gap-6 overflow-hidden">
-      <div className="mb-10 text-center flex flex-col items-center">
-        <div className="h-3 w-48 bg-orange-500/20 rounded-full" />
-        <div className="h-10 md:h-12 w-64 md:w-96 bg-zinc-900/50 rounded-lg mt-2" />
-      </div>
-      <div className="flex flex-col md:flex-row gap-4 w-full items-center md:justify-center md:py-6">
+    <div className='w-full mx-auto flex animate-pulse flex-col gap-6'>
+      <SectionHeadingSkeleton eyebrowClassName='w-36' headingClassName='w-56 md:w-[22rem]' />
+
+      <div className='mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {Array.from({ length: count }).map((_, i) => (
           <BrandCardSkeleton key={i} />
         ))}

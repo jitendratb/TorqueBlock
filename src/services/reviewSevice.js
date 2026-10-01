@@ -20,7 +20,6 @@ class ReviewService {
             throw new Error(error?.response?.data?.message || 'Failed to submit review');
         }
     }
-    
 }
 
 export default ReviewService;

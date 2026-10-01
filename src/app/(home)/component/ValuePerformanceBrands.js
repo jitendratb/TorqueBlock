@@ -4,10 +4,9 @@ import ValuePerformanceBrandsCarouselClient from "./ValuePerformanceBrandsCarous
 
 async function ValuePerformanceBrands() {
     let brands = [];
-
     try {
         let data = await brandServiceInstance.getBrands({ isActive: true });
-
+         console.log(data ,"sdfghjgfdsa")
         const getBrandPriority = (name = "") => {
             const lower = name?.toLowerCase() || "";
             if (lower.includes('eurogrip')) return 1;
@@ -27,18 +26,23 @@ async function ValuePerformanceBrands() {
     if (!brands?.length) return null;
 
     return (
-        <section className="py-8 w-full">
-            <div className="mb-10 text-center">
-                <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">
-                    Trusted Motorcycle Tyre Brands
-                </span>
-                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter mt-2 [.light-mode_&]:text-black [.dark-mode_&]:text-white transition-colors duration-1000">
-                    Value Performance <span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000">Brands</span>
+        <section className="w-full">
+            <div className='flex flex-col items-center text-center'>
+                <div className='flex items-center gap-3'>
+                    <span aria-hidden='true' className='h-px w-8 bg-gradient-to-r from-transparent to-orange-500/70 md:w-12' />
+                    <span className='text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000'>
+                        Trusted Motorcycle Tyre Brands
+                    </span>
+                    <span aria-hidden='true' className='h-px w-8 bg-gradient-to-l from-transparent to-orange-500/70 md:w-12' />
+                </div>
+
+                <h2 className='text-2xl pt-2 md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter text-black transition-colors duration-1000'>
+                    Value Performance <span className='text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000'>Brands</span>
                 </h2>
             </div>
-
-            <ValuePerformanceBrandsCarouselClient brands={brands} />
-
+            <div className="pt-8">
+                <ValuePerformanceBrandsCarouselClient brands={brands} />
+            </div>
         </section>
     );
 }

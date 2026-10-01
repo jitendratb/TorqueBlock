@@ -4,6 +4,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import Image from "@/components/molecules/CustomImage";
 import { useRouter } from "next/navigation";
 import { FaChevronLeft, FaChevronRight, FaArrowRight } from 'react-icons/fa';
+import { getCategoryPreset } from '@/app/(home)/component/performanceBrandPresets';
 
 const priceFormatter = new Intl.NumberFormat('en-IN', {
     style: 'currency',
@@ -30,6 +31,8 @@ const ProductCard = ({ tyre, className = "" }) => {
 
         return { title, categoryName, brandName, images, displayPrice };
     }, [tyre]);
+
+    const { Icon: CategoryIcon, label: categoryLabel } = getCategoryPreset(categoryName);
 
     const handleCardClick = useCallback(() => {
         if (tyre?.identifier) {
@@ -114,11 +117,12 @@ const ProductCard = ({ tyre, className = "" }) => {
             <div className="flex flex-col p-4 gap-2 flex-1 justify-between relative">
                 <div className="space-y-1.5">
                     <div className="flex items-center justify-between gap-2">
-                        <span className="text-[10px] font-black text-zinc-400 [.light-mode_&]:text-zinc-500 uppercase tracking-widest">
-                            {categoryName}
+                        <span className="inline-flex items-center gap-1.5 text-[10px] font-black text-zinc-400 [.light-mode_&]:text-zinc-500 uppercase tracking-widest">
+                            <CategoryIcon aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-orange-500" />
+                            {categoryLabel}
                         </span>
                         {brandName && (
-                            <span className="text-[10px] font-bold border border-white/30 px-2 py-1 rounded-lg text-white/50 [.light-mode_&]:text-zinc-400 uppercase tracking-wider">
+                            <span className="text-[10px] font-bold border border-orange-500 px-2 py-1 rounded-lg text-orange-500 [.light-mode_&]:text-zinc-400 uppercase tracking-wider">
                                 {brandName}
                             </span>
                         )}
@@ -143,7 +147,7 @@ const ProductCard = ({ tyre, className = "" }) => {
 
                     <div
                         aria-hidden="true"
-                        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider justify-center w-auto h-9 px-4 rounded-lg bg-white/5 [.light-mode_&]:bg-zinc-100 text-white [.light-mode_&]:text-zinc-800 border border-white/10 [.light-mode_&]:border-zinc-200 group-hover:bg-orange-500 group-hover:border-orange-500 group-hover:text-white transition-all duration-300"
+                        className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider justify-center w-auto h-9 px-4 rounded-lg bg-transparent [.light-mode_&]:bg-zinc-100 text-orange-500 [.light-mode_&]:text-zinc-800 border border-orange-500 [.light-mode_&]:border-zinc-200 group-hover:bg-orange-500 group-hover:border-orange-500 group-hover:text-white transition-all duration-300"
                     >
                         Explore
                         <FaArrowRight className="text-[10px] group-hover:translate-x-1 transition-transform duration-300" />

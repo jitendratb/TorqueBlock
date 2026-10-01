@@ -19,11 +19,18 @@ async function TrendingSection() {
     }
 
     return (
-        <section className='py-4' id='trending-section'>
-            <div className='flex flex-col items-center mb-8 text-center space-y-2'>
-                <span className="text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000">Top Performance</span>
-                <h2 className='text-3xl md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter mt-2 text-black transition-colors duration-1000'>
-                    Featured<span className="text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000"> Upgrades</span>
+        <section className='' id='trending-section'>
+            <div className='flex py-4 flex-col items-center text-center'>
+                <div className='flex items-center gap-3'>
+                    <span aria-hidden='true' className='h-px w-8 bg-gradient-to-r from-transparent to-orange-500/70 md:w-12' />
+                    <span className='text-orange-500 [.light-mode_&]:text-orange-700 text-[10px] font-black uppercase tracking-[0.5em] transition-colors duration-1000'>
+                        Top Performance
+                    </span>
+                    <span aria-hidden='true' className='h-px w-8 bg-gradient-to-l from-transparent to-orange-500/70 md:w-12' />
+                </div>
+
+                <h2 className='text-2xl md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter text-black transition-colors duration-1000'>
+                    Featured <span className='text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000'>Upgrades</span>
                 </h2>
             </div>
 
