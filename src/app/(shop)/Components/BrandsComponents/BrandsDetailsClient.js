@@ -33,42 +33,20 @@ const ExpandableText = ({ text, color }) => {
 };
 
 function BrandsDetailsClient({ brand }) {
-  if (!brand) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
-        <div className="text-zinc-500 text-sm">No brand details found.</div>
-        <Link
-          href="/brands"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-bold text-white uppercase tracking-wider hover:border-orange-500/50 transition-all"
-        >
-          <FiArrowLeft size={14} /> Back to Brands
-        </Link>
-      </div>
-    );
-  }
-
-
   const brandName = brand?.name || brand?.brandName || "Premium Partner";
   const primaryColor = brand?.featuredData?.primaryColor || '#f97316';
   return (
     <div className="space-y-6 animate-[fadeIn_0.5s_ease-out] w-full max-w-[1400px] mx-auto">
 
       <section className="relative h-[300px] sm:h-[400px] md:h-[480px] w-full overflow-hidden rounded-[2rem] border border-white/5 shadow-2xl">
-        {brand?.brandBanner ? (
+      
           <CustomImage
             src={brand.brandBanner}
             alt={`${brandName} Banner`}
             fill
             priority
-            className="object-cover brightness-[0.7]"
+            className="object-cover "
           />
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 to-zinc-950 flex items-center justify-center">
-            <div className="text-[80px] sm:text-[140px] font-black text-white/[0.02] tracking-widest select-none uppercase">
-              {brandName}
-            </div>
-          </div>
-        )}
 
         <div
           className="absolute inset-0 opacity-40 mix-blend-overlay"
@@ -76,34 +54,51 @@ function BrandsDetailsClient({ brand }) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent z-10" />
 
-        <div className="absolute inset-x-0 bottom-0 px-6 py-4 z-20 flex  items-center gap-4">
+        <div className="absolute inset-x-0 bottom-0 z-20 flex flex-col items-start p-6 md:p-8">
           {brand?.brandLogo ? (
-            <div className="relative overflow-hidden w-20 h-20 sm:w-32 sm:h-32 rounded-3xl bg-white border border-white/10 shadow-[0_0_40px_rgba(255,255,255,0.1)] flex items-center justify-center">
+            <div className="relative flex h-14 w-36 items-center justify-center sm:h-20 sm:w-72">
               <CustomImage
-                src={brand?.brandLogo}
+                src={brand.brandLogo}
                 alt={`${brandName} Logo`}
                 fill
-                sizes="(max-width: 640px) 80px, 128px"
-                imageClassName="object-contain"
+                sizes="(max-width: 640px) 144px, 288px"
+                imageClassName="object-contain object-left drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)]"
               />
             </div>
           ) : (
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-3xl bg-zinc-950 border border-white/10 shadow-2xl flex items-center justify-center text-5xl font-black text-white uppercase select-none transform translate-y-4" style={{ color: primaryColor }}>
+            <div
+              className="flex h-20 w-20 select-none items-center justify-center rounded-3xl border border-white/10 bg-zinc-950 text-4xl font-black uppercase shadow-2xl sm:h-28 sm:w-28 sm:text-5xl"
+              style={{ color: primaryColor }}
+            >
               {brandName.substring(0, 2)}
             </div>
           )}
 
-          <div className="space-y-2">
-            <div className="inline-flex items-center justify-center gap-2 px-2 md:px-4 py-1 md:py-1.5 rounded-full bg-white/[0.05] border border-white/10 backdrop-blur-md text-[8px] md:text-xs font-bold text-white uppercase tracking-[0.2em] shadow-lg">
-              <FiCheckCircle size={14} style={{ color: primaryColor }} className="animate-pulse" /> Official Partner
-            </div>
-            <h1 className="text-2xl sm:text-6xl md:text-5xl font-black text-white tracking-tighter leading-none uppercase drop-shadow-2xl">
-              {brandName}
+          <div className="flex items-center gap-3">
+            <h1 className="text-sm md:text-lg lg:text-xl font-black tracking-tight text-white drop-shadow-md sm:text-2xl md:text-4xl">
+              {brand?.focusKeyword || brandName}
             </h1>
-            <p className="text-zinc-300 text-[10px] md:text-sm font-medium tracking-wide max-w-2xl mx-auto drop-shadow-md">
-              {brand?.focusKeyword}
-            </p>
           </div>
+
+          {brand?.shortDescription && (
+            <p className="max-w-2xl text-xs font-medium leading-relaxed text-zinc-300 drop-shadow-md sm:text-sm md:text-sm py-2">
+              {brand.shortDescription}
+            </p>
+          )}
+
+          {brand?.popularSeries?.length > 0 && (
+            <div className="hidden md:flex flex-wrap items-center gap-2 pt-1">
+              {brand.popularSeries.slice(0, 4).map((series, i) => (
+                <span
+                  key={i}
+                  className="rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white backdrop-blur-md sm:text-xs"
+                  style={{ borderColor: `${primaryColor}66`, background: `${primaryColor}26` }}
+                >
+                  {series}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
