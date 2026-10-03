@@ -34,25 +34,15 @@ function HeroRating({ reviewsPromise }) {
 }
 
 const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
-    const gallery = useMemo(() => {
-        const imgs = Array.isArray(tyre?.productImages) ? tyre.productImages : [];
-        if (imgs.length > 0) return imgs;
-        const gal = Array.isArray(tyre?.gallery) ? tyre.gallery : [];
-        if (gal.length > 0) return gal;
-        return Array.isArray(tyre?.productImage) ? tyre.productImage : [];
-    }, [tyre]);
+    const [activeImage, setActiveImage] = useState([]);
 
-    const [activeImage, setActiveImage] = useState(() => gallery[0] || tyre?.hero?.heroImage || null);
+
 
     useEffect(() => {
-        if (gallery.length > 0) {
-            setActiveImage(gallery[0]);
-        } else if (tyre?.hero?.heroImage) {
-            setActiveImage(tyre.hero.heroImage);
-        }
-    }, [gallery, tyre?.hero?.heroImage]);
+        setActiveImage(tyre?.productImages[0]);
+    }, [tyre?.productImages]);
 
-    const currentDisplayImage = activeImage || gallery[0] || tyre?.hero?.heroImage || '/newlogo.webp';
+
     const allTags = useMemo(() => {
         const eyebrow = tyre?.hero?.eyebrowText || "";
         const subtitle = tyre?.hero?.subtitle || "";
@@ -79,7 +69,7 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
                         <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1">
-                            {gallery.map((item, idx) => {
+                            {tyre?.productImages?.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
                                     <button
@@ -90,8 +80,10 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                                         className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-95" : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"}`}
                                     >
                                         <Image
-                                            src={item || '/newlogo.webp'}
-                                            alt={`${tyre?.productName || "Tyre"} thumbnail ${idx + 1}`}
+                                            src={item?.url || '/newlogo.webp'}
+                                            alt={item?.alt || `${tyre?.alt || "Tyre"} thumbnail ${idx + 1}`}
+                                            title={item?.title}
+                                            caption={item?.caption}
                                             fill
                                             sizes="70px"
                                             imageClassName="object-cover"
@@ -101,17 +93,22 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                             })}
                         </div>
 
-                        <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
-                            <Image
-                                src={currentDisplayImage}
-                                alt={tyre?.productName || "Tyre"}
-                                fill
-                                priority
-                                quality={75}
-                                sizes="(max-width: 768px) 100vw, 50vw"
-                                imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
-                            />
-                        </div>
+                        <figure className="flex flex-col gap-2">
+                            <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
+                                <Image
+                                    src={activeImage?.url || '/newlogo.webp'}
+                                    alt={activeImage?.alt || tyre?.alt || "Tyre"}
+                                    title={activeImage?.title}
+                                    caption={activeImage?.caption}
+                                    fill
+                                    priority
+                                    quality={75}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                    imageClassName="object-contain transition-transform duration-500 group-hover:scale-105"
+                                />
+                            </div>
+                           
+                        </figure>
                     </div>
                 </div>
 

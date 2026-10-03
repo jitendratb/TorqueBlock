@@ -43,7 +43,11 @@ const TyresClient = memo(function TyresClient({ initialData, reviewsPromise }) {
             <Suspense fallback={<div className="min-h-[250px] w-full animate-pulse bg-zinc-900/50 rounded-2xl" />}>
                 <ReviewsCardResolver reviewsPromise={reviewsPromise} tyreId={tyre?._id} />
             </Suspense>
-            <FitmentSection tyre={tyre} scale={false} />
+            {
+                tyre?.gallery?.length > 0 && (
+                    <FitmentSection tyre={tyre} scale={true} />
+                )
+            }
             <Similar tyre={tyre} />
             {tyre?.faqs?.length > 0 && <FAQSection faqs={tyre.faqs} />}
         </div>
