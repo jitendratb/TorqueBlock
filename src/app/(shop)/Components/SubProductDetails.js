@@ -20,6 +20,8 @@ import StarRating from "@/components/atoms/StarRating";
 import MatchingTyreItem from "./MatchingTyreItem";
 import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 import { FiMaximize2 } from "react-icons/fi";
+import ThumbScrollArrows from "@/components/atoms/ThumbScrollArrows";
+import useImageGallery from "@/hooks/useImageGallery";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
@@ -55,13 +57,9 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
 
-    const [activeImage, setActiveImage] = useState(gallery[0] || null);
+    const { activeIndex, setActiveIndex, activeImage, thumbStripRef, thumbScroll, updateThumbScroll, scrollThumbs, swipeProps } = useImageGallery(gallery);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
     const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
-
-    useEffect(() => {
-        setActiveImage(gallery[0] || null);
-    }, [gallery]);
 
     useEffect(() => {
         if (tubeTypes.length > 0 && !tubeTypes.includes(selectedTubeType)) {
@@ -334,26 +332,39 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
-                        <div role="tablist" aria-label="Product images" className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">
-                            {gallery.map((item, idx) => {
-                                const isActive = activeImage === item;
-                                return (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        role="tab"
-                                        aria-selected={isActive}
-                                        onClick={() => setActiveImage(item)}
-                                        onMouseEnter={() => setActiveImage(item)}
-                                        className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}
-                                    >
-                                        <Image src={item} alt={`${title} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
-                                    </button>
-                                );
-                            })}
+                        <div className="relative">
+                            <div
+                                ref={thumbStripRef}
+                                role="tablist"
+                                aria-label="Product images"
+                                onScroll={updateThumbScroll}
+                                className="relative flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar"
+                            >
+                                {gallery.map((item, idx) => {
+                                    const isActive = idx === activeIndex;
+                                    return (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            role="tab"
+                                            aria-selected={isActive}
+                                            onClick={() => setActiveIndex(idx)}
+                                            onMouseEnter={() => setActiveIndex(idx)}
+                                            className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}
+                                        >
+                                            <Image src={item} alt={`${title} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <ThumbScrollArrows thumbScroll={thumbScroll} onScroll={scrollThumbs} />
                         </div>
 
-                        <div className="relative flex h-[350px] md:h-[450px] w-full items-center justify-center overflow-hidden">
+                        <div
+                            {...swipeProps}
+                            className="relative flex h-[350px] md:h-[450px] w-full items-center justify-center overflow-hidden touch-pan-y touch-pinch-zoom"
+                        >
                             {activeImage && (
                                 <Image
                                     src={activeImage}

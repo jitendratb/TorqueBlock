@@ -1,9 +1,11 @@
 "use client";
 
-import { memo, useMemo, useState, useCallback, useEffect, Suspense, use } from "react";
+import { memo, useMemo, useCallback, Suspense, use } from "react";
 import Image from "@/components/molecules/CustomImage";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
+import ThumbScrollArrows from "@/components/atoms/ThumbScrollArrows";
+import useImageGallery from "@/hooks/useImageGallery";
 
 import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaChevronDown, } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
@@ -34,13 +36,7 @@ function HeroRating({ reviewsPromise }) {
 }
 
 const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
-    const [activeImage, setActiveImage] = useState([]);
-
-
-
-    useEffect(() => {
-        setActiveImage(tyre?.productImages[0]);
-    }, [tyre?.productImages]);
+    const { activeIndex, setActiveIndex, activeImage, thumbStripRef, thumbScroll, updateThumbScroll, scrollThumbs, swipeProps } = useImageGallery(tyre?.productImages);
 
 
     const allTags = useMemo(() => {
@@ -68,33 +64,41 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
             <div className="grid grid-cols-1 gap-6 md:gap-8 lg:grid-cols-2">
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
-                        <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1">
-                            {tyre?.productImages?.map((item, idx) => {
-                                const isActive = activeImage === item;
-                                return (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        onClick={() => setActiveImage(item)}
-                                        onMouseEnter={() => setActiveImage(item)}
-                                        className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-95" : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"}`}
-                                    >
-                                        <Image
-                                            src={item?.url || '/newlogo.webp'}
-                                            alt={item?.alt || `${tyre?.alt || "Tyre"} thumbnail ${idx + 1}`}
-                                            title={item?.title}
-                                            caption={item?.caption}
-                                            fill
-                                            sizes="70px"
-                                            imageClassName="object-cover"
-                                        />
-                                    </button>
-                                );
-                            })}
+                        <div className="relative">
+                            <div
+                                ref={thumbStripRef}
+                                onScroll={updateThumbScroll}
+                                className="relative flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1"
+                            >
+                                {tyre?.productImages?.map((item, idx) => {
+                                    const isActive = idx === activeIndex;
+                                    return (
+                                        <button
+                                            key={idx}
+                                            type="button"
+                                            onClick={() => setActiveIndex(idx)}
+                                            onMouseEnter={() => setActiveIndex(idx)}
+                                            className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.4)] scale-95" : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"}`}
+                                        >
+                                            <Image
+                                                src={item?.url || '/newlogo.webp'}
+                                                alt={item?.alt || `${tyre?.alt || "Tyre"} thumbnail ${idx + 1}`}
+                                                title={item?.title}
+                                                caption={item?.caption}
+                                                fill
+                                                sizes="70px"
+                                                imageClassName="object-cover"
+                                            />
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            <ThumbScrollArrows thumbScroll={thumbScroll} onScroll={scrollThumbs} />
                         </div>
 
                         <figure className="flex flex-col gap-2">
-                            <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
+                            <div {...swipeProps} className="relative group h-[320px] md:h-[460px] w-full overflow-hidden touch-pan-y touch-pinch-zoom">
                                 <Image
                                     src={activeImage?.url}
                                     alt={activeImage?.alt || tyre?.alt || "Tyre"}
