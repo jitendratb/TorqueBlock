@@ -46,23 +46,21 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
     }, [tyreData]);
 
     const gallery = useMemo(() => {
-        if (Array.isArray(tyreData?.productImages)) return tyreData.productImages;
-        if (tyreData?.productImages) return [tyreData.productImages];
-        if (Array.isArray(parentTyre?.productImages)) return parentTyre.productImages;
-        if (parentTyre?.productImages) return [parentTyre.productImages];
-        return [];
-    }, [tyreData, parentTyre]);
+        const toUrl = (img) => (typeof img === "string" ? img : img?.imageUrl || img?.url || null);
+        const toList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+        const specific = toList(tyreData?.sizeSpecificImages).map(toUrl).filter(Boolean);
+        if (specific.length > 0) return specific;
+        return toList(parentTyre?.productImages).map(toUrl).filter(Boolean);
+    }, [tyreData?.sizeSpecificImages, parentTyre]);
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
 
-    const [activeImage, setActiveImage] = useState(gallery?.[0] || null);
+    const [activeImage, setActiveImage] = useState(gallery[0] || null);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
     const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
 
     useEffect(() => {
-        if (gallery?.length > 0) {
-            setActiveImage(gallery[0]);
-        }
+        setActiveImage(gallery[0] || null);
     }, [gallery]);
 
     useEffect(() => {
@@ -331,14 +329,13 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         );
     }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
 
-
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
                 <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
                         <div role="tablist" aria-label="Product images" className="flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar">
-                            {gallery?.map((item, idx) => {
+                            {gallery.map((item, idx) => {
                                 const isActive = activeImage === item;
                                 return (
                                     <button

@@ -96,7 +96,7 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                         <figure className="flex flex-col gap-2">
                             <div className="relative group h-[320px] md:h-[460px] w-full overflow-hidden">
                                 <Image
-                                    src={activeImage?.url || '/newlogo.webp'}
+                                    src={activeImage?.url}
                                     alt={activeImage?.alt || tyre?.alt || "Tyre"}
                                     title={activeImage?.title}
                                     caption={activeImage?.caption}
