@@ -15,7 +15,7 @@ function ProductFamilyFeatureCardClient({ recommendedTyre }) {
         if (hasMore && !loading) {
             setLoading(true);
             const nextPage = page + 1;
-            const res = await TyresService.getTyreByFamily({ isNewLaunch: true, limit: 16, page: nextPage });
+            const res = await TyresService.getTyreByFamily({ isBestSeller: true, limit: 16, page: nextPage });
 
             if (res?.success && res.data) {
                 setTyres(prev => [...prev, ...res.data]);

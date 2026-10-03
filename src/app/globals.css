@@ -25,6 +25,25 @@
   --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+html,
+body {
+  overflow-x: clip;
+}
+
+@supports (-webkit-touch-callout: none) {
+  .absolute[class*="blur-"]:not([class*="backdrop-blur"]) {
+    filter: none;
+    -webkit-mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.7), transparent);
+    mask-image: radial-gradient(closest-side, rgba(0, 0, 0, 0.7), transparent);
+  }
+
+
+  .absolute[class*="blur-["]:not([class*="backdrop-blur"]) {
+    -webkit-mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.85) 35%, rgba(0, 0, 0, 0.4) 75%, transparent);
+    mask-image: radial-gradient(closest-side, #000, rgba(0, 0, 0, 0.85) 35%, rgba(0, 0, 0, 0.4) 75%, transparent);
+  }
+}
+
 button {
   cursor: pointer;
 }
@@ -601,3 +620,5 @@ button {
   max-width: revert;
   height: revert;
 }
+
+

@@ -64,7 +64,7 @@ export default function Slider({ isOpen = false, onClose, title, children, size 
     const placementConfig = placementClasses[placement] || placementClasses.right;
 
     return (
-        <div className={`fixed inset-0 z-[100] flex ${placementConfig.container} transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+        <div className={`fixed inset-0 z-[100] flex ${placementConfig.container} overflow-hidden transition-all duration-500 ${isOpen ? 'visible pointer-events-auto' : 'invisible pointer-events-none'}`}
             aria-hidden={!isOpen}
             inert={!isOpen}
         >
@@ -83,7 +83,7 @@ export default function Slider({ isOpen = false, onClose, title, children, size 
 
                 <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none" />
 
-                <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-orange-500/5 blur-[80px] pointer-events-none" />
+                <div className="absolute -top-40 -right-40 w-96 h-96 rounded-full bg-[radial-gradient(closest-side,rgba(249,115,22,0.05),transparent)] pointer-events-none" />
 
                 <div className="relative flex items-center justify-between px-4 py-4 border-b border-white/[0.06] shrink-0 z-10">
                     <div className="flex items-center gap-2 min-w-0">

@@ -44,17 +44,17 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
   const selectedSizeClass = sizeClasses[size] || sizeClasses.md;
 
   const glowClasses = {
-    orange: 'bg-orange-500/5 shadow-[0_0_50px_rgba(249,115,22,0.03)]',
-    purple: 'bg-purple-500/5 shadow-[0_0_50px_rgba(139,92,246,0.03)]',
-    cyan: 'bg-cyan-500/5 shadow-[0_0_50px_rgba(6,182,212,0.03)]',
-    green: 'bg-emerald-500/5 shadow-[0_0_50px_rgba(16,185,129,0.03)]',
+    orange: 'bg-[radial-gradient(closest-side,rgba(249,115,22,0.05),transparent)]',
+    purple: 'bg-[radial-gradient(closest-side,rgba(139,92,246,0.05),transparent)]',
+    cyan: 'bg-[radial-gradient(closest-side,rgba(6,182,212,0.05),transparent)]',
+    green: 'bg-[radial-gradient(closest-side,rgba(16,185,129,0.05),transparent)]',
     none: ''
   };
 
   const selectedGlowClass = glowClasses[themeGlow] || glowClasses.orange;
 
   return (
-    <div className={`fixed inset-0 min-h-screen z-[100] flex items-center justify-center transition-all duration-500 ${isOpen ? 'pointer-events-auto' : 'pointer-events-none'}`}
+    <div className={`fixed inset-0 min-h-screen z-[100] flex items-center justify-center overflow-hidden transition-all duration-500 ${isOpen ? 'visible pointer-events-auto' : 'invisible pointer-events-none'}`}
     >
       <div
         onClick={handleBackdropClick}
@@ -73,8 +73,8 @@ const Model = ({ isOpen = false, onClose, title, subtitle, children, footer, siz
 
         {themeGlow !== 'none' && (
           <>
-            <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full blur-[80px] pointer-events-none ${selectedGlowClass}`} />
-            <div className={`absolute -bottom-40 -right-40 w-96 h-96 rounded-full blur-[80px] pointer-events-none ${selectedGlowClass}`} />
+            <div className={`absolute -top-40 -left-40 w-96 h-96 rounded-full pointer-events-none ${selectedGlowClass}`} />
+            <div className={`absolute -bottom-40 -right-40 w-96 h-96 rounded-full pointer-events-none ${selectedGlowClass}`} />
           </>
         )}
 
