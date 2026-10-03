@@ -207,7 +207,7 @@ async function Footer() {
                                             <FaBuilding className="text-orange-500 text-lg mt-0.5 shrink-0" />
                                             <div>
                                                 <div className="flex items-center gap-2 flex-wrap">
-                                                    <span className="text-white font-bold text-sm">B2B Dealer Portal</span>
+                                                    <span className="text-white font-bold text-sm">Torque Block Trade</span>
                                                     <span className="text-[9px] font-black uppercase tracking-wider text-orange-400 bg-orange-500/15 rounded-full px-2 py-0.5">Coming Soon</span>
                                                 </div>
 
@@ -215,7 +215,7 @@ async function Footer() {
                                         </div>
 
 
-                                        <p className="text-zinc-500 text-xs mt-0.5">For dealers and resellers</p>
+                                        <p className="text-zinc-500 text-xs mt-0.5">For dealers, workshops & service centers</p>
                                     </div>
                                 </div>
                             </div>
