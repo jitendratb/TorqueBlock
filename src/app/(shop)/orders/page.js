@@ -3,6 +3,7 @@ import OrdersClient from "../Components/Orders/OrdersClient";
 import Breadcrumb from "@/components/atoms/BreadCrumb";
 import orderService from "@/services/orderService";
 import { cookies } from "next/headers";
+import { unstable_rethrow } from "next/navigation";
 
 export const metadata = {
     title: "My Orders",
@@ -20,6 +21,7 @@ export default async function MyOrdersPage() {
             initialOrders = await orderService.getOrderHistory(1, 10, undefined, undefined, { token });
         }
     } catch (error) {
+        unstable_rethrow(error);
         console.error("Error loading orders on server:", error);
     }
 
