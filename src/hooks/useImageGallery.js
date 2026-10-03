@@ -4,7 +4,6 @@ const SWIPE_DISTANCE = 40;
 const THUMB_SCROLL_EDGE = 8;
 const NO_IMAGES = [];
 
-// The thumbnail strip is a row on mobile and a column from md up, so read the axis from its layout.
 const getStripAxis = (strip) => {
     const vertical = getComputedStyle(strip).flexDirection.startsWith("column");
     return vertical
@@ -12,16 +11,10 @@ const getStripAxis = (strip) => {
         : { to: "left", pos: "offsetLeft", len: "offsetWidth", view: "clientWidth", scrolled: "scrollLeft", total: "scrollWidth" };
 };
 
-/**
- * State for a product gallery: the active image, a scrollable thumbnail strip with prev/next
- * arrows, and swipe left/right on the main image.
- *
- * Put `thumbStripRef` and `onScroll={updateThumbScroll}` on the strip (it needs `position: relative`
- * so thumbnail offsets are measured from it), and spread `swipeProps` on the main image wrapper.
- */
+
 export default function useImageGallery(images) {
     const list = images ?? NO_IMAGES;
-    // The index belongs to one list; switching lists (a different product or size) starts from the first image.
+  
     const [selection, setSelection] = useState({ list, index: 0 });
     const activeIndex = selection.list === list ? selection.index : 0;
     const setActiveIndex = useCallback((index) => setSelection({ list, index }), [list]);

@@ -5,8 +5,6 @@ const ARROWS = [
     { key: "next", direction: 1, label: "Show next images", Icon: FiChevronRight, position: "-right-2 md:right-auto md:left-1/2 md:top-auto md:-bottom-2 md:-translate-x-1/2" },
 ];
 
-// Scroll buttons for a thumbnail strip: left/right on mobile, up/down from md up. An arrow is only
-// shown when the strip can scroll that way. Render inside a `relative` wrapper around the strip.
 export default function ThumbScrollArrows({ thumbScroll, onScroll }) {
     return ARROWS.map(({ key, direction, label, Icon, position }) => thumbScroll[key] && (
         <button
