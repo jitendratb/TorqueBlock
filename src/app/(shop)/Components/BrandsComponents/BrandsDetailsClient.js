@@ -45,7 +45,7 @@ function BrandsDetailsClient({ brand }) {
             alt={`${brandName} Banner`}
             fill
             priority
-            className="object-cover "
+            className="object-cover object-center"
           />
 
         <div
