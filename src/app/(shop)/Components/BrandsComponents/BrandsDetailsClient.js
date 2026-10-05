@@ -39,13 +39,13 @@ function BrandsDetailsClient({ brand }) {
     <div className="space-y-6 animate-[fadeIn_0.5s_ease-out] w-full max-w-[1400px] mx-auto">
 
       <section className="relative h-[300px] sm:h-[400px] md:h-[480px] w-auto overflow-hidden rounded-[2rem] border border-white/5 shadow-2xl">
-      
+
           <CustomImage
             src={brand.brandBanner}
             alt={`${brandName} Banner`}
             fill
             priority
-            className="object-cover object-center"
+            imageClassName="object-cover object-center"
           />
 
         <div
