@@ -1,11 +1,16 @@
 import { create } from 'zustand';
 import searchService from '@/services/searchService';
 
+// Answers can arrive out of order while the customer types; only the newest request may update the list.
+let autocompleteRequestId = 0;
+
 const useSearchStore = create(
         (set, get) => ({
             // State
             searchInput: '',
             searchResults: null,
+            // search-as-you-type completions (brands, motorcycles, tyre families, sizes) from the smart search
+            autocomplete: [],
             showSuggestions: false,
             loading: false,
             error: null,
@@ -15,9 +20,12 @@ const useSearchStore = create(
                 set({ searchInput: input }, false, 'setSearchInput');
                 if (input.trim()) {
                     get().debouncedSearch(input);
+                    get().debouncedAutocomplete(input);
                 } else {
+                    autocompleteRequestId += 1;
                     set({
                         searchResults: null,
+                        autocomplete: [],
                         showSuggestions: false,
                         loading: false,
                         error: null
@@ -29,14 +37,18 @@ const useSearchStore = create(
 
             setActiveIndex: (index) => set({ activeIndex: index }, false, 'setActiveIndex'),
 
-            clearSearch: () => set({
-                searchInput: '',
-                searchResults: null,
-                showSuggestions: false,
-                loading: false,
-                error: null,
-                activeIndex: 0
-            }, false, 'clearSearch'),
+            clearSearch: () => {
+                autocompleteRequestId += 1;
+                set({
+                    searchInput: '',
+                    searchResults: null,
+                    autocomplete: [],
+                    showSuggestions: false,
+                    loading: false,
+                    error: null,
+                    activeIndex: 0
+                }, false, 'clearSearch');
+            },
 
             debouncedSearch: (() => {
                 let timeoutId;
@@ -47,6 +59,24 @@ const useSearchStore = create(
                     }, 150);
                 };
             })(),
+
+            debouncedAutocomplete: (() => {
+                let timeoutId;
+                return (query) => {
+                    clearTimeout(timeoutId);
+                    timeoutId = setTimeout(() => {
+                        get().performAutocomplete(query);
+                    }, 120);
+                };
+            })(),
+
+            performAutocomplete: async (query) => {
+                if (!get().searchInput.trim()) return;
+                const requestId = ++autocompleteRequestId;
+                const items = await searchService.suggest(query);
+                if (requestId !== autocompleteRequestId) return;
+                set({ autocomplete: items }, false, 'autocomplete');
+            },
 
             performSearch: async (query) => {
                 if (!query.trim()) return;
@@ -100,7 +130,8 @@ const useSearchStore = create(
                             relevanceScore: tyre.relevanceScore || 0,
                             sizesIds: tyre?.sizesIds,
                             productImages:tyre?.productImages,
-                            category:tyre?.category?.name
+                            category:tyre?.category?.name,
+                            completions: [tyre.productName]
                         });
                     });
                 }
@@ -126,6 +157,7 @@ const useSearchStore = create(
                             query: formatBikeLabel(bike),
                             identifier: bike.identifier,
                             relevanceScore: bike.relevanceScore || 0,
+                            completions: [formatBikeLabel(bike), bike.bikeModel]
                         });
                     });
                 }
@@ -141,6 +173,7 @@ const useSearchStore = create(
                             availableTyres: sizeItem.availableTyres,
                             size: sizeItem.size,
                             relevanceScore: sizeItem.relevanceScore || 0,
+                            completions: [sizeItem.size]
                         });
                     });
                 }

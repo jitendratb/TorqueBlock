@@ -9,7 +9,10 @@ import Link from 'next/link';
 import TyreCard from '@/components/atoms/TyreCard';
 import Carousel from '@/components/organisms/Carousel';
 import SearchCard from '@/components/atoms/SearchCard';
+import HighlightedText from '@/components/atoms/HighlightedText';
 import useUiStore from '@/stores/uiStore';
+import { buildDropdownRows } from '@/utils/searchDropdown';
+import { buildCompletionCandidates, pickCompletion } from '@/utils/inlineCompletion';
 
 const PLACEHOLDERS = [
   "Search by Motorcycle, Tyre, Size or Brand...",
@@ -33,15 +36,40 @@ const PLACEHOLDERS = [
   "Find the perfect tyre for your ride..."
 ];
 
+const getRoute = (type, identifier, item) => {
+  const id = identifier || item?.query || item?.label;
+  const lowerType = type?.toLowerCase() || '';
+  switch (lowerType) {
+    case 'tyre sizes':
+      return `/tyres/${item?.availableTyres?.identifier || 'size'}/${item?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
+    case 'tyre':
+      return `/tyres/${id}`;
+    case 'bike':
+      return `/motorcycles/${id}`;
+    case 'trending':
+      return `/trending/${id}`;
+    case 'comparison':
+      return `/compare/${id}`;
+    case 'blogs':
+      return `/blogs/${id}`;
+    default:
+      return `/search?q=${encodeURIComponent(id)}`;
+  }
+};
+
 function SearchBar({ onSearch, searchItems = [] }) {
   const [showSearch, setShowSearch] = useState(false);
   const searchBarRef = useRef(null);
   const router = useRouter();
   const inputRef = useRef(null);
-  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  // the highlighted row of the dropdown; it only counts for the text it was chosen for, so typing clears it
+  const [selection, setSelection] = useState({ index: -1, forText: '' });
   const [isDropdownUp, setIsDropdownUp] = useState(false);
   const suggestionsContainerRef = useRef(null);
   const wrapperRef = useRef(null);
+  // the inline completion is only offered while the caret is at the end of the text, and until Escape dismisses it
+  const [caretAtEnd, setCaretAtEnd] = useState(true);
+  const [dismissedFor, setDismissedFor] = useState('');
 
   const {
     searchInput,
@@ -52,8 +80,8 @@ function SearchBar({ onSearch, searchItems = [] }) {
     setActiveIndex,
     loading,
     error,
+    autocomplete,
     getSuggestions,
-    clearSearch
   } = useSearchStore();
 
   const [placeholderText, setPlaceholderText] = useState(PLACEHOLDERS[0]);
@@ -86,7 +114,16 @@ function SearchBar({ onSearch, searchItems = [] }) {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, placeholderIndex, isFocused, searchInput.length]);
 
-  const suggestions = getSuggestions();
+  // Dropdown: completions from the smart search first, then the normal results (hidden while they load, so the list does not flash).
+  const allResults = getSuggestions();
+  const results = !loading && !error ? allResults : [];
+  const suggestions = buildDropdownRows({ autocomplete, results, getResultHref: getRoute });
+  const selectedIndex = selection.forText === searchInput && selection.index < suggestions.length ? selection.index : -1;
+
+  // Inline completion: the rest of the most likely name, shown inside the input. Tab (or a click on it) completes the text.
+  const completion = isFocused && caretAtEnd && dismissedFor !== searchInput && selectedIndex < 0
+    ? pickCompletion(searchInput, buildCompletionCandidates({ autocomplete, results: allResults }))
+    : null;
 
   useEffect(() => {
     function handleClickOutside(event) {
@@ -109,14 +146,8 @@ function SearchBar({ onSearch, searchItems = [] }) {
   }, [setShowSuggestions]);
 
   useEffect(() => {
-    setSelectedSuggestionIndex(-1);
-  }, [searchInput]);
-
-
-  useEffect(() => {
-    if (selectedSuggestionIndex >= 0 && suggestionsContainerRef.current) {
-      const container = suggestionsContainerRef.current;
-      const selectedElement = container.children[selectedSuggestionIndex];
+    if (selectedIndex >= 0 && suggestionsContainerRef.current) {
+      const selectedElement = suggestionsContainerRef.current.children[selectedIndex];
       if (selectedElement) {
         selectedElement.scrollIntoView({
           behavior: 'smooth',
@@ -124,7 +155,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
         });
       }
     }
-  }, [selectedSuggestionIndex]);
+  }, [selectedIndex]);
 
   useEffect(() => {
     if ((storeShowSuggestions && suggestions.length > 0) || showSearch) {
@@ -163,27 +194,6 @@ function SearchBar({ onSearch, searchItems = [] }) {
     return () => window.removeEventListener('keydown', handleShortcut);
   }, []);
 
-  const getRoute = (type, identifier, item) => {
-    const id = identifier || item?.query || item?.label;
-    const lowerType = type?.toLowerCase() || '';
-    switch (lowerType) {
-      case 'tyre sizes':
-        return `/tyres/${item?.availableTyres?.identifier || 'size'}/${item?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
-      case 'tyre':
-        return `/tyres/${id}`;
-      case 'bike':
-        return `/motorcycles/${id}`;
-      case 'trending':
-        return `/trending/${id}`;
-      case 'comparison':
-        return `/compare/${id}`;
-      case 'blogs':
-        return `/blogs/${id}`;
-      default:
-        return `/search?q=${encodeURIComponent(id)}`;
-    }
-  };
-
   const handleSearchSubmit = (query) => {
     if (!query.trim()) return;
     setShowSuggestions(false);
@@ -194,25 +204,42 @@ function SearchBar({ onSearch, searchItems = [] }) {
     }
   };
 
+  const acceptCompletion = (e) => {
+    e?.preventDefault();
+    if (!completion) return;
+    setSearchInput(completion.full);
+    setShowSuggestions(true);
+    setCaretAtEnd(true);
+    inputRef.current?.focus();
+  };
+
   const handleKeyDown = (e) => {
-    if (e.key === 'ArrowDown') {
+    if (e.nativeEvent.isComposing) return;
+    const listIsOpen = storeShowSuggestions && suggestions.length > 0;
+
+    if (completion && !e.shiftKey && (e.key === 'Tab' || e.key === 'ArrowRight')) {
+      acceptCompletion(e);
+    } else if (e.key === 'ArrowDown') {
       e.preventDefault();
-      if (storeShowSuggestions && suggestions.length > 0) {
-        setSelectedSuggestionIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : prev));
+      if (listIsOpen) {
+        setSelection({ index: selectedIndex < suggestions.length - 1 ? selectedIndex + 1 : selectedIndex, forText: searchInput });
       }
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      if (storeShowSuggestions && suggestions.length > 0) {
-        setSelectedSuggestionIndex(prev => (prev > 0 ? prev - 1 : prev));
+      if (listIsOpen) {
+        setSelection({ index: selectedIndex > 0 ? selectedIndex - 1 : selectedIndex, forText: searchInput });
       }
+    } else if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setDismissedFor(searchInput);
+      setSelection({ index: -1, forText: '' });
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      if (storeShowSuggestions && selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestions.length) {
-        const item = suggestions[selectedSuggestionIndex];
-        router.push(getRoute(item.type, item.identifier, item));
+      if (listIsOpen && selectedIndex >= 0) {
+        router.push(suggestions[selectedIndex].href);
         setShowSuggestions(false);
         setSearchInput("");
-        setSelectedSuggestionIndex(-1);
+        setSelection({ index: -1, forText: '' });
       } else if (searchInput.trim()) {
         handleSearchSubmit(searchInput);
       }
@@ -226,16 +253,17 @@ function SearchBar({ onSearch, searchItems = [] }) {
 
       <div className={`absolute   left-0 right-0 w-full rounded-2xl border border-white/20 bg-zinc-950/10 backdrop-blur-3xl text-white shadow-xl z-50  transition-all duration-300 ${isDropdownUp ? 'bottom-full mb-2 origin-bottom ' : 'top-full mt-2 origin-top '} ${storeShowSuggestions && suggestions.length > 0 ? "visible opacity-100 scale-100" : "invisible opacity-0 scale-95"}`} >
         <div ref={suggestionsContainerRef} className="p-2 max-h-80 overflow-y-auto">
-          {!loading && !error && suggestions.map((item, index) => {
-            const isSelected = selectedSuggestionIndex === index;
+          {suggestions.map((item, index) => {
+            const isSelected = selectedIndex === index;
 
             return (
               <div
-                key={`${item.type}-${index}`}
+                key={item.key}
                 className={`w-full flex flex-col mb-1 rounded-xl transition ${isSelected ? 'bg-white/30' : 'hover:bg-white/20'}`}
               >
                 <Link
-                  href={getRoute(item.type, item.identifier, item)}
+                  href={item.href}
+                  prefetch={item.source === 'completion' ? false : undefined}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => {
                     setShowSuggestions(false);
@@ -243,9 +271,11 @@ function SearchBar({ onSearch, searchItems = [] }) {
                   }}
                   className="w-full text-left px-2 py-2 flex items-center justify-between gap-2 cursor-pointer"
                 >
-                  <span className="font-semibold text-white truncate text-[10px] md:text-xs">{item.label}</span>
+                  <span className="font-semibold text-white truncate text-[10px] md:text-xs">
+                    <HighlightedText text={item.label} query={searchInput} />
+                  </span>
                   <span className="rounded-full bg-white/30 text-white px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider">
-                    {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type}
+                    {item.badge}
                   </span>
                 </Link>
 
@@ -306,7 +336,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
             <AiOutlinePlus className='text-lg md:text-xl' />
           </button>
         </div>
-        <div className='flex-1 min-w-0'>
+        <div className='relative flex-1 min-w-0'>
           <input
             ref={inputRef}
             type='text'
@@ -316,11 +346,14 @@ function SearchBar({ onSearch, searchItems = [] }) {
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck={false}
+            aria-autocomplete='inline'
             value={searchInput}
             onChange={(e) => {
               setSearchInput(e.target.value);
               if (e.target.value.trim()) setShowSuggestions(true);
+              setCaretAtEnd(e.target.selectionStart === e.target.value.length);
             }}
+            onSelect={(e) => setCaretAtEnd(e.target.selectionStart === e.target.value.length && e.target.selectionEnd === e.target.value.length)}
             onKeyDown={handleKeyDown}
             onFocus={() => {
               setIsFocused(true);
@@ -330,6 +363,16 @@ function SearchBar({ onSearch, searchItems = [] }) {
             className='w-full flex items-center font-normal placeholder:font-normal truncate line-clamp-1 bg-transparent outline-none text-base lg:text-lg py-2'
             placeholder={placeholderText}
           />
+          {completion && (
+            <div aria-hidden='true' className='pointer-events-none absolute inset-0 flex items-center overflow-hidden whitespace-pre text-base lg:text-lg font-normal'>
+              <span className='invisible'>{searchInput}</span>
+              <span onMouseDown={acceptCompletion} className='pointer-events-auto cursor-pointer text-white/40'>{completion.ghost}</span>
+              <span onMouseDown={acceptCompletion} className='pointer-events-auto ml-2 shrink-0 cursor-pointer rounded-md border border-white/30 bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase leading-none tracking-wider text-white/70'>
+                <span className='hidden md:inline'>Tab</span>
+                <span className='md:hidden'>&rarr;</span>
+              </span>
+            </div>
+          )}
         </div>
 
         <div className='shrink-0'>

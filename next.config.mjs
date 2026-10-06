@@ -2,6 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  allowedDevOrigins: ['192.168.88.*'],
+
   images: {
     qualities: [25, 50, 70, 75, 85, 90, 100],
     remotePatterns: [

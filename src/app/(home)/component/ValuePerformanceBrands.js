@@ -6,7 +6,6 @@ async function ValuePerformanceBrands() {
     let brands = [];
     try {
         let data = await brandServiceInstance.getBrands({ isActive: true });
-         console.log(data ,"sdfghjgfdsa")
         const getBrandPriority = (name = "") => {
             const lower = name?.toLowerCase() || "";
             if (lower.includes('eurogrip')) return 1;

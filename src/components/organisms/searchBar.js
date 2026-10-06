@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { IoSearchSharp, IoClose } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
+import HighlightedText from '@/components/atoms/HighlightedText';
+import { buildDropdownRows } from '@/utils/searchDropdown';
 
 const PLACEHOLDERS = [
   'Search "Royal Enfield Hunter 350"...',
@@ -21,6 +23,30 @@ const PLACEHOLDERS = [
   "Find front & rear tyre sets...",
   "Compare motorcycle tyres...",
 ];
+
+const getRoute = (type, identifier, item) => {
+    const id = identifier || item?.query || item?.label;
+    const lowerType = type?.toLowerCase() || '';
+    switch (lowerType) {
+        case 'tyre sizes':
+            return `/tyres/${item?.availableTyres?.identifier || 'size'}/${item?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
+        case 'tyre':
+            return `/tyres/${id}`;
+        case 'bike':
+            return `/motorcycles/${id}`;
+        case 'trending':
+            return `/trending/${id}`;
+        case 'comparison':
+            return `/compare/${id}`;
+        case 'blogs':
+            return `/blogs/${id}`;
+        case 'tube':
+        case 'tubes':
+            return `/tubes/${id}`;
+        default:
+            return `/search?q=${encodeURIComponent(id)}`;
+    }
+};
 
 function SearchBar({
     placeholder = "Search for",
@@ -53,6 +79,7 @@ function SearchBar({
         setActiveIndex,
         loading,
         error,
+        autocomplete,
         getSuggestions,
         clearSearch
     } = useSearchStore();
@@ -135,31 +162,9 @@ function SearchBar({
         return () => window.removeEventListener('keydown', handleShortcut);
     }, []);
 
-    const suggestions = getSuggestions();
-
-    const getRoute = (type, identifier, item) => {
-        const id = identifier || item?.query || item?.label;
-        const lowerType = type?.toLowerCase() || '';
-        switch (lowerType) {
-            case 'tyre sizes':
-                return `/tyres/${item?.availableTyres?.identifier || 'size'}/${item?.size?.toLowerCase().replace(/[\s/]/g, '-')}`;
-            case 'tyre':
-                return `/tyres/${id}`;
-            case 'bike':
-                return `/motorcycles/${id}`;
-            case 'trending':
-                return `/trending/${id}`;
-            case 'comparison':
-                return `/compare/${id}`;
-            case 'blogs':
-                return `/blogs/${id}`;
-            case 'tube':
-            case 'tubes':
-                return `/tubes/${id}`;
-            default:
-                return `/search?q=${encodeURIComponent(id)}`;
-        }
-    };
+    // completions from the smart search first, then the broader results (hidden while they load, so the list does not flash)
+    const results = !loading && !error ? getSuggestions() : [];
+    const suggestions = buildDropdownRows({ autocomplete, results, getResultHref: getRoute });
 
     const handleSearchSubmit = (query) => {
         if (!query.trim()) return;
@@ -182,11 +187,14 @@ function SearchBar({
             if (storeShowSuggestions && suggestions.length > 0) {
                 setSelectedSuggestionIndex(prev => (prev > 0 ? prev - 1 : prev));
             }
+        } else if (e.key === 'Escape') {
+            setShowSuggestions(false);
+            setSelectedSuggestionIndex(-1);
         } else if (e.key === 'Enter') {
             e.preventDefault();
             if (storeShowSuggestions && selectedSuggestionIndex >= 0 && selectedSuggestionIndex < suggestions.length) {
                 const item = suggestions[selectedSuggestionIndex];
-                router.push(getRoute(item.type, item.identifier, item));
+                router.push(item.href);
                 setShowSuggestions(false);
                 setSearchInput("");
                 setSelectedSuggestionIndex(-1);
@@ -240,11 +248,12 @@ function SearchBar({
                 <div className="absolute left-0 right-0 mt-1 w-full min-w-[200px] md:min-w-full rounded-2xl border border-slate-200/70 bg-white shadow-xl ring-1 ring-black/5 z-50 overflow-hidden">
                     <div ref={suggestionsContainerRef} className="p-1 max-h-60 overflow-y-auto scroll-smooth">
                   
-                        {!loading && !error && suggestions.map((item, index) => {
+                        {suggestions.map((item, index) => {
                             return (
                                 <Link
-                                    href={getRoute(item.type, item.identifier, item)}
-                                    key={`${item.type}-${index}`}
+                                    href={item.href}
+                                    key={item.key}
+                                    prefetch={item.source === 'completion' ? false : undefined}
                                     onMouseDown={(e) => e.preventDefault()}
                                     onClick={() => { 
                                         setShowSuggestions(false); 
@@ -252,9 +261,11 @@ function SearchBar({
                                     }}
                                     className={`w-full text-left transition px-3 py-2 rounded-xl flex items-center justify-between gap-2 cursor-pointer ${selectedSuggestionIndex === index ? 'bg-blue-100/80' : 'hover:bg-blue-50/70'}`}
                                 >
-                                    <span className="font-semibold text-slate-800 truncate text-[10px] md:text-xs">{item.label}</span>
+                                    <span className="font-semibold text-slate-800 truncate text-[10px] md:text-xs">
+                                        <HighlightedText text={item.label} query={searchInput} highlightClassName="text-orange-600" />
+                                    </span>
                                     <span className="rounded-full bg-black/5 text-slate-600 px-2.5 py-0.5 text-[8px] font-bold uppercase tracking-wider">
-                                        {item.type === "Tyre Sizes" ? "Size" : item.type === "Trending" ? "Featured" : item.type === "Bike" ? "Motorcycle" : item.type === "Tube" || item.type === "Tubes" ? "Tube" : item.type} 
+                                        {item.badge}
                                     </span>
                                 </Link>
                             );
