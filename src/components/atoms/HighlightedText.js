@@ -1,6 +1,5 @@
 import { splitHighlight } from '@/utils/searchDropdown';
 
-/** Emphasises the part of a suggestion the customer has already typed. */
 export default function HighlightedText({ text, query, highlightClassName = 'text-orange-400' }) {
   return splitHighlight(text, query).map((piece, i) =>
     piece.match

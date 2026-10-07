@@ -2,8 +2,6 @@ import axios from 'axios';
 import TorqueBlockApi from '@/lib/api';
 
 const SUGGEST_CACHE_TTL = 60 * 1000;
-// When the suggestion service is unavailable (search engine offline, index not built yet) stop asking for a while,
-// instead of failing again on every keystroke.
 const SUGGEST_PAUSE_AFTER_FAILURE = 30 * 1000;
 const SUGGEST_CACHE_MAX_ENTRIES = 200;
 
@@ -15,13 +13,6 @@ class SearchService {
         this.suggestPausedUntil = 0;
     }
 
-    /**
-     * Search-as-you-type completions: brands, motorcycles, tyre families and sizes (typo tolerant).
-     * Never throws and never blocks the search box: when the suggestion service is down this returns [].
-     *
-     * Uses plain axios on purpose. Failing suggestions are an expected state, so they must not go through the shared
-     * client's error logging and token-refresh handling.
-     */
     async suggest(query, { limit = 6 } = {}) {
         const text = (query || '').trim();
         if (text.length < 2 || Date.now() < this.suggestPausedUntil) {
@@ -105,7 +96,6 @@ class SearchService {
         this.suggestPausedUntil = 0;
     }
 
-    // Method to invalidate specific cache entry
     invalidateCache(query, options = {}) {
         const params = {
             search: query.trim(),

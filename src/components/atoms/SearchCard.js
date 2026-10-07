@@ -104,9 +104,9 @@ export default function SearchCard({ product, tyre, className, onClick }) {
                     </div>
 
                     <div
-                        className="flex text-xs items-center font-semibold justify-center w-auto p-2 rounded-full bg-white/10 text-white group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm"
+                        className="flex text-xs items-center font-semibold justify-center w-auto p-2 rounded-lg bg-white/10 text-white group-hover:bg-orange-500 group-hover:text-white transition-all duration-300 shadow-sm"
                     >
-                        <FiArrowRight />
+                       View Details 
                     </div>
                 </div>
             </div>

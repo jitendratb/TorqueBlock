@@ -52,6 +52,7 @@ export default function ProductCard({ product, tyre, className, opposteProductId
         router.push(url);
     };
 
+
     return (
         <div
             onClick={handleCardClick}
@@ -61,7 +62,7 @@ export default function ProductCard({ product, tyre, className, opposteProductId
 
             <div className="relative w-full h-48 flex items-center justify-center p-4">
                 <Image
-                    src={product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || product?.availableTyres?.productImages?.[0]?.url || '/newLogo.webp'}
+                    src={ product?.sizeSpecificImages?.[0]?.imageUrl || product?.productImages?.[0] || product?.availableTyres?.productImages?.[0] || product?.availableTyres?.productImages?.[0]?.url || '/newLogo.webp'}
                     alt={title}
                     fill
                     sizes="(max-width: 768px) 280px, 300px"

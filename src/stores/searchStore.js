@@ -1,15 +1,12 @@
 import { create } from 'zustand';
 import searchService from '@/services/searchService';
 
-// Answers can arrive out of order while the customer types; only the newest request may update the list.
 let autocompleteRequestId = 0;
 
 const useSearchStore = create(
         (set, get) => ({
-            // State
             searchInput: '',
             searchResults: null,
-            // search-as-you-type completions (brands, motorcycles, tyre families, sizes) from the smart search
             autocomplete: [],
             showSuggestions: false,
             loading: false,
@@ -148,7 +145,7 @@ const useSearchStore = create(
                     });
                 }
 
-                // Add all bikes
+
                 if (searchResults?.results?.vehicleIntent?.data) {
                     searchResults.results.vehicleIntent.data.forEach(bike => {
                         items.push({
@@ -162,7 +159,6 @@ const useSearchStore = create(
                     });
                 }
 
-                // Add all tyre sizes
                 if (searchResults?.results?.tyreSizes?.data) {
                     searchResults.results.tyreSizes.data.forEach(sizeItem => {
                         items.push({
@@ -178,7 +174,6 @@ const useSearchStore = create(
                     });
                 }
 
-                // Add all blogs
                 if (searchResults?.results?.blogs?.data) {
                     searchResults.results.blogs.data.forEach(blog => {
                         items.push({
@@ -191,7 +186,6 @@ const useSearchStore = create(
                     });
                 }
 
-                // Add all trending
                 if (searchResults?.results?.trending?.data) {
                     searchResults.results.trending.data.forEach(trend => {
                         items.push({
@@ -204,7 +198,6 @@ const useSearchStore = create(
                     });
                 }
 
-                // Add all tubes
                 if (searchResults?.results?.tubes?.data) {
                     searchResults.results.tubes.data.forEach(tube => {
                         items.push({
@@ -219,18 +212,15 @@ const useSearchStore = create(
                     });
                 }
 
-                // Sort items by relevanceScore descending
                 items.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
                 return items;
             },
 
-            // Clear cache
             clearCache: () => {
                 searchService.clearCache();
             },
 
-            // Invalidate specific cache entry
             invalidateCache: (query) => {
                 searchService.invalidateCache(query);
             }

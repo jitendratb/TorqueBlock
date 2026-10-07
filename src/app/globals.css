@@ -94,6 +94,14 @@ button {
   background: rgba(234, 88, 12, 0.8);
 }
 
+.custom-scroll-visible {
+  scrollbar-color: rgba(249, 115, 22, 0.4) transparent;
+}
+
+.custom-scroll-visible::-webkit-scrollbar-thumb {
+  background: rgba(249, 115, 22, 0.4);
+}
+
 @keyframes spinSlow {
   from {
     transform: rotate(0deg);

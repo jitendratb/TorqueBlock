@@ -2,11 +2,12 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { IoSearchSharp, IoClose } from 'react-icons/io5';
+import { IoSearchSharp, IoClose, IoArrowForward } from 'react-icons/io5';
 import useSearchStore from '@/stores/searchStore';
 import Link from 'next/link';
 import HighlightedText from '@/components/atoms/HighlightedText';
 import { buildDropdownRows } from '@/utils/searchDropdown';
+import { buildCompletionCandidates, pickCompletion } from '@/utils/inlineCompletion';
 
 const PLACEHOLDERS = [
   'Search "Royal Enfield Hunter 350"...',
@@ -69,6 +70,8 @@ function SearchBar({
     const [charIndex, setCharIndex] = useState(PLACEHOLDERS[0].length);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const [caretAtEnd, setCaretAtEnd] = useState(true);
+    const [dismissedFor, setDismissedFor] = useState('');
 
     const {
         searchInput,
@@ -162,9 +165,12 @@ function SearchBar({
         return () => window.removeEventListener('keydown', handleShortcut);
     }, []);
 
-    // completions from the smart search first, then the broader results (hidden while they load, so the list does not flash)
-    const results = !loading && !error ? getSuggestions() : [];
+    const allResults = getSuggestions();
+    const results = !loading && !error ? allResults : [];
     const suggestions = buildDropdownRows({ autocomplete, results, getResultHref: getRoute });
+    const completion = isFocused && caretAtEnd && dismissedFor !== searchInput && selectedSuggestionIndex < 0
+        ? pickCompletion(searchInput, buildCompletionCandidates({ autocomplete, results: allResults }))
+        : null;
 
     const handleSearchSubmit = (query) => {
         if (!query.trim()) return;
@@ -176,8 +182,21 @@ function SearchBar({
         }
     };
 
+    const acceptCompletion = (e) => {
+        e?.preventDefault();
+        if (!completion) return;
+        setSearchInput(completion.full);
+        setShowSuggestions(true);
+        setCaretAtEnd(true);
+        inputRef.current?.focus();
+    };
+
     const handleKeyDown = (e) => {
-        if (e.key === 'ArrowDown') {
+        if (e.nativeEvent.isComposing) return;
+
+        if (completion && !e.shiftKey && (e.key === 'Tab' || e.key === 'ArrowRight')) {
+            acceptCompletion(e);
+        } else if (e.key === 'ArrowDown') {
             e.preventDefault();
             if (storeShowSuggestions && suggestions.length > 0) {
                 setSelectedSuggestionIndex(prev => (prev < suggestions.length - 1 ? prev + 1 : prev));
@@ -189,6 +208,7 @@ function SearchBar({
             }
         } else if (e.key === 'Escape') {
             setShowSuggestions(false);
+            setDismissedFor(searchInput);
             setSelectedSuggestionIndex(-1);
         } else if (e.key === 'Enter') {
             e.preventDefault();
@@ -216,7 +236,16 @@ function SearchBar({
                         ref={inputRef}
                         type="text"
                         value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
+                        autoComplete="off"
+                        autoCorrect="off"
+                        autoCapitalize="off"
+                        spellCheck={false}
+                        aria-autocomplete="inline"
+                        onChange={(e) => {
+                            setSearchInput(e.target.value);
+                            setCaretAtEnd(e.target.selectionStart === e.target.value.length);
+                        }}
+                        onSelect={(e) => setCaretAtEnd(e.target.selectionStart === e.target.value.length && e.target.selectionEnd === e.target.value.length)}
                         onKeyDown={handleKeyDown}
                         placeholder={placeholderText}
                         onFocus={() => {
@@ -227,6 +256,18 @@ function SearchBar({
                         className="w-full bg-transparent text-white text-xs md:text-sm outline-none z-10 pl-0 truncate"
                         aria-label="Search"
                     />
+                    {completion && (
+                        <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-20 flex items-center overflow-hidden whitespace-pre text-xs md:text-sm font-normal">
+                            <span className="invisible">{searchInput}</span>
+                            <span onMouseDown={acceptCompletion} className="pointer-events-auto cursor-pointer text-white/40">{completion.ghost}</span>
+                            <span onMouseDown={acceptCompletion} className="pointer-events-auto ml-2 shrink-0 cursor-pointer rounded-md border border-white/30 bg-white/10 px-1.5 py-0.5 text-[9px] font-semibold uppercase leading-none tracking-wider text-white/70 pointer-coarse:px-2 pointer-coarse:py-1.5">
+                                <span className="hidden pointer-fine:inline">Tab</span>
+                                <span className="flex items-center pointer-fine:hidden">
+                                    <IoArrowForward size={14} />
+                                </span>
+                            </span>
+                        </div>
+                    )}
                 </div>
                 {searchInput.length > 0 && (
                     <button
@@ -246,7 +287,7 @@ function SearchBar({
 
             {showSuggestions && storeShowSuggestions && suggestions.length > 0 && (
                 <div className="absolute left-0 right-0 mt-1 w-full min-w-[200px] md:min-w-full rounded-2xl border border-slate-200/70 bg-white shadow-xl ring-1 ring-black/5 z-50 overflow-hidden">
-                    <div ref={suggestionsContainerRef} className="p-1 max-h-60 overflow-y-auto scroll-smooth">
+                    <div ref={suggestionsContainerRef} className="p-1 max-h-60 overflow-y-auto custom-scroll custom-scroll-visible">
                   
                         {suggestions.map((item, index) => {
                             return (
