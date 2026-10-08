@@ -93,6 +93,7 @@ export default function useImageGallery(images) {
         thumbScroll,
         updateThumbScroll,
         scrollThumbs,
+        revealThumb,
         swipeProps,
     };
 }

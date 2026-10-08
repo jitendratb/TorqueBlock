@@ -3,8 +3,10 @@
 import React from 'react';
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import { MdVerified } from "react-icons/md";
+import { GiTyre } from "react-icons/gi";
 
 export default function PriceCard({ tyre }) {
+    const sizeCount = tyre?.sizesIds?.length || 0;
     const startingPrice = tyre?.startingPrice;
     const endingPrice = tyre?.endingPrice;
     const pricing = tyre?.pricing;
@@ -54,7 +56,7 @@ export default function PriceCard({ tyre }) {
                     {isRange && (
                         <>
                             <span className="text-xl font-bold text-zinc-500 mx-1 drop-shadow-sm">-</span>
-                            <span className="text-xl font-black text-zinc-300 tracking-tighter drop-shadow-md">
+                            <span className="text-2xl font-black text-zinc-300 tracking-tighter drop-shadow-md">
                                 &#8377;{priceMax.toLocaleString("en-IN")}
                             </span>
                         </>
@@ -64,8 +66,8 @@ export default function PriceCard({ tyre }) {
                     <MdVerified className="text-green-400 text-sm drop-shadow-[0_0_8px_rgba(34,197,94,0.6)]" />
                     <p className="text-zinc-400 text-[11px] font-medium tracking-wide">
                         Inclusive of all taxes &bull; Varies by size
-                    </p>
-                </div>
+                        </p>
+                    </div>
             </div>
         </div>
     );

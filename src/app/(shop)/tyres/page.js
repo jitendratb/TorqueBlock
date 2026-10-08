@@ -117,7 +117,6 @@ export default async function TyresPage() {
             <div className="space-y-4 pb-6">
                 <Breadcrumb items={BREADCRUMB_ITEMS} />
                 <TyresPageBanner />
-
                 {!hasError && categories.length > 0 ? (
                     categories.map((data, index) => (
                         <section key={data?._id || data?.name} aria-label={`${data?.name} Tyres`}>

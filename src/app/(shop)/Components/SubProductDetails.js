@@ -22,6 +22,7 @@ import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 import { FiMaximize2 } from "react-icons/fi";
 import ThumbScrollArrows from "@/components/atoms/ThumbScrollArrows";
 import useImageGallery from "@/hooks/useImageGallery";
+import SwipeGallery from "@/components/molecules/SwipeGallery";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
@@ -57,7 +58,8 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
 
-    const { activeIndex, setActiveIndex, activeImage, thumbStripRef, thumbScroll, updateThumbScroll, scrollThumbs, swipeProps } = useImageGallery(gallery);
+    const slides = useMemo(() => gallery.map((url) => ({ url })), [gallery]);
+    const { activeIndex, setActiveIndex, thumbStripRef, thumbScroll, updateThumbScroll, scrollThumbs, revealThumb } = useImageGallery(gallery);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
     const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
 
@@ -361,20 +363,15 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                             <ThumbScrollArrows thumbScroll={thumbScroll} onScroll={scrollThumbs} />
                         </div>
 
-                        <div
-                            {...swipeProps}
-                            className="relative flex h-[350px] md:h-[450px] w-full items-center justify-center overflow-hidden touch-pan-y touch-pinch-zoom"
-                        >
-                            {activeImage && (
-                                <Image
-                                    src={activeImage}
-                                    alt={title}
-                                    fill
-                                    priority
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    imageClassName="object-contain transition-transform w-full duration-500 hover:scale-105 drop-shadow-2xl"
-                                />
-                            )}
+                        <div className="relative h-[350px] md:h-[450px] w-full">
+                            <SwipeGallery
+                                images={slides}
+                                activeIndex={activeIndex}
+                                onChange={(i) => { setActiveIndex(i); revealThumb(i); }}
+                                alt={title || "Tyre"}
+                                className="h-full"
+                                imageClassName="drop-shadow-2xl"
+                            />
 
                             {isOfferActive && hasExclusiveTag && offerExpireDate && (
                                 <div className="absolute bottom-4  right-4 border-t border-white/10 flex items-center justify-between gap-2">
