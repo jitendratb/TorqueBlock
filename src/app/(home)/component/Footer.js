@@ -215,7 +215,7 @@ async function Footer() {
                                         </div>
 
 
-                                        <p className="text-zinc-500 text-xs mt-0.5">For dealers, workshops & service centers</p>
+                                        <p className="text-zinc-500 text-xs mt-0.5 text-center">For dealers, workshops & service centers</p>
                                     </div>
                                 </div>
                             </div>
