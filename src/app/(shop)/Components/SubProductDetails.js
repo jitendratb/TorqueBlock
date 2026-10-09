@@ -329,10 +329,12 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         );
     }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
 
+    console.log(tyreData , "sdfghggsjnd k. fbknc n n fk ")
+
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
-                <div className="flex flex-col gap-4 lg:sticky lg:top-24">
+                <div className="flex flex-col gap-4 lg:sticky lg:top-24 mb-4">
                     <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
                         <div className="relative">
                             <div
@@ -380,21 +382,6 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                             )}
                         </div>
                     </div>
-                    <aside className="relative hidden lg:flex flex-col sm:flex-row items-center justify-between gap-4 p-4 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
-                        <div className="relative z-10 flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                            <h2 className="text-xl sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h2>
-                            <p className="text-xs font-medium text-zinc-400 leading-relaxed">
-                                We're here if you need help with fitment or your order
-                            </p>
-                        </div>
-                        <div className="flex items-center shrink-0 w-full sm:w-auto mt-2 sm:mt-0">
-                            <WhatsAppButton
-                                text="Contact Support"
-                                value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
-                                className="!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
-                            />
-                        </div>
-                    </aside>
                 </div>
 
                 <div className="space-y-4">
@@ -668,22 +655,6 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
 
                 </div>
-
-                <aside className="relative  flex lg:hidden flex-col md:flex-row items-center justify-between gap-2 md:gap-4 p-4 lg:p-0 rounded-2xl bg-white/10 border border-white/5 backdrop-blur-2xl shadow-2xl w-full overflow-hidden group hover:border-white/10 transition-all duration-500">
-                    <div className="relative z-10  flex flex-col items-center sm:items-start text-center sm:text-left w-full">
-                        <h2 className="text-sm sm:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white to-zinc-300 tracking-tight">Still Have a Question?</h2>
-                        <p className="text-[10px] md:text-xs font-medium text-zinc-400 leading-relaxed">
-                            Ask our <span className="text-orange-400 font-bold">Tyre Experts</span> for 1-on-1 fitment advice.
-                        </p>
-                    </div>
-                    <div className="flex items-center shrink-0 w-full md:w-auto  sm:mt-0">
-                        <WhatsAppButton
-                            text="Contact Support"
-                            value="I need some personalized advice on choosing the perfect tyres for my motorcycle."
-                            className="md:!w-auto w-full px-6 py-2.5 rounded-xl font-bold whitespace-nowrap shadow-[0_0_15px_rgba(34,197,94,0.2)] hover:shadow-[0_0_20px_rgba(34,197,94,0.4)] transition-all"
-                        />
-                    </div>
-                </aside>
             </div>
 
             <Login isOpen={isLogin} onClose={handleCloseLogin} />
