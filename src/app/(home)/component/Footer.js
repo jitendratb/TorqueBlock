@@ -203,19 +203,17 @@ async function Footer() {
 
                                 <div className="mt-4">
                                     <div className="flex flex-col items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-3.5">
-                                        <div className="flex items-start gap-3">
-                                            <FaBuilding className="text-orange-500 text-lg mt-0.5 shrink-0" />
+                                        <div className="flex items-center gap-3">
+                                            <FaBuilding className="text-orange-500 text-[28px]  shrink-0" />
                                             <div>
-                                                <div className="flex items-center gap-2 flex-wrap">
-                                                    <span className="text-white font-bold text-sm">Torque Block Trade</span>
-                                                    <span className="text-[9px] font-black uppercase tracking-wider text-orange-400 bg-orange-500/15 rounded-full px-2 py-0.5">Coming Soon</span>
+                                                <div className="flex flex-col items-start gap-1">
+                                                    <p className="text-white font-bold text-xs">Torque Block Trade</p>
+                                                    <p className="text-[8px] font-black uppercase tracking-wider text-orange-400 bg-orange-500/15 rounded-full px-2 py-0.5">Coming Soon</p>
                                                 </div>
 
                                             </div>
                                         </div>
-
-
-                                        <p className="text-zinc-500 text-xs mt-0.5 text-center">For dealers, workshops & service centers</p>
+                                        <p className="text-zinc-500 text-xs">For dealers, workshops & service centres</p>
                                     </div>
                                 </div>
                             </div>
