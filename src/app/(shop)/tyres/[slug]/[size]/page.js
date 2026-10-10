@@ -75,7 +75,7 @@ async function Page({ params, searchParams }) {
     ];
 
     return (
-        <div className="space-y-4">
+        <div className="">
             <TyreSizeSchema sizeData={formattedData} tyreSlug={slug} sizeSlug={size} />
             <BreadcrumbSchema items={breadcrumbItems} />
             <Breadcrumb items={breadcrumbItems} />

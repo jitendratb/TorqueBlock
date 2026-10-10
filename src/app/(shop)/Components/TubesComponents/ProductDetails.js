@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState, useEffect, useCallback } from "react";
-import Image from "@/components/molecules/CustomImage";
+import ProductGallery from "@/components/organisms/ProductGallery";
 import useCartStore from "@/stores/cartStore";
 import { useRouter } from "next/navigation";
 import { FaTag, FaMotorcycle, FaWrench, FaShieldAlt, FaBell } from "react-icons/fa";
@@ -17,12 +17,6 @@ const INR_FORMATTER = new Intl.NumberFormat("en-IN", {
 
 const formatPrice = (price) => INR_FORMATTER.format(price || 0);
 
-const getImageUrl = (item) => {
-    if (!item) return "/newlogo.webp";
-    if (typeof item === "string") return item;
-    return item.url || "/newlogo.webp";
-};
-
 export default function ProductDetails({ tube }) {
     const router = useRouter();
     const { addToCart } = useCartStore();
@@ -33,16 +27,7 @@ export default function ProductDetails({ tube }) {
         return Array.isArray(imgs) ? imgs : [];
     }, [tube]);
 
-    const [activeImage, setActiveImage] = useState(() => gallery[0] || null);
     const [isRinging, setIsRinging] = useState(false);
-
-    useEffect(() => {
-        if (gallery.length > 0) {
-            setActiveImage(gallery[0]);
-        } else {
-            setActiveImage(null);
-        }
-    }, [gallery]);
 
     useEffect(() => {
         let timer;
@@ -122,13 +107,6 @@ export default function ProductDetails({ tube }) {
         handleAddToCart();
     }, [handleAddToCart]);
 
-    const handleThumbnailKeyDown = useCallback((e, item) => {
-        if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            setActiveImage(item);
-        }
-    }, []);
-
     if (!tube) {
         return (
             <div className="w-full py-12 text-center text-zinc-500 rounded-2xl border border-zinc-800 bg-zinc-950/40">
@@ -137,73 +115,18 @@ export default function ProductDetails({ tube }) {
         );
     }
 
-    const activeImgSrc = getImageUrl(activeImage);
-
     return (
         <section className="w-full relative" aria-label="Product Details">
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
                 <div className="flex flex-col gap-4">
-                    <div className="flex flex-col-reverse md:grid md:grid-cols-[80px_1fr] gap-3 md:gap-4">
-                        <div
-                            className="flex md:flex-col gap-2 overflow-x-auto md:overflow-y-auto md:h-[460px] pb-1 md:pb-0 md:pr-1 hide-scrollbar"
-                            role="tablist"
-                            aria-label="Product images gallery"
-                        >
-                            {gallery.map((item, idx) => {
-                                const imgSrc = getImageUrl(item);
-                                const isActive = activeImgSrc === imgSrc;
-                                return (
-                                    <button
-                                        key={idx}
-                                        type="button"
-                                        role="tab"
-                                        aria-selected={isActive}
-                                        aria-label={`View thumbnail image ${idx + 1}`}
-                                        onClick={() => setActiveImage(item)}
-                                        onMouseEnter={() => setActiveImage(item)}
-                                        onKeyDown={(e) => handleThumbnailKeyDown(e, item)}
-                                        className={`relative shrink-0 h-16 w-16 md:h-[70px] md:w-[70px] overflow-hidden rounded-xl border-2 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 ${isActive
-                                                ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.4)] scale-95"
-                                                : "border-zinc-800 hover:border-zinc-600 opacity-60 hover:opacity-100"
-                                            }`}
-                                    >
-                                        <Image
-                                            src={imgSrc}
-                                            alt={`${tube.name || "Tube"} thumbnail ${idx + 1}`}
-                                            fill
-                                            sizes="70px"
-                                            imageClassName="object-cover"
-                                        />
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        <div
-                            className="relative group h-[320px] md:h-[460px] w-full flex items-center justify-center overflow-hidden rounded-2xl bg-black/20"
-                            role="tabpanel"
-                            aria-label="Active product image preview"
-                        >
-                            <div className="absolute inset-0 bg-radial from-orange-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                            {activeImage && (
-                                <Image
-                                    src={activeImgSrc}
-                                    alt={tube.name || "Tube Image"}
-                                    fill
-                                    priority
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                    imageClassName="object-contain transition-transform duration-500 group-hover:scale-105 drop-shadow-2xl"
-                                />
-                            )}
-                        </div>
-                    </div>
+                    <ProductGallery images={gallery} alt={tube.name || "Tube"} />
                 </div>
 
                 <div className="flex flex-col gap-3">
                     <div className="flex items-center gap-2.5 flex-wrap">
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
-                            <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
-                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider text-orange-400 z-10">
+                        <div className="absolute top-4 left-2 z-10 md:static md:z-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/40 md:border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group overflow-hidden">
+                            <RiSparkling2Fill size={14} className="text-white md:text-orange-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] md:drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
+                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider text-white md:text-orange-400 z-10">
                                 {brandName}
                             </span>
                         </div>

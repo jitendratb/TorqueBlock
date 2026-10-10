@@ -1,13 +1,12 @@
 "use client";
 
-import React, { useMemo, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
-import Image from "@/components/molecules/CustomImage";
-import { FaMotorcycle, FaBolt, FaShieldAlt, FaTag, FaBell } from "react-icons/fa";
+import { FaMotorcycle, FaBolt, FaTag, FaBell } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { RiSparkling2Fill } from "react-icons/ri";
-import { MdStraighten, MdLocalShipping } from "react-icons/md";
-import { TbDimensions } from "react-icons/tb";
+import { MdStraighten } from "react-icons/md";
+import { TbDimensions, TbCircleDot } from "react-icons/tb";
 import { GiTyre } from "react-icons/gi";
 import useCartStore from "@/stores/cartStore";
 import { useToast } from "@/context/ToastContext";
@@ -18,20 +17,47 @@ import Login from "@/components/organisms/login";
 import { notifyService } from "@/services/notifyService";
 import StarRating from "@/components/atoms/StarRating";
 import MatchingTyreItem from "./MatchingTyreItem";
+import PriceCard from "./PriceCard";
 import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 import { FiMaximize2 } from "react-icons/fi";
-import ThumbScrollArrows from "@/components/atoms/ThumbScrollArrows";
-import useImageGallery from "@/hooks/useImageGallery";
-import SwipeGallery from "@/components/molecules/SwipeGallery";
+import ProductGallery from "@/components/organisms/ProductGallery";
+import ProductTrust from "@/components/molecules/ProductTrust";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
+const TUBE_TYPE_LABELS = { TT: 'Tube Type (TT)', TL: 'Tubeless (TL)' };
 
 const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId }) => {
     const [isLogin, setIsLogin] = useState(false);
     const [pendingCheckout, setPendingCheckout] = useState(false);
     const [pendingNotify, setPendingNotify] = useState(false);
     const [isRinging, setIsRinging] = useState(false);
+    const buyBarRef = useRef(null);
+    const [isBuyBarStuck, setIsBuyBarStuck] = useState(true);
+
+    useEffect(() => {
+        const bar = buyBarRef.current;
+        if (!bar) return;
+        let frame = 0;
+        const measure = () => {
+            frame = 0;
+            const prev = bar.previousElementSibling;
+            if (!prev) return;
+            const naturalTop = prev.getBoundingClientRect().bottom + parseFloat(getComputedStyle(prev).marginBottom) + parseFloat(getComputedStyle(bar).marginTop);
+            setIsBuyBarStuck(bar.getBoundingClientRect().top < naturalTop - 1);
+        };
+        const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
+        measure();
+        window.addEventListener("scroll", schedule, { passive: true });
+        window.addEventListener("resize", schedule);
+        window.visualViewport?.addEventListener("resize", schedule);
+        return () => {
+            cancelAnimationFrame(frame);
+            window.removeEventListener("scroll", schedule);
+            window.removeEventListener("resize", schedule);
+            window.visualViewport?.removeEventListener("resize", schedule);
+        };
+    }, []);
 
     const router = useRouter();
     const { isAuthenticated } = useAuthStore();
@@ -48,6 +74,13 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         };
     }, [tyreData]);
 
+    const titleWords = useMemo(() => {
+        const nameWords = (parentTyre?.productName || "").split(/\s+/).filter(Boolean);
+        const nameSet = new Set(nameWords.map((w) => w.toLowerCase()));
+        const rest = (title || "").split(/\s+/).filter((w) => w && !nameSet.has(w.toLowerCase()));
+        return { matched: nameWords.join(" "), unmatched: rest.join(" ") };
+    }, [parentTyre?.productName, title]);
+
     const gallery = useMemo(() => {
         const toUrl = (img) => (typeof img === "string" ? img : img?.imageUrl || img?.url || null);
         const toList = (v) => (Array.isArray(v) ? v : v ? [v] : []);
@@ -58,8 +91,6 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
     const tubeTypes = useMemo(() => Array.isArray(tyreData?.tubeType) ? tyreData.tubeType : tyreData?.tubeType ? [tyreData.tubeType] : ["TL"], [tyreData?.tubeType]);
 
-    const slides = useMemo(() => gallery.map((url) => ({ url })), [gallery]);
-    const { activeIndex, setActiveIndex, thumbStripRef, thumbScroll, updateThumbScroll, scrollThumbs, revealThumb } = useImageGallery(gallery);
     const [selectedOpposite, setSelectedOpposite] = useState(null);
     const [selectedTubeType, setSelectedTubeType] = useState(tubeTypes[0]);
 
@@ -157,7 +188,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         }
     }, [tyreData?._id, selectedOpposite?._id, setProductIds]);
 
-    const { basePrice, oppositePrice, totalPrice, baseOriginalPrice, baseDiscountAmount, baseDiscountPercentage } = useMemo(() => {
+    const prices = useMemo(() => {
         const bp = tyreData?.price || 0;
         const bd = tyreData?.discount || 0;
         const baseSalePrice = Math.max(0, bp - bd);
@@ -166,7 +197,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         const od = selectedOpposite?.discount || 0;
         const oppositeSalePrice = op > 0 ? Math.max(0, op - od) : 0;
         const sale = baseSalePrice + oppositeSalePrice;
-        
+
         return {
             basePrice: baseSalePrice,
             oppositePrice: oppositeSalePrice,
@@ -176,14 +207,6 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
             baseDiscountPercentage: basePerc
         };
     }, [tyreData?.price, tyreData?.discount, selectedOpposite?.price, selectedOpposite?.discount]);
-
-    const { isExpressEligible } = useMemo(() => {
-        const mainInStock = tyreData?.quantity > 0 || tyreData?.availability === "in_stock";
-        const oppInStock = !selectedOpposite || (selectedOpposite.quantity > 0 || selectedOpposite.availability !== "out_of_stock");
-        return {
-            isExpressEligible: mainInStock && oppInStock
-        };
-    }, [tyreData?.quantity, tyreData?.availability, selectedOpposite]);
 
     const handleAddToCart = useCallback(() => {
         if (!parentTyre) {
@@ -329,90 +352,47 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         );
     }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
 
-    console.log(tyreData , "sdfghggsjnd k. fbknc n n fk ")
-
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
-                <div className="flex flex-col gap-4 lg:sticky lg:top-24 mb-4">
-                    <div className="flex flex-col-reverse md:grid md:grid-cols-[90px_1fr] gap-4">
-                        <div className="relative">
-                            <div
-                                ref={thumbStripRef}
-                                role="tablist"
-                                aria-label="Product images"
-                                onScroll={updateThumbScroll}
-                                className="relative flex md:h-[450px] md:flex-col gap-3 overflow-y-auto pr-1 hide-scrollbar"
-                            >
-                                {gallery.map((item, idx) => {
-                                    const isActive = idx === activeIndex;
-                                    return (
-                                        <button
-                                            key={idx}
-                                            type="button"
-                                            role="tab"
-                                            aria-selected={isActive}
-                                            onClick={() => setActiveIndex(idx)}
-                                            onMouseEnter={() => setActiveIndex(idx)}
-                                            className={`relative cursor-pointer h-20 w-20 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "border-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.3)]" : "border-zinc-800 hover:border-zinc-600"}`}
-                                        >
-                                            <Image src={item} alt={`${title} image ${idx + 1}`} fill sizes="40px" imageClassName="object-cover transition-transform duration-300 hover:scale-105" />
-                                        </button>
-                                    );
-                                })}
+            <div className="relative grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
+                <div className="flex flex-col gap-4 lg:sticky lg:top-24">
+                    <ProductGallery images={gallery} alt={title || "Tyre"}>
+                        {isOfferActive && hasExclusiveTag && offerExpireDate && (
+                            <div className="absolute bottom-4  right-4 border-t border-white/10 flex items-center justify-between gap-2">
+                                <OfferCountdownTimer targetDate={offerExpireDate} label="Exclusive Offer Ends In" />
                             </div>
-
-                            <ThumbScrollArrows thumbScroll={thumbScroll} onScroll={scrollThumbs} />
-                        </div>
-
-                        <div className="relative h-[350px] md:h-[450px] w-full">
-                            <SwipeGallery
-                                images={slides}
-                                activeIndex={activeIndex}
-                                onChange={(i) => { setActiveIndex(i); revealThumb(i); }}
-                                alt={title || "Tyre"}
-                                className="h-full"
-                                imageClassName="drop-shadow-2xl"
-                            />
-
-                            {isOfferActive && hasExclusiveTag && offerExpireDate && (
-                                <div className="absolute bottom-4  right-4 border-t border-white/10 flex items-center justify-between gap-2">
-                                    <OfferCountdownTimer targetDate={offerExpireDate} label="Exclusive Offer Ends In" />
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                        )}
+                    </ProductGallery>
                 </div>
 
                 <div className="space-y-4">
-                    <header className="space-y-4 mt-2 md:mt-0">
-                        <div className="flex items-center gap-4">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
+                    <header className="flex flex-col gap-0">
+                        <div className="absolute top-4 left-2 md:static md:flex md:items-center md:gap-4">
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/40 md:border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] ]" />
-                                <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
-                                <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400 z-10">
+                                <RiSparkling2Fill size={14} className="text-white md:text-orange-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] md:drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
+                                <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-white md:text-orange-400 z-10">
                                     {brandName}
                                 </span>
                             </div>
-
-                            <div className="absolute top-0 right-0 md:relative inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(34,197,94,0.15)] group overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] animate-[shimmer_2.5s_infinite]" />
-                                <FaShieldAlt className="text-xs text-orange-400 drop-shadow-[0_0_8px_rgba(34,197,94,0.8)] z-10" aria-hidden="true" />
-                                <span className="text-[10px] lg:text-xs font-bold uppercase tracking-wider text-orange-100 z-10">
-                                    Trusted by 50,000+ riders
-                                </span>
-                            </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <h1 id="product-details-heading" className="text-2xl md:text-4xl lg:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tighter leading-[1.05] drop-shadow-2xl">
-                                {title}
-                            </h1>
-                        </div>
+                        <h1 id="product-details-heading" className="space-y-1  tracking-tighter drop-shadow-2xl">
+                            {titleWords.matched && <span className="block font-black text-2xl md:text-3xl lg:text-4xl leading-tight text-white">{titleWords.matched}</span>}
+                            {titleWords.unmatched && <span className="block font-black text-lg md:text-xl lg:text-3xl leading-tight text-orange-400">{titleWords.unmatched}</span>}
+                        </h1>
+
                     </header>
 
-                    <div className="space-y-5">
+                    <div className="">
                         <div className="flex flex-wrap items-center gap-2" aria-label="Product features">
+                            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
+                                <FaMotorcycle className="text-orange-500 text-sm" aria-hidden="true" />
+                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
+                                    {tyreData?.position}
+                                </span>
+                            </div>
+
                             {tyreData?.size && (
                                 <div className="flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-orange-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-orange-500/60 hover:shadow-[0_0_12px_rgba(59,130,246,0.2)]">
                                     <FiMaximize2 className="text-orange-400 text-sm" aria-hidden="true" />
@@ -424,7 +404,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                             {tyreData?.tyretype && (
                                 <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 to-emerald-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-emerald-500/60 hover:shadow-[0_0_12px_rgba(16,185,129,0.2)]">
                                     <GiTyre className="text-emerald-400 text-sm" aria-hidden="true" />
-                                    <span className="text-[9px] md:text-[11px] font-bold text-emerald-200 uppercase tracking-widest">
+                                    <span className="text-[9px] md:text-[11px] font-bold text-emerald-200  tracking-widest">
                                         {tyreData.tyretype}
                                     </span>
                                 </div>
@@ -440,152 +420,20 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                <FaMotorcycle className="text-orange-500 text-sm" aria-hidden="true" />
-                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
-                                    {tyreData?.position}
-                                </span>
-                            </div>
+                            {tyreData?.tubeType?.length > 0 && (
+                                <div className="hidden md:flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-orange-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-orange-500/60 hover:shadow-[0_0_12px_rgba(249,115,22,0.2)]">
+                                    <TbCircleDot className="text-orange-400 text-sm" aria-hidden="true" />
+                                    <span className="text-[9px] md:text-[11px] font-bold text-orange-200 uppercase tracking-widest">
+                                        {tubeTypes.map((type) => TUBE_TYPE_LABELS[type] || type).join(" / ")}
+                                    </span>
+                                </div>
+                            )}
+
                         </div>
                     </div>
 
-                    <article className="relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 to-transparent p-4 shadow-[0_0_40px_rgba(249,115,22,0.1)] backdrop-blur-xl group transition-all duration-500 hover:border-orange-500/50 flex flex-col gap-4">
-                        <div className="absolute -top-12 -right-12 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-orange-500/30 transition-colors duration-700" />
-                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-600/10 rounded-full blur-2xl pointer-events-none" />
+                    <PriceCard tyreData={tyreData} selectedOpposite={selectedOpposite} prices={prices} formatPrice={formatPrice} />
 
-                        <div className="flex flex-col relative z-10 gap-3">
-                            <div className="flex justify-between items-start">
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-[10px] md:text-xs font-black text-orange-500 uppercase tracking-[0.3em] drop-shadow-sm">
-                                        Price
-                                    </span>
-                                    {baseDiscountAmount > 0 ? (
-                                        <div className="flex flex-col gap-1 mt-1">
-                                            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-                                                <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 drop-shadow-sm tracking-tight">
-                                                    {formatPrice(basePrice)}
-                                                </span>
-                                                <div className="flex items-center gap-2.5 bg-black/20 rounded-full pl-3 pr-1 py-1 border border-white/5 backdrop-blur-md shadow-inner">
-                                                    <span className="text-xs md:text-sm font-semibold text-zinc-400 line-through decoration-red-500/60 decoration-[1.5px]" aria-label="Original price">
-                                                        {formatPrice(baseOriginalPrice)}
-                                                    </span>
-                                                    <div className="inline-flex min-w-[120px] items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)] relative overflow-hidden">
-                                                        <span className="relative z-10 drop-shadow-md flex items-center gap-1">
-                                                            Save {formatPrice(baseDiscountAmount)}
-                                                            <span className="bg-black/20 px-1.5 py-0.5 rounded font-bold">({baseDiscountPercentage}%)</span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <span className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase">
-                                                (Incl. of all taxes)
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <div className="flex gap-2 items-end">
-                                            <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
-                                                {formatPrice(basePrice)}
-                                            </span>
-                                            <span className="text-[10px] font-medium text-zinc-400 pb-1.5">
-                                                (Incl. of all taxes)
-                                            </span>
-                                        </div>
-                                    )}
-                                </div>
-
-                                <div className={`flex min-w-[90px] absolute top-0 right-0 items-center gap-1.5 rounded-xl border px-2 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${tyreData?.availability === "in_stock"
-                                    ? 'border-green-500/20 bg-green-500/10'
-                                    : tyreData?.availability === "backorder"
-                                        ? 'border-yellow-500/20 bg-yellow-500/10'
-                                        : tyreData?.availability === "preorder"
-                                            ? 'border-blue-500/20 bg-blue-500/10'
-                                            : 'border-red-500/20 bg-red-500/10'
-                                    }`}>
-                                    <FaShieldAlt className={`text-[9px] ${tyreData?.availability === "in_stock" ? 'text-green-400'
-                                        : tyreData?.availability === "backorder" ? 'text-yellow-400'
-                                            : tyreData?.availability === "preorder" ? 'text-blue-400'
-                                                : 'text-red-400'
-                                        }`} aria-hidden="true" />
-                                    <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${tyreData?.availability === "in_stock" ? 'text-green-100'
-                                        : tyreData?.availability === "backorder" ? 'text-yellow-100'
-                                            : tyreData?.availability === "preorder" ? 'text-blue-100'
-                                                : 'text-red-100'
-                                        }`}>
-                                        {tyreData?.availability === "in_stock" ? 'In Stock'
-                                            : tyreData?.availability === "backorder" ? 'Available To Order'
-                                                : tyreData?.availability === "preorder" ? 'Pre Order'
-                                                    : 'Out of Stock'}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {selectedOpposite && (
-                                <div className="pt-2 border-t border-white/10 flex flex-col gap-2.5 relative">
-                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Order Summary</p>
-                                    <div className="flex flex-col gap-2 rounded-xl bg-white/10 border border-white/5 p-3.5 shadow-inner">
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-[10px] font-medium text-zinc-500">{tyreData.size}</span>
-                                                <span className="text-xs font-bold text-zinc-200 capitalize">( {tyreData?.position || 'Current Tyre'} )</span>
-                                            </div>
-                                            <span className="text-sm font-black text-zinc-200">{formatPrice(basePrice)}</span>
-                                        </div>
-                                        <div className="h-px w-full bg-white/5" />
-                                        <div className="flex justify-between items-center">
-                                            <div className="flex items-center gap-1">
-                                                <span className="text-[10px] font-medium text-zinc-500">{selectedOpposite.size}</span>
-                                                <span className="text-xs font-bold text-emerald-400 capitalize">Matching {selectedOpposite.position}</span>
-                                            </div>
-                                            <span className="text-sm font-black text-emerald-400">{formatPrice(oppositePrice)}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </article>
-
-                    {/* {tubeTypes?.length > 0 && (
-                        <div className="flex flex-col gap-2 p-4 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md" role="radiogroup" aria-labelledby="tube-type-label">
-                            <span id="tube-type-label" className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Tube Type</span>
-                            <div className="flex flex-wrap gap-2">
-                                {tubeTypes.map((type) => (
-                                    <button
-                                        key={type}
-                                        role="radio"
-                                        aria-checked={selectedTubeType === type}
-                                        onClick={() => setSelectedTubeType(type)}
-                                        className={`relative overflow-hidden px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wider transition-all duration-300 ${selectedTubeType === type
-                                            ? "bg-orange-500/20 text-orange-400 border border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.2)]"
-                                            : "bg-black/40 text-zinc-400 border border-white/10 hover:border-white/20 hover:text-zinc-200"
-                                            }`}
-                                    >
-                                        <span className="relative z-10">{type}</span>
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    )} */}
-
-                    {tyreData?.availability !== "backorder" && (
-                        <div className="relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 p-4 backdrop-blur-sm">
-                            <div className="relative flex items-center gap-3">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-orange-500/15 ring-1 ring-orange-500/30 shadow-[0_0_12px_rgba(249,115,22,0.2)]">
-                                    <MdLocalShipping className="text-orange-400 text-lg drop-shadow-[0_0_6px_rgba(249,115,22,0.6)]" aria-hidden="true" />
-                                </div>
-                                <div className="flex flex-col gap-0.5 flex-1">
-                                    <span className="text-xs font-black uppercase tracking-wider text-orange-400">
-                                        {isExpressEligible ? "READY TO SHIP" : "Standard Delivery"}
-                                    </span>
-                                    <span className="text-[10px] font-medium text-zinc-400">
-                                        {isExpressEligible
-                                            ? "Order dispatched within 24 hours*"
-                                            : "Delivered in 5–7 business days"}
-                                    </span>
-                                </div>
-
-                            </div>
-                        </div>
-                    )}
 
                     {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
                         <section aria-labelledby="matching-tyres-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 space-y-2 md:space-y-4 backdrop-blur-md overflow-hidden">
@@ -626,10 +474,10 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         </section>
                     )}
 
-                    <div className={`grid gap-4 relative z-10 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2'}`}>
+                    <div ref={buyBarRef} data-mobile-buy-bar className={`sticky bottom-0 z-30 ${isBuyBarStuck ? '-mx-4 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[#0B0F19]/95 backdrop-blur-xl border-t border-white/10' : 'py-0'} md:mx-0 md:px-0 md:py-0 md:relative md:bg-transparent md:backdrop-blur-none md:border-0 grid gap-2 md:gap-4 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             onClick={handleAddToCart}
-                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
+                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-1 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
                         >
                             Add to Cart
                         </button>
@@ -645,18 +493,16 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         ) : (
                             <button
                                 onClick={() => handleBuyNow(false)}
-                                className="py-4 px-4 flex gap-2 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                className="py-4 px-1 flex gap-1 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                Buy Now {selectedOpposite && <span className="inline-block ml-1"> ({formatPrice(totalPrice)})</span>}
+                                Buy Now {selectedOpposite && <span className="inline-block"> ({formatPrice(prices.totalPrice)})</span>}
                             </button>
                         )}
                     </div>
 
-
-
+                    <ProductTrust />
                 </div>
             </div>
-
             <Login isOpen={isLogin} onClose={handleCloseLogin} />
         </section>
     );

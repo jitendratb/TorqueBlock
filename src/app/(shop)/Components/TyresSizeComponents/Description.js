@@ -146,7 +146,6 @@ function Description({ tyreData }) {
                             </p>
                         </div>
                     </div>
-
                     <div className="flex flex-wrap gap-2.5 md:gap-3 relative z-10">
                         {tyreData.quickFacts.popularBikes.map((bike, idx) => (
                             <div

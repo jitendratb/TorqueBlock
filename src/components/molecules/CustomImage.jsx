@@ -58,11 +58,6 @@ export default function CustomImage({
 
     return (
         <Wrapper className={clsx("relative overflow-hidden", fill ? "w-full h-full" : "", className)} style={!fill ? { width, height } : undefined} >
-            {loading && !error && !priority && (
-                <div className={clsx("absolute inset-0 animate-pulse bg-zinc-800 pointer-events-none z-0", skeletonClassName)}>
-                    <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#999_1px,transparent_1px)] [background-size:16px_16px]" />
-                </div>
-            )}
             <Image
                 src={error ? fallback : safeSrc}
                 alt={finalAlt}

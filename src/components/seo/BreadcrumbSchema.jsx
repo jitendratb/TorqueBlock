@@ -13,7 +13,6 @@ export default function BreadcrumbSchema({ items = [] }) {
       const name = item.label || item.name || `Step ${index + 1}`;
       const relativePath = item.href || item.url || "/";
 
-      // Ensure all breadcrumb item links are absolute URLs (required by Google Search Console)
       const absoluteUrl = relativePath.startsWith("http")
         ? relativePath
         : `${SITE_URL}${relativePath.startsWith("/") ? relativePath : `/${relativePath}`}`;

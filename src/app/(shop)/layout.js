@@ -104,6 +104,7 @@ export const metadata = {
 
 export const viewport = {
     themeColor: "#000000",
+    viewportFit: "cover",
 };
 
 export default function HomeLayout({ children }) {

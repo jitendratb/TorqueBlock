@@ -103,7 +103,7 @@ export default function SwipeGallery({ images, activeIndex, onChange, alt = "Ima
                                     quality={75}
                                     sizes="(max-width: 768px) 100vw, 50vw"
                                     draggable={false}
-                                    imageClassName={`object-contain transition-transform duration-500 group-hover:scale-105 ${imageClassName}`}
+                                    imageClassName={`object-contain  transition-transform duration-500 group-hover:scale-105 ${imageClassName}`}
                                 />
                             )}
                         </div>
@@ -111,7 +111,7 @@ export default function SwipeGallery({ images, activeIndex, onChange, alt = "Ima
                 </div>
                 <span
                     aria-hidden="true"
-                    className="pointer-events-none absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/80 backdrop-blur-sm transition-colors group-hover:border-orange-500/40 group-hover:text-orange-400"
+                    className="pointer-events-none absolute right-2 bottom-2 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/20 text-white/80 backdrop-blur-xl transition-colors group-hover:border-orange-500/40 group-hover:text-orange-400"
                 >
                     <FiMaximize2 className="text-sm" />
                 </span>

@@ -21,7 +21,7 @@ function TyreSizeClient({ initialData, reviewData , opposteProductId }) {
     const isTubeType = tyreSize?.tubeType?.includes?.("TT") || tyreSize?.tubeType === "TT";
 
     return (
-        <div className="flex flex-col gap-4 pb-4">
+        <div className="flex flex-col gap-4  py-2">
             <SubProductDetails tyreData={tyreSize}  setProductIds={setProductIds} opposteProductId={opposteProductId} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />

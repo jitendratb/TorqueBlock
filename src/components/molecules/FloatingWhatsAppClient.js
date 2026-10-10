@@ -203,6 +203,7 @@ function FloatingWhatsAppClient({ data }) {
 
     return (
         <div
+            data-floating-whatsapp
             className="fixed bottom-3 lg:bottom-9 right-3 lg:right-9 z-[9999] font-[Inter,sans-serif] text-zinc-100 select-none"
             style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
         >

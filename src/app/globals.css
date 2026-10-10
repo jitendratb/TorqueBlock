@@ -630,3 +630,10 @@ button {
 }
 
 
+
+/* Mobile product page: keep the WhatsApp button clear of the sticky buy bar */
+@media (max-width: 767px) {
+  body:has([data-mobile-buy-bar]) [data-floating-whatsapp] {
+    bottom: calc(88px + env(safe-area-inset-bottom));
+  }
+}
