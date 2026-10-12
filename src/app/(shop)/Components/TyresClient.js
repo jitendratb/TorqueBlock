@@ -28,21 +28,18 @@ const FAQSection = dynamic(() => import("@/components/atoms/FAQSection"), {
     ssr: true,
 });
 
-function ReviewsCardResolver({ reviewsPromise, tyreId }) {
-    const reviewData = use(reviewsPromise);
-    return <ReviewsCard reviewData={reviewData} tyreId={tyreId} />;
-}
 
-const TyresClient = memo(function TyresClient({ initialData, reviewsPromise }) {
+
+const TyresClient = memo(function TyresClient({ initialData }) {
     const tyre = initialData;
     return (
         <div className="py-4 space-y-4">
-            <ProductDetails tyre={tyre} reviewsPromise={reviewsPromise} />
+            <ProductDetails tyre={tyre}  />
             <Description tyre={tyre} />
 
-            <Suspense fallback={<div className="min-h-[250px] w-full animate-pulse bg-zinc-900/50 rounded-2xl" />}>
+            {/* <Suspense fallback={<div className="min-h-[250px] w-full animate-pulse bg-zinc-900/50 rounded-2xl" />}>
                 <ReviewsCardResolver reviewsPromise={reviewsPromise} tyreId={tyre?._id} />
-            </Suspense>
+            </Suspense> */}
             {
                 tyre?.gallery?.length > 0 && (
                     <FitmentSection tyre={tyre} scale={true} />

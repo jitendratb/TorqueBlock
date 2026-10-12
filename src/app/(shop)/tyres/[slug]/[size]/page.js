@@ -65,7 +65,7 @@ async function Page({ params, searchParams }) {
     const awaitedSearchParams = await searchParams;
     const opposteProductId = awaitedSearchParams?.opposteProductId;
     const tyreBySize = await tyresService.getTyreBySize(`${slug}-${size}`);
-    const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
+    // const Review = await ReviewService.getReviews({ productId: tyreBySize?._id });
     const formattedData = tyreBySize;
 
     const breadcrumbItems = [
@@ -79,7 +79,7 @@ async function Page({ params, searchParams }) {
             <TyreSizeSchema sizeData={formattedData} tyreSlug={slug} sizeSlug={size} />
             <BreadcrumbSchema items={breadcrumbItems} />
             <Breadcrumb items={breadcrumbItems} />
-            <TyresSizeClient initialData={formattedData} reviewData={Review} opposteProductId={opposteProductId} />
+            <TyresSizeClient initialData={formattedData}  opposteProductId={opposteProductId} />
         </div>
     )
 }

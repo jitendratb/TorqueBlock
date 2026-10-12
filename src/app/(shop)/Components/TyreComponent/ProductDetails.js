@@ -162,7 +162,7 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                                 </div>
                                 <div className="text-center">
                                     <p className="text-[11px] font-bold leading-tight tracking-wide text-white/90">Expert Help</p>
-                                    <p className="text-[9px] text-zinc-500">24/7 Support</p>
+                                    <p className="text-[9px] text-zinc-500">Advice When Needed</p>
                                 </div>
                             </div>
                         </div>

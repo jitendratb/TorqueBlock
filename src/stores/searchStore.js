@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import searchService from '@/services/searchService';
 
 let autocompleteRequestId = 0;
+let suggestionsDismissed = false;
 
 const useSearchStore = create(
         (set, get) => ({
@@ -14,6 +15,7 @@ const useSearchStore = create(
             activeIndex: 0,
 
             setSearchInput: (input) => {
+                suggestionsDismissed = !input.trim();
                 set({ searchInput: input }, false, 'setSearchInput');
                 if (input.trim()) {
                     get().debouncedSearch(input);
@@ -30,11 +32,15 @@ const useSearchStore = create(
                 }
             },
 
-            setShowSuggestions: (show) => set({ showSuggestions: show }, false, 'setShowSuggestions'),
+            setShowSuggestions: (show) => {
+                suggestionsDismissed = !show;
+                set({ showSuggestions: show }, false, 'setShowSuggestions');
+            },
 
             setActiveIndex: (index) => set({ activeIndex: index }, false, 'setActiveIndex'),
 
             clearSearch: () => {
+                suggestionsDismissed = true;
                 autocompleteRequestId += 1;
                 set({
                     searchInput: '',
@@ -84,7 +90,7 @@ const useSearchStore = create(
                     const results = await searchService.search(query);
                     set({
                         searchResults: results,
-                        showSuggestions: true,
+                        showSuggestions: !suggestionsDismissed,
                         loading: false,
                         error: null
                     }, false, 'searchSuccess');

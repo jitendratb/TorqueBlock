@@ -322,7 +322,7 @@ export default function ProductDetails({ tube }) {
                                 </div>
                                 <div className="text-center">
                                     <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Expert Help</p>
-                                    <p className="text-[8px] text-zinc-500 md:text-[9px]">24/7 Support</p>
+                                    <p className="text-[8px] text-zinc-500 md:text-[9px]">Advice When Needed</p>
                                 </div>
                             </div>
                         </div>

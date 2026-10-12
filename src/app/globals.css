@@ -629,11 +629,20 @@ button {
   height: revert;
 }
 
-
-
-/* Mobile product page: keep the WhatsApp button clear of the sticky buy bar */
-@media (max-width: 767px) {
-  body:has([data-mobile-buy-bar]) [data-floating-whatsapp] {
-    bottom: calc(88px + env(safe-area-inset-bottom));
+[data-floating-whatsapp] {
+  transition: bottom 300ms ease-out;
+}
+body:has([data-sticky-buy-bar]) [data-site-footer] {
+  padding-bottom: calc(128px + env(safe-area-inset-bottom));
+}
+body:has([data-sticky-buy-bar][data-visible]) [data-floating-whatsapp] {
+  bottom: calc(140px + env(safe-area-inset-bottom));
+}
+@media (min-width: 768px) {
+  body:has([data-sticky-buy-bar]) [data-site-footer] {
+    padding-bottom: 104px;
+  }
+  body:has([data-sticky-buy-bar][data-visible]) [data-floating-whatsapp] {
+    bottom: 120px;
   }
 }

@@ -111,7 +111,7 @@ async function ProductSchemaWithReviews({ product, reviewsPromise }) {
 async function Page({ params }) {
     const { slug } = await params;
     const tyre = await getTyre(slug);
-    const reviewsPromise = ReviewService.getReviews({ tyreId: tyre?._id });
+    // const reviewsPromise = ReviewService.getReviews({ tyreId: tyre?._id });
     const formattedTyre = tyre;
 
     const displayName = formattedTyre?.productName || formattedTyre?.hero?.title || slug;
@@ -123,7 +123,7 @@ async function Page({ params }) {
     return (
         <div className="">
             <Suspense fallback={null}>
-                <ProductSchemaWithReviews product={formattedTyre} reviewsPromise={reviewsPromise} />
+                <ProductSchemaWithReviews product={formattedTyre}  />
             </Suspense>
             <BreadcrumbSchema items={breadcrumbItems} />
             <LocalBusinessSchema />
@@ -131,7 +131,7 @@ async function Page({ params }) {
                 <FAQSchema faqs={formattedTyre.faqs} />
             )}
             <Breadcrumb items={breadcrumbItems} />
-            <TyresClient initialData={formattedTyre} reviewsPromise={reviewsPromise} />
+            <TyresClient initialData={formattedTyre}  />
         </div>
     );
 }

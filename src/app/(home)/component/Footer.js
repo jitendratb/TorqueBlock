@@ -100,7 +100,7 @@ async function Footer() {
     }
 
     return (
-        <footer className="bg-black/95 border-t border-zinc-800">
+        <footer data-site-footer className="bg-black/95 border-t border-zinc-800">
             <div className="max-w-7xl mx-auto px-4 pt-16 md:pb-4 ">
                 <div className="grid grid-cols-1 md:grid-cols-[30%_70%] gap-4">
 

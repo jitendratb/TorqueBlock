@@ -193,35 +193,31 @@ const Description = memo(function Description({ tyre, desClassName = "space-y-2"
                     )}
                 </div>
             </section>
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
-                <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                <div className="relative flex border-b border-white/10 pb-4 items-center gap-3.5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
-                        <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
-                    </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 justify-between flex-1">
-                        <div>
-                            <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
-                                Commonly Used On
-                            </h2>
-                            <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
-                                Verified Compatible Motorcycles
-                            </p>
+            {tyre?.compatibleVehicles?.length > 0 && (
+                <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">
+                    <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
+
+                    <div className="relative flex border-b border-white/10 pb-4 items-center gap-3.5">
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300">
+                            <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" />
+                        </div>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 justify-between flex-1">
+                            <div>
+                                <h2 className="text-sm md:text-base font-black uppercase tracking-[0.25em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent drop-shadow-sm">
+                                    Commonly Used On
+                                </h2>
+                                <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
+                                    Verified Compatible Motorcycles
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                    {tyre?.compatibleVehicles?.length > 0 && <CompatibleBikes tyre={tyre} />}
+                </div>)
+            }
 
-                <div className="relative pt-4 space-y-4">
-                    {!tyre?.compatibleVehicles?.length && tyre?.commonlyUsedOn && (
-                        <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide">
-                            {tyre?.commonlyUsedOn}
-                        </p>
-                    )}
-                </div>
-                {tyre?.compatibleVehicles?.length > 0 && <CompatibleBikes tyre={tyre} />}
-            </div>
-           {/* {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
+            {/* {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
                 <section className="relative">
 
                     <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-white/5 to-transparent p-4 backdrop-blur-xl">

@@ -22,6 +22,8 @@ import OfferCountdownTimer from "@/components/atoms/OfferCountdownTimer";
 import { FiMaximize2 } from "react-icons/fi";
 import ProductGallery from "@/components/organisms/ProductGallery";
 import ProductTrust from "@/components/molecules/ProductTrust";
+import ShareButton from "@/components/molecules/ShareButton";
+import StickyBuyBar from "./StickyBuyBar";
 
 const priceFormatter = new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 });
 const formatPrice = (price) => priceFormatter.format(price);
@@ -33,30 +35,15 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
     const [pendingNotify, setPendingNotify] = useState(false);
     const [isRinging, setIsRinging] = useState(false);
     const buyBarRef = useRef(null);
-    const [isBuyBarStuck, setIsBuyBarStuck] = useState(true);
 
+    // Show the bottom buy bar while the inline buttons are off screen
+    const [showStickyBuyBar, setShowStickyBuyBar] = useState(false);
     useEffect(() => {
         const bar = buyBarRef.current;
         if (!bar) return;
-        let frame = 0;
-        const measure = () => {
-            frame = 0;
-            const prev = bar.previousElementSibling;
-            if (!prev) return;
-            const naturalTop = prev.getBoundingClientRect().bottom + parseFloat(getComputedStyle(prev).marginBottom) + parseFloat(getComputedStyle(bar).marginTop);
-            setIsBuyBarStuck(bar.getBoundingClientRect().top < naturalTop - 1);
-        };
-        const schedule = () => { if (!frame) frame = requestAnimationFrame(measure); };
-        measure();
-        window.addEventListener("scroll", schedule, { passive: true });
-        window.addEventListener("resize", schedule);
-        window.visualViewport?.addEventListener("resize", schedule);
-        return () => {
-            cancelAnimationFrame(frame);
-            window.removeEventListener("scroll", schedule);
-            window.removeEventListener("resize", schedule);
-            window.visualViewport?.removeEventListener("resize", schedule);
-        };
+        const observer = new IntersectionObserver(([entry]) => setShowStickyBuyBar(!entry.isIntersecting));
+        observer.observe(bar);
+        return () => observer.disconnect();
     }, []);
 
     const router = useRouter();
@@ -352,6 +339,15 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         );
     }, [selectedOpposite, tyreData, parentTyre, isOfferActive, hasExclusiveTag]);
 
+    // Share the page as it's set up now, so the customer opens it with the same matching tyre selected
+    const getShareUrl = useCallback(() => {
+        const url = new URL(window.location.href);
+        url.hash = "";
+        if (selectedOpposite?._id) url.searchParams.set("opposteProductId", selectedOpposite._id);
+        else url.searchParams.delete("opposteProductId");
+        return url.toString();
+    }, [selectedOpposite?._id]);
+
     return (
         <section aria-labelledby="product-details-heading" className="w-full relative  lg:pb-0">
             <div className="relative grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
@@ -365,9 +361,9 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                     </ProductGallery>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-4 lg:space-y-3">
                     <header className="flex flex-col gap-0">
-                        <div className="absolute top-4 left-2 md:static md:flex md:items-center md:gap-4">
+                        <div className="absolute top-4 left-2 right-2 z-20 flex items-center justify-between gap-4 md:static">
                             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/40 md:border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
                                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] ]" />
                                 <RiSparkling2Fill size={14} className="text-white md:text-orange-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] md:drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
@@ -375,11 +371,13 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                                     {brandName}
                                 </span>
                             </div>
+
+                            <ShareButton title={title || parentTyre?.productName || "this tyre"} getUrl={getShareUrl} />
                         </div>
 
                         <h1 id="product-details-heading" className="space-y-1  tracking-tighter drop-shadow-2xl">
-                            {titleWords.matched && <span className="block font-black text-2xl md:text-3xl lg:text-4xl leading-tight text-white">{titleWords.matched}</span>}
-                            {titleWords.unmatched && <span className="block font-black text-lg md:text-xl lg:text-3xl leading-tight text-orange-400">{titleWords.unmatched}</span>}
+                            {titleWords.matched && <span className="block font-black text-2xl md:text-3xl leading-tight text-white">{titleWords.matched}</span>}
+                            {titleWords.unmatched && <span className="block font-black text-lg md:text-xl lg:text-2xl leading-tight text-orange-400">{titleWords.unmatched}</span>}
                         </h1>
 
                     </header>
@@ -436,7 +434,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
 
                     {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
-                        <section aria-labelledby="matching-tyres-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 space-y-2 md:space-y-4 backdrop-blur-md overflow-hidden">
+                        <section aria-labelledby="matching-tyres-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 lg:p-3 space-y-2 md:space-y-4 lg:space-y-2 backdrop-blur-md overflow-hidden">
                             <header className="relative flex items-start md:items-center gap-3.5">
                                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 mt-1 md:mt-0">
                                     <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" aria-hidden="true" />
@@ -474,10 +472,10 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         </section>
                     )}
 
-                    <div ref={buyBarRef} data-mobile-buy-bar className={`sticky bottom-0 z-30 ${isBuyBarStuck ? '-mx-4 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-[#0B0F19]/95 backdrop-blur-xl border-t border-white/10' : 'py-0'} md:mx-0 md:px-0 md:py-0 md:relative md:bg-transparent md:backdrop-blur-none md:border-0 grid gap-2 md:gap-4 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    <div ref={buyBarRef} className={`grid gap-2 md:gap-4 ${tyreData?.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             onClick={handleAddToCart}
-                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 px-1 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
+                            className={`${tyreData?.availability === "backorder" && 'hidden'} py-4 lg:py-3 px-1 rounded-xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
                         >
                             Add to Cart
                         </button>
@@ -485,7 +483,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         {(tyreData?.availability === "backorder" || tyreData?.availability === "out_of_stock") ? (
                             <button
                                 onClick={() => handleNotify(false)}
-                                className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                className="py-4 lg:py-3 px-4 flex gap-2 items-center justify-center rounded-lg font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
                                 NOTIFY ME
                                 <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} aria-hidden="true" />
@@ -493,7 +491,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                         ) : (
                             <button
                                 onClick={() => handleBuyNow(false)}
-                                className="py-4 px-1 flex gap-1 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
+                                className="py-4 lg:py-3 px-1 flex gap-1 justify-center items-center rounded-lg font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
                                 Buy Now {selectedOpposite && <span className="inline-block"> ({formatPrice(prices.totalPrice)})</span>}
                             </button>
@@ -503,6 +501,19 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
                     <ProductTrust />
                 </div>
             </div>
+            <StickyBuyBar
+                isVisible={showStickyBuyBar}
+                image={gallery[0]}
+                name={titleWords.matched || title}
+                subtitle={titleWords.matched ? titleWords.unmatched : ""}
+                availability={tyreData?.availability}
+                price={formatPrice(prices.totalPrice)}
+                priceNote={selectedOpposite ? "Set of 2 (Incl. all taxes)" : "(Incl. all taxes)"}
+                isRinging={isRinging}
+                onAddToCart={handleAddToCart}
+                onBuyNow={() => handleBuyNow(false)}
+                onNotify={() => handleNotify(false)}
+            />
             <Login isOpen={isLogin} onClose={handleCloseLogin} />
         </section>
     );

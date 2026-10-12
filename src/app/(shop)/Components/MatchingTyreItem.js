@@ -65,11 +65,11 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
                 </div>
             </div>
 
-            <h4 className={`text-base font-black transition-colors tracking-tight mb-1 ${dimClass} ${!isOrderable ? "text-zinc-500" : "text-white"}`}>
+            <h4 className={`text-base font-black transition-colors tracking-tight mb-1 lg:mb-0 ${dimClass} ${!isOrderable ? "text-zinc-500" : "text-white"}`}>
                 {item.size}
             </h4>
 
-            <div className="flex justify-between items-center w-full mt-2 pt-2 border-t border-white/5">
+            <div className="flex justify-between items-center w-full mt-2 pt-2 lg:mt-1.5 lg:pt-1.5 border-t border-white/5">
                 <div className={`flex flex-col ${dimClass}`}>
                     {discount > 0 ? (
                         <div className="flex flex-col">

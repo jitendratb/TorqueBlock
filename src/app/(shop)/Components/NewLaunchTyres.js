@@ -92,7 +92,7 @@ export default function TyreSection({ categoryId, Similar = [], brandId, isNewLa
           <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
             {title}
           </h2>
-          <p className="text-zinc-500 text-[10px] mt-0.5">
+          <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
             {subtitle}
           </p>
         </div>

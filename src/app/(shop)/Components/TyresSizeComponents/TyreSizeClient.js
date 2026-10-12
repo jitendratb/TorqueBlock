@@ -9,7 +9,7 @@ import ReviewsCard from '@/components/atoms/reviewCard';
 import TyreSection from '../NewLaunchTyres';
 import TubeSection from './TubeSection';
 
-function TyreSizeClient({ initialData, reviewData , opposteProductId }) {
+function TyreSizeClient({ initialData, opposteProductId }) {
     const [tyreSize] = useState(initialData);
     const [productIds , setProductIds] = useState([]);
     useEffect(()=>{
@@ -20,15 +20,17 @@ function TyreSizeClient({ initialData, reviewData , opposteProductId }) {
 
     const isTubeType = tyreSize?.tubeType?.includes?.("TT") || tyreSize?.tubeType === "TT";
 
+    console.log(tyreSize)
+
     return (
-        <div className="flex flex-col gap-4  py-2">
+        <div className="flex flex-col gap-4  py-2 relative">
             <SubProductDetails tyreData={tyreSize}  setProductIds={setProductIds} opposteProductId={opposteProductId} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
             {isTubeType && (
                 <TubeSection productIds={productIds} />
             )}
-            <ReviewsCard reviewData={reviewData} productId={tyreSize?._id} />
+            {/* <ReviewsCard reviewData={reviewData} productId={tyreSize?._id} /> */}
             <TyreSection
                 categoryId={tyreSize?.availableTyres?.categoryId?._id}
                 title="Similar Tyres"

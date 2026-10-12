@@ -10,8 +10,8 @@ function Similar({ tyre }) {
           <TyreSection
                     categoryId={tyre?.categoryId?._id}
                     Similar={tyre?.relatedProducts}
-                    title="Similar Tyres"
-                    subtitle="Similar tyres you might like"
+                    title={`Alternatives to ${tyre?.productName || "This Tyre"}`}
+                    subtitle="Compare similar tyres before you choose"
                  
                 />
         </section>
