@@ -7,6 +7,8 @@ import WhatsAppButton from '@/components/atoms/WhatsAppButton';
 import Checkbox from '@/components/atoms/Checkbox';
 import CustomDropdown from '@/components/atoms/CustomDropdown';
 import searchServiceInstance from '@/services/searchService';
+import brandServiceInstance from '@/services/brandService';
+import categoryServiceInstance from '@/services/categoryService';
 import { FiTarget, FiCloudRain, FiMap, FiSettings, FiArrowRight, FiStar, FiCalendar, FiTrendingUp, FiTag, FiEye, FiCompass } from 'react-icons/fi';
 
 const getDeterministicRating = (id = '') => {
@@ -530,6 +532,8 @@ function SearchPageContent() {
     const [totalResults, setTotalResults] = useState(0);
     const [resultCounts, setResultCounts] = useState({ tyreIntent: 0, vehicleIntent: 0, comparison: 0 });
     const [filtersModal, setFiltersModal] = useState(false);
+    const [brands, setBrands] = useState([]);
+    const [types, setTypes] = useState([]);
 
     useEffect(() => {
         const performSearch = async () => {
@@ -614,8 +618,21 @@ function SearchPageContent() {
         return () => clearTimeout(debounceTimer);
     }, [searchQuery, filters, sortBy, currentPage]);
 
-    const brands = ['Pirelli', 'Michelin', 'Metzeler',];
-    const types = ['Sports', 'Touring', 'Cruiser', 'Off-road',];
+    useEffect(() => {
+        const fetchFilterOptions = async () => {
+            const [brandsRes, categoriesRes] = await Promise.allSettled([
+                brandServiceInstance.getBrands({ isActive: true }),
+                categoryServiceInstance.getCategory(),
+            ]);
+            if (brandsRes.status === 'fulfilled') {
+                setBrands((brandsRes.value || []).map((brand) => brand?.name).filter(Boolean));
+            }
+            if (categoriesRes.status === 'fulfilled') {
+                setTypes((categoriesRes.value || []).map((category) => category?.name).filter(Boolean));
+            }
+        };
+        fetchFilterOptions();
+    }, []);
 
     const toggleFilter = useCallback((filterType, value) => {
         setFilters((prev) => ({
@@ -644,7 +661,7 @@ function SearchPageContent() {
         <div className="flex flex-col flex-1 min-h-0 space-y-4 pb-4">
             <Breadcrumb items={breadcrumbItems} />
             <div className="grid grid-cols-1 gap-6 lg:grid-cols-[250px_1fr] relative flex flex-col flex-1 min-h-0 overflow-hidden">
-                <aside className="hidden lg:block lg:sticky top-0 self-start mb-4 max-h-[calc(91vh-5rem)] overflow-hidden flex flex-col">
+                <aside className="hidden lg:flex lg:sticky top-0 self-start mb-4 max-h-[calc(91vh-5rem)] overflow-hidden flex-col">
                     <div className="flex items-center justify-between mb-4">
                         <div>
                             <h2 className=" text-xl font-semibold text-white">Filters</h2>
@@ -660,7 +677,7 @@ function SearchPageContent() {
                         )}
                     </div>
 
-                    <div className="space-y-4 overflow-y-auto h-full flex-1 ">
+                    <div className="space-y-4 overflow-y-auto flex-1 min-h-0">
                         <div>
                             <h3 className="text-sm font-semibold text-white">Brands</h3>
                             <div className="mt-3 grid gap-2 ">
