@@ -35,11 +35,11 @@ function ReviewsCardResolver({ reviewsPromise, tyreId }) {
 
 const TyresClient = memo(function TyresClient({ initialData, reviewsPromise }) {
     const tyre = initialData;
-
     return (
         <div className="py-4 space-y-4">
             <ProductDetails tyre={tyre} reviewsPromise={reviewsPromise} />
             <Description tyre={tyre} />
+
             <Suspense fallback={<div className="min-h-[250px] w-full animate-pulse bg-zinc-900/50 rounded-2xl" />}>
                 <ReviewsCardResolver reviewsPromise={reviewsPromise} tyreId={tyre?._id} />
             </Suspense>

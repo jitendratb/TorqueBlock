@@ -6,7 +6,7 @@ import ProductFamilyCard from '@/components/atoms/ProductFamilyCard';
 import tyresService from '@/services/tyresService';
 import { TyreCardSkeletonGroup } from '@/app/(home)/component/Tyre/TyreCardSkeleton';
 
-export default function TyreSection({ categoryId, brandId, isNewLaunch, isBestSeller, isFeatured, title = "Available Products", subtitle = "Explore all products", primaryColor = '#f97316' }) {
+export default function TyreSection({ categoryId, Similar = [], brandId, isNewLaunch, isBestSeller, isFeatured, title = "Available Products", subtitle = "Explore all products", primaryColor = '#f97316' }) {
   const [tyres, setTyres] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const loadingRef = useRef(false);
@@ -44,19 +44,23 @@ export default function TyreSection({ categoryId, brandId, isNewLaunch, isBestSe
     }
   };
 
+  const hasSimilar = Similar?.length > 0;
+  const items = hasSimilar ? Similar : tyres;
+
   useEffect(() => {
+    if (hasSimilar) return;
     fetchTyres(page);
-  }, [brandId, categoryId, isNewLaunch, isBestSeller, isFeatured, page]);
+  }, [hasSimilar, brandId, categoryId, isNewLaunch, isBestSeller, isFeatured, page]);
 
   const handleReachEnd = () => {
-    if (hasMore && !loadingRef.current) {
+    if (!hasSimilar && hasMore && !loadingRef.current) {
       setPage(prev => prev + 1);
     }
   };
 
-  if (tyres.length === 0 && !isLoading) return null;
+  if (items.length === 0 && !isLoading) return null;
 
-  if (tyres.length === 0 && isLoading) {
+  if (items.length === 0 && isLoading) {
     return (
       <div className="space-y-4">
         <div className="flex items-center gap-3 lg:border-b lg:border-white/10 lg:pb-4 animate-pulse">
@@ -95,7 +99,7 @@ export default function TyreSection({ categoryId, brandId, isNewLaunch, isBestSe
       </div>
       <div className="relative">
         <Carousel
-          items={tyres}
+          items={items}
           itemWidth="w-[280px] md:w-[300px]"
 
           renderItem={(tyre) => {

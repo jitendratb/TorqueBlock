@@ -9,6 +9,7 @@ function Similar({ tyre }) {
         <section className="relative">
           <TyreSection
                     categoryId={tyre?.categoryId?._id}
+                    Similar={tyre?.relatedProducts}
                     title="Similar Tyres"
                     subtitle="Similar tyres you might like"
                  

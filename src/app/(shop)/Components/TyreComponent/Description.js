@@ -5,6 +5,7 @@ import { RiThumbUpFill, RiThumbDownFill, RiShieldCheckFill } from 'react-icons/r
 import { TbCheck, TbX } from 'react-icons/tb';
 import TyreCard from "@/components/atoms/TyreCard";
 import Carousel from '@/components/organisms/Carousel';
+import CompatibleBikes from './CompatibleBikes';
 
 const Description = memo(function Description({ tyre, desClassName = "space-y-2", sizesClassName }) {
     const [isExpanded, setIsExpanded] = useState(false);
@@ -205,62 +206,20 @@ const Description = memo(function Description({ tyre, desClassName = "space-y-2"
                                 Commonly Used On
                             </h2>
                             <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5">
-                                Verified Compatible Vehicles
+                                Verified Compatible Motorcycles
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <div className="relative pt-4 space-y-4">
-                    {tyre?.commonlyUsedOn && (
+                    {!tyre?.compatibleVehicles?.length && tyre?.commonlyUsedOn && (
                         <p className="text-[13px] md:text-sm text-zinc-300/90 leading-relaxed font-medium tracking-wide">
                             {tyre?.commonlyUsedOn}
                         </p>
                     )}
-
-                    <div className="w-full min-w-0">
-                        {tyre?.compatibleVehicles?.length > 0 ? (
-                            <Carousel
-                                items={tyre?.compatibleVehicles}
-                                itemWidth="w-auto"
-                                showDots={false}
-                                showArrows={true}
-                                arrowSize={16}
-                                leftArrowClassName="-left-2 p-1"
-                                rightArrowClassName="-right-2 p-1"
-                                gap={12}
-                                renderItem={(brand, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 whitespace-nowrap cursor-pointer"
-                                    >
-                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm shrink-0" />
-                                        <span>{brand?.brand} {brand?.model}</span>
-                                    </div>
-                                )}
-                            />
-                        ) : tyre?.commonlyUsedBikes?.length > 0 ? (
-                            <Carousel
-                                items={tyre?.commonlyUsedBikes}
-                                itemWidth="w-auto"
-                                showDots={false}
-                                showArrows={true}
-                                gap={12}
-                                renderItem={(bike, idx) => (
-                                    <div
-                                        key={idx}
-                                        className="flex items-center gap-2 px-3 py-1.5 md:px-4 md:py-2 rounded-lg border border-white/10 bg-white/5 text-xs md:text-sm text-zinc-300 font-bold hover:text-white hover:border-orange-500/50 hover:bg-orange-500/10 hover:shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 whitespace-nowrap cursor-pointer"
-                                    >
-                                        <FaMotorcycle className="text-orange-500 text-sm drop-shadow-sm shrink-0" />
-                                        <span>{bike}</span>
-                                    </div>
-                                )}
-                            />
-                        ) : null}
-                    </div>
-
-
                 </div>
+                {tyre?.compatibleVehicles?.length > 0 && <CompatibleBikes tyre={tyre} />}
             </div>
             {(tyre?.pros?.length > 0 || tyre?.cons?.length > 0) && (
                 <section className="relative">
