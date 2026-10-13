@@ -86,7 +86,7 @@ function BikeModelsClient({ data }) {
         return <FiInfo className="text-orange-500/80 text-sm group-hover:text-orange-400 transition-colors duration-300" />;
     };
 
-    const whatsappMessage = encodeURIComponent(`Hi Torque Block! I need a high-performance tyre setup for my ${data.bikeBrand} ${data.bikeModel}. What's the best rubber for maximum grip?`);
+ console.log(data)
 
     return (
         <div className="relative space-y-4">
@@ -117,7 +117,7 @@ function BikeModelsClient({ data }) {
                         </div>
 
                         <h2 className="text-orange-500 text-lg md:text-2xl font-black uppercase tracking-widest drop-shadow-md">
-                            {data.bikeBrand}
+                            {data?.bikeBrandId?.brandName || data.bikeBrand}
                         </h2>
                         <h1 className="text-4xl md:text-6xl lg:text-[5.5rem] font-black text-white tracking-[-0.02em] leading-[0.9] drop-shadow-2xl">
                             {data.bikeModel}

@@ -7,8 +7,8 @@ function BikeCard({ brand, index, className = "" }) {
     if (!brand) return null;
 
     const href = `/motorcycles/${brand.identifier}`;
-    const imageSrc = brand?.heroImage || brand?.mobileHeroImage || brand?.image || '/placeholder.jpg';
-    const brandName = brand?.bikeBrand || brand?.name || 'Motorcycle Brand';
+    const imageSrc = brand?.hero?.banner || brand?.heroImage || brand?.mobileHeroImage || brand?.image || '/placeholder.jpg';
+    const brandName = brand?.bikeBrandId?.brandName ||  brand?.bikeBrand || brand?.name || 'Motorcycle Brand';
     const modelName = brand?.bikeModel || '';
     const title = modelName ? `${brandName} ${modelName}` : brandName;
 
@@ -16,11 +16,13 @@ function BikeCard({ brand, index, className = "" }) {
     const firstWord = titleWords[0];
     const restOfTitle = titleWords.slice(1).join(' ');
 
+    console.log(brand)
+
     return (
         <Link href={href} className={`group relative h-[320px] rounded-[2rem] border border-white/20 block shrink-0 overflow-hidden cursor-pointer ${className}`}>
             <CustomImage
                 src={imageSrc}
-                alt={title}
+                alt={brand?.hero?.title || title}
                 fill
                 priority={index < 6}
                 imageClassName="object-cover transition-transform duration-1000 ease-out group-hover:scale-110"

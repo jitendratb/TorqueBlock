@@ -213,7 +213,10 @@ const Description = memo(function Description({ tyre, desClassName = "space-y-2"
                             </div>
                         </div>
                     </div>
-                    {tyre?.compatibleVehicles?.length > 0 && <CompatibleBikes tyre={tyre} />}
+                    <div className='mt-4'>
+                        {tyre?.compatibleVehicles?.length > 0 && <CompatibleBikes tyre={tyre} />}
+                    </div>
+
                 </div>)
             }
 
