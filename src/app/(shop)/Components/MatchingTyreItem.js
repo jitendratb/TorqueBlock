@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { FaCheck, FaArrowRight } from "react-icons/fa";
+import { FaCheck, FaArrowRight, FaShieldAlt } from "react-icons/fa";
 
 export default function MatchingTyreItem({ item, parentTyre, isSelected, parentAvailability, isOfferItem, isOfferActive, onSelect, formatPrice, onViewDetails }) {
     const router = useRouter();
@@ -59,7 +59,8 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
                         {item.position}
                     </span>
 
-                    <span className={`text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${availBadgeClass}`}>
+                    <span className={`inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${availBadgeClass}`}>
+                        <FaShieldAlt className="text-[8px]" aria-hidden="true" />
                         {availLabel}
                     </span>
                 </div>
@@ -86,7 +87,7 @@ export default function MatchingTyreItem({ item, parentTyre, isSelected, parentA
                             </span>
                         </div>
                     ) : (
-                        <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
+                        <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-400"}`}>
                             {formatPrice(price)}
                         </p>
                     )}

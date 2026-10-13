@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
-import { FaMotorcycle, FaBolt, FaTag, FaBell } from "react-icons/fa";
+import { FaMotorcycle, FaBolt, FaBell } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
 import { RiSparkling2Fill } from "react-icons/ri";
 import { MdStraighten } from "react-icons/md";
@@ -36,7 +36,6 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
     const [isRinging, setIsRinging] = useState(false);
     const buyBarRef = useRef(null);
 
-    // Show the bottom buy bar while the inline buttons are off screen
     const [showStickyBuyBar, setShowStickyBuyBar] = useState(false);
     useEffect(() => {
         const bar = buyBarRef.current;
@@ -363,13 +362,24 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
                 <div className="space-y-4 lg:space-y-3">
                     <header className="flex flex-col gap-0">
-                        <div className="absolute top-4 left-2 right-2 z-20 flex items-center justify-between gap-4 md:static">
-                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/40 md:border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group relative overflow-hidden">
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-100%] ]" />
-                                <RiSparkling2Fill size={14} className="text-white md:text-orange-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] md:drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
-                                <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-white md:text-orange-400 z-10">
-                                    {brandName}
+                        <div className="absolute top-4 left-2 right-2 z-20 flex items-center justify-between gap-3 md:static">
+                            {/* Phones: this row sits over the gallery photo, so give it a dark glass backing */}
+                            <div className="flex min-w-0 items-center gap-2.5 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-md md:bg-transparent md:p-0 md:backdrop-blur-none">
+                                <span className="flex shrink-0 items-center gap-1.5">
+                                    <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" aria-hidden="true" />
+                                    <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400">
+                                        {brandName}
+                                    </span>
                                 </span>
+
+                                {categoryName && (
+                                    <>
+                                        <span className="h-3.5 w-px shrink-0 bg-white/25" aria-hidden="true" />
+                                        <span className="truncate text-[10px] lg:text-xs font-bold uppercase tracking-[0.2em] text-zinc-300">
+                                            {categoryName}
+                                        </span>
+                                    </>
+                                )}
                             </div>
 
                             <ShareButton title={title || parentTyre?.productName || "this tyre"} getUrl={getShareUrl} />
@@ -382,56 +392,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
                     </header>
 
-                    <div className="">
-                        <div className="flex flex-wrap items-center gap-2" aria-label="Product features">
-                            <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-zinc-800/50 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                <FaMotorcycle className="text-orange-500 text-sm" aria-hidden="true" />
-                                <span className="text-[9px] md:text-[11px] font-bold text-zinc-300 uppercase tracking-widest">
-                                    {tyreData?.position}
-                                </span>
-                            </div>
-
-                            {tyreData?.size && (
-                                <div className="flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-orange-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-orange-500/60 hover:shadow-[0_0_12px_rgba(59,130,246,0.2)]">
-                                    <FiMaximize2 className="text-orange-400 text-sm" aria-hidden="true" />
-                                    <span className="text-[9px] md:text-[11px] font-bold text-orange-200 uppercase tracking-widest">
-                                        {tyreData.size}
-                                    </span>
-                                </div>
-                            )}
-                            {tyreData?.tyretype && (
-                                <div className="flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-gradient-to-r from-emerald-500/15 to-emerald-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-emerald-500/60 hover:shadow-[0_0_12px_rgba(16,185,129,0.2)]">
-                                    <GiTyre className="text-emerald-400 text-sm" aria-hidden="true" />
-                                    <span className="text-[9px] md:text-[11px] font-bold text-emerald-200  tracking-widest">
-                                        {tyreData.tyretype}
-                                    </span>
-                                </div>
-                            )}
-
-
-                            {categoryName && (
-                                <div className="flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300">
-                                    <FaTag className="text-orange-400 text-sm" aria-hidden="true" />
-                                    <span className="text-[9px] md:text-[11px] font-black text-orange-400 uppercase tracking-widest">
-                                        {categoryName}
-                                    </span>
-                                </div>
-                            )}
-
-                            {tyreData?.tubeType?.length > 0 && (
-                                <div className="hidden md:flex items-center gap-1.5 rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 to-orange-600/5 px-3 py-1.5 shadow-inner backdrop-blur-md transition-all duration-300 hover:border-orange-500/60 hover:shadow-[0_0_12px_rgba(249,115,22,0.2)]">
-                                    <TbCircleDot className="text-orange-400 text-sm" aria-hidden="true" />
-                                    <span className="text-[9px] md:text-[11px] font-bold text-orange-200 uppercase tracking-widest">
-                                        {tubeTypes.map((type) => TUBE_TYPE_LABELS[type] || type).join(" / ")}
-                                    </span>
-                                </div>
-                            )}
-
-                        </div>
-                    </div>
-
                     <PriceCard tyreData={tyreData} selectedOpposite={selectedOpposite} prices={prices} formatPrice={formatPrice} />
-
 
                     {tyreData?.oppositeSizes && tyreData.oppositeSizes.length > 0 && (
                         <section aria-labelledby="matching-tyres-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 lg:p-3 space-y-2 md:space-y-4 lg:space-y-2 backdrop-blur-md overflow-hidden">
@@ -458,13 +419,13 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
 
                             <Carousel
                                 items={tyreData.oppositeSizes}
-                                itemWidth='w-[240px] md:w-[260px]'
+                                itemWidth='w-full md:w-[260px]'
                                 gap={12}
                                 showArrows={true}
                                 showDots={false}
                                 arrowSize={10}
-                                leftArrowClassName={"-left-4 p-1"}
-                                rightArrowClassName={"-right-4 p-1"}
+                                leftArrowClassName={"-left-2 p-1"}
+                                rightArrowClassName={"-right-2 p-1"}
                                 className="w-full"
                                 renderItem={renderCarouselItem}
                                 activeIndex={selectedOpposite ? tyreData.oppositeSizes.findIndex(item => (item._id || item.id) === (selectedOpposite._id || selectedOpposite.id)) : undefined}

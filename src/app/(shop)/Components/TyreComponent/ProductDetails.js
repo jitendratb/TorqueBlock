@@ -4,10 +4,10 @@ import { memo, useMemo, useCallback, useState, Suspense, use } from "react";
 import StarRating from "@/components/atoms/StarRating";
 import PriceCard from "./PriceCard";
 import ProductGallery from "@/components/organisms/ProductGallery";
+import ProductTrust from "@/components/molecules/ProductTrust";
 
-import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaTag, FaChevronDown } from "react-icons/fa";
+import { FaMotorcycle, FaRoad, FaBolt, FaFlagCheckered, FaShieldAlt, FaChevronDown } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
-import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
 import { RiSparkling2Fill } from "react-icons/ri";
 
 const tagConfig = {
@@ -55,19 +55,21 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                 </div>
 
                 <div className="flex flex-col gap-4">
-                    <div className="mt-2 flex flex-wrap items-center gap-3 md:mt-0">
-                        <div className="group relative inline-flex items-center gap-2 overflow-hidden rounded-full border border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 px-4 py-1.5 shadow-[0_0_20px_rgba(249,115,22,0.15)] backdrop-blur-xl">
-                            <RiSparkling2Fill size={14} className="z-10 text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" />
-                            <span className="z-10 text-[10px] font-black uppercase tracking-[0.3em] text-orange-400 lg:text-xs">
+                    <div className="mt-2 flex min-w-0 items-center gap-2.5 md:mt-0">
+                        <span className="flex shrink-0 items-center gap-1.5 ">
+                            <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" aria-hidden="true" />
+                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400">
                                 {tyre?.brand?.name}
                             </span>
-                        </div>
+                        </span>
 
                         {tyre?.categoryId?.name && (
-                            <div className="inline-flex items-center gap-1.5 rounded-full border border-orange-500/20 bg-orange-500/10 px-3 py-1.5">
-                                <FaTag className="text-xs text-orange-400" />
-                                <span className="text-[11px] font-semibold text-orange-300">{tyre.categoryId.name}</span>
-                            </div>
+                            <>
+                                <span className="h-3.5 w-px shrink-0 bg-white/25" aria-hidden="true" />
+                                <span className="truncate text-[10px] lg:text-xs font-bold uppercase tracking-[0.2em] text-zinc-300">
+                                    {tyre.categoryId.name}
+                                </span>
+                            </>
                         )}
                     </div>
 
@@ -134,39 +136,7 @@ const ProductDetails = memo(function ProductDetails({ tyre, reviewsPromise }) {
                         </button>
                     </div>
 
-                    <div className="relative">
-                        <div className="grid grid-cols-3 gap-2 px-1">
-                            <div className="group relative flex flex-col sm:flex-row justify-center items-center gap-1.5 sm:gap-3 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-1.5 py-3 sm:px-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(249,115,22,0.15)]">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30 transition-all duration-300 group-hover:ring-orange-500/60 group-hover:shadow-[0_0_10px_rgba(249,115,22,0.3)]">
-                                    <MdLocalShipping className="text-orange-400 text-lg" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[11px] font-bold leading-tight tracking-wide text-white/90">Free Delivery</p>
-                                    <p className="text-[9px] text-zinc-500">Pan India</p>
-                                </div>
-                            </div>
-
-                            <div className="group relative flex flex-col sm:flex-row justify-center items-center gap-1.5 sm:gap-3 rounded-xl border border-emerald-500/20 bg-gradient-to-b from-emerald-500/10 to-white/10 px-1.5 py-3 sm:px-2 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:from-emerald-500/15 hover:shadow-[0_0_18px_rgba(16,185,129,0.15)]">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30 transition-all duration-300 group-hover:ring-emerald-500/60 group-hover:shadow-[0_0_10px_rgba(16,185,129,0.3)]">
-                                    <MdVerified className="text-emerald-400 text-lg" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[11px] font-bold leading-tight tracking-wide text-white/90">100% Genuine</p>
-                                    <p className="text-[9px] text-zinc-500">Certified Brand</p>
-                                </div>
-                            </div>
-
-                            <div className="group relative flex flex-col sm:flex-row justify-center items-center gap-1.5 sm:gap-3 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-1.5 py-3 sm:px-2 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15 hover:shadow-[0_0_18px_rgba(59,130,246,0.15)]">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30 transition-all duration-300 group-hover:ring-orange-500/60 group-hover:shadow-[0_0_10px_rgba(59,130,246,0.3)]">
-                                    <MdSupportAgent className="text-orange-400 text-lg" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[11px] font-bold leading-tight tracking-wide text-white/90">Expert Help</p>
-                                    <p className="text-[9px] text-zinc-500">Advice When Needed</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductTrust />
                 </div>
 
             </div>
