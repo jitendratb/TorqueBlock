@@ -1,13 +1,15 @@
 "use client";
 
-import { useMemo, useState, useEffect, useCallback } from "react";
+import { useMemo, useState, useEffect, useCallback, useRef } from "react";
 import ProductGallery from "@/components/organisms/ProductGallery";
+import ProductTrust from "@/components/molecules/ProductTrust";
+import ShareButton from "@/components/molecules/ShareButton";
 import useCartStore from "@/stores/cartStore";
 import { useRouter } from "next/navigation";
-import { FaTag, FaMotorcycle, FaWrench, FaShieldAlt, FaBell } from "react-icons/fa";
-import { MdVerified, MdLocalShipping, MdSupportAgent } from "react-icons/md";
+import { FaTag, FaMotorcycle, FaWrench, FaBell } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
-import { HiLightningBolt } from "react-icons/hi";
+import PriceCard from "../PriceCard";
+import StickyBuyBar from "../StickyBuyBar";
 
 const INR_FORMATTER = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -20,6 +22,7 @@ const formatPrice = (price) => INR_FORMATTER.format(price || 0);
 export default function ProductDetails({ tube }) {
     const router = useRouter();
     const { addToCart } = useCartStore();
+    const buyBarRef = useRef(null);
 
     const gallery = useMemo(() => {
         if (!tube) return [];
@@ -39,14 +42,37 @@ export default function ProductDetails({ tube }) {
         };
     }, [isRinging]);
 
+    // Show the bottom buy bar while the inline buttons are off screen
+    const [showStickyBuyBar, setShowStickyBuyBar] = useState(false);
+    useEffect(() => {
+        const bar = buyBarRef.current;
+        if (!bar) return;
+        const observer = new IntersectionObserver(([entry]) => setShowStickyBuyBar(!entry.isIntersecting));
+        observer.observe(bar);
+        return () => observer.disconnect();
+    }, [tube]);
+
     const brandName = useMemo(() => {
         if (!tube?.brand) return "TorqueBlock";
         return typeof tube.brand === "object" ? tube.brand.name || "TorqueBlock" : tube.brand;
     }, [tube]);
 
-    const { basePrice, baseOriginalPrice, baseDiscountAmount, baseDiscountPercentage } = useMemo(() => {
+    const categoryName = tube?.categoryId?.name;
+
+    // Tubes without an availability value have always been shown as in stock
+    const availability = tube?.availability || "in_stock";
+
+    // Split the name so the size can be highlighted, like the tyre size page title
+    const titleParts = useMemo(() => {
+        const name = tube?.name || "";
+        const sizeIndex = tube?.size ? name.indexOf(tube.size) : -1;
+        if (sizeIndex <= 0) return { main: name, size: "" };
+        return { main: name.slice(0, sizeIndex).trim(), size: name.slice(sizeIndex).trim() };
+    }, [tube]);
+
+    const prices = useMemo(() => {
         if (!tube) {
-            return { basePrice: 0, baseOriginalPrice: 0, baseDiscountAmount: 0, baseDiscountPercentage: 0 };
+            return { basePrice: 0, oppositePrice: 0, totalPrice: 0, baseOriginalPrice: 0, baseDiscountAmount: 0, baseDiscountPercentage: 0 };
         }
         const selling = tube.pricing?.sellingPrice ?? tube.startingPrice ?? tube.pricing?.mrp ?? 0;
         const mrp = tube.pricing?.mrp ?? selling;
@@ -55,6 +81,8 @@ export default function ProductDetails({ tube }) {
 
         return {
             basePrice: selling,
+            oppositePrice: 0,
+            totalPrice: selling,
             baseOriginalPrice: mrp,
             baseDiscountAmount: discAmt,
             baseDiscountPercentage: discPerc
@@ -116,169 +144,96 @@ export default function ProductDetails({ tube }) {
     }
 
     return (
-        <section className="w-full relative" aria-label="Product Details">
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <div className="flex flex-col gap-4">
+        <section aria-labelledby="product-details-heading" className="w-full relative">
+            <div className="relative grid grid-cols-1 gap-4 lg:grid-cols-2 items-start">
+                <div className="flex flex-col gap-4 lg:sticky lg:top-24">
                     <ProductGallery images={gallery} alt={tube.name || "Tube"} />
                 </div>
 
-                <div className="flex flex-col gap-3">
-                    <div className="flex items-center gap-2.5 flex-wrap">
-                        <div className="absolute top-4 left-2 z-10 md:static md:z-auto inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/40 md:border-orange-500/30 bg-gradient-to-r from-orange-500/15 via-orange-500/5 to-white/10 backdrop-blur-xl shadow-[0_0_20px_rgba(249,115,22,0.15)] group overflow-hidden">
-                            <RiSparkling2Fill size={14} className="text-white md:text-orange-400 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)] md:drop-shadow-[0_0_8px_rgba(249,115,22,0.8)] z-10" aria-hidden="true" />
-                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider text-white md:text-orange-400 z-10">
-                                {brandName}
-                            </span>
+                <div className="space-y-4 lg:space-y-3">
+                    <header className="flex flex-col gap-0">
+                        <div className="absolute top-4 left-2 right-2 z-20 flex items-center justify-between gap-3 md:static">
+                            {/* Phones: this row sits over the gallery photo, so give it a dark glass backing */}
+                            <div className="flex min-w-0 items-center gap-2.5 rounded-full bg-black/40 px-3 py-1.5 backdrop-blur-md md:bg-transparent md:p-0 md:backdrop-blur-none">
+                                <span className="flex shrink-0 items-center gap-1.5">
+                                    <RiSparkling2Fill size={14} className="text-orange-400 drop-shadow-[0_0_8px_rgba(249,115,22,0.8)]" aria-hidden="true" />
+                                    <span className="text-[10px] lg:text-xs font-black uppercase tracking-[0.3em] text-orange-400">
+                                        {brandName}
+                                    </span>
+                                </span>
+
+                                {categoryName && (
+                                    <>
+                                        <span className="h-3.5 w-px shrink-0 bg-white/25" aria-hidden="true" />
+                                        <span className="truncate text-[10px] lg:text-xs font-bold uppercase tracking-[0.2em] text-zinc-300">
+                                            {categoryName}
+                                        </span>
+                                    </>
+                                )}
+                            </div>
+
+                            <ShareButton title={tube.name || "this tube"} />
                         </div>
 
-                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-emerald-500/40 bg-gradient-to-r from-emerald-500/20 via-emerald-500/10 to-emerald-950/30 backdrop-blur-xl shadow-[0_0_20px_rgba(16,185,129,0.2)] group relative overflow-hidden">
-                            <HiLightningBolt className="text-xs text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] z-10" aria-hidden="true" />
-                            <span className="text-[10px] lg:text-xs font-black uppercase tracking-wider text-emerald-300 z-10">
-                                3000+ Sold this month
-                            </span>
-                        </div>
-                    </div>
-
-                    <div className="space-y-2">
-                        <h1 className="text-2xl md:text-4xl lg:text-4.5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-orange-300 tracking-tight leading-[1.1] drop-shadow-2xl">
-                            {tube.name}
+                        <h1 id="product-details-heading" className="space-y-1 tracking-tighter drop-shadow-2xl">
+                            <span className="block font-black text-2xl md:text-3xl leading-tight text-white">{titleParts.main}</span>
+                            {titleParts.size && <span className="block font-black text-lg md:text-xl lg:text-2xl leading-tight text-orange-400">{titleParts.size}</span>}
                         </h1>
+
                         {tube.shortDescription && (
-                            <p className="text-xs text-zinc-400 font-medium leading-relaxed">
+                            <p className="mt-2 text-xs text-zinc-400 font-medium leading-relaxed">
                                 {tube.shortDescription}
                             </p>
                         )}
-                    </div>
+                    </header>
 
-                    <div className="flex items-center gap-2.5 flex-wrap my-1">
-                        {tube.tubeType && (
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/60 bg-orange-950/40 backdrop-blur-md shadow-sm">
-                                <FaTag size={12} className="text-orange-400" aria-hidden="true" />
-                                <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">
-                                    {tube.tubeType}
-                                </span>
-                            </div>
-                        )}
-
-                        {tube.position && (
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-700/60 bg-[#16181e] backdrop-blur-md shadow-sm">
-                                <FaMotorcycle size={13} className="text-orange-500" aria-hidden="true" />
-                                <span className="text-xs font-extrabold uppercase tracking-wider text-white">
-                                    {tube.position}
-                                </span>
-                            </div>
-                        )}
-
-                        {tube.valveType && (
-                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-700/60 bg-[#16181e] backdrop-blur-md shadow-sm">
-                                <FaWrench size={13} className="text-orange-500" aria-hidden="true" />
-                                <span className="text-xs font-extrabold uppercase tracking-wider text-white">
-                                    {tube.valveType} {tube.valveAngle ? `(${tube.valveAngle})` : ''}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-
-                    <article className="relative overflow-hidden rounded-2xl border border-orange-500/30 bg-gradient-to-br from-orange-500/10 via-zinc-900/40 to-transparent p-4 md:p-5 shadow-[0_0_40px_rgba(249,115,22,0.1)] backdrop-blur-xl group transition-all duration-500 hover:border-orange-500/50 flex flex-col gap-4">
-                        <div className="absolute -top-12 -right-12 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl pointer-events-none group-hover:bg-orange-500/30 transition-colors duration-700" />
-                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-orange-600/10 rounded-full blur-2xl pointer-events-none" />
-
-                        <div className="flex flex-col relative z-10 gap-3">
-                            <div className="flex justify-between items-start">
-                                <div className="flex flex-col gap-1">
-                                    <span className="text-[10px] md:text-xs font-black text-orange-500 uppercase tracking-[0.3em] drop-shadow-sm">
-                                        Price
+                    {(tube.tubeType || tube.position || tube.valveType) && (
+                        <div className="flex items-center gap-2.5 flex-wrap" aria-label="Tube specifications">
+                            {tube.tubeType && (
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-orange-500/60 bg-orange-950/40 backdrop-blur-md shadow-sm">
+                                    <FaTag size={12} className="text-orange-400" aria-hidden="true" />
+                                    <span className="text-xs font-extrabold uppercase tracking-wider text-orange-400">
+                                        {tube.tubeType}
                                     </span>
-                                    {baseDiscountAmount > 0 ? (
-                                        <div className="flex flex-col gap-1 mt-1">
-                                            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-                                                <span className="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-zinc-400 drop-shadow-sm tracking-tight">
-                                                    {formatPrice(basePrice)}
-                                                </span>
-                                                <div className="flex items-center gap-2.5 bg-black/20 rounded-full pl-3 pr-1 py-1 border border-white/5 backdrop-blur-md shadow-inner">
-                                                    <span className="text-xs md:text-sm font-semibold text-zinc-400 line-through decoration-red-500/60 decoration-[1.5px]" aria-label={`Original price ${formatPrice(baseOriginalPrice)}`}>
-                                                        {formatPrice(baseOriginalPrice)}
-                                                    </span>
-                                                    <div className="inline-flex min-w-[120px] items-center px-3 py-1 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-[0_0_15px_rgba(249,115,22,0.3)] relative overflow-hidden">
-                                                        <span className="relative z-10 drop-shadow-md flex items-center gap-1">
-                                                            Save {formatPrice(baseDiscountAmount)}
-                                                            <span className="bg-black/20 px-1.5 py-0.5 rounded font-bold">({baseDiscountPercentage}%)</span>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <span className="text-[9px] md:text-[10px] font-bold text-zinc-500 uppercase">
-                                                (Incl. of all taxes)
-                                            </span>
-                                        </div>
-                                    ) : (
-                                        <div className="flex gap-2 items-end">
-                                            <span className="text-4xl md:text-5xl font-black text-white drop-shadow-lg tracking-tight">
-                                                {formatPrice(basePrice)}
-                                            </span>
-                                            <span className="text-[10px] font-medium text-zinc-400 pb-1.5">
-                                                (Incl. of all taxes)
-                                            </span>
-                                        </div>
-                                    )}
                                 </div>
+                            )}
 
-                                <div className={`flex min-w-[90px] items-center gap-1.5 rounded-xl border px-2.5 py-1 backdrop-blur-xl shadow-lg transition-all duration-300 ${tube.availability === "in_stock" || !tube.availability
-                                        ? 'border-green-500/20 bg-green-500/10'
-                                        : tube.availability === "backorder"
-                                            ? 'border-yellow-500/20 bg-yellow-500/10'
-                                            : tube.availability === "preorder"
-                                                ? 'border-blue-500/20 bg-blue-500/10'
-                                                : 'border-red-500/20 bg-red-500/10'
-                                    }`}>
-                                    <FaShieldAlt className={`text-[9px] ${tube.availability === "in_stock" || !tube.availability ? 'text-green-400'
-                                            : tube.availability === "backorder" ? 'text-yellow-400'
-                                                : tube.availability === "preorder" ? 'text-blue-400'
-                                                    : 'text-red-400'
-                                        }`} aria-hidden="true" />
-                                    <p className={`text-[9px] sm:text-[10px] font-bold uppercase tracking-widest ${tube.availability === "in_stock" || !tube.availability ? 'text-green-100'
-                                            : tube.availability === "backorder" ? 'text-yellow-100'
-                                                : tube.availability === "preorder" ? 'text-blue-100'
-                                                    : 'text-red-100'
-                                        }`}>
-                                        {tube.availability === "in_stock" || !tube.availability ? 'In Stock'
-                                            : tube.availability === "backorder" ? 'Available To Order'
-                                                : tube.availability === "preorder" ? 'Pre Order'
-                                                    : 'Out of Stock'}
-                                    </p>
+                            {tube.position && (
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-700/60 bg-[#16181e] backdrop-blur-md shadow-sm">
+                                    <FaMotorcycle size={13} className="text-orange-500" aria-hidden="true" />
+                                    <span className="text-xs font-extrabold uppercase tracking-wider text-white">
+                                        {tube.position}
+                                    </span>
                                 </div>
-                            </div>
-                        </div>
-                    </article>
+                            )}
 
-                    <div className="rounded-2xl border border-emerald-500/30 bg-[#0c1c17]/80 backdrop-blur-xl p-3.5 flex items-center gap-3.5 shadow-lg">
-                        <div className="h-9 w-9 shrink-0 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shadow-inner">
-                            <HiLightningBolt size={18} aria-hidden="true" />
+                            {tube.valveType && (
+                                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-zinc-700/60 bg-[#16181e] backdrop-blur-md shadow-sm">
+                                    <FaWrench size={13} className="text-orange-500" aria-hidden="true" />
+                                    <span className="text-xs font-extrabold uppercase tracking-wider text-white">
+                                        {tube.valveType} {tube.valveAngle ? `(${tube.valveAngle})` : ''}
+                                    </span>
+                                </div>
+                            )}
                         </div>
-                        <div className="flex flex-col">
-                            <h2 className="text-[11px] md:text-xs font-black uppercase tracking-wider text-emerald-400">
-                                Ships Within 24 Hours
-                            </h2>
-                            <p className="text-[10px] text-zinc-400 font-medium">
-                                Order dispatched within 24 hours*
-                            </p>
-                        </div>
-                    </div>
+                    )}
 
-                    <div className={`grid gap-4 relative z-10 w-full ${tube.availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
+                    <PriceCard tyreData={{ ...tube, availability }} selectedOpposite={null} prices={prices} formatPrice={formatPrice} />
+
+                    <div ref={buyBarRef} className={`grid gap-2 md:gap-4 ${availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
                             type="button"
                             onClick={handleAddToCart}
-                            className={`${tube.availability === "backorder" ? 'hidden' : ''} py-4 px-4 rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer  flex justify-center items-center focus:outline-none`}
+                            className={`${availability === "backorder" ? 'hidden' : ''} py-4 lg:py-3 px-1 rounded-xl font-black uppercase tracking-widest text-xs sm:text-sm bg-white/10 text-white border border-white/10 hover:bg-white/15 backdrop-blur-md shadow-lg transform hover:-translate-y-1 transition-all duration-300 cursor-pointer`}
                         >
                             Add to Cart
                         </button>
 
-                        {(tube.availability === "backorder" || tube.availability === "out_of_stock") ? (
+                        {(availability === "backorder" || availability === "out_of_stock") ? (
                             <button
                                 type="button"
                                 onClick={handleNotify}
-                                className="py-4 px-4 flex gap-2 items-center justify-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer focus:outline-none"
+                                className="py-4 lg:py-3 px-4 flex gap-2 items-center justify-center rounded-lg font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 active:scale-95 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
                                 CHECK AVAILABILITY
                                 <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} aria-hidden="true" />
@@ -287,48 +242,31 @@ export default function ProductDetails({ tube }) {
                             <button
                                 type="button"
                                 onClick={handleBuyNow}
-                                className="py-4 px-4 flex gap-2 justify-center items-center rounded-2xl font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer focus:outline-none"
+                                className="py-4 lg:py-3 px-1 flex gap-1 justify-center items-center rounded-lg font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
                                 Buy Now
                             </button>
                         )}
                     </div>
 
-                    <div className="relative mt-1">
-                        <div className="grid grid-cols-3 gap-2 px-1">
-                            <div className="group relative flex justify-center items-center gap-2.5 rounded-xl border border-orange-500/20 bg-gradient-to-b from-orange-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-orange-500/50 hover:from-orange-500/15">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/15 ring-1 ring-orange-500/30">
-                                    <MdLocalShipping className="text-orange-400 text-lg" aria-hidden="true" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Free Delivery</p>
-                                    <p className="text-[8px] text-zinc-500 md:text-[9px]">Pan India</p>
-                                </div>
-                            </div>
-
-                            <div className="group relative flex justify-center items-center gap-2.5 rounded-xl border border-emerald-500/20 bg-gradient-to-b from-emerald-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-emerald-500/50 hover:from-emerald-500/15">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-500/15 ring-1 ring-emerald-500/30">
-                                    <MdVerified className="text-emerald-400 text-lg" aria-hidden="true" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">100% Genuine</p>
-                                    <p className="text-[8px] text-zinc-500 md:text-[9px]">Certified Brand</p>
-                                </div>
-                            </div>
-
-                            <div className="group relative flex justify-center items-center gap-2.5 rounded-xl border border-blue-500/20 bg-gradient-to-b from-blue-500/10 to-white/10 px-2 py-3 backdrop-blur-sm transition-all duration-300 hover:border-blue-500/50 hover:from-blue-500/15">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-500/15 ring-1 ring-blue-500/30">
-                                    <MdSupportAgent className="text-blue-400 text-lg" aria-hidden="true" />
-                                </div>
-                                <div className="text-center">
-                                    <p className="text-[10px] font-bold tracking-wide text-white/90 md:text-[11px]">Expert Help</p>
-                                    <p className="text-[8px] text-zinc-500 md:text-[9px]">Advice When Needed</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ProductTrust />
                 </div>
             </div>
+
+            <StickyBuyBar
+                isVisible={showStickyBuyBar}
+                image={gallery[0]}
+                name={titleParts.main}
+                subtitle={titleParts.size}
+                availability={availability}
+                price={formatPrice(prices.totalPrice)}
+                priceNote="(Incl. all taxes)"
+                isRinging={isRinging}
+                notifyLabel="Check Availability"
+                onAddToCart={handleAddToCart}
+                onBuyNow={handleBuyNow}
+                onNotify={handleNotify}
+            />
         </section>
     );
 }

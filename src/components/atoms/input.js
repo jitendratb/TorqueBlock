@@ -75,7 +75,9 @@ export const Input = forwardRef(function Input(
           onChange={onChange}
           className={clsx(
             "w-full bg-transparent outline-none text-sm border-none p-0 m-0 focus:ring-0",
-            variant === "glass" ? "text-white placeholder-gray-300" : "text-gray-900 placeholder-gray-400",
+            variant === "glass"
+              ? "text-white placeholder-gray-300 autofill:[transition:background-color_9999s_ease-in-out_0s] autofill:[-webkit-text-fill-color:#fff] autofill:caret-white"
+              : "text-gray-900 placeholder-gray-400",
             className
           )}
           {...props}

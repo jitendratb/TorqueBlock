@@ -11,7 +11,7 @@ const AVAILABILITY = {
 };
 const OUT_OF_STOCK = { label: "Out of Stock", badge: "border-red-500/20 bg-red-500/10 text-red-400" };
 
-export default function StickyBuyBar({ isVisible, image, name, subtitle, availability, price, priceNote, isRinging, onAddToCart, onBuyNow, onNotify }) {
+export default function StickyBuyBar({ isVisible, image, name, subtitle, availability, price, priceNote, isRinging, notifyLabel = "Notify Me", onAddToCart, onBuyNow, onNotify }) {
     const stock = AVAILABILITY[availability] || OUT_OF_STOCK;
     const canNotify = availability === "backorder" || availability === "out_of_stock";
     const canAddToCart = availability !== "backorder";
@@ -64,7 +64,7 @@ export default function StickyBuyBar({ isVisible, image, name, subtitle, availab
                             onClick={onNotify}
                             className="flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-4 lg:px-8 py-3 text-xs font-black uppercase tracking-widest text-white hover:bg-orange-600 shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-colors duration-300 cursor-pointer"
                         >
-                            Notify Me
+                            {notifyLabel}
                             <FaBell className={`text-sm ${isRinging ? "animate-bell-ring" : ""}`} aria-hidden="true" />
                         </button>
                     ) : (
