@@ -52,7 +52,8 @@ const reconstructCart = (backendItems) => {
       sku: item.sku || sizeObj?.sku,
       type: itemType,
       offerId: item.offerId || sizeObj?.offerId,
-      isOfferItem: item.isOfferItem || sizeObj?.isOfferItem
+      // Customer offer links add an extra discount on top of the product's own discount
+      isOfferItem: Boolean(item.isOfferItem || sizeObj?.isOfferItem || (sizeObj && Number(item.discountPrice || 0) > Number(sizeObj.discount || 0)))
     };
 
     const position = (sizeItem.position || '').toLowerCase();

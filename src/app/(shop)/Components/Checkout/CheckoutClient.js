@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import Link from 'next/link';
 import Script from 'next/script';
 import useCartStore from '@/stores/cartStore';
 import useAuthStore from '@/stores/authStore';
@@ -199,11 +198,19 @@ export default function CheckoutClient() {
     }, [couponData, subtotal, cart]);
 
 
+    const hasOfferItem = useMemo(() => cart.some((item) =>
+        [item.selectedFront, item.selectedRear, item.selectedGeneric].some((size) => size?.isOfferItem)
+    ), [cart]);
+
     const finalTotal = useMemo(() => Math.max(0, subtotal + deliveryCharge - discountAmount), [subtotal, deliveryCharge, discountAmount]);
 
     const handleApplyCoupon = useCallback(async () => {
         if (!couponCode) {
             setCouponError("Please enter a coupon code");
+            return;
+        }
+        if (hasOfferItem) {
+            setCouponError("Not eligible: your cart already has an exclusive offer discount.");
             return;
         }
         setCouponError("");
@@ -223,7 +230,7 @@ export default function CheckoutClient() {
         } finally {
             setIsApplyingCoupon(false);
         }
-    }, [couponCode, toast]);
+    }, [couponCode, hasOfferItem, toast]);
 
     const handleRemoveCoupon = useCallback(() => {
         setCouponCode('');
