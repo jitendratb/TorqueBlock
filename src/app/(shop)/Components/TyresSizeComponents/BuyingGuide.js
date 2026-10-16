@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { TbUserCheck, TbUserX, TbRoad, TbCheck, TbX, TbChevronRight } from 'react-icons/tb';
 import { FaBookOpen } from 'react-icons/fa';
+import GuideRating from './GuideRating';
 
 const GuideSection = React.memo(({ title, subtitle, items, Icon, ItemIcon, theme }) => {
     if (!Array.isArray(items) || items.length === 0) return null;
@@ -47,11 +48,11 @@ const GuideSection = React.memo(({ title, subtitle, items, Icon, ItemIcon, theme
                     {items.slice(0, 7).map((item, idx) => (
                         <li key={idx} className="group flex items-start gap-3 text-xs md:text-sm text-zinc-300 hover:text-white transition-colors duration-200">
                             <span className={`flex-shrink-0 flex items-center justify-center w-5 h-5 rounded-full border transition-colors mt-0.5 ${currentTheme.itemIconWrapper}`}>
-                                <ItemIcon 
-                                    size={14} 
-                                    strokeWidth={2.5} 
-                                    className={theme === 'orange' ? "group-hover:translate-x-0.5 transition-transform" : ""} 
-                                    aria-hidden="true" 
+                                <ItemIcon
+                                    size={14}
+                                    strokeWidth={2.5}
+                                    className={theme === 'orange' ? "group-hover:translate-x-0.5 transition-transform" : ""}
+                                    aria-hidden="true"
                                 />
                             </span>
                             <span className="leading-relaxed pt-0.5">{item}</span>
@@ -65,6 +66,10 @@ const GuideSection = React.memo(({ title, subtitle, items, Icon, ItemIcon, theme
 
 const BuyingGuide = React.memo(({ tyreData }) => {
     const guide = tyreData?.buyingGuide;
+    const guideRating = Array.isArray(tyreData?.availableTyres?.guideRating) ? tyreData.availableTyres.guideRating : [];
+    const tyreName = tyreData?.availableTyres?.productName || tyreData?.hero?.title || 'This Tyre';
+
+    console.log(tyreData, "fghj")
 
     const { hasWhoShouldBuy, hasWhoShouldAvoid, hasBestUseCases } = useMemo(() => {
         return {
@@ -74,8 +79,12 @@ const BuyingGuide = React.memo(({ tyreData }) => {
         };
     }, [guide]);
 
-    if (!guide || (!hasWhoShouldBuy && !hasWhoShouldAvoid && !hasBestUseCases)) {
+    if (guideRating.length === 0 && !hasWhoShouldBuy && !hasWhoShouldAvoid && !hasBestUseCases) {
         return null;
+    }
+
+    if (guideRating.length > 0) {
+        return <GuideRating data={guideRating} tyreName={tyreName} />;
     }
 
     return (
@@ -107,7 +116,7 @@ const BuyingGuide = React.memo(({ tyreData }) => {
                         theme="emerald"
                     />
                 )}
-                
+
                 {hasWhoShouldAvoid && (
                     <GuideSection
                         title="Who Should Avoid"
@@ -133,5 +142,8 @@ const BuyingGuide = React.memo(({ tyreData }) => {
         </section>
     );
 });
+
+GuideSection.displayName = 'GuideSection';
+BuyingGuide.displayName = 'BuyingGuide';
 
 export default BuyingGuide;
