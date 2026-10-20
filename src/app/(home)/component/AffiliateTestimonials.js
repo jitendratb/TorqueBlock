@@ -30,7 +30,7 @@ async function AffiliateTestimonials() {
                 </div>
 
                 <h2 className='text-2xl pt-2 md:text-5xl [.light-mode_&]:text-black [.dark-mode_&]:text-white font-black uppercase tracking-tighter text-black transition-colors duration-1000'>
-                    Rider <span className='text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000'>Stories</span>
+                   Our Community<span className='text-orange-500 [.light-mode_&]:text-orange-600 transition-colors duration-1000'> Partners</span>
                 </h2>
             </div>
 

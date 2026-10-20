@@ -25,7 +25,6 @@ const GuideRating = React.memo(function GuideRating({ data, tyreName }) {
 
     return (
         <div className="relative z-10 rounded-2xl overflow-hidden border border-white/10 bg-white/5 backdrop-blur-2xl p-4">
-            {/* Header: stacked on narrow cards, side by side from @md */}
             <div className="grid md:grid-cols-[3fr_1fr] items-center md:gap-4 border-b pb-4 border-gray-300/20">
                 <div className="flex items-center gap-3 min-w-0">
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-500/10 ring-1 ring-orange-500/30 shadow-[0_0_14px_rgba(249,115,22,0.15)]">
@@ -33,7 +32,7 @@ const GuideRating = React.memo(function GuideRating({ data, tyreName }) {
                     </div>
                     <div className="min-w-0">
                         <h2 className="text-xs md:text-sm font-black uppercase tracking-[0.12em] @md:tracking-[0.2em] bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent truncate">
-                            Performance Metric
+                     PERFORMANCE METRICS
                         </h2>
                         <p className="text-zinc-500 text-[10px] md:text-xs font-semibold tracking-wide mt-0.5 @md:truncate">
                             How this tyre performs on the road

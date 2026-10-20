@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Torque Block",
   shortName: "TorqueBlock",
-  title: "Torque Block - India’s No.1 Destination for Performance Tyres",
-  description: "Torque Block is India's specialist performance motorcycle tyre platform. Compare, choose and buy tyres for superbikes, sport touring and adventure motorcycles from leading global brands.",
+  title: "Torque Block | Find the Right Tyres for Your Motorcycle",
+  description: "Explore premium and value performance motorcycle tyres from leading brands. Find the right tyres for your motorcycle, with delivery across India.",
 
   keywords: [
     "high performance motorcycle tyres",

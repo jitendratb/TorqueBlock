@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Description from './Description';
 import BuyingGuide from './BuyingGuide';
+import CompatibleBikesSection from './CompatibleBikesSection';
 import FAQSection from '@/components/atoms/FAQSection';
 import SubProductDetails from '../SubProductDetails';
 import ReviewsCard from '@/components/atoms/reviewCard';
@@ -36,6 +37,10 @@ function TyreSizeClient({ initialData, opposteProductId }) {
             <SubProductDetails tyreData={tyreSize} setProductIds={setProductIds} opposteProductId={opposteProductId} />
             <Description tyreData={tyreSize} />
             <BuyingGuide tyreData={tyreSize} />
+            <CompatibleBikesSection
+                compatibleModel={tyreSize?.compatibleModel}
+                popularBikes={tyreSize?.quickFacts?.popularBikes}
+            />
             {isTubeType && (
                 <TubeSection productIds={productIds} />
             )}
