@@ -18,6 +18,7 @@ export default async function sitemap() {
     '/about',
     '/contact',
     '/trending',
+    '/testimonials',
     '/privacy-policy',
     '/return-policy',
     '/shipping-policy',

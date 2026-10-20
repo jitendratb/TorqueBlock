@@ -2,6 +2,8 @@ import React from 'react';
 import TyreCardSkeleton from '@/app/(home)/component/Tyre/TyreCardSkeleton';
 import SectionHeadingSkeleton from '@/components/atoms/SectionHeadingSkeleton';
 import BrandCardSkeleton from './BrandCardSkeleton';
+import TestimonialCardSkeleton from '@/components/atoms/TestimonialCardSkeleton';
+import { MARQUEE_CARD_CLASS } from './TestimonialMarquee';
 
 export function FeatureCardSkeleton({ count = 4 }) {
     return (
@@ -104,6 +106,25 @@ export function B2BEnterpriseSkeleton() {
                 </div>
             </div>
         </section>
+    );
+}
+
+export function AffiliateTestimonialsSkeleton() {
+    return (
+        <div className="w-full animate-pulse" id="affiliate-testimonials-skeleton">
+            <SectionHeadingSkeleton eyebrowClassName="w-48" headingClassName="w-56 md:w-[22rem]" />
+
+            {/* Mirrors the two marquee rows */}
+            <div className="mt-6 space-y-2">
+                {[0, 1].map((row) => (
+                    <div key={row} className="flex overflow-hidden py-3">
+                        {[0, 1, 2].map((i) => (
+                            <TestimonialCardSkeleton key={i} className={MARQUEE_CARD_CLASS} />
+                        ))}
+                    </div>
+                ))}
+            </div>
+        </div>
     );
 }
 

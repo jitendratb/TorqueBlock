@@ -13,12 +13,13 @@ import WebPageSchema from '@/components/seo/WebPageSchema'
 import TrendingSection from './component/TrendingSection'
 import TrendCardSkelton from '@/components/atoms/TrendCardSkelton'
 import dynamic from 'next/dynamic'
-import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton, FeaturedProductBannerSkeleton } from './component/HomeSkeletons'
+import { FeatureCardSkeleton, CategorySkeleton, ValuePerformanceBrandsSkeleton, B2BEnterpriseSkeleton, ReviewsSectionSkeleton, FeaturedProductBannerSkeleton, AffiliateTestimonialsSkeleton } from './component/HomeSkeletons'
 import AiSearchBar from './component/BigSearchBar'
 import HeroSearchObserver from './component/HeroSearchObserver'
 import HeroSearchChips from './component/HeroSearchChips'
 import ProductFamilyFeatureCard from './component/ProductFamilyFeatureCard'
 import HeroBanner from './component/HeroBanner'
+import AffiliateTestimonials from './component/AffiliateTestimonials'
 
 
 const FeatureCard = dynamic(() => import('./component/FeatureCard'))
@@ -214,6 +215,12 @@ async function page() {
             <section aria-label="Value & Performance Brands">
               <Suspense fallback={<ValuePerformanceBrandsSkeleton count={4} />}>
                 <ValuePerformanceBrands />
+              </Suspense>
+            </section>
+
+            <section aria-label="Affiliate Rider Testimonials">
+              <Suspense fallback={<AffiliateTestimonialsSkeleton />}>
+                <AffiliateTestimonials />
               </Suspense>
             </section>
 
