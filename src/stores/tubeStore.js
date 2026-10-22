@@ -17,7 +17,7 @@ const useTubeStore = create((set, get) => ({
             
             const responseData = response?.data || response;
             const newTubes = responseData?.data || responseData || [];
-            const pagination = response?.pagination || responseData?.pagination;
+            const pagination = response?.meta || response?.pagination || responseData?.pagination;
 
             set((state) => ({
                 tubes: params.page === 1 || !params.page ? newTubes : [...state.tubes, ...newTubes],
@@ -34,7 +34,7 @@ const useTubeStore = create((set, get) => ({
         if (!response) return;
         const responseData = response?.data || response;
         const newTubes = responseData?.data || responseData || [];
-        const pagination = response?.pagination || responseData?.pagination;
+        const pagination = response?.meta || response?.pagination || responseData?.pagination;
 
         set({
             tubes: newTubes,

@@ -8,17 +8,14 @@ import TubeCardSkeleton from './TubeCardSkeleton';
 export default function TubesClint({ initailTubes }) {
     const { tubes, loading, error, fetchTubes, hasMore, page, setInitialTubes } = useTubeStore();
     const observerTarget = useRef(null);
-    const initialized = useRef(false);
 
-    const ssrTubes = initailTubes?.data?.data || initailTubes?.data || initailTubes || [];
-        useEffect(() => {
-        if (!initialized.current) {
-            if (initailTubes) {
-                setInitialTubes(initailTubes);
-            } else {
-                fetchTubes({ page: 1, limit: 16 });
-            }
-            initialized.current = true;
+    const ssrTubes = initailTubes?.data || [];
+
+    useEffect(() => {
+        if (initailTubes) {
+            setInitialTubes(initailTubes);
+        } else {
+            fetchTubes({ page: 1, limit: 16 });
         }
     }, [initailTubes, setInitialTubes, fetchTubes]);
 
@@ -38,11 +35,7 @@ export default function TubesClint({ initailTubes }) {
             observer.observe(observerTarget.current);
         }
 
-        return () => {
-            if (observerTarget.current) {
-                observer.unobserve(observerTarget.current);
-            }
-        };
+        return () => observer.disconnect();
     }, [hasMore, loading, page, fetchTubes]);
 
     if (error && displayTubes.length === 0) {

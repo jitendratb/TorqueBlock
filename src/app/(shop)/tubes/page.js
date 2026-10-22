@@ -31,8 +31,7 @@ export async function generateMetadata() {
 const BREADCRUMB_ITEMS = [{ label: 'Tubes', isLast: true }];
 
 export default async function Tubes() {
-    const Tubes = await TubesService.getTube({ page: 1, limit: 16})
-
+    const Tubes = await TubesService.getTube({ params: { page: 1, limit: 16 } })
     return (
         <main className="w-full">
             <WebPageSchema
