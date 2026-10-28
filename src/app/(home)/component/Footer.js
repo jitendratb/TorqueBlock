@@ -15,7 +15,7 @@ const shopLinks = [
 ]
 
 const exploreLinks = [
-    { label: 'TBRN (Rider Community)', href: '/' },
+    { label: 'TBRN (Rider Community)', href: '/tbnr' },
     { label: 'Blogs', href: '/blogs' },
     { label: 'About Us', href: '/about' },
     { label: 'Contact Us', href: '/contact' },

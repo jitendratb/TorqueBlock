@@ -12,7 +12,7 @@ export default function TyresPageBanner({
     badgeIcon: BadgeIcon = FaCrown,
 }) {
     return (
-        <div className="relative w-full h-48 md:h-64 rounded-3xl overflow-hidden flex items-center justify-between px-6 border border-white/10 bg-white/10 [.light-mode_&]:bg-white/60 [.light-mode_&]:border-zinc-200 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
+        <div className="relative w-full min-h-48 py-4 md:h-64 md:py-0 rounded-3xl overflow-hidden flex items-center justify-between px-6 border border-white/10 bg-white/10 [.light-mode_&]:bg-white/60 [.light-mode_&]:border-zinc-200 backdrop-blur-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)]">
             <div className="absolute -top-24 -right-24 w-96 h-96 bg-orange-500/20 [.light-mode_&]:bg-orange-400/10 rounded-full blur-[80px] pointer-events-none" />
             <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/10 [.light-mode_&]:bg-blue-400/10 rounded-full blur-[80px] pointer-events-none" />
 

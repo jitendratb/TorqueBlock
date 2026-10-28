@@ -15,7 +15,7 @@ function Textarea({ id, label, value, onChange, placeholder, required, className
                 onChange={onChange}
                 placeholder={placeholder}
                 maxLength={characterLimit}
-                className={twMerge('w-full bg-black/20 border border-white/10 rounded-xl p-3.5 text-zinc-300 text-sm placeholder:text-white/40 focus:outline-none focus:border-orange-500 transition-colors resize-none h-20 scrollbar-thin scrollbar-thumb-zinc-700', className)}
+                className={twMerge('w-full bg-white/5 border border-white/10 rounded-xl p-3.5 text-zinc-300 text-sm placeholder:text-white/40 focus:outline-none focus:border-orange-500 transition-colors resize-none h-20 scrollbar-thin scrollbar-thumb-zinc-700', className)}
                 {...props}
             />
             {characterLimit && (
