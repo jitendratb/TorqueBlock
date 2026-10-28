@@ -21,7 +21,7 @@ import PaymentVerifyingState from './PaymentVerifyingState';
 import OrderSuccessView from './OrderSuccessView';
 import EmptyCartView from './EmptyCartView';
 import Login from '@/components/organisms/login';
-import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline } from 'react-icons/io5';
+import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline, IoTicketOutline, IoChevronDown } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
 
 const AddressSection = dynamic(() => import('./AddressSection'), {
@@ -64,6 +64,7 @@ export default function CheckoutClient() {
     const [couponData, setCouponData] = useState(null);
     const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
     const [couponError, setCouponError] = useState('');
+    const [isCouponOpen, setIsCouponOpen] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -511,56 +512,93 @@ export default function CheckoutClient() {
                         couponDiscount={discountAmount}
                     />
 
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-4 backdrop-blur-sm">
-                        <label className="flex items-center gap-2 text-sm font-medium text-zinc-300 mb-3">
-                            <IoRibbonOutline className="text-lg text-orange-400" />
-                            Have a promotional code?
-                        </label>
-                        <div className="flex gap-2 items-start">
-                            <Input
-                                value={couponCode}
-                                onChange={(e) => {
-                                    setCouponCode(e.target.value.toUpperCase());
-                                    if (couponError) setCouponError('');
-                                }}
-                                placeholder="Enter code here"
-                                variant="glass"
-                                disabled={isApplyingCoupon || !!couponData}
-                                error={couponError}
-                                wrapperClassName="flex-1"
-                                size="sm"
+                    <div className="bg-white/10 border border-white/10 rounded-2xl backdrop-blur-sm">
+                        <button
+                            type="button"
+                            onClick={() => setIsCouponOpen((prev) => !prev)}
+                            aria-expanded={isCouponOpen}
+                            aria-controls="offer-code-panel"
+                            className="flex w-full cursor-pointer items-center gap-3 rounded-2xl p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                        >
+                            <IoTicketOutline aria-hidden="true" className="shrink-0 text-2xl text-orange-400" />
+                            <span className="flex-1 text-sm font-semibold text-white">Have an offer code?</span>
+                            {couponData && (
+                                <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
+                                    <IoCheckmarkCircleOutline aria-hidden="true" className="shrink-0 text-xs" />
+                                    Applied
+                                </span>
+                            )}
+                            <IoChevronDown
+                                aria-hidden="true"
+                                className={`shrink-0 text-lg text-zinc-400 transition-transform duration-300 ${isCouponOpen ? 'rotate-180' : ''}`}
                             />
-                            <div>
-                                {!couponData ? (
-                                    <button
-                                        onClick={handleApplyCoupon}
-                                        disabled={isApplyingCoupon || !couponCode}
-                                        className="px-5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold rounded-lg transition-colors disabled:opacity-50"
-                                    >
-                                        {isApplyingCoupon ? 'Applying...' : 'Apply'}
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={handleRemoveCoupon}
-                                        className="px-4 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
-                                    >
-                                        <IoCloseCircleOutline className="text-lg" />
-                                        Remove
-                                    </button>
-                                )}
+                        </button>
+
+                        <div
+                            id="offer-code-panel"
+                            inert={!isCouponOpen}
+                            className={`grid transition-[grid-template-rows,margin-top] duration-300 ${isCouponOpen ? 'grid-rows-[1fr] -mt-3' : 'grid-rows-[0fr]'}`}
+                        >
+                            <div className="overflow-hidden">
+                                <div className="px-4 pb-4">
+                                    <p className="pl-9 text-xs leading-relaxed text-zinc-400">
+                                        Enter your code if you received one from a Torque Block campaign or partner.
+                                    </p>
+                                    <div className="mt-4 flex gap-2 items-start">
+                                        <Input
+                                            value={couponCode}
+                                            onChange={(e) => {
+                                                setCouponCode(e.target.value.toUpperCase());
+                                                if (couponError) setCouponError('');
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !couponData) {
+                                                    e.preventDefault();
+                                                    handleApplyCoupon();
+                                                }
+                                            }}
+                                            aria-label="Offer code"
+                                            placeholder="Enter offer code"
+                                            variant="glass"
+                                            disabled={isApplyingCoupon || !!couponData}
+                                            error={couponError}
+                                            wrapperClassName="flex-1"
+                                            size="lg"
+                                        />
+                                        {!couponData ? (
+                                            <button
+                                                type="button"
+                                                onClick={handleApplyCoupon}
+                                                disabled={isApplyingCoupon || !couponCode}
+                                                className="shrink-0 cursor-pointer rounded-lg border border-orange-500 bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                {isApplyingCoupon ? 'Applying...' : 'Apply'}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={handleRemoveCoupon}
+                                                className="shrink-0 cursor-pointer px-4 py-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                                            >
+                                                <IoCloseCircleOutline className="text-lg" />
+                                                Remove
+                                            </button>
+                                        )}
+                                    </div>
+                                    {couponData && discountAmount > 0 && (
+                                        <div className="mt-2 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                            <IoCheckmarkCircleOutline className="text-lg" />
+                                            Coupon applied! You save {formatPrice(discountAmount)}
+                                        </div>
+                                    )}
+                                    {couponData && discountAmount === 0 && (
+                                        <div className="mt-2 text-xs font-bold text-orange-400 flex items-center gap-1.5">
+                                            Coupon applied, but not applicable to your items.
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
-                        {couponData && discountAmount > 0 && (
-                            <div className="mt-2 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
-                                <IoCheckmarkCircleOutline className="text-lg" />
-                                Coupon applied! You save {formatPrice(discountAmount)}
-                            </div>
-                        )}
-                        {couponData && discountAmount === 0 && (
-                            <div className="mt-2 text-xs font-bold text-orange-400 flex items-center gap-1.5">
-                                Coupon applied, but not applicable to your items.
-                            </div>
-                        )}
                     </div>
 
                     <button
