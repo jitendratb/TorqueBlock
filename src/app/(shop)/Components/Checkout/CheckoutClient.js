@@ -559,14 +559,14 @@ export default function CheckoutClient() {
                                             disabled={isApplyingCoupon || !!couponData}
                                             error={couponError}
                                             wrapperClassName="flex-1"
-                                            size="lg"
+                                            size="md"
                                         />
                                         {!couponData ? (
                                             <button
                                                 type="button"
                                                 onClick={handleApplyCoupon}
                                                 disabled={isApplyingCoupon || !couponCode}
-                                                className="shrink-0 cursor-pointer rounded-lg border border-orange-500 bg-orange-500 px-6 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+                                                className="shrink-0 cursor-pointer rounded-lg border border-orange-500 bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
                                             >
                                                 {isApplyingCoupon ? 'Applying...' : 'Apply'}
                                             </button>
@@ -574,7 +574,7 @@ export default function CheckoutClient() {
                                             <button
                                                 type="button"
                                                 onClick={handleRemoveCoupon}
-                                                className="shrink-0 cursor-pointer px-4 py-3.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                                                className="shrink-0 cursor-pointer px-4 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
                                             >
                                                 <IoCloseCircleOutline className="text-lg" />
                                                 Remove
