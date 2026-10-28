@@ -522,12 +522,6 @@ export default function CheckoutClient() {
                         >
                             <IoTicketOutline aria-hidden="true" className="shrink-0 text-2xl text-orange-400" />
                             <span className="flex-1 text-sm font-semibold text-white">Have an offer code?</span>
-                            {couponData && (
-                                <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-400">
-                                    <IoCheckmarkCircleOutline aria-hidden="true" className="shrink-0 text-xs" />
-                                    Applied
-                                </span>
-                            )}
                             <IoChevronDown
                                 aria-hidden="true"
                                 className={`shrink-0 text-lg text-zinc-400 transition-transform duration-300 ${isCouponOpen ? 'rotate-180' : ''}`}
@@ -541,9 +535,11 @@ export default function CheckoutClient() {
                         >
                             <div className="overflow-hidden">
                                 <div className="px-4 pb-4">
-                                    <p className="pl-9 text-xs leading-relaxed text-zinc-400">
-                                        Enter your code if you received one from a Torque Block campaign or partner.
-                                    </p>
+                                    {!couponData && (
+                                        <p className="pl-9 text-xs leading-relaxed text-zinc-400">
+                                            Enter your code if you received one from a Torque Block campaign or partner.
+                                        </p>
+                                    )}
                                     <div className="mt-4 flex gap-2 items-start">
                                         <Input
                                             value={couponCode}
