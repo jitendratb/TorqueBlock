@@ -15,7 +15,7 @@ const shopLinks = [
 ]
 
 const exploreLinks = [
-    { label: 'TBRN (Rider Community)', href: '/tbnr' },
+    { label: 'TBRN (Rider Community)', href: '/tbrn' },
     { label: 'Blogs', href: '/blogs' },
     { label: 'About Us', href: '/about' },
     { label: 'Contact Us', href: '/contact' },
@@ -199,7 +199,7 @@ async function Footer() {
                                     {exploreLinks.map((item, index) => (
                                         <FooterLink key={index} href={item.href}>{item.label}</FooterLink>
                                     ))}
-                                </ul> 
+                                </ul>
 
                                 <div className="mt-4">
                                     <div className="flex flex-col items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-3.5">

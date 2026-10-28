@@ -7,7 +7,7 @@ import trendingService from '@/services/trending.service';
 
 export default async function sitemap() {
   const baseUrl = 'https://www.torqueblock.com';
-  
+
   const staticRoutes = [
     '',
     '/motorcycles',
@@ -18,7 +18,7 @@ export default async function sitemap() {
     '/about',
     '/contact',
     '/trending',
-    '/tbnr',
+    '/tbrn',
     '/privacy-policy',
     '/return-policy',
     '/shipping-policy',
@@ -42,10 +42,10 @@ export default async function sitemap() {
       bikeRoutes = bikes.map((bike) => {
         const slug = bike?.identifier || bike?.slug || bike?.brandName?.toLowerCase().replace(/\s+/g, '-') || bike?.name?.toLowerCase().replace(/\s+/g, '') || '';
         return {
-            url: `${baseUrl}/motorcycles/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'monthly',
-            priority: 0.7,
+          url: `${baseUrl}/motorcycles/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'monthly',
+          priority: 0.7,
         };
       }).filter(r => r.url !== `${baseUrl}/motorcycles/`);
     }
@@ -61,10 +61,10 @@ export default async function sitemap() {
       tyreRoutes = tyres.map((tyre) => {
         const slug = tyre?.identifier || tyre?.slug || '';
         return {
-            url: `${baseUrl}/tyres/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: 0.9,
+          url: `${baseUrl}/tyres/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'weekly',
+          priority: 0.9,
         };
       }).filter(r => r.url !== `${baseUrl}/tyres/`);
     }
@@ -82,12 +82,12 @@ export default async function sitemap() {
         const sizeSlug = size?.size ? size.size.toLowerCase().replace(/[\s/]/g, '-') : '';
 
         if (tyreIdentifier && sizeSlug) {
-            return {
-                url: `${baseUrl}/tyres/${tyreIdentifier}/${sizeSlug}`,
-                lastModified: size?.updatedAt ? new Date(size.updatedAt).toISOString() : new Date().toISOString(),
-                changeFrequency: 'weekly',
-                priority: 0.8,
-            };
+          return {
+            url: `${baseUrl}/tyres/${tyreIdentifier}/${sizeSlug}`,
+            lastModified: size?.updatedAt ? new Date(size.updatedAt).toISOString() : new Date().toISOString(),
+            changeFrequency: 'weekly',
+            priority: 0.8,
+          };
         }
         return null;
       }).filter(Boolean);
@@ -104,10 +104,10 @@ export default async function sitemap() {
       brandRoutes = brands.map((brand) => {
         const slug = brand?.slug || brand?.name?.toLowerCase().replace(/\s+/g, '-') || '';
         return {
-            url: `${baseUrl}/brands/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+          url: `${baseUrl}/brands/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'weekly',
+          priority: 0.8,
         };
       }).filter(r => r.url !== `${baseUrl}/brands/`);
     }
@@ -124,10 +124,10 @@ export default async function sitemap() {
         let rawSlug = blog?.blogid || blog?.slug || blog?.title || '';
         const slug = rawSlug.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
         return {
-            url: `${baseUrl}/blogs/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: 0.6,
+          url: `${baseUrl}/blogs/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'weekly',
+          priority: 0.6,
         };
       }).filter(r => r.url !== `${baseUrl}/blogs/`);
     }
@@ -143,10 +143,10 @@ export default async function sitemap() {
       compareRoutes = compares.map((comp) => {
         const slug = comp?.identifier || comp?.slug || '';
         return {
-            url: `${baseUrl}/compare/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+          url: `${baseUrl}/compare/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'weekly',
+          priority: 0.8,
         };
       }).filter(r => r.url !== `${baseUrl}/compare/`);
     }
@@ -162,10 +162,10 @@ export default async function sitemap() {
       trendingRoutes = trendings.map((trend) => {
         const slug = trend?.slug || '';
         return {
-            url: `${baseUrl}/trending/${slug}`,
-            lastModified: new Date().toISOString(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
+          url: `${baseUrl}/trending/${slug}`,
+          lastModified: new Date().toISOString(),
+          changeFrequency: 'weekly',
+          priority: 0.8,
         };
       }).filter(r => r.url !== `${baseUrl}/trending/`);
     }

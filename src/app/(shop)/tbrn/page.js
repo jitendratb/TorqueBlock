@@ -65,7 +65,7 @@ const toPage = (value) => {
     return Number.isFinite(page) && page > 0 ? page : 1;
 };
 
-const pageHref = (page) => (page > 1 ? `/tbnr?page=${page}` : '/tbnr');
+const pageHref = (page) => (page > 1 ? `/tbrn?page=${page}` : '/tbrn');
 
 export async function generateMetadata({ searchParams }) {
     const page = toPage((await searchParams)?.page);
@@ -132,7 +132,7 @@ function WayToWorkCard({ way, eager = false }) {
                         <p className="text-sm text-zinc-400">{way.description}</p>
                     </div>
                     <JoinTbrnButton
-                        source="tbnr_ways_to_work"
+                        source="tbrn_ways_to_work"
                         className="inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-orange-500/40 p-2 text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors hover:bg-orange-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 sm:px-4"
                     >
                         <span className="sr-only sm:not-sr-only">Join TBRN</span>
@@ -187,7 +187,7 @@ export default async function TbrnPage({ searchParams }) {
                 type="WebPage"
                 title={TITLE}
                 description={DESCRIPTION}
-                url="/tbnr"
+                url="/tbrn"
             />
             <Breadcrumb items={[{ label: 'TBRN', isLast: true }]} />
 
@@ -226,7 +226,7 @@ export default async function TbrnPage({ searchParams }) {
                             Ride, create and grow with Torque Block. Be one of the first riders in the network.
                         </p>
                         <JoinTbrnButton
-                            source="tbnr_partners"
+                            source="tbrn_partners"
                             className="mt-6 inline-flex cursor-pointer items-center gap-2 rounded-full border border-orange-500/40 px-5 py-2.5 text-xs font-bold uppercase tracking-widest text-orange-500 transition-colors hover:bg-orange-500/10"
                         >
                             Become a TBRN Creator <FiChevronRight aria-hidden="true" />

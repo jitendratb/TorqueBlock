@@ -5,7 +5,7 @@ import { MdOutlineSmartDisplay } from 'react-icons/md'
 import { FaMotorcycle, FaRegHandshake, FaRegLightbulb } from 'react-icons/fa'
 import JoinTbrnButton from '@/components/molecules/JoinTbrnButton'
 
-const EXPLORE_HREF = '/tbnr'
+const EXPLORE_HREF = '/tbrn'
 
 const BACKGROUND_IMAGE = 'https://cdn.torqueblock.com/torqueblock9-8.webp'
 
@@ -13,38 +13,44 @@ const PHOTOS = [
     {
         src: 'https://cdn.torqueblock.com/images-6-5.webp',
         alt: 'Rider seated on a black and green Kawasaki',
-        className: 'md:z-10 md:col-start-1 md:col-end-8 md:row-start-3 md:row-end-7',
+        className: 'z-10 col-start-1 col-end-8 row-start-3 row-end-7',
         imageClassName: 'object-[center_50%]',
+        sizes: '(max-width: 1023px) 58vw, 26vw',
     },
     {
         src: 'https://cdn.torqueblock.com/513910180_18507484615039332_1120044797685231742_n-2.webp',
         alt: 'Rider standing on a misty green mountain trail',
-        className: 'md:col-start-6 md:col-end-9 md:row-start-1 md:row-end-4',
+        className: 'col-start-6 col-end-9 row-start-1 row-end-4',
         imageClassName: 'object-[center_40%]',
+        sizes: '(max-width: 1023px) 25vw, 12vw',
     },
     {
         src: 'https://cdn.torqueblock.com/473371233_3606197776342779_5375249406800229080_n-1.webp',
         alt: 'Rider in a green helmet and goggles on an adventure bike at sunset',
-        className: 'md:z-10 md:col-start-8 md:col-end-13 md:row-start-5 md:row-end-7',
+        className: 'z-10 col-start-8 col-end-13 row-start-5 row-end-7',
         imageClassName: 'object-[35%_35%]',
+        sizes: '(max-width: 1023px) 42vw, 19vw',
     },
     {
         src: 'https://cdn.torqueblock.com/images-3-4.webp',
         alt: 'Rider in a riding jacket in front of snow-capped mountains',
-        className: 'hidden md:block md:col-start-1 md:col-end-6 md:row-start-1 md:row-end-3',
+        className: 'col-start-1 col-end-6 row-start-1 row-end-3',
         imageClassName: 'object-[center_30%]',
+        sizes: '(max-width: 1023px) 42vw, 19vw',
     },
     {
         src: 'https://cdn.torqueblock.com/whatsapp-image-2026-10-23-at-63854-pm-6.webp',
         alt: 'Rider posing on a KTM Duke',
-        className: 'hidden md:block md:col-start-9 md:col-end-13 md:row-start-1 md:row-end-3',
+        className: 'col-start-9 col-end-13 row-start-1 row-end-3',
         imageClassName: 'object-[center_35%]',
+        sizes: '(max-width: 1023px) 33vw, 15vw',
     },
     {
         src: 'https://cdn.torqueblock.com/587651251_17886344211397147_7913687044721114136_n-3.webp',
         alt: 'Riders on a beach beside their adventure motorcycle',
-        className: 'hidden md:block md:col-start-9 md:col-end-13 md:row-start-3 md:row-end-5',
+        className: 'col-start-9 col-end-13 row-start-3 row-end-5',
         imageClassName: 'object-[center_50%]',
+        sizes: '(max-width: 1023px) 33vw, 15vw',
     },
 ]
 
@@ -75,9 +81,13 @@ function RidersNetworkBanner() {
                         {/* <span aria-hidden='true' className='h-px w-8 bg-gradient-to-l from-transparent to-orange-500/70 md:w-12' /> */}
                     </div>
 
-                    <h2 className='mt-4 text-3xl sm:text-4xl  font-black uppercase leading-[0.95] tracking-tight'>
-                        Real Riders. Real Knowledge.
-                        <span className='block text-orange-500'>A Stronger Riding Community.</span>
+                    <h2 className='mt-4 text-[1.75rem] sm:text-4xl font-black uppercase leading-[0.95] tracking-tight'>
+                        <span className='block sm:inline'>Real Riders.</span>{' '}
+                        <span className='block sm:inline'>Real Knowledge.</span>
+                        <span className='block text-orange-500'>
+                            <span className='block sm:inline'>A Stronger</span>{' '}
+                            <span className='block sm:inline'>Riding Community.</span>
+                        </span>
                     </h2>
 
                     <p className='mt-4 max-w-xl text-sm md:text-base text-zinc-300'>
@@ -99,7 +109,7 @@ function RidersNetworkBanner() {
                         <div className='text-center'>
                             <Link
                                 href={EXPLORE_HREF}
-                                className='group flex items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 py-4 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950'
+                                className='group flex items-center justify-center gap-2 rounded-lg bg-orange-500 px-6 py-2 lg:py-4 text-sm font-bold uppercase tracking-wider text-white transition-colors hover:bg-orange-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950'
                             >
                                 Explore TBRN
                                 <FiArrowRight aria-hidden='true' className='transition-transform group-hover:translate-x-1' />
@@ -108,7 +118,7 @@ function RidersNetworkBanner() {
                         <div className='text-center'>
                             <JoinTbrnButton
                                 source='home_banner'
-                                className='group flex w-full cursor-pointer items-center justify-center gap-2 rounded-xl border border-orange-500 px-6 py-4 text-sm font-bold uppercase tracking-wider text-orange-500 transition-colors hover:bg-orange-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950'
+                                className='group flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-orange-500 px-6 py-2 lg:py-4 text-sm font-bold uppercase tracking-wider text-orange-500 transition-colors hover:bg-orange-500 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950'
                             >
                                 Become a TBRN Creator
                                 <FiArrowRight aria-hidden='true' className='transition-transform group-hover:translate-x-1' />
@@ -117,7 +127,7 @@ function RidersNetworkBanner() {
                     </div>
                 </div>
 
-                <div className='grid h-44 grid-cols-3 gap-2 sm:h-60 md:h-[440px] md:grid-cols-12 md:grid-rows-6 md:gap-3 lg:h-auto lg:min-h-[360px]'>
+                <div className='grid aspect-[3/2] grid-cols-12 grid-rows-6 gap-1.5 sm:gap-2 md:aspect-auto md:h-[440px] md:gap-3 lg:h-auto lg:min-h-[360px]'>
                     {PHOTOS.map((photo) => (
                         <div
                             key={photo.src}
@@ -127,7 +137,7 @@ function RidersNetworkBanner() {
                                 src={photo.src}
                                 alt={photo.alt}
                                 fill
-                                sizes='(max-width: 768px) 33vw, (max-width: 1024px) 60vw, 30vw'
+                                sizes={photo.sizes}
                                 className={`object-cover ${photo.imageClassName}`}
                             />
                         </div>
@@ -137,11 +147,11 @@ function RidersNetworkBanner() {
 
             <ul className='relative grid grid-cols-1 divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/10 backdrop-blur-sm sm:grid-cols-2 sm:divide-y-0  lg:grid-cols-4 lg:divide-x'>
                 {HIGHLIGHTS.map(({ icon: Icon, title, text }) => (
-                    <li key={title} className='flex items-center gap-4 p-4'>
+                    <li key={title} className='flex items-center gap-4 p-2 lg:p-4'>
                         <Icon aria-hidden='true' className='shrink-0 text-3xl text-orange-500' />
                         <div>
                             <h3 className='text-sm font-bold'>{title}</h3>
-                            <p className='mt-1 text-xs text-zinc-400'>{text}</p>
+                            <p className='lg:mt-1 text-xs text-zinc-400'>{text}</p>
                         </div>
                     </li>
                 ))}

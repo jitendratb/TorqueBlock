@@ -61,26 +61,31 @@ function H1Tags({ rating = RATING, reviews = REVIEWS }) {
        Premium & Value Performance Motorcycle Tyres - Matched to Your Motorcycle and Delivered Across India.
       </p>
 
-      <div className='flex lg:hidden w-fit items-center gap-1.5 md:gap-2.5 rounded-full border border-white/15 bg-white/10 px-3.5 py-2 backdrop-blur'>
-        <span aria-hidden="true" className='flex -space-x-2'>
+      <div className='relative isolate flex lg:hidden w-fit max-w-full items-center gap-3 overflow-hidden rounded-xl border border-white/15 bg-white/10 px-3 py-2 shadow-lg shadow-black/30 backdrop-blur-xl'>
+        <span aria-hidden="true" className='pointer-events-none absolute inset-x-4 top-0 block h-px bg-gradient-to-r from-transparent via-white/50 to-transparent' />
+        <span aria-hidden="true" className='flex shrink-0 -space-x-2'>
           {AVATARS.map((a) => (
             a.img ? (
-              <img key={a.initials} src={a.img} alt="" className='h-5 w-5 rounded-full border border-[#0B0F19] object-cover' />
+              <img key={a.initials} src={a.img} alt="" className='h-7 w-7 rounded-full border-2 border-[#0B0F19] object-cover' />
             ) : (
-              <span key={a.initials} className={`grid h-5 w-5 place-items-center rounded-full border border-gray-300/20 bg-gradient-to-br ${a.tint} text-[8px] font-bold text-white`}>
+              <span key={a.initials} className={`grid h-7 w-7 place-items-center rounded-full border-2 border-gray-300/40 bg-gradient-to-br ${a.tint} text-[9px] font-bold text-white`}>
                 {a.initials}
               </span>
             )
           ))}
         </span>
-        <span className='text-[11px] font-black text-white'>{rating}<span className='font-semibold text-white/50'>/5</span></span>
-        <span aria-hidden="true" className='flex items-center gap-0.5 text-orange-400'>
-          {[0, 1, 2, 3, 4].map((i) => <FaStar key={i} className='text-[9px]' />)}
-        </span>
-        <span aria-hidden="true" className='h-3 w-px bg-white/20' />
-        <span className='inline-flex items-center gap-1 text-[11px] text-white/80'>
-          <FcGoogle className='text-sm' /> {reviews} reviews
-        </span>
+        <span aria-hidden="true" className='h-8 w-px shrink-0 bg-white/15' />
+        <div className='min-w-0 leading-tight'>
+          <div className='flex items-center gap-1.5'>
+            <span className='text-sm font-black text-white'>{rating}<span className='text-[10px] font-semibold text-white/50'>/5</span></span>
+            <span aria-hidden="true" className='flex items-center gap-0.5 text-orange-400'>
+              {[0, 1, 2, 3, 4].map((i) => <FaStar key={i} className='text-[10px]' />)}
+            </span>
+          </div>
+          <p className='mt-0.5 inline-flex items-center gap-1 whitespace-nowrap text-[11px] font-medium text-white/80'>
+            <FcGoogle className='shrink-0 text-xs' /> {reviews} Google Reviews
+          </p>
+        </div>
       </div>
     </div>
   )
