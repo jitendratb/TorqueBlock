@@ -18,7 +18,7 @@ export default function TyresPageBanner({
 
             <div className="relative z-10 max-w-2xl">
                 <div className="flex items-center gap-3 mb-4">
-                    <span className="flex items-center gap-1.5 text-[10px] border border-white/10 [.light-mode_&]:border-zinc-300 px-2.5 py-1 font-medium tracking-[0.3em] uppercase text-zinc-300 [.light-mode_&]:text-zinc-500 rounded-sm bg-white/5 backdrop-blur-sm">
+                    <span className="flex items-center gap-1.5 text-[10px] border border-white/10 [.light-mode_&]:border-zinc-300 px-2.5 py-1 font-medium uppercase text-zinc-300 [.light-mode_&]:text-zinc-500 rounded-sm bg-white/5 backdrop-blur-sm">
                         {BadgeIcon && <BadgeIcon size={12} className="text-orange-500 drop-shadow-md" />}
                         {badge}
                     </span>

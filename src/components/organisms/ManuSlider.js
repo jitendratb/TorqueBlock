@@ -5,9 +5,19 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import Slider from './Slider';
-import { IoHomeOutline, IoDiscOutline, IoSpeedometerOutline, IoGitCompareOutline, IoReceiptOutline, IoChevronForwardOutline, IoLogInOutline, IoLogOutOutline, IoTrendingUpOutline, IoCartOutline } from 'react-icons/io5';
+import { IoHomeOutline, IoDiscOutline, IoSpeedometerOutline, IoGitCompareOutline, IoReceiptOutline, IoChevronForwardOutline, IoLogInOutline, IoLogOutOutline, IoTrendingUpOutline, IoCartOutline, IoPricetagsOutline, IoPeopleOutline, IoEllipseOutline, IoGridOutline, IoNewspaperOutline, IoInformationCircleOutline, IoCallOutline, IoCubeOutline, IoReturnUpBackOutline, IoDocumentTextOutline, IoShieldCheckmarkOutline } from 'react-icons/io5';
 import useAuthStore from '@/stores/authStore';
 import useCartStore from '@/stores/cartStore';
+
+const infoSections = [
+  {
+    title: 'Explore',
+    links: [
+      { label: 'Blogs', href: '/blogs', Icon: IoNewspaperOutline },
+      { label: 'About Us', href: '/about', Icon: IoInformationCircleOutline },
+    ],
+  }
+];
 
 export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, whatsappNumber, whatsappMessage }) {
 
@@ -58,17 +68,11 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
           className="w-full py-3 rounded-xl bg-white/5 text-slate-100 text-xs font-bold   border border-white/10 flex items-center justify-center gap-2 cursor-pointer transition-all duration-300 active:scale-95 hover:bg-white/10 hover:border-orange-400/50 hover:text-orange-400"
         >
           <IoLogInOutline className="text-sm" />
-          Log In
+         Log In / My Account
         </button>
       )}
 
-      <button
-        onClick={handleTalkToExpert}
-        className="w-full py-3 rounded-xl text-white text-xs font-bold  cursor-pointer transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 hover:shadow-[0_0_15px_rgba(59,130,246,0.25)]"
-        style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%)' }}
-      >
-       Talk to a Tyre Expert
-      </button>
+
     </div>
   );
 
@@ -163,7 +167,7 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
             >
               <div className="flex items-center gap-2.5">
                 <IoTrendingUpOutline className="text-lg text-orange-500/80" />
-                <span className="text-[10px] font-bold">Most Searched Tyres</span>
+                <span className="text-[10px] font-bold">Best Selling Motorcycle Tyres</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -179,6 +183,21 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               <div className="flex items-center gap-2.5">
                 <IoDiscOutline className="text-lg text-orange-500/80" />
                 <span className="text-[10px] font-bold">Explore Tyres</span>
+              </div>
+              <IoChevronForwardOutline className="text-xs text-zinc-500" />
+            </Link>
+
+            <Link
+              href="/tubes"
+              onClick={onClose}
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/tubes'
+                ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
+                }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <IoEllipseOutline className="text-lg text-orange-500/80" />
+                <span className="text-[10px] font-bold">Explore Tubes</span>
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
@@ -212,34 +231,79 @@ export default function ManuSlider({ isOpen = false, setIsLoginOpen, onClose, wh
               </div>
               <IoChevronForwardOutline className="text-xs text-zinc-500" />
             </Link>
+
+            <Link
+              href="/brands"
+              onClick={onClose}
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/brands'
+                ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
+                }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <IoPricetagsOutline className="text-lg text-orange-500/80" />
+                <span className="text-[10px] font-bold">Shop by Brand</span>
+              </div>
+              <IoChevronForwardOutline className="text-xs text-zinc-500" />
+            </Link>
+
+            <Link
+              href="/category"
+              onClick={onClose}
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/category'
+                ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
+                }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <IoGridOutline className="text-lg text-orange-500/80" />
+                <span className="text-[10px] font-bold">Shop by Category</span>
+              </div>
+              <IoChevronForwardOutline className="text-xs text-zinc-500" />
+            </Link>
+
+            <Link
+              href="/tbrn"
+              onClick={onClose}
+              className={`flex items-center justify-between p-3 rounded-xl border transition-all duration-300 active:scale-95 ${pathname === '/tbrn'
+                ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
+                : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
+                }`}
+            >
+              <div className="flex items-center gap-2.5">
+                <IoPeopleOutline className="text-lg text-orange-500/80" />
+                <span className="text-[10px] font-bold">Torque Block Riders Network</span>
+              </div>
+              <IoChevronForwardOutline className="text-xs text-zinc-500" />
+            </Link>
           </div>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 px-1">
-            <span className="text-[9px] font-black text-orange-500">Rider's Choice</span>
-            <div className="flex-1 h-[1px] bg-white/[0.04]" />
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            {trendingTyres.map((tyre) => {
-              const isActive = pathname === tyre.href;
-              return (
+        {/* SECTION 3: EXPLORE & SUPPORT */}
+        {infoSections.map((section) => (
+          <div key={section.title} className="space-y-2">
+            <div className="flex items-center gap-2 px-1">
+              <span className="text-[9px] font-black text-orange-500 tracking-widest uppercase">{section.title}</span>
+              <div className="flex-1 h-[1px] bg-white/[0.04]" />
+            </div>
+            <div className="grid grid-cols-1 gap-2">
+              {section.links.map(({ label, href, Icon }) => (
                 <Link
-                  key={tyre.label}
-                  href={tyre.href}
+                  key={href}
+                  href={href}
                   onClick={onClose}
-                  className={`flex items-center p-3 rounded-xl border text-[10px] font-semibold tracking-wide transition-all duration-300 active:scale-95 ${isActive
+                  className={`flex items-center gap-2.5 p-3 rounded-xl border transition-all duration-300 active:scale-95 odd:last:col-span-2 ${pathname === href
                     ? 'bg-orange-500/10 border-orange-500/20 text-orange-400'
                     : 'bg-white/[0.02] border-white/[0.05] hover:border-white/[0.1] text-white/80 hover:text-white hover:bg-white/[0.04]'
                     }`}
                 >
-                  <span className="truncate">{tyre.label}</span>
+                  <Icon className="text-lg text-orange-500/80 shrink-0" />
+                  <span className="text-[10px] font-bold truncate">{label}</span>
                 </Link>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        </div>
-
+        ))}
       </div>
 
     </Slider>
