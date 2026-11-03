@@ -10,6 +10,8 @@ import { FaTag, FaMotorcycle, FaWrench, FaBell } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
 import PriceCard from "../PriceCard";
 import StickyBuyBar from "../StickyBuyBar";
+import Carousel from "@/components/organisms/Carousel";
+import OtherTubeItem from "./OtherTubeItem";
 
 const INR_FORMATTER = new Intl.NumberFormat("en-IN", {
     style: "currency",
@@ -19,7 +21,25 @@ const INR_FORMATTER = new Intl.NumberFormat("en-IN", {
 
 const formatPrice = (price) => INR_FORMATTER.format(price || 0);
 
-export default function ProductDetails({ tube }) {
+const getTubeSize = (item) => item?.size || item?.name?.split(" ").pop();
+
+const toCartTube = (item) => {
+    const productName = item.name || item.productName || item.hero?.title || "Motorcycle Tube";
+    return {
+        product: { ...item, type: "Tube", tubeId: item._id, productName },
+        generic: {
+            _id: item._id,
+            tubeId: item._id,
+            size: item.size || (item.wheelSize ? `Rim ${item.wheelSize}` : 'Standard'),
+            price: item.startingPrice || item.pricing?.sellingPrice || item.pricing?.mrp || 0,
+            sku: item.sku || '',
+            type: "Tube",
+            productName
+        }
+    };
+};
+
+export default function ProductDetails({ tube, otherTubes = [] }) {
     const router = useRouter();
     const { addToCart } = useCartStore();
     const buyBarRef = useRef(null);
@@ -32,6 +52,12 @@ export default function ProductDetails({ tube }) {
 
     const [isRinging, setIsRinging] = useState(false);
 
+    const [selectedTubeId, setSelectedTubeId] = useState(null);
+    const selectedTube = useMemo(
+        () => otherTubes.find((item) => item._id === selectedTubeId) || null,
+        [otherTubes, selectedTubeId]
+    );
+
     useEffect(() => {
         let timer;
         if (isRinging) {
@@ -42,7 +68,6 @@ export default function ProductDetails({ tube }) {
         };
     }, [isRinging]);
 
-    // Show the bottom buy bar while the inline buttons are off screen
     const [showStickyBuyBar, setShowStickyBuyBar] = useState(false);
     useEffect(() => {
         const bar = buyBarRef.current;
@@ -59,10 +84,8 @@ export default function ProductDetails({ tube }) {
 
     const categoryName = tube?.categoryId?.name;
 
-    // Tubes without an availability value have always been shown as in stock
-    const availability = tube?.availability || "in_stock";
+ const availability = tube?.availability || "in_stock";
 
-    // Split the name so the size can be highlighted, like the tyre size page title
     const titleParts = useMemo(() => {
         const name = tube?.name || "";
         const sizeIndex = tube?.size ? name.indexOf(tube.size) : -1;
@@ -78,57 +101,35 @@ export default function ProductDetails({ tube }) {
         const mrp = tube.pricing?.mrp ?? selling;
         const discAmt = mrp > selling ? mrp - selling : (tube.pricing?.discountAmount || 0);
         const discPerc = tube.pricing?.discountPercentage || (mrp > 0 && discAmt > 0 ? Math.round((discAmt / mrp) * 100) : 0);
+        const extraPrice = selectedTube ? toCartTube(selectedTube).generic.price : 0;
 
         return {
             basePrice: selling,
-            oppositePrice: 0,
-            totalPrice: selling,
+            oppositePrice: extraPrice,
+            totalPrice: selling + extraPrice,
             baseOriginalPrice: mrp,
             baseDiscountAmount: discAmt,
             baseDiscountPercentage: discPerc
         };
-    }, [tube]);
+    }, [tube, selectedTube]);
+
+    const addTubesToCart = useCallback((isSliderOpen) => {
+        [tube, selectedTube].filter(Boolean).forEach((item) => {
+            const { product, generic } = toCartTube(item);
+            addToCart(product, null, null, generic, isSliderOpen);
+        });
+    }, [tube, selectedTube, addToCart]);
 
     const handleAddToCart = useCallback(() => {
         if (!tube) return;
-        const tubeProduct = {
-            ...tube,
-            type: "Tube",
-            tubeId: tube._id,
-            productName: tube.name || tube.productName || tube.hero?.title || "Motorcycle Tube"
-        };
-        const selectedGeneric = {
-            _id: tube._id,
-            tubeId: tube._id,
-            size: tube.size || (tube.wheelSize ? `Rim ${tube.wheelSize}` : 'Standard'),
-            price: tube.startingPrice || tube.pricing?.sellingPrice || tube.pricing?.mrp || 0,
-            sku: tube.sku || '',
-            type: "Tube",
-            productName: tubeProduct.productName
-        };
-        addToCart(tubeProduct, null, null, selectedGeneric, true);
-    }, [tube, addToCart]);
+        addTubesToCart(true);
+    }, [tube, addTubesToCart]);
 
     const handleBuyNow = useCallback(() => {
         if (!tube) return;
-        const tubeProduct = {
-            ...tube,
-            type: "Tube",
-            tubeId: tube._id,
-            productName: tube.name || tube.productName || tube.hero?.title || "Motorcycle Tube"
-        };
-        const selectedGeneric = {
-            _id: tube._id,
-            tubeId: tube._id,
-            size: tube.size || (tube.wheelSize ? `Rim ${tube.wheelSize}` : 'Standard'),
-            price: tube.startingPrice || tube.endingPrice || tube.pricing?.sellingPrice || tube.pricing?.mrp || 0,
-            sku: tube.sku || '',
-            type: "Tube",
-            productName: tubeProduct.productName
-        };
-        addToCart(tubeProduct, null, null, selectedGeneric, false);
+        addTubesToCart(false);
         router.push('/checkout');
-    }, [tube, addToCart, router]);
+    }, [tube, addTubesToCart, router]);
 
     const handleNotify = useCallback(() => {
         setIsRinging(true);
@@ -218,7 +219,54 @@ export default function ProductDetails({ tube }) {
                         </div>
                     )}
 
-                    <PriceCard tyreData={{ ...tube, availability }} selectedOpposite={null} prices={prices} formatPrice={formatPrice} />
+                    <PriceCard
+                        tyreData={{ ...tube, availability, size: getTubeSize(tube) }}
+                        selectedOpposite={selectedTube && { ...selectedTube, size: getTubeSize(selectedTube) }}
+                        prices={prices}
+                        formatPrice={formatPrice}
+                        baseLabel="This Tube"
+                        oppositeLabel="Added Tube"
+                    />
+
+                    {otherTubes.length > 0 && (
+                        <section aria-labelledby="other-tubes-heading" className="bg-white/10 relative border border-white/10 rounded-xl p-4 lg:p-3 space-y-2 md:space-y-4 lg:space-y-2 backdrop-blur-md overflow-hidden">
+                            <header className="relative flex items-start md:items-center gap-3.5">
+                                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-orange-500/20 to-orange-600/5 ring-1 ring-orange-500/30 shadow-[0_0_15px_rgba(249,115,22,0.15)] transition-all duration-300 mt-1 md:mt-0">
+                                    <FaMotorcycle className="text-orange-400 text-lg drop-shadow-[0_0_8px_rgba(249,115,22,0.4)]" aria-hidden="true" />
+                                </div>
+                                <div className="flex flex-col">
+                                    <h2 id="other-tubes-heading" className="text-xs md:text-sm font-black uppercase tracking-[0.25em] bg-gradient-to-r from-orange-400 to-amber-500 bg-clip-text text-transparent drop-shadow-sm">
+                                        More Tube Sizes
+                                    </h2>
+                                    <p className="text-zinc-400 text-[10px] md:text-[11px] font-semibold tracking-wide">
+                                        Select a tube to buy it along with this one.
+                                    </p>
+                                </div>
+                            </header>
+
+                            <Carousel
+                                items={otherTubes}
+                                itemWidth='w-full md:w-[260px]'
+                                gap={12}
+                                showArrows={true}
+                                showDots={false}
+                                arrowSize={10}
+                                leftArrowClassName={"-left-2 p-1"}
+                                rightArrowClassName={"-right-2 p-1"}
+                                className="w-full"
+                                renderItem={(item) => (
+                                    <OtherTubeItem
+                                        key={item._id}
+                                        tube={item}
+                                        isSelected={item._id === selectedTubeId}
+                                        parentAvailability={availability}
+                                        onSelect={setSelectedTubeId}
+                                        formatPrice={formatPrice}
+                                    />
+                                )}
+                            />
+                        </section>
+                    )}
 
                     <div ref={buyBarRef} className={`grid gap-2 md:gap-4 ${availability === "backorder" ? 'grid-cols-1' : 'grid-cols-2'}`}>
                         <button
@@ -244,7 +292,7 @@ export default function ProductDetails({ tube }) {
                                 onClick={handleBuyNow}
                                 className="py-4 lg:py-3 px-1 flex gap-1 justify-center items-center rounded-lg font-black uppercase tracking-widest text-xs sm:text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-[0_0_30px_rgba(249,115,22,0.3)] hover:shadow-[0_0_40px_rgba(249,115,22,0.6)] transform hover:-translate-y-1 transition-all duration-300 cursor-pointer"
                             >
-                                Buy Now
+                                Buy Now {selectedTube && <span className="inline-block"> ({formatPrice(prices.totalPrice)})</span>}
                             </button>
                         )}
                     </div>
@@ -260,7 +308,7 @@ export default function ProductDetails({ tube }) {
                 subtitle={titleParts.size}
                 availability={availability}
                 price={formatPrice(prices.totalPrice)}
-                priceNote="(Incl. all taxes)"
+                priceNote={selectedTube ? "2 Tubes (Incl. all taxes)" : "(Incl. all taxes)"}
                 isRinging={isRinging}
                 notifyLabel="Check Availability"
                 onAddToCart={handleAddToCart}

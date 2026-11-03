@@ -6,7 +6,7 @@ import FAQSection from "@/components/atoms/FAQSection";
 import TubeDescription from "./TubeDescription";
 import TyreSection from "../NewLaunchTyres";
 
-export default function TubesDetailsClient({ initialData }) {
+export default function TubesDetailsClient({ initialData, otherTubes = [] }) {
     const tube = useMemo(() => initialData, [initialData]);
 
     if (!tube) return null;
@@ -15,7 +15,7 @@ export default function TubesDetailsClient({ initialData }) {
 
     return (
         <main className="py-4 space-y-4">
-            <ProductDetails tube={tube} />
+            <ProductDetails tube={tube} otherTubes={otherTubes} />
             <TubeDescription tube={tube} />
             <TyreSection title="Recommended Tyres" subtitle="These tyres are recommended for your vehicle" />
             {hasFaqs && <FAQSection faqs={tube.faqs} />}

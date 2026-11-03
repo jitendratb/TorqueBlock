@@ -1,0 +1,110 @@
+import Link from "next/link";
+import { FaArrowRight, FaCheck, FaShieldAlt } from "react-icons/fa";
+
+export default function OtherTubeItem({ tube, isSelected, parentAvailability, onSelect, formatPrice }) {
+    const availability = tube?.availability || "in_stock";
+    const isInStock = availability !== "out_of_stock";
+    // Same rule as the matching tyre card: only tubes with the same availability go in one order
+    const isOrderable = isInStock && (parentAvailability ? availability === parentAvailability : true);
+
+    const sellingPrice = tube?.pricing?.sellingPrice || tube?.pricing?.mrp || 0;
+    const mrp = tube?.pricing?.mrp || 0;
+    const discount = mrp > sellingPrice ? mrp - sellingPrice : 0;
+    const discountPercentage = discount > 0 ? Math.round((discount / mrp) * 100) : 0;
+
+    // Some tubes have no size set, so fall back to the size at the end of the name
+    const size = tube?.size || tube?.name?.split(" ").pop();
+
+    const availBadgeClass = availability === "in_stock"
+        ? "bg-green-500/10 border-green-500/20 text-green-400"
+        : availability === "backorder"
+            ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-400"
+            : availability === "preorder"
+                ? "bg-blue-500/10 border-blue-500/20 text-blue-400"
+                : "bg-red-500/10 border-red-500/20 text-red-400";
+
+    const availLabel = availability === "in_stock" ? "In Stock"
+        : availability === "backorder" ? "Available To Order"
+            : availability === "preorder" ? "Pre Order"
+                : "Out of Stock";
+
+    const tagClass = `text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${isSelected
+        ? "bg-orange-500/10 border-orange-500/20 text-orange-400"
+        : "bg-white/20 border-white/80 text-white/80 group-hover:text-white"
+        }`;
+
+    const dimClass = !isOrderable ? "opacity-50" : "";
+
+    return (
+        <div
+            onClick={() => isOrderable && onSelect(isSelected ? null : tube._id)}
+            className={`flex flex-col p-3 w-full rounded-2xl border text-left transition-all duration-300 relative group ${!isOrderable
+                ? "bg-zinc-900/30 border-white/10 cursor-not-allowed"
+                : isSelected
+                    ? "bg-orange-500/10 border-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.15)] cursor-pointer"
+                    : "bg-white/5 border-white/5 hover:border-white/15 cursor-pointer"
+                }`}
+        >
+            <div className={`flex justify-between items-center w-full mb-1 ${dimClass}`}>
+                {/* The click bubbles up to the card, which does the toggling */}
+                <button
+                    type="button"
+                    disabled={!isOrderable}
+                    aria-pressed={isSelected}
+                    aria-label={`${isSelected ? "Remove" : "Add"} ${size} tube`}
+                    className={`w-4 h-4 rounded-full border flex items-center justify-center shrink-0 transition-all cursor-pointer disabled:cursor-not-allowed ${isSelected ? "border-orange-500 bg-orange-500" : "border-zinc-700 bg-zinc-950/50"
+                        }`}
+                >
+                    {isSelected && <FaCheck className="text-[8px] text-white" aria-hidden="true" />}
+                </button>
+
+                <div className="flex gap-1 md:gap-2">
+                    {tube?.position && <span className={tagClass}>{tube.position}</span>}
+                    <span className={`inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border transition-all ${availBadgeClass}`}>
+                        <FaShieldAlt className="text-[8px]" aria-hidden="true" />
+                        {availLabel}
+                    </span>
+                </div>
+            </div>
+
+            <h4 className={`text-base font-black tracking-tight mb-1 lg:mb-0 ${dimClass} ${!isOrderable ? "text-zinc-500" : "text-white"}`}>
+                {size}
+            </h4>
+
+            <div className="flex justify-between items-center w-full mt-2 pt- lg:mt-1.5 lg:pt-1.5 border-t border-white/5">
+                <div className={`flex flex-col ${dimClass}`}>
+                    {discount > 0 ? (
+                        <div className="flex flex-col">
+                            <div className="flex items-baseline gap-1.5">
+                                <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-300"}`}>
+                                    {formatPrice(sellingPrice)}
+                                </p>
+                                <span className="text-[10px] text-zinc-500 line-through decoration-red-500/60 font-semibold" aria-label="Original price">
+                                    {formatPrice(mrp)}
+                                </span>
+                            </div>
+                            <span className="text-[9px] font-bold text-emerald-400">
+                                Save {formatPrice(discount)} ({discountPercentage}% OFF)
+                            </span>
+                        </div>
+                    ) : (
+                        <p className={`text-sm font-black ${!isOrderable ? "text-zinc-500" : "text-orange-400"}`}>
+                            {formatPrice(sellingPrice)}
+                        </p>
+                    )}
+                </div>
+
+                <Link
+                    href={`/tubes/${tube?.identifier || tube?._id}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="group/btn relative overflow-hidden px-2.5 py-1 rounded-md border border-orange-500/40 bg-orange-500/10 hover:bg-orange-500/20 hover:border-orange-500/70 transition-all duration-300 flex items-center gap-1.5 z-10"
+                >
+                    <span className="text-[9px] font-black uppercase tracking-widest text-orange-400 group-hover/btn:text-orange-300 transition-colors">
+                        View
+                    </span>
+                    <FaArrowRight className="text-[8px] text-orange-400 group-hover/btn:text-orange-300 transition-all group-hover/btn:translate-x-0.5" aria-hidden="true" />
+                </Link>
+            </div>
+        </div>
+    );
+}

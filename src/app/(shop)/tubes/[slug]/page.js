@@ -76,14 +76,20 @@ async function TubesDetailsPage({ params }) {
     }
     
     const formattedTube = tube;
-    
+
+    // Other tubes for the "More Tube Sizes" card, same rim size first
+    const allTubes = await TubesService.getTube({ params: { page: 1, limit: 50 } });
+    const otherTubes = (allTubes?.data || [])
+        .filter((item) => item._id !== tube._id)
+        .sort((a, b) => (b.wheelSize === tube.wheelSize) - (a.wheelSize === tube.wheelSize));
+
     const displayName = formattedTube?.productName || formattedTube?.name || formattedTube?.hero?.title || slug;
     const breadcrumbItems = [{ label: "Tubes", href: "/tubes", }, { label: displayName, isLast: true, },];
 
     return (
         <main className="w-full">
             <Breadcrumb items={breadcrumbItems} />
-            <TubesDetailsClient initialData={formattedTube} />
+            <TubesDetailsClient initialData={formattedTube} otherTubes={otherTubes} />
             <ProductSchema product={formattedTube} />
             <BreadcrumbSchema items={breadcrumbItems} />
         </main>

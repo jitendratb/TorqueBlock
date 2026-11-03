@@ -4,7 +4,7 @@ import { MdLocalShipping } from "react-icons/md";
 import { deliveryService } from "@/services/deliveryService";
 import DeliveryLocationModal from "./DeliveryLocationModal";
 
-export default function PriceCard({ tyreData, selectedOpposite, prices, formatPrice }) {
+export default function PriceCard({ tyreData, selectedOpposite, prices, formatPrice, baseLabel, oppositeLabel }) {
     const { basePrice, oppositePrice, baseOriginalPrice, baseDiscountAmount, baseDiscountPercentage } = prices;
     const [delivery, setDelivery] = useState(null);
     const [isLocationOpen, setIsLocationOpen] = useState(false);
@@ -129,7 +129,7 @@ export default function PriceCard({ tyreData, selectedOpposite, prices, formatPr
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-1">
                                         <span className="text-[10px] font-medium text-zinc-500">{tyreData.size}</span>
-                                        <span className="text-xs font-bold text-zinc-200 capitalize">( {tyreData?.position || 'Current Tyre'} )</span>
+                                        <span className="text-xs font-bold text-zinc-200 capitalize">( {baseLabel || tyreData?.position || 'Current Tyre'} )</span>
                                     </div>
                                     <span className="text-sm font-black text-zinc-200">{formatPrice(basePrice)}</span>
                                 </div>
@@ -137,7 +137,7 @@ export default function PriceCard({ tyreData, selectedOpposite, prices, formatPr
                                 <div className="flex justify-between items-center">
                                     <div className="flex items-center gap-1">
                                         <span className="text-[10px] font-medium text-zinc-500">{selectedOpposite.size}</span>
-                                        <span className="text-xs font-bold text-emerald-400 capitalize">Matching {selectedOpposite.position}</span>
+                                        <span className="text-xs font-bold text-emerald-400 capitalize">{oppositeLabel || `Matching ${selectedOpposite.position}`}</span>
                                     </div>
                                     <span className="text-sm font-black text-emerald-400">{formatPrice(oppositePrice)}</span>
                                 </div>
