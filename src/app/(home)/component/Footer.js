@@ -110,7 +110,7 @@ async function Footer() {
                             <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block h-auto w-[100px] md:w-[130px]" style={{ objectFit: 'contain', height: 'auto' }} />
                         </Link>
 
-                        <p className="text-zinc-400 text-[15px] leading-relaxed max-w-xs">
+                        <p className="text-zinc-400 text-[15px] leading-relaxed max-w-xs pt-4">
                             Premium &amp; Value Performance Motorcycle Tyres, delivered across India.
                         </p>
 
