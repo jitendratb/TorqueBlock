@@ -4,7 +4,8 @@ import Link from 'next/link'
 import {
     FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaWhatsapp,
     FaEnvelope, FaMapMarkerAlt, FaChevronRight, FaArrowRight, FaShoppingCart,
-    FaLayerGroup, FaUsers, FaHeadset, FaShieldAlt, FaTruck, FaCreditCard, FaBuilding
+    FaLayerGroup, FaUsers, FaHeadset, FaShieldAlt, FaTruck, FaCreditCard, FaBuilding,
+    FaExternalLinkAlt
 } from 'react-icons/fa'
 import brandServiceInstance from "@/services/brandService";
 
@@ -202,19 +203,14 @@ async function Footer() {
                                 </ul>
 
                                 <div className="mt-4">
-                                    <div className="flex flex-col items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-3.5">
-                                        <div className="flex items-center gap-3">
+                                    <a href="https://trade.torqueblock.com" target="_blank" rel="noopener noreferrer" className="group flex flex-col items-start gap-3 rounded-xl border border-zinc-800 bg-zinc-900/50 p-3.5 transition-colors hover:border-orange-500/50 hover:bg-zinc-900">
+                                        <div className="flex w-full items-center gap-3">
                                             <FaBuilding className="text-orange-500 text-[28px]  shrink-0" />
-                                            <div>
-                                                <div className="flex flex-col items-start gap-1">
-                                                    <p className="text-white font-bold text-xs">Torque Block Trade</p>
-                                                    <p className="text-[8px] font-black uppercase tracking-wider text-orange-400 bg-orange-500/15 rounded-full px-2 py-0.5">Coming Soon</p>
-                                                </div>
-
-                                            </div>
+                                            <p className="text-white font-bold text-xs transition-colors group-hover:text-orange-500">Torque Block Trade</p>
+                                            <FaExternalLinkAlt aria-hidden="true" className="ml-auto shrink-0 text-[11px] text-zinc-500 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-orange-500" />
                                         </div>
                                         <p className="text-zinc-500 text-xs">For dealers, workshops & service centres</p>
-                                    </div>
+                                    </a>
                                 </div>
                             </div>
 
