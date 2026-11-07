@@ -106,8 +106,8 @@ async function Footer() {
 
 
                     <div className="">
-                        <Link href="/" className="inline-block mb-4">
-                            <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={120} priority className="h-auto w-[110px] lg:w-[150px]" style={{ height: 'auto' }} />
+                        <Link href="/" className="text-2xl font-bold flex-shrink-0" aria-label="Torque Block Home">
+                            <Image src="/newlogo.webp" alt="Torque Block Logo" width={130} height={60} priority className="inline-block h-auto w-[100px] md:w-[130px]" style={{ objectFit: 'contain', height: 'auto' }} />
                         </Link>
 
                         <p className="text-zinc-400 text-[15px] leading-relaxed max-w-xs">
