@@ -1,7 +1,6 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import { siteConfig } from "@/config/site";
 import "./globals.css";
-import FloatingWhatsApp from "@/components/atoms/FloatingWhatsApp";
 
 const inter = Inter({
   variable: "--font-inter",
