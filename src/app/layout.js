@@ -6,12 +6,14 @@ import FloatingWhatsApp from "@/components/atoms/FloatingWhatsApp";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  preload: false,
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 export async function generateMetadata() {

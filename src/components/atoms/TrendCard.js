@@ -6,7 +6,7 @@ import CustomImage from '../molecules/CustomImage';
 
 function TrendCard({ item, className = "w-full" }) {
     const productName = item?.productId?.productName || item?.name || 'Performance Tyre';
-    const heroImage = item?.image || item?.bannerImage || '/placeholder.jpg';
+    const heroImage = item?.image || item?.bannerImage;
     const categoryName = item?.productId?.categoryId?.name || item?.category || 'Premium';
     const { Icon: CategoryIcon, label: categoryLabel } = getCategoryPreset(categoryName);
 
@@ -19,6 +19,7 @@ function TrendCard({ item, className = "w-full" }) {
                 src={heroImage}
                 alt={productName}
                 fill
+                sizes="(max-width: 768px) 100vw, 380px"
                 priority={false}
                 imageClassName="object-cover transition-transform duration-1000 ease-out group-hover:scale-105"
                 className="absolute inset-0"
@@ -29,7 +30,7 @@ function TrendCard({ item, className = "w-full" }) {
             <div className="absolute inset-x-0 bottom-0 z-10 p-5 md:p-6 space-y-3">
                 <div className="flex items-center justify-start gap-1">
                     <div className="h-auto w-16">
-                        <CustomImage src={item?.bike?.bikeId?.brandId?.brandLogo} alt={productName} />
+                        <CustomImage src={item?.bike?.bikeId?.brandId?.brandLogo} alt={productName} sizes="64px" />
                     </div>
 
                     <h3 className="text-lg font-black leading-[1.05] text-white drop-shadow-md sm:text-sm"> {item?.bike?.bikeId?.brandId?.brandName} <span>{item?.bike?.bikeId?.modelName}</span> </h3>
@@ -44,10 +45,10 @@ function TrendCard({ item, className = "w-full" }) {
                     </span>
                 </div>
 
-                <h1 className="font-black leading-[1.05] text-xl drop-shadow-md">
+                <p className="font-black leading-[1.05] text-xl drop-shadow-md">
                     <span className="text-white">{item?.productId?.productName?.split(' ')?.[0]}</span>{' '}
                     <span className="text-orange-500">{item?.productId?.productName?.split(' ')?.slice(1).join(' ')}</span>
-                </h1>
+                </p>
                 <p className="line-clamp-2 max-w-[90%] text-[13px] leading-relaxed font-semibold text-white/70">
                     {item?.shortDescription}
                 </p>

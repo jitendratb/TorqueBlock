@@ -26,7 +26,6 @@ function PerformanceBrandCard({ brand }) {
   return (
     <Link
       href={`/brands/${brand._id}`}
-      aria-label={`Shop ${name}`}
       className="group relative flex h-[380px] lg:h-[420px] w-full flex-col overflow-hidden rounded-[2rem] bg-[#07090d] transition-all duration-500 ease-out hover:-translate-y-1 hover:border-orange-500/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 focus-visible:ring-offset-black  [.light-mode_&]:border-black/10"
     >
       <div className="absolute inset-0 z-0">

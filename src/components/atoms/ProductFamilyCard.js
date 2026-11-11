@@ -15,7 +15,8 @@ const priceFormatter = new Intl.NumberFormat('en-IN', {
 const ProductCard = ({ tyre, className = "" }) => {
     const router = useRouter();
     const [currentImg, setCurrentImg] = useState(0);
-    
+    const [seenImgs, setSeenImgs] = useState(() => new Set([0]));
+
     const { title, categoryName, brandName, images, displayPrice } = useMemo(() => {
         const title = tyre?.productName || "Tyre";
         const categoryName = tyre?.categoryId?.name || "Premium Tyre";
@@ -47,19 +48,24 @@ const ProductCard = ({ tyre, className = "" }) => {
         }
     }, [handleCardClick]);
 
+    const showImage = useCallback((index) => {
+        setCurrentImg(index);
+        setSeenImgs((prev) => (prev.has(index) ? prev : new Set(prev).add(index)));
+    }, []);
+
     const nextImage = useCallback((e) => {
         e.stopPropagation();
         if (images.length > 0) {
-            setCurrentImg((prev) => (prev + 1) % images.length);
+            showImage((currentImg + 1) % images.length);
         }
-    }, [images.length]);
+    }, [images.length, currentImg, showImage]);
 
     const prevImage = useCallback((e) => {
         e.stopPropagation();
         if (images.length > 0) {
-            setCurrentImg((prev) => (prev - 1 + images.length) % images.length);
+            showImage((currentImg - 1 + images.length) % images.length);
         }
-    }, [images.length]);
+    }, [images.length, currentImg, showImage]);
 
     return (
         <div
@@ -67,12 +73,11 @@ const ProductCard = ({ tyre, className = "" }) => {
             onKeyDown={handleKeyDown}
             role="button"
             tabIndex={0}
-            aria-label={`View details for ${title}`}
             className={`group mt-1 cursor-pointer relative flex flex-col w-full bg-white/20 hover:bg-white/10 [.light-mode_&]:bg-white/20  [.light-mode_&]:backdrop-blur-3xl hover:bg-white/10 [.light-mode_&]:hover:bg-zinc-950/20 backdrop-blur-md border border-white/5 [.light-mode_&]:border-white/30 hover:border-orange-500/30 [.light-mode_&]:hover:border-orange-400/50 rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-[0_0_30px_rgba(249,115,22,0.15)] [.light-mode_&]:shadow-[0_2px_15px_rgba(0,0,0,0.04)] [.light-mode_&]:hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] hover:-translate-y-1 ${className}`}
         >
             <div className="relative w-full h-[200px] flex items-center justify-center p-4 transition-colors duration-500">
                 {images.length > 0 ? (
-                    images.map((img, index) => (
+                    images.map((img, index) => seenImgs.has(index) && (
                         <div
                             key={index}
                             className={`absolute inset-0 p-4 transition-opacity duration-200 ${

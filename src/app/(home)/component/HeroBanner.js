@@ -1,32 +1,19 @@
-'use client';
-
-import { useEffect, useState } from 'react';
 import { getImageProps } from 'next/image';
 
-export default function HeroBanner({ banners, topContent, bottomContent }) {
-    const [selectedBanner, setSelectedBanner] = useState(banners[0]);
 
-    useEffect(() => {
-        const id = requestAnimationFrame(() => {
-            const randomIndex = Math.floor(Math.random() * banners.length);
-            setSelectedBanner(banners[randomIndex]);
-        });
-
-        return () => cancelAnimationFrame(id);
-    }, [banners]);
-
-    if (!selectedBanner) return null;
+export default function HeroBanner({ banner, topContent, bottomContent }) {
+    if (!banner) return null;
 
     const commonProps = {
-        alt: selectedBanner.alt,
+        alt: banner.alt,
         fill: true,
         loading: 'eager',
         sizes: '100vw',
         quality: 75,
     };
 
-    const { props: desktopProps } = getImageProps({ ...commonProps, src: selectedBanner.image });
-    const { props: mobileProps } = getImageProps({ ...commonProps, src: selectedBanner.mobileImage });
+    const { props: desktopProps } = getImageProps({ ...commonProps, src: banner.image });
+    const { props: mobileProps } = getImageProps({ ...commonProps, src: banner.mobileImage });
 
     return (
         <section className='relative w-full min-h-svh' aria-label="Hero Section">
@@ -35,7 +22,7 @@ export default function HeroBanner({ banners, topContent, bottomContent }) {
                 <source media="(max-width: 767px)" srcSet={mobileProps.srcSet} sizes={mobileProps.sizes} />
                 <img
                     {...mobileProps}
-                    alt={selectedBanner.alt}
+                    alt={banner.alt}
                     fetchPriority="high"
                     decoding="async"
                     style={{ ...mobileProps.style, objectFit: 'cover' }}

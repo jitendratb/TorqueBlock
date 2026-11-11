@@ -7,7 +7,7 @@ function BikeCard({ brand, index, className = "" }) {
     if (!brand) return null;
 
     const href = `/motorcycles/${brand.identifier}`;
-    const imageSrc = brand?.hero?.banner || brand?.heroImage || brand?.mobileHeroImage || brand?.image || '/placeholder.jpg';
+    const imageSrc = brand?.hero?.banner || brand?.heroImage || brand?.mobileHeroImage || brand?.image; // CustomImage shows its fallback when empty
     const brandName = brand?.bikeBrandId?.brandName ||  brand?.bikeBrand || brand?.name || 'Motorcycle Brand';
     const modelName = brand?.bikeModel || '';
     const title = modelName ? `${brandName} ${modelName}` : brandName;
@@ -15,8 +15,6 @@ function BikeCard({ brand, index, className = "" }) {
     const titleWords = title.trim().split(' ');
     const firstWord = titleWords[0];
     const restOfTitle = titleWords.slice(1).join(' ');
-
-    console.log(brand)
 
     return (
         <Link href={href} className={`group relative h-[320px] rounded-[2rem] border border-white/20 block shrink-0 overflow-hidden cursor-pointer ${className}`}>

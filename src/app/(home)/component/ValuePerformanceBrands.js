@@ -1,11 +1,11 @@
 import React from "react";
-import brandServiceInstance from "@/services/brandService";
+import { getActiveBrands } from "@/services/getActiveBrands";
 import ValuePerformanceBrandsCarouselClient from "./ValuePerformanceBrandsCarouselClient";
 
 async function ValuePerformanceBrands() {
     let brands = [];
     try {
-        let data = await brandServiceInstance.getBrands({ isActive: true });
+        let data = await getActiveBrands();
         const getBrandPriority = (name = "") => {
             const lower = name?.toLowerCase() || "";
             if (lower.includes('eurogrip')) return 1;
@@ -40,7 +40,16 @@ async function ValuePerformanceBrands() {
                 </h2>
             </div>
             <div className="pt-8">
-                <ValuePerformanceBrandsCarouselClient brands={brands} />
+                <ValuePerformanceBrandsCarouselClient
+                brands={brands.map((b) => ({
+                    _id: b?._id,
+                    name: b?.name,
+                    brandLogo: b?.brandLogo,
+                    brandBanner: b?.brandBanner,
+                    focusKeyword: b?.focusKeyword,
+                    categories: b?.categories,
+                }))}
+            />
             </div>
         </section>
     );

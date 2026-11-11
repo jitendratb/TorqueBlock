@@ -66,13 +66,10 @@ export default function CustomImage({
                 height={resolvedHeight}
                 preload={priority}
                 fetchPriority={finalFetchPriority}
+                unoptimized={useFallback || undefined}
                 quality={quality}
                 sizes={finalSizes}
-                className={clsx(
-                    "transition-opacity duration-300",
-                    loading ? "opacity-0" : "opacity-100",
-                    imageClassName
-                )}
+                className={imageClassName}
                 onLoad={(e) => {
                     if (e.currentTarget?.naturalWidth > 0 || e.target?.naturalWidth > 0) {
                         setLoading(false);
@@ -84,6 +81,11 @@ export default function CustomImage({
                 }}
                 {...props}
             />
+            {loading && (
+                <div className={clsx("absolute inset-0 animate-pulse bg-zinc-800", skeletonClassName)}>
+                    <div className="absolute inset-0 opacity-40 bg-[radial-gradient(#999_1px,transparent_1px)] [background-size:16px_16px]" />
+                </div>
+            )}
             {finalCaption && (
                 <figcaption className={clsx("sr-only")}>
                     {finalCaption}

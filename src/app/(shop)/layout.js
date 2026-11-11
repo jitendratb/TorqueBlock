@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import Header from "@/components/organisms/header";
 import { PageShellMain } from "./Components/PageShell";
 import EnterprisePreFooter from "../(home)/component/PreFooter";
@@ -114,8 +115,12 @@ export default function HomeLayout({ children }) {
             <PageShellMain>
                 {children}
             </PageShellMain>
-            <EnterprisePreFooter />
-            <Footer />
+            <Suspense fallback={null}>
+                <EnterprisePreFooter />
+            </Suspense>
+            <Suspense fallback={null}>
+                <Footer />
+            </Suspense>
         </div>
 
     );

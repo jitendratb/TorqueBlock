@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { FiChevronRight, FiArrowRight } from "react-icons/fi";
 import { PiMotorcycleFill, PiTrophyFill, PiCoinsFill, PiScalesFill } from "react-icons/pi";
-import brandServiceInstance from "@/services/brandService";
+import { getActiveBrands } from "@/services/getActiveBrands";
 
 const motorcycleLinks = [
   { label: "Triumph Scrambler 400X", href: "/motorcycles/triumph-scrambler-400-x-tyres" },
@@ -54,7 +54,7 @@ export default async function EnterprisePreFooter() {
   let valuePerformanceBrands = [];
 
   try {
-    const data = await brandServiceInstance.getBrands({ isActive: true });
+    const data = await getActiveBrands();
 
     premiumBrands = (data?.filter((brand) =>
       PREMIUM_ORDER.includes(brand?.name?.toLowerCase())

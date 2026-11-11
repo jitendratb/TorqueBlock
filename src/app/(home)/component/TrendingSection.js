@@ -3,6 +3,31 @@ import TrendCard from '@/components/atoms/TrendCard';
 import trendingService from '@/services/trending.service';
 import TrendingCarouselClient from './TrendingCarouselClient';
 
+const toCardData = (item) => ({
+    _id: item?._id,
+    slug: item?.slug,
+    name: item?.name,
+    image: item?.image,
+    bannerImage: item?.bannerImage,
+    category: item?.category,
+    shortDescription: item?.shortDescription,
+    productId: item?.productId && typeof item.productId === 'object'
+        ? {
+            productName: item.productId.productName,
+            categoryId: { name: item.productId.categoryId?.name },
+        }
+        : undefined,
+    bike: {
+        bikeId: {
+            modelName: item?.bike?.bikeId?.modelName,
+            brandId: {
+                brandName: item?.bike?.bikeId?.brandId?.brandName,
+                brandLogo: item?.bike?.bikeId?.brandId?.brandLogo,
+            },
+        },
+    },
+});
+
 async function TrendingSection() {
     let trendingProducts = [];
 
@@ -34,7 +59,7 @@ async function TrendingSection() {
                 </h2>
             </div>
 
-            <TrendingCarouselClient trendingProducts={trendingProducts} />
+            <TrendingCarouselClient trendingProducts={trendingProducts.map(toCardData)} />
         </section>
     )
 }

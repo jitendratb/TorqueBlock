@@ -329,7 +329,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
 
       <div ref={searchBarRef} className='search-bar-animated-border relative bg-white/20 rounded-full backdrop-blur-sm h-14 lg:h-16 flex items-center w-full px-1.5 lg:px-3 gap-2 lg:gap-4 border border-white/20 transition-all duration-300 focus-within:bg-white/20 focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500/20 focus-within:shadow-md cursor-text'>
         <div className='shrink-0'>
-          <button onClick={() => setShowSearch(!showSearch)} className={`p-2 bg-white/30 rounded-full transition-transform duration-300 ${showSearch ? "rotate-45" : "rotate-0"}`} >
+          <button type="button" aria-label="Image search options" aria-expanded={showSearch} onClick={() => setShowSearch(!showSearch)} className={`p-2 bg-white/30 rounded-full transition-transform duration-300 ${showSearch ? "rotate-45" : "rotate-0"}`} >
             <AiOutlinePlus className='text-lg md:text-xl' />
           </button>
         </div>
@@ -343,6 +343,7 @@ function SearchBar({ onSearch, searchItems = [] }) {
             autoCorrect='off'
             autoCapitalize='off'
             spellCheck={false}
+            aria-label='Search motorcycle tyres'
             aria-autocomplete='inline'
             value={searchInput}
             onChange={(e) => {
@@ -376,6 +377,8 @@ function SearchBar({ onSearch, searchItems = [] }) {
 
         <div className='shrink-0'>
           <button
+            type="button"
+            aria-label="Search"
             onClick={() => handleSearchSubmit(searchInput)}
             disabled={!searchInput.trim()}
             className={`p-2 rounded-full transition-all duration-300 ${searchInput.trim() ? 'bg-orange-500/80 cursor-pointer' : 'bg-gray-400 opacity-50 cursor-not-allowed'}`}

@@ -1,13 +1,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import {
-    FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaWhatsapp,
-    FaEnvelope, FaMapMarkerAlt, FaChevronRight, FaArrowRight, FaShoppingCart,
-    FaLayerGroup, FaUsers, FaHeadset, FaShieldAlt, FaTruck, FaCreditCard, FaBuilding,
-    FaExternalLinkAlt
-} from 'react-icons/fa'
-import brandServiceInstance from "@/services/brandService";
+import { FaInstagram, FaFacebookF, FaYoutube, FaLinkedinIn, FaPhoneAlt, FaWhatsapp, FaEnvelope, FaMapMarkerAlt, FaChevronRight, FaArrowRight, FaShoppingCart, FaLayerGroup, FaUsers, FaHeadset, FaShieldAlt, FaTruck, FaCreditCard, FaBuilding, FaExternalLinkAlt } from 'react-icons/fa'
+import { getActiveBrands } from "@/services/getActiveBrands";
 
 const shopLinks = [
     { label: 'Shop Tyres', href: '/tyres' },
@@ -86,8 +81,8 @@ async function Footer() {
     let brandLinks = [];
 
     try {
-        const data = await brandServiceInstance.getBrands({ isActive: true });
-        const sortedBrands = (data || []).sort(
+        const data = await getActiveBrands();
+        const sortedBrands = [...(data || [])].sort(
             (a, b) => getBrandPriority(a?.name) - getBrandPriority(b?.name)
         );
 

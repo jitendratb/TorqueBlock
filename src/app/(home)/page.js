@@ -1,5 +1,4 @@
 import React, { Suspense } from 'react'
-import { preconnect } from 'react-dom'
 import { FiChevronDown } from 'react-icons/fi'
 import { MdTwoWheeler } from 'react-icons/md'
 import H1Tags from './component/H1Tags'
@@ -29,7 +28,8 @@ const ReviewsSection = dynamic(() => import('./component/ReviewSection'))
 const B2BEnterpriseSection = dynamic(() => import('./component/B2BEnterpriseSection'))
 import FAQSchema from '@/components/seo/FAQSchema'
 import LocalBusinessSchema from '@/components/seo/LocalBusinessSchema'
-import { getTrustindexStats } from '@/services/trustindexStats'
+import TrustindexValue from './component/TrustindexValue'
+import { RATING, REVIEWS } from './component/socialProof'
 
 export const revalidate = 0;
 
@@ -45,11 +45,20 @@ const POPULAR_SEARCHES = [
 ];
 
 
-async function page() {
+// Keep this component synchronous. Any await here holds the whole page behind the root
+// loading screen, and React then delays revealing the hero by ~300 ms, which pushes LCP.
+function page() {
 
-  const stats = await getTrustindexStats()
-  const liveRating = stats.rating
-  const liveReviews = stats.reviews ? `${stats.reviews}+` : undefined
+  const liveRating = (
+    <Suspense fallback={RATING}>
+      <TrustindexValue field="rating" />
+    </Suspense>
+  )
+  const liveReviews = (
+    <Suspense fallback={REVIEWS}>
+      <TrustindexValue field="reviews" />
+    </Suspense>
+  )
 
   const banners = [
     {
@@ -120,8 +129,8 @@ async function page() {
     },
   ];
 
-  preconnect('https://cdn.trustindex.io');
-
+  // revalidate = 0 renders every request, so this picks a new hero per visit.
+  const banner = banners[Math.floor(Math.random() * banners.length)]
 
   return (
     <main className='overflow-hidden relative'>
@@ -149,7 +158,7 @@ async function page() {
         ]}
       />
       <HeroBanner
-        banners={banners}
+        banner={banner}
         topContent={(
           <>
             <H1Tags rating={liveRating} reviews={liveReviews} />
