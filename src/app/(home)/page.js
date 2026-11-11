@@ -45,8 +45,7 @@ const POPULAR_SEARCHES = [
 ];
 
 
-// Keep this component synchronous. Any await here holds the whole page behind the root
-// loading screen, and React then delays revealing the hero by ~300 ms, which pushes LCP.
+
 function page() {
 
   const liveRating = (
