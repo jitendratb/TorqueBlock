@@ -43,7 +43,7 @@ export default function PaymentVerifyingState() {
                     <div className="w-1 h-1 rounded-full bg-zinc-700"></div>
                     <div className="flex items-center gap-1.5 text-zinc-500 text-[10px] uppercase font-bold tracking-wider">
                         <IoShieldCheckmarkOutline className="text-emerald-500 text-xs" />
-                        <span>Razorpay Secure</span>
+                        <span>GoKwik Secure</span>
                     </div>
                 </div>
             </div>

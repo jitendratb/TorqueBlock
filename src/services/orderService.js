@@ -3,32 +3,22 @@ import TorqueBlockApi from '@/lib/api';
 class OrderService {
     constructor() { }
 
-    async createOrder(orderData) {
+    async startGokwikCheckout(checkoutData) {
         try {
-            const response = await TorqueBlockApi.post('/user-orders/create', orderData);
+            const response = await TorqueBlockApi.post('/gokwik/checkout', checkoutData);
             return response;
         } catch (error) {
-            console.error('Error creating order:', error);
+            console.error('Error starting GoKwik checkout:', error);
             throw error;
         }
     }
 
-    async verifyPayment(paymentData) {
+    async getGokwikCheckout(cartId) {
         try {
-            const response = await TorqueBlockApi.post('/user-orders/verify-payment', paymentData);
+            const response = await TorqueBlockApi.get(`/gokwik/checkout/${cartId}`);
             return response;
         } catch (error) {
-            console.error('Error verifying payment:', error);
-            throw error;
-        }
-    }
-
-    async paymentFailed(failedData) {
-        try {
-            const response = await TorqueBlockApi.post('/user-orders/payment-failed', failedData);
-            return response;
-        } catch (error) {
-            console.error('Error marking payment as failed:', error);
+            console.error('Error fetching GoKwik checkout:', error);
             throw error;
         }
     }

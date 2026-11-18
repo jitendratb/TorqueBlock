@@ -29,42 +29,6 @@ const useOrderStore = create((set, get) => ({
     }
   },
 
-  createOrder: async (orderData) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await orderService.createOrder(orderData);
-      set({ loading: false });
-      return response;
-    } catch (err) {
-      set({ error: err.message || 'Failed to create order', loading: false });
-      throw err;
-    }
-  },
-
-  verifyPayment: async (paymentData) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await orderService.verifyPayment(paymentData);
-      set({ loading: false });
-      return response;
-    } catch (err) {
-      set({ error: err.message || 'Failed to verify payment', loading: false });
-      throw err;
-    }
-  },
-
-  paymentFailed: async (failedData) => {
-    set({ loading: true, error: null });
-    try {
-      const response = await orderService.paymentFailed(failedData);
-      set({ loading: false });
-      return response;
-    } catch (err) {
-      set({ error: err.message || 'Failed to report payment failure', loading: false });
-      throw err;
-    }
-  },
-
   cancelOrder: async (orderId, note) => {
     set({ loading: true, error: null });
     try {
