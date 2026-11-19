@@ -86,7 +86,7 @@ function BikeModelsClient({ data }) {
         return <FiInfo className="text-orange-500/80 text-sm group-hover:text-orange-400 transition-colors duration-300" />;
     };
 
- console.log(data)
+
 
     return (
         <div className="relative space-y-4">

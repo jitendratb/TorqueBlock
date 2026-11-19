@@ -136,6 +136,8 @@ export default function CartSlider() {
         );
     }, [cart, getCartTotal, couponDiscount, formatPrice, handleCheckout, isStarting, hasOutOfStockItems]);
 
+
+    console.log('CartSlider render: cart length =', cart)
     return (
         <Slider
             isOpen={isSliderOpen}

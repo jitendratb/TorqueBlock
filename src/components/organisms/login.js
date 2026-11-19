@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaArrowRight, FaArrowLeft } from 'react-icons/fa6';
+import { FaPhone, FaArrowRight, FaArrowLeft, FaCheck } from 'react-icons/fa6';
 import { IoShieldCheckmarkOutline } from 'react-icons/io5';
 import { CgSpinner } from 'react-icons/cg';
 import Model from './CustomModel';
@@ -7,84 +7,22 @@ import { Input } from '../atoms/input';
 import useAuthStore from '@/stores/authStore';
 import { useToast } from '@/context/ToastContext';
 
-const OTP_LENGTH = 4;
-const emptyOtp = () => Array(OTP_LENGTH).fill('');
-const kpError = (res, fallback) => Object.assign(new Error(res?.message || fallback), { kpMessage: res?.message || fallback });
-
-const getKwikpass = () => new Promise((resolve) => {
-    const instance = () => (window.__KP_LOGIN_SDK_INSTANCE__?.kpSendOTP ? window.__KP_LOGIN_SDK_INSTANCE__ : null);
-    if (instance() || window.__KP_SCRIPT_LOADED__ || !process.env.NEXT_PUBLIC_KWIKPASS_MID) {
-        resolve(instance());
-        return;
-    }
-    const onLoaded = () => resolve(instance());
-    window.addEventListener('kp-script-loaded', onLoaded, { once: true });
-    setTimeout(() => {
-        window.removeEventListener('kp-script-loaded', onLoaded);
-        resolve(instance());
-    }, 10000);
-});
-
-const requireKwikpass = async () => {
-    const kp = await getKwikpass();
-    if (!kp) throw kpError(null, 'Login is unavailable right now. Please refresh the page and try again.');
-    return kp;
-};
-
 function Login({ isOpen, onClose }) {
     const [step, setStep] = useState('phone');
     const [phoneNumber, setPhoneNumber] = useState('');
-    const [otp, setOtp] = useState(emptyOtp);
+    const [otp, setOtp] = useState(['', '', '', '', '', '']);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [timer, setTimer] = useState(30);
     const [isTimerActive, setIsTimerActive] = useState(false);
 
     const otpRefs = useRef([]);
-    const onCloseRef = useRef(onClose);
 
-    const storeLoginWithKwikpass = useAuthStore((state) => state.loginWithKwikpass);
+    const storeLogin = useAuthStore((state) => state.login);
+    const storeVerifyOtp = useAuthStore((state) => state.verifyOtp);
+    const storeResendOtp = useAuthStore((state) => state.resendOtp);
     const storeClearError = useAuthStore((state) => state.clearError);
     const toast = useToast();
-
-    useEffect(() => {
-        onCloseRef.current = onClose;
-    }, [onClose]);
-
-    useEffect(() => {
-        if (!isOpen || step !== 'phone') return;
-        let active = true;
-        getKwikpass().then((kp) => {
-            if (active) kp?.handleKpSSOButton?.();
-        });
-        return () => {
-            active = false;
-        };
-    }, [isOpen, step]);
-
-    useEffect(() => {
-        if (!isOpen) return;
-
-        const handleSso = async (event) => {
-            const kpToken = event?.detail?.kpToken || event?.data?.detail?.kpToken;
-            const { isAuthenticated, loading } = useAuthStore.getState();
-            if (!kpToken || isAuthenticated || loading) return;
-            setIsLoading(true);
-            setError('');
-            try {
-                await storeLoginWithKwikpass(kpToken);
-                setStep('success');
-                setTimeout(() => onCloseRef.current?.(), 2000);
-            } catch (err) {
-                setError(err?.response?.data?.message || 'Login failed. Please try again.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        window.addEventListener('kwikpass-sso', handleSso);
-        return () => window.removeEventListener('kwikpass-sso', handleSso);
-    }, [isOpen, storeLoginWithKwikpass]);
 
     useEffect(() => {
         let interval = null;
@@ -103,7 +41,7 @@ function Login({ isOpen, onClose }) {
         if (!isOpen) {
             setStep('phone');
             setPhoneNumber('');
-            setOtp(emptyOtp());
+            setOtp(['', '', '', '', '', '']);
             setError('');
             setIsLoading(false);
             setTimer(30);
@@ -136,16 +74,13 @@ function Login({ isOpen, onClose }) {
         storeClearError();
 
         try {
-            const kp = await requireKwikpass();
-            const data = await kp.kpSendOTP(phoneNumber);
-            if (data?.status !== 200) throw kpError(data, 'Failed to send OTP.');
-            setOtp(emptyOtp());
+            const data = await storeLogin(phoneNumber);
             setStep('otp');
             setTimer(30);
             setIsTimerActive(true);
             toast.success(data?.message || "OTP Sent Successfully");
         } catch (err) {
-            setError(err?.kpMessage || 'Failed to send OTP. Please check your connection.');
+            setError(err?.response?.data?.message || 'Failed to send OTP. Please check your connection.');
         } finally {
             setIsLoading(false);
         }
@@ -164,7 +99,7 @@ function Login({ isOpen, onClose }) {
         newOtp[index] = cleanValue.slice(-1);
         setOtp(newOtp);
 
-        if (index < OTP_LENGTH - 1) {
+        if (index < 5) {
             otpRefs.current[index + 1]?.focus();
         }
     };
@@ -182,10 +117,11 @@ function Login({ isOpen, onClose }) {
 
     const handleOtpPaste = (e) => {
         e.preventDefault();
-        const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, OTP_LENGTH);
-        if (pastedData.length === OTP_LENGTH) {
-            setOtp(pastedData.split(''));
-            otpRefs.current[OTP_LENGTH - 1]?.focus();
+        const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        if (pastedData.length === 6) {
+            const newOtp = pastedData.split('');
+            setOtp(newOtp);
+            otpRefs.current[5]?.focus();
         }
     };
 
@@ -196,8 +132,8 @@ function Login({ isOpen, onClose }) {
             setError('Please enter the verification code.');
             return;
         }
-        if (otpCode.length !== OTP_LENGTH) {
-            setError(`Please enter a complete ${OTP_LENGTH}-digit OTP.`);
+        if (otpCode.length !== 6) {
+            setError('Please enter a complete 6-digit OTP.');
             return;
         }
 
@@ -206,16 +142,14 @@ function Login({ isOpen, onClose }) {
         storeClearError();
 
         try {
-            const kp = await requireKwikpass();
-            const res = await kp.kpVerifyOTP({ phone: phoneNumber, otp: Number(otpCode) });
-            const kpToken = res?.body?.data?.kpToken;
-            if (res?.status !== 200 || !kpToken) throw kpError(res, 'Invalid or expired OTP. Please try again.');
-            await storeLoginWithKwikpass(kpToken);
-
-            setStep('success');
-            setTimeout(() => onCloseRef.current?.(), 2000);
+            const data = await storeVerifyOtp(otpCode);
+       
+                setStep('success');
+                setTimeout(() => {
+                    onClose();
+                }, 2000);
         } catch (err) {
-            setError(err?.response?.data?.message || err?.kpMessage || 'Login failed. Please try again.');
+            setError(err?.response?.data?.message || 'Invalid or expired OTP. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -228,16 +162,18 @@ function Login({ isOpen, onClose }) {
         storeClearError();
 
         try {
-            const kp = await requireKwikpass();
-            const data = await kp.kpSendOTP(phoneNumber);
-            if (data?.status !== 200) throw kpError(data, 'Failed to resend OTP.');
-            setOtp(emptyOtp());
-            setTimer(30);
-            setIsTimerActive(true);
-            otpRefs.current[0]?.focus();
-            toast.success(data?.message || 'OTP Resent Successfully');
+            const data = await storeResendOtp(phoneNumber);
+            if (data?.success) {
+                setOtp(['', '', '', '', '', '']);
+                setTimer(30);
+                setIsTimerActive(true);
+                otpRefs.current[0]?.focus();
+                toast.success(data?.message || 'OTP Resent Successfully');
+            } else {
+                setError(data?.message || 'Failed to resend OTP.');
+            }
         } catch (err) {
-            setError(err?.kpMessage || 'Failed to resend OTP. Please try again.');
+            setError(err?.response?.data?.message || 'Failed to resend OTP. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -249,7 +185,7 @@ function Login({ isOpen, onClose }) {
             onClose={onClose}
             title={step === 'success' ? '' : 'Authentication'}
             subtitle={
-                step === 'phone' ? 'Enter your mobile number to receive an OTP' : step === 'otp' ? `Enter the ${OTP_LENGTH}-digit code sent to +91 ${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}` : ''
+                step === 'phone' ? 'Enter your mobile number to receive an OTP on WhatsApp' : step === 'otp' ? `Enter the 6-digit code sent on WhatsApp to +91 ${phoneNumber.slice(0, 3)}-${phoneNumber.slice(3, 6)}-${phoneNumber.slice(6)}` : ''
             }
             themeGlow={step === 'success' ? 'green' : 'orange'}
             size="sm"
@@ -295,9 +231,9 @@ function Login({ isOpen, onClose }) {
                                 <FaArrowRight className="text-xs" />
                             )}
                         </button>
-                        {isOpen && (
-                            <div id="kwikpass-sso-container" logo="https://pdp.gokwik.co/kwikpass/assets/icons/kwik_pass_logo.svg"></div>
-                        )}
+                        <p className="text-[10px] text-gray-300 text-center font-medium mt-2">
+                            Note: Verification code (OTP) will be delivered to your number on WhatsApp.
+                        </p>
                     </form>
                 )}
 
@@ -313,7 +249,7 @@ function Login({ isOpen, onClose }) {
                                     onClick={() => {
                                         setStep('phone');
                                         setError('');
-                                        setOtp(emptyOtp());
+                                        setOtp(['', '', '', '', '', '']);
                                     }}
                                     disabled={isLoading}
                                     className="text-[10px] font-bold uppercase tracking-wider text-orange-400 hover:text-orange-300 transition flex items-center gap-1 cursor-pointer"
@@ -322,7 +258,7 @@ function Login({ isOpen, onClose }) {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-4 md:px-12 gap-2" onPaste={handleOtpPaste}>
+                              <div className="grid grid-cols-6 gap-2 md:px-4" onPaste={handleOtpPaste}>
                                 {otp.map((digit, idx) => (
                                     <Input
                                         key={idx}
@@ -344,14 +280,14 @@ function Login({ isOpen, onClose }) {
                                     />
                                 ))}
                             </div>
-
+                    
                             {error && <p className="text-red-400 text-xs font-semibold mt-1 text-center">{error}</p>}
                         </div>
 
                         <div className="space-y-4">
                             <button
                                 type="submit"
-                                disabled={isLoading || otp.join('').length !== OTP_LENGTH}
+                                disabled={isLoading || otp.join('').length !== 6}
                                 className="w-full py-3.5 rounded-xl text-xs font-black uppercase tracking-widest text-white cursor-pointer transition-all duration-300 active:scale-[0.98] flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(249,115,22,0.2)] disabled:opacity-40 disabled:pointer-events-none"
                                 style={{ background: 'linear-gradient(135deg, #f97316 0%, #ea580c 100%)' }}
                             >

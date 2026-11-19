@@ -69,7 +69,6 @@ const BuyingGuide = React.memo(({ tyreData }) => {
     const guideRating = Array.isArray(tyreData?.availableTyres?.guideRating) ? tyreData.availableTyres.guideRating : [];
     const tyreName = tyreData?.availableTyres?.productName || tyreData?.hero?.title || 'This Tyre';
 
-    console.log(tyreData, "fghj")
 
     const { hasWhoShouldBuy, hasWhoShouldAvoid, hasBestUseCases } = useMemo(() => {
         return {
