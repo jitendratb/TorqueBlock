@@ -1,22 +1,20 @@
 "use client";
 
 import React, { useCallback, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import useCartStore from '@/stores/cartStore';
-import useCheckoutStore, { getCouponDiscount } from '@/stores/checkoutStore';
+import useCheckoutStore from '@/stores/checkoutStore';
 import { useToast } from '@/context/ToastContext';
 import Slider from './Slider';
 import CartItem from '@/components/molecules/CartItem';
-import OfferCodeBox from '@/components/molecules/OfferCodeBox';
 import { FaArrowRightLong } from "react-icons/fa6";
 import { IoCartOutline } from "react-icons/io5";
-import { CgSpinner } from 'react-icons/cg';
 
 export default function CartSlider() {
     const toast = useToast();
+    const router = useRouter();
     const { cart, isSliderOpen, setSliderOpen, removeFromCart, updateQuantity, getCartTotal } = useCartStore();
-    const coupon = useCheckoutStore((state) => state.coupon);
-    const isStarting = useCheckoutStore((state) => state.status === 'starting');
-    const startCheckout = useCheckoutStore((state) => state.startCheckout);
+    const openCheckout = useCheckoutStore((state) => state.openCheckout);
 
     const hasOutOfStockItems = useMemo(() => {
         return cart.some(item => {
@@ -26,8 +24,6 @@ export default function CartSlider() {
             return frontOut || rearOut || genOut;
         });
     }, [cart]);
-
-    const couponDiscount = useMemo(() => getCouponDiscount(cart, coupon), [cart, coupon]);
 
     const formatPrice = useCallback((price) => {
         return new Intl.NumberFormat('en-IN', {
@@ -50,8 +46,8 @@ export default function CartSlider() {
             toast.warning("Please remove out of stock items from your cart before proceeding.");
             return;
         }
-        startCheckout();
-    }, [hasOutOfStockItems, toast, startCheckout]);
+        openCheckout(router);
+    }, [hasOutOfStockItems, toast, openCheckout, router]);
 
     const headerTitle = useMemo(() => {
         return (
@@ -75,8 +71,6 @@ export default function CartSlider() {
 
         return (
             <div className="space-y-4 pt-1">
-                <OfferCodeBox cart={cart} discount={couponDiscount} formatPrice={formatPrice} />
-
                 <div className="p-3.5 rounded-xl bg-white/[0.02] border border-white/[0.05] space-y-2">
                     <div className="flex items-center justify-between">
                         <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">
@@ -86,55 +80,24 @@ export default function CartSlider() {
                             {formatPrice(subtotal)}
                         </span>
                     </div>
-                    {couponDiscount > 0 && (
-                        <>
-                            <div className="flex items-center justify-between">
-                                <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">
-                                    Offer Discount
-                                </span>
-                                <span className="text-sm font-black text-emerald-400">
-                                    -{formatPrice(couponDiscount)}
-                                </span>
-                            </div>
-                            <div className="flex items-center justify-between border-t border-white/5 pt-2">
-                                <span className="text-xs font-black text-zinc-400 uppercase tracking-widest">
-                                    Total
-                                </span>
-                                <span className="text-base font-black text-white tracking-tight">
-                                    {formatPrice(Math.max(0, subtotal - couponDiscount))}
-                                </span>
-                            </div>
-                        </>
-                    )}
                 </div>
 
                 <div>
                     <button
                         type="button"
                         onClick={handleCheckout}
-                        disabled={isStarting}
-                        aria-busy={isStarting}
-                        className={`group w-full py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] text-center transition-all duration-300 flex items-center justify-center gap-2 disabled:pointer-events-none ${hasOutOfStockItems
+                        className={`group w-full py-3.5 rounded-xl font-black uppercase tracking-widest text-[10px] text-center transition-all duration-300 flex items-center justify-center gap-2 ${hasOutOfStockItems
                                 ? "bg-zinc-800 text-zinc-500 cursor-not-allowed opacity-50 border border-white/5"
                                 : "bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] cursor-pointer"
                             }`}
                     >
-                        {isStarting ? (
-                            <>
-                                Opening Checkout
-                                <CgSpinner className="animate-spin text-sm" />
-                            </>
-                        ) : (
-                            <>
-                                Proceed to Checkout
-                                <FaArrowRightLong className="text-xs group-hover:translate-x-1 transition-transform duration-300" />
-                            </>
-                        )}
+                        Proceed to Checkout
+                        <FaArrowRightLong className="text-xs group-hover:translate-x-1 transition-transform duration-300" />
                     </button>
                 </div>
             </div>
         );
-    }, [cart, getCartTotal, couponDiscount, formatPrice, handleCheckout, isStarting, hasOutOfStockItems]);
+    }, [cart, getCartTotal, formatPrice, handleCheckout, hasOutOfStockItems]);
 
 
     console.log('CartSlider render: cart length =', cart)
