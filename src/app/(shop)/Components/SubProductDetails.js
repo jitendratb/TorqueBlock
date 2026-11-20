@@ -11,8 +11,8 @@ import { GiTyre } from "react-icons/gi";
 import useCartStore from "@/stores/cartStore";
 import { useToast } from "@/context/ToastContext";
 import Carousel from "@/components/organisms/Carousel";
+import { useRouter } from "next/navigation";
 import useAuthStore from "@/stores/authStore";
-import useCheckoutStore from "@/stores/checkoutStore";
 import Login from "@/components/organisms/login";
 import { notifyService } from "@/services/notifyService";
 import StarRating from "@/components/atoms/StarRating";
@@ -45,7 +45,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         return () => observer.disconnect();
     }, []);
 
-    const startCheckout = useCheckoutStore((state) => state.startCheckout);
+    const router = useRouter();
     const { isAuthenticated } = useAuthStore();
     const { addToCart } = useCartStore();
     const toast = useToast();
@@ -267,8 +267,8 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         }
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric, false);
-        startCheckout();
-    }, [tyreData, isAuthenticated, parentTyre, selectedOpposite, addToCart, startCheckout, toast]);
+        router.push('/checkout');
+    }, [tyreData, isAuthenticated, parentTyre, selectedOpposite, addToCart, router, toast]);
 
     const handleNotify = useCallback(async (bypassAuth = false) => {
         setIsRinging(true);
@@ -294,7 +294,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
     }, [isAuthenticated, tyreData?._id, selectedOpposite?._id, toast]);
 
     useEffect(() => {
-        if (isAuthenticated && pendingCheckout && !isLogin) {
+        if (isAuthenticated && pendingCheckout) {
             handleBuyNow(true);
             setPendingCheckout(false);
         }
@@ -302,7 +302,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
             handleNotify(true);
             setPendingNotify(false);
         }
-    }, [isAuthenticated, pendingCheckout, pendingNotify, isLogin, handleBuyNow, handleNotify]);
+    }, [isAuthenticated, pendingCheckout, pendingNotify, handleBuyNow, handleNotify]);
 
     const handleCloseLogin = useCallback(() => {
         setIsLogin(false);

@@ -5,7 +5,7 @@ import ProductGallery from "@/components/organisms/ProductGallery";
 import ProductTrust from "@/components/molecules/ProductTrust";
 import ShareButton from "@/components/molecules/ShareButton";
 import useCartStore from "@/stores/cartStore";
-import useCheckoutStore from "@/stores/checkoutStore";
+import { useRouter } from "next/navigation";
 import { FaTag, FaMotorcycle, FaWrench, FaBell } from "react-icons/fa";
 import { RiSparkling2Fill } from "react-icons/ri";
 import PriceCard from "../PriceCard";
@@ -40,7 +40,7 @@ const toCartTube = (item) => {
 };
 
 export default function ProductDetails({ tube, otherTubes = [] }) {
-    const startCheckout = useCheckoutStore((state) => state.startCheckout);
+    const router = useRouter();
     const { addToCart } = useCartStore();
     const buyBarRef = useRef(null);
 
@@ -128,8 +128,8 @@ export default function ProductDetails({ tube, otherTubes = [] }) {
     const handleBuyNow = useCallback(() => {
         if (!tube) return;
         addTubesToCart(false);
-        startCheckout();
-    }, [tube, addTubesToCart, startCheckout]);
+        router.push('/checkout');
+    }, [tube, addTubesToCart, router]);
 
     const handleNotify = useCallback(() => {
         setIsRinging(true);

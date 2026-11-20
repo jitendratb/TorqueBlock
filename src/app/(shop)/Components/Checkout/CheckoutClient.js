@@ -1,0 +1,636 @@
+"use client";
+
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import Script from 'next/script';
+import useCartStore from '@/stores/cartStore';
+import useAuthStore from '@/stores/authStore';
+import useUiStore from '@/stores/uiStore';
+import useAddressStore from '@/stores/addressStore';
+import useOrderStore from '@/stores/orderStore';
+import { useToast } from '@/context/ToastContext';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
+import TorqueBlockApi from '@/lib/api';
+import couponService from '@/services/couponService';
+import { Input } from '@/components/atoms/input';
+import AddressSkeleton from './AddressSkeleton';
+import PaymentSkeleton from './PaymentSkeleton';
+import CartSummarySkeleton from './CartSummarySkeleton';
+import HeaderSkeleton from './HeaderSkeleton';
+import PaymentVerifyingState from './PaymentVerifyingState';
+import OrderSuccessView from './OrderSuccessView';
+import EmptyCartView from './EmptyCartView';
+import Login from '@/components/organisms/login';
+import { IoLockClosedOutline, IoShieldCheckmarkOutline, IoRibbonOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline, IoTicketOutline, IoChevronDown } from 'react-icons/io5';
+import { CgSpinner } from 'react-icons/cg';
+
+const AddressSection = dynamic(() => import('./AddressSection'), {
+    loading: () => <AddressSkeleton />,
+    ssr: false
+});
+
+const PaymentSection = dynamic(() => import('./PaymentSection'), {
+    loading: () => <PaymentSkeleton />,
+    ssr: false
+});
+
+const CartSummary = dynamic(() => import('./CartSummary'), {
+    loading: () => <CartSummarySkeleton />,
+    ssr: false
+});
+
+const AddressModal = dynamic(() => import('./AddressModal'), {
+    ssr: false
+});
+
+export default function CheckoutClient() {
+    const toast = useToast();
+    const [isMounted, setIsMounted] = useState(false);
+    const [addressModalOpen, setAddressModalOpen] = useState(false);
+    const [editingAddress, setEditingAddress] = useState(null);
+    const { cart, getCartTotal, clearCart, fetchCart } = useCartStore();
+    const { isAuthenticated, user } = useAuthStore();
+    const { addresses, fetchAddresses, loading: addressLoading } = useAddressStore();
+    const { createOrder, verifyPayment, paymentFailed, loading: orderLoading } = useOrderStore();
+    const [selectedAddressId, setSelectedAddressId] = useState(null);
+    const [paymentMethod, setPaymentMethod] = useState('razorpay');
+    const isLoginOpen = useUiStore((state) => state.isLoginOpen);
+    const setLoginOpen = useUiStore((state) => state.setLoginOpen);
+    const [isOrderPlacing, setIsOrderPlacing] = useState(false);
+    const [orderPlacedSuccess, setOrderPlacedSuccess] = useState(false);
+    const [placedOrderDetails, setPlacedOrderDetails] = useState(null);
+    const [verifyLoading, setVerifyLoading] = useState(false);
+    const [couponCode, setCouponCode] = useState('');
+    const [couponData, setCouponData] = useState(null);
+    const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
+    const [couponError, setCouponError] = useState('');
+    const [isCouponOpen, setIsCouponOpen] = useState(false);
+    const router = useRouter();
+
+    useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+
+    const formatPrice = useCallback((price) => {
+        return new Intl.NumberFormat('en-IN', {
+            style: 'currency',
+            currency: 'INR',
+            maximumFractionDigits: 0
+        }).format(price);
+    }, []);
+
+    useEffect(() => {
+        if (isMounted && !isAuthenticated) {
+            router.back();
+            setTimeout(() => setLoginOpen(true), 300);
+        }
+    }, [isMounted, isAuthenticated, router, setLoginOpen]);
+
+    const handleCloseAddressModal = useCallback(() => {
+        setAddressModalOpen(false);
+        setEditingAddress(null);
+    }, []);
+
+    useEffect(() => {
+        if (isAuthenticated) {
+            fetchAddresses();
+            fetchCart();
+        }
+    }, [isAuthenticated, fetchAddresses, fetchCart]);
+
+    useEffect(() => {
+        if (addresses.length > 0 && !selectedAddressId) {
+            const defaultAddr = addresses.find(a => a.isDefault && a.isActive !== false) || addresses[0];
+            setSelectedAddressId(defaultAddr._id);
+        }
+    }, [addresses, selectedAddressId]);
+
+    const subtotal = useMemo(() => getCartTotal(), [getCartTotal, cart]);
+    const deliveryCharge = useMemo(() => (subtotal > 0 ? 0 : 0), [subtotal]);
+
+    const discountAmount = useMemo(() => {
+        if (!couponData) return 0;
+
+        let totalDiscount = 0;
+        let isGlobalDiscount = (!couponData.productIds || couponData.productIds.length === 0) && (!couponData.brand || couponData.brand.length === 0);
+
+        if (isGlobalDiscount) {
+            if (couponData.discountCategory === 'percentage') {
+                return (subtotal * (couponData.discountValue || 0)) / 100;
+            }
+            return couponData.discountValue || 0;
+        }
+
+        cart.forEach((item) => {
+            const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+            const disc = sizeObj.discount || sizeObj.discountAmount || item.discount || item.product?.discount || 0;
+            const unitOriginal = item.price || sizeObj.price || 0;
+            const unitSale = disc > 0 ? Math.max(0, unitOriginal - disc) : unitOriginal;
+            const itemTotalPrice = unitSale * (item.quantity || 1);
+
+            let itemDiscount = 0;
+            let brandMatched = false;
+
+            if (couponData.brand && couponData.brand.length > 0) {
+                const itemBrandId =
+                    item.product?.brand?._id ||
+                    item.product?.brandId ||
+                    (typeof item.product?.brand === 'string' ? item.product?.brand : null) ||
+                    sizeObj?.brand?._id ||
+                    sizeObj?.brandId ||
+                    (typeof sizeObj?.brand === 'string' ? sizeObj?.brand : null) ||
+                    item.brand?._id ||
+                    item.brandId ||
+                    (typeof item.brand === 'string' ? item.brand : null);
+
+                const matchedBrand = couponData.brand.find(b =>
+                    b.brandId === itemBrandId ||
+                    (itemBrandId && b.brandId === itemBrandId.toString())
+                );
+
+                if (matchedBrand) {
+                    brandMatched = true;
+                    if (matchedBrand.discountCategory === 'percentage') {
+                        itemDiscount = (itemTotalPrice * (matchedBrand.discountValue || 0)) / 100;
+                    } else {
+                        itemDiscount = (matchedBrand.discountValue || 0) * (item.quantity || 1);
+                    }
+                }
+            }
+
+            if (!brandMatched && couponData.productIds && couponData.productIds.length > 0) {
+                const isTube = Boolean(
+                    item.selectedGeneric?.tubeId ||
+                    item.product?.tubeId ||
+                    sizeObj?.tubeId ||
+                    item.selectedGeneric?.type?.toLowerCase() === 'tube' ||
+                    item.type?.toLowerCase() === 'tube' ||
+                    item.product?.type?.toLowerCase() === 'tube' ||
+                    sizeObj?.type?.toLowerCase() === 'tube' ||
+                    item.product?.valveType ||
+                    sizeObj?.valveType ||
+                    (typeof (item.product?.tubeType || sizeObj?.tubeType) === 'string') ||
+                    item.product?.productName?.toLowerCase().includes('tube') ||
+                    item.product?.name?.toLowerCase().includes('tube') ||
+                    sizeObj?.productName?.toLowerCase().includes('tube') ||
+                    sizeObj?.name?.toLowerCase().includes('tube') ||
+                    item.sku?.toLowerCase().includes('tube') ||
+                    sizeObj?.sku?.toLowerCase().includes('tube')
+                );
+
+                const targetId = isTube
+                    ? (sizeObj.tubeId || sizeObj._id || item.product?.tubeId || item.product?._id)
+                    : (sizeObj._id || item.product?._id);
+
+                if (couponData.productIds.includes(targetId)) {
+                    if (couponData.discountCategory === 'percentage') {
+                        itemDiscount = (itemTotalPrice * (couponData.discountValue || 0)) / 100;
+                    } else {
+                        itemDiscount = (couponData.discountValue || 0) * (item.quantity || 1);
+                    }
+                }
+            }
+
+            totalDiscount += itemDiscount;
+        });
+
+        return totalDiscount;
+    }, [couponData, subtotal, cart]);
+
+
+    const hasOfferItem = useMemo(() => cart.some((item) =>
+        [item.selectedFront, item.selectedRear, item.selectedGeneric].some((size) => size?.isOfferItem)
+    ), [cart]);
+
+    const finalTotal = useMemo(() => Math.max(0, subtotal + deliveryCharge - discountAmount), [subtotal, deliveryCharge, discountAmount]);
+
+    const handleApplyCoupon = useCallback(async () => {
+        if (!couponCode) {
+            setCouponError("Please enter a coupon code");
+            return;
+        }
+        if (hasOfferItem) {
+            setCouponError("Not eligible: your cart already has an exclusive offer discount.");
+            return;
+        }
+        setCouponError("");
+        setIsApplyingCoupon(true);
+        try {
+            const response = await couponService.applyCoupon(couponCode);
+            if (response?.success) {
+                setCouponData(response.data);
+                toast.success("Coupon applied successfully");
+            } else {
+                setCouponError(response?.message || "Invalid coupon");
+                setCouponData(null);
+            }
+        } catch (error) {
+            setCouponError(error?.response?.data?.message || "Failed to apply coupon");
+            setCouponData(null);
+        } finally {
+            setIsApplyingCoupon(false);
+        }
+    }, [couponCode, hasOfferItem, toast]);
+
+    const handleRemoveCoupon = useCallback(() => {
+        setCouponCode('');
+        setCouponData(null);
+        setCouponError('');
+    }, []);
+
+    const handlePlaceOrder = useCallback(async () => {
+        if (!selectedAddressId) {
+            toast.error("Please select a delivery address.");
+            return;
+        }
+
+        setIsOrderPlacing(true);
+        try {
+            const items = cart.map((item) => {
+                const sizeObj = item.selectedFront || item.selectedRear || item.selectedGeneric || {};
+                const isTube = Boolean(
+                    item.selectedGeneric?.tubeId ||
+                    item.product?.tubeId ||
+                    sizeObj?.tubeId ||
+                    item.selectedGeneric?.type?.toLowerCase() === 'tube' ||
+                    item.type?.toLowerCase() === 'tube' ||
+                    item.product?.type?.toLowerCase() === 'tube' ||
+                    sizeObj?.type?.toLowerCase() === 'tube' ||
+                    item.product?.valveType ||
+                    sizeObj?.valveType ||
+                    (typeof (item.product?.tubeType || sizeObj?.tubeType) === 'string') ||
+                    item.product?.productName?.toLowerCase().includes('tube') ||
+                    item.product?.name?.toLowerCase().includes('tube') ||
+                    sizeObj?.productName?.toLowerCase().includes('tube') ||
+                    sizeObj?.name?.toLowerCase().includes('tube') ||
+                    item.sku?.toLowerCase().includes('tube') ||
+                    sizeObj?.sku?.toLowerCase().includes('tube')
+                );
+                const targetId = isTube
+                    ? (sizeObj.tubeId || sizeObj._id || item.product?.tubeId || item.product?._id)
+                    : (sizeObj._id || item.product?._id);
+                const unitDiscount = sizeObj.discount || sizeObj.discountAmount || item.discount || item.product?.discount || 0;
+
+                return {
+                    ...(isTube ? { tubeId: targetId } : { productId: targetId }),
+                    quantity: item.quantity,
+                    deliveryMode: 'standard',
+                    installation: false,
+                    addressId: selectedAddressId,
+                    size: sizeObj.size || 'Standard',
+                    shippingCharge: 0,
+                    taxAmount: 0,
+                    discount: unitDiscount * (item.quantity || 1)
+                };
+            });
+
+
+            const orderData = {
+                paymentMethod,
+                items,
+                ...(couponData && { couponId: couponData._id }),
+                ...(discountAmount > 0 && { couponDiscount: discountAmount }),
+                ...(couponData?.affiliate?._id && { affiliateId: couponData?.affiliate?._id })
+            };
+
+            const response = await createOrder(orderData);
+
+            if (response?.success) {
+                if (paymentMethod === 'razorpay' && response.razorpayOrder) {
+                    if (typeof window === 'undefined' || typeof window.Razorpay === 'undefined') {
+                        toast.error("Razorpay payment gateway failed to load. Please refresh the page and try again.");
+                        setIsOrderPlacing(false);
+                        return;
+                    }
+
+                    const razorpayOrderId = response.razorpayOrder.id;
+                    const selectedAddr = addresses.find(a => a._id === selectedAddressId);
+                    const options = {
+                        key: response.razorpayKey,
+                        amount: response.razorpayOrder.amount,
+                        currency: response.razorpayOrder.currency,
+                        name: "TorqueBlock",
+                        description: "Purchase of High-Performance Tyres & Tubes",
+                        order_id: razorpayOrderId,
+                        handler: async (payResponse) => {
+                            setVerifyLoading(true);
+                            try {
+                                const verifyRes = await verifyPayment({
+                                    razorpay_payment_id: payResponse.razorpay_payment_id,
+                                    razorpay_order_id: payResponse.razorpay_order_id,
+                                    razorpay_signature: payResponse.razorpay_signature
+                                });
+
+                                if (verifyRes?.success) {
+                                    toast.success("Payment successful! Order placed.");
+                                    setPlacedOrderDetails(verifyRes.data);
+                                    setOrderPlacedSuccess(true);
+                                    await clearCart();
+                                } else {
+                                    toast.error(verifyRes?.message || "Payment verification failed.");
+                                }
+                            } catch (err) {
+                                toast.error(err?.response?.data?.message || "Payment verification failed.");
+                            } finally {
+                                setVerifyLoading(false);
+                                setIsOrderPlacing(false);
+                            }
+                        },
+                        prefill: {
+                            name: selectedAddr?.fullName || user?.name || "",
+                            email: selectedAddr?.email || user?.email || "",
+                            contact: selectedAddr?.phone || user?.phone || ""
+                        },
+                        theme: {
+                            color: "#f97316"
+                        },
+                        modal: {
+                            ondismiss: async () => {
+                                setIsOrderPlacing(false);
+                                toast.warning("Payment cancelled by user.");
+                                try {
+                                    await paymentFailed({
+                                        razorpay_order_id: razorpayOrderId,
+                                        reason: "Payment modal closed by user."
+                                    });
+                                } catch (e) {
+                                    console.error("Error updating cancelled order status:", e);
+                                }
+                            }
+                        }
+                    };
+
+                    const rzpay = new window.Razorpay(options);
+
+                    rzpay.on('payment.failed', async function (failedResponse) {
+                        console.error("Razorpay Payment Failed:", failedResponse?.error);
+                        const desc = failedResponse?.error?.description || "Payment failed on payment gateway.";
+                        toast.error(desc);
+                        setIsOrderPlacing(false);
+                        try {
+                            await paymentFailed({
+                                razorpay_order_id: razorpayOrderId,
+                                reason: desc
+                            });
+                        } catch (e) {
+                            console.error("Failed to report payment failure to backend:", e);
+                        }
+                    });
+
+                    try {
+                        rzpay.open();
+                    } catch (sdkErr) {
+                        console.error("Razorpay SDK open() failed:", sdkErr);
+                        toast.error("Failed to open payment gateway. Please try again.");
+                        setIsOrderPlacing(false);
+                    }
+                    return;
+                } else {
+                    toast.success("Order placed successfully!");
+                    setPlacedOrderDetails(response.data);
+                    setOrderPlacedSuccess(true);
+                    await clearCart();
+                }
+            } else {
+                toast.error(response?.message || "Failed to place order.");
+            }
+        } catch (err) {
+            toast.error(err?.response?.data?.message || "Failed to place order. Please try again.");
+        } finally {
+            setIsOrderPlacing(false);
+        }
+    }, [cart, selectedAddressId, paymentMethod, createOrder, verifyPayment, paymentFailed, addresses, user, clearCart, toast, couponData, discountAmount]);
+
+    if (!isMounted) {
+        return (
+            <>
+                <HeaderSkeleton />
+                <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
+                    <div className="space-y-4">
+                        <AddressSkeleton />
+                        <PaymentSkeleton />
+                    </div>
+                    <div className="space-y-4">
+                        <CartSummarySkeleton />
+                    </div>
+                </div>
+            </>
+        );
+    }
+
+    if (verifyLoading) {
+        return <PaymentVerifyingState />;
+    }
+
+    if (orderPlacedSuccess && placedOrderDetails) {
+        return <OrderSuccessView orderDetails={placedOrderDetails} />;
+    }
+
+    if (cart.length === 0) {
+        return <EmptyCartView />;
+    }
+
+    return (
+        <>
+            <div className="relative z-10 space-y-4 py-4">
+                <div className="p-4 rounded-xl bg-white/10 border border-white/10 backdrop-blur-2xl shadow-[0_10px_40px_rgba(0,0,0,0.3)] relative overflow-hidden">
+
+                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div className="space-y-2">
+
+                            <div className="flex items-center gap-3">
+                                <div className="p-2.5 rounded-xl bg-orange-500/10 border border-orange-500/20 text-orange-500 shrink-0">
+                                    <IoLockClosedOutline className="text-xl md:text-2xl" />
+                                </div>
+                                <div>
+                                    <div className="flex flex-col items-start gap-1">
+                                        <h1 className="text-xl md:text-xl font-black uppercase tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-400">
+                                            SECURE CHECKOUT
+                                        </h1>
+                                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-orange-400">
+                                            Complete your order securely
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="hidden md:flex items-center gap-2 md:gap-3 p-2.5 px-4 rounded-xl bg-white/[0.02] border border-white/5 self-start lg:self-auto">
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-orange-500 text-white font-black text-[11px] flex items-center justify-center shadow-[0_0_12px_rgba(249,115,22,0.4)]">
+                                    1
+                                </div>
+                                <span className="text-xs font-bold text-white uppercase tracking-wider">Address</span>
+                            </div>
+
+                            <div className="w-5 md:w-8 h-[2px] bg-gradient-to-r from-orange-500 to-zinc-700 rounded-full" />
+
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 text-zinc-400 font-bold text-[11px] flex items-center justify-center">
+                                    2
+                                </div>
+                                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Payment</span>
+                            </div>
+
+                            <div className="w-5 md:w-8 h-[2px] bg-zinc-800 rounded-full" />
+
+                            <div className="flex items-center gap-2">
+                                <div className="w-6 h-6 rounded-full bg-zinc-800 border border-white/10 text-zinc-400 font-bold text-[11px] flex items-center justify-center">
+                                    3
+                                </div>
+                                <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Order</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] xl:grid-cols-[1fr_420px] gap-4 items-start">
+                <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="lazyOnload" />
+
+                <div className="space-y-4">
+                    <AddressSection
+                        selectedAddressId={selectedAddressId}
+                        onSelectAddress={setSelectedAddressId}
+                        setAddressModalOpen={setAddressModalOpen}
+                        setEditingAddress={setEditingAddress}
+                    />
+
+                    <PaymentSection
+                        paymentMethod={paymentMethod}
+                        onSelectMethod={setPaymentMethod}
+                    />
+                </div>
+
+                <div className="lg:sticky lg:top-24 space-y-4">
+                    <CartSummary
+                        subtotal={subtotal}
+                        deliveryCharge={deliveryCharge}
+                        finalTotal={finalTotal}
+                        couponDiscount={discountAmount}
+                    />
+
+                    <div className="bg-white/10 border border-white/10 rounded-2xl backdrop-blur-sm">
+                        <button
+                            type="button"
+                            onClick={() => setIsCouponOpen((prev) => !prev)}
+                            aria-expanded={isCouponOpen}
+                            aria-controls="offer-code-panel"
+                            className="flex w-full cursor-pointer items-center gap-3 rounded-2xl p-4 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500"
+                        >
+                            <IoTicketOutline aria-hidden="true" className="shrink-0 text-2xl text-orange-400" />
+                            <span className="flex-1 text-sm font-semibold text-white">Have an offer code?</span>
+                            <IoChevronDown
+                                aria-hidden="true"
+                                className={`shrink-0 text-lg text-zinc-400 transition-transform duration-300 ${isCouponOpen ? 'rotate-180' : ''}`}
+                            />
+                        </button>
+
+                        <div
+                            id="offer-code-panel"
+                            inert={!isCouponOpen}
+                            className={`grid transition-[grid-template-rows,margin-top] duration-300 ${isCouponOpen ? 'grid-rows-[1fr] -mt-3' : 'grid-rows-[0fr]'}`}
+                        >
+                            <div className="overflow-hidden">
+                                <div className="px-4 pb-4">
+                                    {!couponData && (
+                                        <p className="pl-9 text-xs leading-relaxed text-zinc-400">
+                                            Enter your code if you received one from a Torque Block campaign or partner.
+                                        </p>
+                                    )}
+                                    <div className="mt-4 flex gap-2 items-start">
+                                        <Input
+                                            value={couponCode}
+                                            onChange={(e) => {
+                                                setCouponCode(e.target.value.toUpperCase());
+                                                if (couponError) setCouponError('');
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !couponData) {
+                                                    e.preventDefault();
+                                                    handleApplyCoupon();
+                                                }
+                                            }}
+                                            aria-label="Offer code"
+                                            placeholder="Enter offer code"
+                                            variant="glass"
+                                            disabled={isApplyingCoupon || !!couponData}
+                                            error={couponError}
+                                            wrapperClassName="flex-1"
+                                            size="md"
+                                        />
+                                        {!couponData ? (
+                                            <button
+                                                type="button"
+                                                onClick={handleApplyCoupon}
+                                                disabled={isApplyingCoupon || !couponCode}
+                                                className="shrink-0 cursor-pointer rounded-lg border border-orange-500 bg-orange-500 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-50"
+                                            >
+                                                {isApplyingCoupon ? 'Applying...' : 'Apply'}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                type="button"
+                                                onClick={handleRemoveCoupon}
+                                                className="shrink-0 cursor-pointer px-4 py-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/20 text-sm font-semibold rounded-lg transition-colors flex items-center justify-center gap-1.5"
+                                            >
+                                                <IoCloseCircleOutline className="text-lg" />
+                                                Remove
+                                            </button>
+                                        )}
+                                    </div>
+                                    {couponData && discountAmount > 0 && (
+                                        <div className="mt-2 text-xs font-bold text-emerald-400 flex items-center gap-1.5">
+                                            <IoCheckmarkCircleOutline className="text-lg" />
+                                            Coupon applied! You save {formatPrice(discountAmount)}
+                                        </div>
+                                    )}
+                                    {couponData && discountAmount === 0 && (
+                                        <div className="mt-2 text-xs font-bold text-orange-400 flex items-center gap-1.5">
+                                            Coupon applied, but not applicable to your items.
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handlePlaceOrder}
+                        disabled={isOrderPlacing || orderLoading || !selectedAddressId}
+                        aria-busy={isOrderPlacing}
+                        className="w-full py-4 rounded-xl font-black uppercase tracking-widest text-xs bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white shadow-[0_4px_20px_rgba(249,115,22,0.15)] hover:shadow-[0_4px_30px_rgba(249,115,22,0.35)] disabled:opacity-40 disabled:pointer-events-none transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.98]"
+                    >
+                        {isOrderPlacing ? (
+                            <>
+                                <CgSpinner className="animate-spin text-lg" />
+                                Processing...
+                            </>
+                        ) : (
+                            <>
+                                <IoLockClosedOutline className="text-sm" />
+                                {paymentMethod === 'cod' ? 'Place Order' : `Pay ${formatPrice(finalTotal)}`}
+                            </>
+                        )}
+                    </button>
+
+                    <div className="grid grid-cols-2 gap-3">
+                        <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                            <IoShieldCheckmarkOutline className="text-orange-400 text-xl" />
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">Secure Payment</span>
+                        </div>
+                        <div className="flex gap-2 items-center justify-center p-3 rounded-xl bg-white/5 border border-white/5 text-center gap-1.5 transition-colors hover:bg-white/10">
+                            <IoRibbonOutline className="text-orange-400 text-xl" />
+                            <span className="text-[9px] font-bold text-zinc-400 uppercase tracking-wider">100% Genuine Products</span>
+                        </div>
+                    </div>
+                </div>
+
+                <Login isOpen={isLoginOpen} onClose={() => setLoginOpen(false)} />
+                <AddressModal isOpen={addressModalOpen} address={editingAddress} onClose={handleCloseAddressModal} />
+            </div>
+        </>
+    );
+}

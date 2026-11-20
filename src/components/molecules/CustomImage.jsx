@@ -31,7 +31,7 @@ export default function CustomImage({
     sizes,
     quality = 85,
     skeletonClassName = "",
-    fallback = "/newlogo.webp",
+    fallback = "/fallback.webp",
     fetchPriority,
     caption,
     captionClassName = "",
