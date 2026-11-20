@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 
-export default function OrderSuccessView({ orderDetails }) {
+export default function OrderSuccessView({ orderDetails, onClose }) {
     if (!orderDetails) return null;
 
     const totalPaidAmount = orderDetails?.paidAmount || orderDetails?.items?.reduce((sum, item) => sum + (item.totalPrice || ((item.unitPrice || 0) * (item.quantity || 1))), 0) || 0;
@@ -48,12 +48,14 @@ export default function OrderSuccessView({ orderDetails }) {
                 <div className="flex flex-col sm:flex-row gap-3 w-full justify-center">
                     <Link
                         href="/orders"
+                        onClick={onClose}
                         className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 hover:text-white transition-all text-center"
                     >
                         View My Orders
                     </Link>
                     <Link
                         href="/tyres"
+                        onClick={onClose}
                         className="px-8 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest bg-orange-500 hover:bg-orange-600 text-white shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-all text-center"
                     >
                         Continue Shopping

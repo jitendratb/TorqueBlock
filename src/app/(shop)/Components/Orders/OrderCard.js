@@ -363,7 +363,7 @@ export default function OrderCard({ order }) {
                 </div>
                 {order.paymentId && (
                   <div className="col-span-2 border-t border-white/5 pt-2">
-                    <span className="text-zinc-500 block mb-0.5">Razorpay Payment ID</span>
+                    <span className="text-zinc-500 block mb-0.5">Payment ID</span>
                     <span className="text-white font-black font-mono tracking-tight normal-case text-xs block truncate">
                       {order.paymentId}
                     </span>

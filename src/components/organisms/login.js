@@ -302,10 +302,10 @@ function Login({ isOpen, onClose }) {
                 )}
 
                 {step === 'otp' && (
-                    <form onSubmit={handleVerifyOtp} className="space-y-6">
-                        <div className="space-y-4">
+                    <form onSubmit={handleVerifyOtp} className="space-y-4">
+                        <div className="space-y-4 ">
                             <div className="flex items-center justify-between">
-                                <label className="text-xs font-bold uppercase tracking-widest text-zinc-400">
+                                <label className="text-xs font-bold uppercase text-white">
                                     Verification Code
                                 </label>
                                 <button
@@ -322,7 +322,7 @@ function Login({ isOpen, onClose }) {
                                 </button>
                             </div>
 
-                            <div className="grid grid-cols-4 md:px-12 gap-2" onPaste={handleOtpPaste}>
+                            <div className="flex justify-center gap-3" onPaste={handleOtpPaste}>
                                 {otp.map((digit, idx) => (
                                     <Input
                                         key={idx}
@@ -338,7 +338,8 @@ function Login({ isOpen, onClose }) {
                                         autoComplete="one-time-code"
                                         variant="glass"
                                         size="sm"
-                                        wrapperClassName="aspect-square !p-0 flex items-center justify-center"
+                                        fullWidth={false}
+                                        wrapperClassName="w-12 h-12 md:w-14 md:h-14 !p-0 justify-center"
                                         className="text-center text-lg font-bold "
                                         autoFocus={isOpen && idx === 0}
                                     />
@@ -348,7 +349,7 @@ function Login({ isOpen, onClose }) {
                             {error && <p className="text-red-400 text-xs font-semibold mt-1 text-center">{error}</p>}
                         </div>
 
-                        <div className="space-y-4">
+                        <div className="space-y-2">
                             <button
                                 type="submit"
                                 disabled={isLoading || otp.join('').length !== OTP_LENGTH}
