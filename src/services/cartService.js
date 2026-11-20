@@ -24,8 +24,7 @@ class CartService {
                 quantity,
                 unitPrice,
                 discountPrice,
-                totalPrice,
-                orderType: 'website order'
+                totalPrice
             });
 
             return response;

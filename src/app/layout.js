@@ -102,6 +102,33 @@ export default function RootLayout({ children }) {
         {/* <FloatingWhatsApp /> */}
         <LocalBusinessSchema />
 
+        {process.env.NEXT_PUBLIC_KWIKPASS_MID && (
+          <Script
+            id="kwikpass-loader"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function () {
+                  var production = ${JSON.stringify(process.env.NEXT_PUBLIC_KWIKPASS_ENVIRONMENT === 'production')};
+                  window.merchantInfo = Object.assign({}, window.merchantInfo, { mid: ${JSON.stringify(process.env.NEXT_PUBLIC_KWIKPASS_MID)}, environment: production ? "production" : "sandbox", type: "merchantInfo", integrationType: "CUSTOM_HEADLESS" });
+                  window.__KP_LOGIN_SDK_INSTANCE__ = window.__KP_LOGIN_SDK_INSTANCE__ || {};
+                  window.__KP_LOGIN_SDK_INSTANCE__.logEvents = window.__KP_LOGIN_SDK_INSTANCE__.logEvents || function (event) {
+                    window.kpqueue = window.kpqueue || [];
+                    window.kpqueue.push(event);
+                  };
+                  var s = document.createElement("script");
+                  s.type = "text/javascript";
+                  s.defer = true;
+                  s.src = production ? "https://pdp.gokwik.co/kwikpass/plugin/build/kp-custom-merchant.js" : "https://sandbox.pdp.gokwik.co/kwikpass/plugin/build/kp-custom-merchant.js";
+                  s.onload = function () { window.__KP_SCRIPT_LOADED__ = true; window.dispatchEvent(new Event("kp-script-loaded")); };
+                  s.onerror = s.onload;
+                  document.body.appendChild(s);
+                })();
+              `,
+            }}
+          />
+        )}
+
         <Script
           id="microsoft-clarity"
           strategy="afterInteractive"

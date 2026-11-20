@@ -392,26 +392,9 @@ const useCartStore = create(
               if (targetItem.selectedRear) promises.push(cartService.deleteCart(targetItem.selectedRear._id));
               if (targetItem.selectedGeneric) promises.push(cartService.deleteCart(targetItem.selectedGeneric._id));
             } else {
-              const product = targetItem.product || {};
-              const syncSelection = (sel) => cartService.updateCart(sel._id, newQty).catch((err) => {
-                if (err?.response?.status !== 404) throw err;
-                const disc = sel.discount || sel.discountAmount || 0;
-                const net = sel.price ? Math.max(0, sel.price - disc) : 0;
-                return cartService.addToCart({
-                  productId: sel._id,
-                  productName: product.productName || product.name,
-                  sku: sel.sku || product.sku || '',
-                  image: product.productImages?.[0] || (typeof product.images?.[0] === 'string' ? product.images[0] : product.images?.[0]?.url) || '',
-                  size: sel.size,
-                  quantity: newQty,
-                  unitPrice: sel.price,
-                  discountPrice: disc,
-                  totalPrice: net * newQty,
-                });
-              });
-              [targetItem.selectedFront, targetItem.selectedRear, targetItem.selectedGeneric]
-                .filter(Boolean)
-                .forEach((sel) => promises.push(syncSelection(sel)));
+              if (targetItem.selectedFront) promises.push(cartService.updateCart(targetItem.selectedFront._id, newQty));
+              if (targetItem.selectedRear) promises.push(cartService.updateCart(targetItem.selectedRear._id, newQty));
+              if (targetItem.selectedGeneric) promises.push(cartService.updateCart(targetItem.selectedGeneric._id, newQty));
             }
 
             await Promise.all(promises);
