@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
 import ProductGallery from "@/components/organisms/ProductGallery";
 import ProductTrust from "@/components/molecules/ProductTrust";
 import ShareButton from "@/components/molecules/ShareButton";
@@ -41,8 +40,7 @@ const toCartTube = (item) => {
 };
 
 export default function ProductDetails({ tube, otherTubes = [] }) {
-    const router = useRouter();
-    const openCheckout = useCheckoutStore((state) => state.openCheckout);
+    const startCheckout = useCheckoutStore((state) => state.startCheckout);
     const { addToCart } = useCartStore();
     const buyBarRef = useRef(null);
 
@@ -130,8 +128,8 @@ export default function ProductDetails({ tube, otherTubes = [] }) {
     const handleBuyNow = useCallback(() => {
         if (!tube) return;
         addTubesToCart(false);
-        openCheckout(router);
-    }, [tube, addTubesToCart, openCheckout, router]);
+        startCheckout();
+    }, [tube, addTubesToCart, startCheckout]);
 
     const handleNotify = useCallback(() => {
         setIsRinging(true);

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useMemo, useState, useEffect, useCallback, useRef } from "react";
-import { useRouter } from "next/navigation";
 import WhatsAppButton from "@/components/atoms/WhatsAppButton";
 import { FaMotorcycle, FaBolt, FaBell } from "react-icons/fa";
 import { HiFire } from "react-icons/hi";
@@ -46,8 +45,7 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         return () => observer.disconnect();
     }, []);
 
-    const router = useRouter();
-    const openCheckout = useCheckoutStore((state) => state.openCheckout);
+    const startCheckout = useCheckoutStore((state) => state.startCheckout);
     const { isAuthenticated } = useAuthStore();
     const { addToCart } = useCartStore();
     const toast = useToast();
@@ -269,8 +267,8 @@ const TyreDataDetails = React.memo(({ tyreData, setProductIds, opposteProductId 
         }
 
         addToCart(parentTyre, selectedFront, selectedRear, selectedGeneric, false);
-        openCheckout(router);
-    }, [tyreData, isAuthenticated, parentTyre, selectedOpposite, addToCart, openCheckout, router, toast]);
+        startCheckout();
+    }, [tyreData, isAuthenticated, parentTyre, selectedOpposite, addToCart, startCheckout, toast]);
 
     const handleNotify = useCallback(async (bypassAuth = false) => {
         setIsRinging(true);
