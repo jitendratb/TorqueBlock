@@ -1,32 +1,12 @@
 import TorqueBlockApi from "@/lib/api";
 
 class AuthService {
-  async login(phone) {
+  async kwikpassLogin(kpToken) {
     try {
-      const res = await TorqueBlockApi.post("/auth/login", { phone });
-      return res; 
+      const res = await TorqueBlockApi.post("/gokwik/kwikpass/login", { kpToken });
+      return res;
     } catch (error) {
-      console.error("Failed to login (send OTP):", error);
-      throw error;
-    }
-  }
-
-  async verifyOtp(otp, otpVerifyToken) {
-    try {
-      const res = await TorqueBlockApi.post("/auth/verify-otp", { otp, otpVerifyToken });
-      return res; // contains success, message, token, user
-    } catch (error) {
-      console.error("Failed to verify OTP:", error);
-      throw error;
-    }
-  }
-
-  async resendOtp(phone) {
-    try {
-      const res = await TorqueBlockApi.post("/auth/resend-otp", { phone });
-      return res; // contains success, message, otpVerifyToken
-    } catch (error) {
-      console.error("Failed to resend OTP:", error);
+      console.error("Failed to login with KwikPass:", error);
       throw error;
     }
   }
